@@ -1,0 +1,6 @@
+site key
+6LfXNBMlAAAAAAL8J97bmb_be_LaBtwcAb6ZpJzJ
+<div class="g-recaptcha" data-sitekey="6LfXNBMlAAAAAAL8J97bmb_be_LaBtwcAb6ZpJzJ"></div>
+
+secret key
+6LfXNBMlAAAAACUbJ5PhZSx59hZpJecKV-DYx9-P

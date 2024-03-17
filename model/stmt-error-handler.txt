@@ -1,0 +1,10 @@
+if ($stmt) {
+    if ($stmt->execute()) {
+
+    } else {
+        die("Error in executing statement: " . $stmt->error);
+        $stmt->close();
+    }
+} else {
+    die("Error in preparing statement: " . $conn->error);
+}
