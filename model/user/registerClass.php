@@ -44,7 +44,8 @@
                     $user = $this->getUser($email);
                     if ($this->newUser($user['id'])) {
                         $_SESSION['user_id'] = $user['id'];
-                        header('Location: /fmware');
+                        $json = array('redirect' => '/fmware');
+                        echo json_encode($json);
                     } else {
                         die("Error in executing statement: " . $stmt->error);
                         $stmt->close();

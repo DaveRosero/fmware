@@ -25,8 +25,7 @@
                         <i class="fa-solid fa-envelope"></i>
                         <p class="mb-0 fs-3">My Account</p>
                     </a>
-                    <form action="/fmware/dashboard" method="POST">
-                      <input type="hidden" name="action" value="logout">
+                    <form action="/fmware/logout" method="POST">
                       <button type="submit" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
                     </form>
                   </div>
