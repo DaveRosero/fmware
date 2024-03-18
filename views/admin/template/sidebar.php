@@ -25,33 +25,6 @@
               </a>
             </li>
             <li class="nav-small-cap">
-              <span class="hide-menu">People</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/groups" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-users fs-4"></i>
-                </span>
-                <span class="hide-menu">Groups</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/users" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-user fs-4"></i>
-                </span>
-                <span class="hide-menu">Users</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/staff" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-user-tie fs-4"></i>
-                </span>
-                <span class="hide-menu">Staff</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
               <span class="hide-menu">Inventory</span>
             </li>
             <li class="sidebar-item">
@@ -122,15 +95,34 @@
               </a>
             </li>
             <li class="nav-small-cap">
-              <span class="hide-menu">Maintenance</span>
+              <span class="hide-menu">People</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/attributes" aria-expanded="false">
+              <a class="sidebar-link" href="/fmware/groups" aria-expanded="false">
                 <span>
-                <i class="fas fa-tag fs-4"></i>
+                <i class="fa-solid fa-users fs-4"></i>
                 </span>
-                <span class="hide-menu">Attributes</span>
+                <span class="hide-menu">Groups</span>
               </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/users" aria-expanded="false">
+                <span>
+                <i class="fa-solid fa-user fs-4"></i>
+                </span>
+                <span class="hide-menu">Users</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/staff" aria-expanded="false">
+                <span>
+                <i class="fa-solid fa-user-tie fs-4"></i>
+                </span>
+                <span class="hide-menu">Staff</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <span class="hide-menu">Maintenance</span>
             </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="/fmware/category" aria-expanded="false">
@@ -156,13 +148,8 @@
                 <span class="hide-menu">Unit</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/archive" aria-expanded="false">
-                <span>
-                <i class="fas fa-archive fs-4"></i>
-                </span>
-                <span class="hide-menu">Archive</span>
-              </a>
+            <li class="nav-small-cap">
+              <span class="hide-menu">Archive</span>
             </li>
           </ul>
           <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">

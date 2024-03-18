@@ -1,31 +1,13 @@
-<?php
-    if(session_status() == PHP_SESSION_NONE){
-      session_start();
-    }
-
-    require_once 'model/user/registerClass.php';
-
-    $register = new Register();
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if ($_POST['action'] == 'register') {
-        $register->register();
-      }
-    }
-?>
+<?php include_once 'session.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FMWare</title>
-    <link rel="icon" href="asset/images/store/logo.png" type="image/png">
-    <!--Bootstrap CSS-->
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <!--Style-->
-    <!--Fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <?php 
+        include_once 'vendor/Bootstrap/css/bundle.php'; 
+      ?>
   </head>
   <body class="bg-light">
     <!--Content-->
@@ -44,7 +26,7 @@
           </h5>
         </div>
         <div class="col shadow bg-light p-4 rounded">
-          <form action="/fmware/register" method="POST">
+          <form id="register">
             <div class="row mb-2">
               <h1>Register</h1>
             </div>
@@ -138,12 +120,11 @@
     </div>
     <!--Content-->
 
-    <!--jQuery-->
-    <script src="vendor/jQuery/jquery-3.7.1.slim.min.js"></script>
-    <!--Bootstrap JS-->
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!--Font Awesome-->
-    <script src="vendor/fontawesome/js/all.min.js"></script>
-    <!--Scripts-->
+    <?php
+      include_once 'vendor/jQuery/bundle.php';
+      include_once 'vendor/FontAwesome/kit.php';
+      include_once 'vendor/Bootstrap/js/bundle.php'; 
+    ?>
+    <script src="asset/js/auth/register.js"></script>
   </body>
 </html>

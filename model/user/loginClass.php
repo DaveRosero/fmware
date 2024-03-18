@@ -15,6 +15,7 @@
 
         public function login () {
             $conn = $this->getConnection();
+            $json = array();
             $query = 'SELECT id, email, password
                     FROM user
                     WHERE email = ?';
@@ -30,10 +31,15 @@
                         $group_name = $this->getUserGroup($id);
                         $_SESSION['user_id'] = $id;
                         if ($group_name == 'user'){
-                            header('Location: /fmware');
+                            $json['redirect'] = '/fmware';
                         } else {
-                            header('Location: /fmware/dashboard');
+                            $json['redirect'] = '/fmware/dashboard';
                         }
+
+                        echo json_encode($json);
+                    } else {
+                        $json['login_feedback'] = 'Invalid Email or Password. Please try again.';
+                        echo json_encode($json);
                     }
                 } else {    
                     die("Error in executing statement: " . $stmt->error);

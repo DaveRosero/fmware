@@ -1,17 +1,8 @@
 <?php
-    if(session_status() == PHP_SESSION_NONE){
-        session_start();
-    }
-  
+    include_once 'session.php';
     require_once 'model/user/user.php';
-    require_once 'model/user/logoutClass.php';
 
     $user = new User();
-    $logout = new Logout();
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $logout->logout();
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +11,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>FMWare</title>
         <link rel="icon" href="asset/images/store/logo.png" type="image/png">
-        <!--Bootstrap CSS-->
-        <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-        <!--Style-->
+        <?php 
+            include_once 'vendor/Bootstrap/css/bundle.php'; 
+        ?>
         <link rel="stylesheet" href="asset/css/index.css">
-        <!--Fonts-->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-        <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
     </head>
     <body>
         <!-- Header -->
@@ -81,8 +69,7 @@
                                     <a class="dropdown-item" href="#">Profile</a>
                                     <a class="dropdown-item" href="#">Settings</a>
                                     <div class="dropdown-divider"></div>
-                                    <form action="/fmware/" method="POST">
-                                        <input type="hidden" name="action" value="logout">
+                                    <form action="/fmware/logout" method="post">
                                         <button type="submit" class="dropdown-item">Logout</button>
                                     </form>
                                     
@@ -231,13 +218,10 @@
         </div>
         <!--Footer End-->
         
-        <!--jQuery-->
-        <script src="vendor/jQuery/jquery-3.7.1.slim.min.js"></script>
-        <!--Bootstrap JS-->
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!--Font Awesome-->
-        <script src="vendor/fontawesome/js/all.min.js"></script>
-        <!--Scripts-->
-        <script src="asset/js/home.js"></script>
+    <?php
+        include_once 'vendor/jQuery/bundle.php';
+        include_once 'vendor/FontAwesome/kit.php';
+        include_once 'vendor/Bootstrap/js/bundle.php'; 
+    ?>
     </body>
 </html>

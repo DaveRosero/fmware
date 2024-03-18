@@ -4,10 +4,8 @@
     class Logout extends User {
         public function logout () {
             session_start();
-            session_unset();
-
+            session_destroy();
             header('Location: /fmware/login');
-            exit();
         }
     }
 ?>
