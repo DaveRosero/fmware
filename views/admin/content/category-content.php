@@ -16,7 +16,6 @@
                         <!-- DataTables print button will be placed here -->
                     </div>
                 </div>
-
             </div>
             
                 <table id="category-table">

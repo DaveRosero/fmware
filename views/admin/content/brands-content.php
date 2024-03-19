@@ -1,23 +1,4 @@
 <div class="container-fluid">
-    <!--Create Brand Start-->
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">New Brand</h5>
-            <form action="/fmware/brands" method="POST">
-                <div class="row">
-                    <div class="col">
-                        <label for="group_name" class="form-label">Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="group_name" name="brand_name" aria-describedby="group_name" required>
-                    </div>
-                </div>
-                <input type="hidden" name="action" value="create_brand">    
-                <button type="submit" class="btn btn-primary mt-3">Submit</button>
-            </form>
-        </div>
-    </div>
-    <!--Create Brand End-->
-
-
     <!--Brand Table Start-->
     <div class="card">
         <div class="card-body">
@@ -26,16 +7,25 @@
                     <h5 class="card-title fw-semibold mb-4">Brand List</h5>
                 </div>
                 <div class="col text-end">
-                    <a href="#"><i class="fa-solid fa-print fs-5"></i></a>
+                    <div class="d-inline-block me-2">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBrand">
+                            New Brand
+                        </button>
+                    </div>
+                    <div id="printButtonContainer" class="d-inline-block">
+                        <!-- DataTables print button will be placed here -->
+                    </div>
                 </div>
             </div>
             
             <form>
-                <table class="table">
+                <table id="brand-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
                             <th>Status</th>
+                            <th>Brand</th>
+                            <th>Author</th>
+                            <th>Date Added</th>
                             <th>Action</th>
                         </tr>
                     </thead>

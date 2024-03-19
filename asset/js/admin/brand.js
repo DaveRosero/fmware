@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('#category-table').DataTable({
+    $('#brand-table').DataTable({
         dom: 'lBfrtip',
         buttons: [
             {
@@ -17,11 +17,11 @@ $(document).ready(function(){
         }
     });
 
-    $('#new-category').on('submit', function(event){
+    $('#new-brand').on('submit', function(event){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/new-category',
+            url: '/fmware/new-brand',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -29,7 +29,7 @@ $(document).ready(function(){
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 } else {
-                    $('#category_feedback').text(feedback.category_feedback);
+                    $('#brand_feedback').text(feedback.brand_feedback);
                 }
             }
         });
@@ -37,11 +37,11 @@ $(document).ready(function(){
 
     $('.status').on('click', function(){
         $.ajax({
-            url: '/fmware/disable-category',
+            url: '/fmware/disable-brand',
             method: 'POST',
             data: {
-                id : $(this).data('category-id'),
-                status : $(this).data('category-status')
+                id : $(this).data('brand-id'),
+                status : $(this).data('brand-status')
             },
             dataType: 'json', 
             success: function(feedback){
@@ -53,21 +53,22 @@ $(document).ready(function(){
     });
 
     $('.edit').on('click', function(){
-        $('#edit-label').html('Editing <strong>"' + $(this).data('category-name') + '</strong>"');
-        $('#category_name').val($(this).data('category-name'));
-        $('#category_id').val($(this).data('category-id'));
-        $('#editCategory').modal('show');
+        $('#edit-label').html('Editing <strong>"' + $(this).data('brand-name') + '</strong>"');
+        $('#brand_name').val($(this).data('brand-name'));
+        $('#brand_id').val($(this).data('brand-id'));
+        $('#editBrand').modal('show');
     });
 
-    $('#edit-category').on('submit', function(event){
+    $('#edit-brand').on('submit', function(event){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/edit-category',
+            url: '/fmware/edit-brand',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
             success: function(feedback){
+                $('#edit_feedback').text(feedback.edit_feedback);
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
