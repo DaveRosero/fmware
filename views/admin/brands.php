@@ -4,9 +4,9 @@
   require_once 'model/admin/brandsClass.php';
 
   $admin = new Admin();
-  $admin->isAdmin();
-
   $brand = new Brands();
+
+  $admin->isAdmin();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,6 +41,11 @@
     </div>
   </div>
 
+  <!-- Modal Start -->
+  <?php
+      include_once 'views/admin/modals/brand-modal.php';
+    ?>
+  <!-- Modal End-->
 
   <?php
     include_once 'vendor/jQuery/bundle.php';
@@ -51,6 +56,6 @@
   <script src="asset/js/admin/dashboard.js"></script>
   <script src="asset/js/admin/mini-sidebar.js"></script>
   <script src="asset/js/admin/sidebarmenu.js"></script>
-  <script src="asset/js/admin/category.js"></script>
+  <script src="asset/js/admin/brand.js"></script>
 </body>
 </html>
