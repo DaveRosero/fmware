@@ -53,9 +53,9 @@
                                 <td>
                                     <button 
                                         type="button" 
-                                        class="btn btn-primary" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#restock"
+                                        class="btn btn-primary restock"
+                                        data-product-name="'.$name.'"
+                                        data-product-id="'.$id.'" 
                                     >
                                         Restock
                                     </button> 

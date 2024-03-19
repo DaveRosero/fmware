@@ -54,27 +54,10 @@ $(document).ready(function(){
         });
     });
 
-    $('.edit').on('click', function(){
-        $('#edit-label').html('Editing <strong>"' + $(this).data('brand-name') + '</strong>"');
-        $('#brand_name').val($(this).data('brand-name'));
-        $('#brand_id').val($(this).data('brand-id'));
-        $('#editBrand').modal('show');
-    });
-
-    $('#edit-brand').on('submit', function(event){
-        event.preventDefault();
-
-        $.ajax({
-            url: '/fmware/edit-brand',
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(feedback){
-                $('#edit_feedback').text(feedback.edit_feedback);
-                if (feedback.redirect) {
-                    window.location.href = feedback.redirect;
-                }
-            }
-        });
+    $('.restock').on('click', function(){
+        $('#edit-label').html('Restocking <strong>"' + $(this).data('product-name') + '</strong>"');
+        $('#product-name').val($(this).data('product-name'));
+        $('#product-id').val($(this).data('product-id'));
+        $('#restock').modal('show');
     });
 });

@@ -42,14 +42,9 @@
                 <h5 class="modal-title" id="edit-label"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="edit-brand" method="POST">
+            <form id="restock" method="POST">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="" class="form-label">New Brand Name<span class="text-danger">*</span></label>
-                        <p class="text-danger" id="edit_feedback"></p>
-                        <input type="text" class="form-control" id="brand_name" name="brand_name" required>
-                        <input type="hidden" name="brand_id" id="brand_id">
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
