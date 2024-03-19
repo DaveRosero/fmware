@@ -1,17 +1,27 @@
 <!-- New Modal -->
-<div class="modal fade" id="newUnit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addStock" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Unit</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Stock</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="new-unit" method="POST">
+        <form id="add-stock" method="POST">
             <div class="modal-body">
-                <div class="mb-3">
-                    <label for="" class="form-label">Unit Name<span class="text-danger">*</span></label>
-                    <p class="text-danger" id="unit_feedback"></p>
-                    <input type="text" class="form-control" name="unit_name" required>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="form-label">Product<span class="text-danger">*</span></label><br>
+                        <select class="form-select" id="products" name="product_id" data-placeholder="Select a Product">
+                            <option></option>
+                            <?php $stocks->getProducts(); ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label for="" class="form-label">Critical Level (%)</label>
+                        <input type="number" class="form-control" name="critical_level" min="0">
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -24,21 +34,21 @@
 </div>
 
 
-<!-- Edit Modal -->
-<div class="modal fade" id="editUnit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Restock Modal -->
+<div class="modal fade" id="restock" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="edit-label"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="edit-unit" method="POST">
+            <form id="edit-brand" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="" class="form-label">New Unit Name<span class="text-danger">*</span></label>
+                        <label for="" class="form-label">New Brand Name<span class="text-danger">*</span></label>
                         <p class="text-danger" id="edit_feedback"></p>
-                        <input type="text" class="form-control" id="unit_name" name="unit_name" required>
-                        <input type="hidden" name="unit_id" id="unit_id">
+                        <input type="text" class="form-control" id="brand_name" name="brand_name" required>
+                        <input type="hidden" name="brand_id" id="brand_id">
                     </div>
                 </div>
                 <div class="modal-footer">
