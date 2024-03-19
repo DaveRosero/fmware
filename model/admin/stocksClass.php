@@ -94,5 +94,51 @@
                 die("Error in preparing statement: " . $conn->error);
             }
         }
+
+        public function updateQty ($qty, $id) {
+            $conn = $this->getConnection();
+
+            $query = 'UPDATE stock SET qty = qty + ? WHERE product_id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ii', $qty, $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
+        public function restock () {
+            $conn = $this->getConnection();
+
+            $supplier_order_no = $_POST['supplier_order_no'];
+            $product_id = $_POST['product_id'];
+            $qty = $_POST['qty'];
+            $date = $_POST['date'];
+
+            $query = 'INSERT INTO restock
+                        (user_id, supplier_order_no, product_id, qty, date)
+                    VALUES (?,?,?,?,?)';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('isiis', $_SESSION['user_id'], $supplier_order_no, $product_id, $qty, $date);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $this->updateQty($qty, $product_id);
+                    $json = array('redirect' => '/fmware/stocks');
+                    echo json_encode($json);
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
     }
 ?>
