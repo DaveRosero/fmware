@@ -1,8 +1,5 @@
 <?php
-  if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-  }
-
+  include_once 'session.php';
   require_once 'model/admin/admin.php';
   require_once 'model/admin/productClass.php';
 
@@ -10,12 +7,6 @@
   $admin->isAdmin();
 
   $products = new Products();
-
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['action'] == 'new_product') {
-      $products->newProduct();
-    }
-  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +18,7 @@
     <?php 
       include_once 'vendor/Bootstrap/css/bundle.php';
       include_once 'vendor/DataTables/css/bundle.php'; 
+      include_once 'vendor/Select2/css/bundle.php';
     ?>
     <link rel="stylesheet" href="asset/css/admin/dashboard.css">
 </head>
@@ -61,6 +53,7 @@
     include_once 'vendor/jQuery/bundle.php';
     include_once 'vendor/FontAwesome/kit.php';    
     include_once 'vendor/DataTables/js/bundle.php';
+    include_once 'vendor/Select2/js/bundle.php';
     include_once 'vendor/Bootstrap/js/bundle.php'; 
   ?>
   <script src="asset/js/admin/dashboard.js"></script>

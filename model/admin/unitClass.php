@@ -90,13 +90,21 @@
                                 <td>'.date('d F Y | h:i A', strtotime($date)).'</td>
                                 <td>
                                     <button 
-                                        class="btn text-success edit" 
+                                        class="btn btn-sm btn-success edit" 
                                         type="button" 
                                         data-unit-id="'.$id.'" 
                                         data-unit-name="'.$name.'"
                                     >
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>                                
+                                    </button>
+                                    <button 
+                                        class="btn btn-sm btn-danger delete" 
+                                        type="button" 
+                                        data-unit-id="'.$id.'" 
+                                        data-unit-name="'.$name.'"
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>                                  
                                 </td>
                             </tr>';
                     }

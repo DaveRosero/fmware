@@ -39,8 +39,13 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
-    // Inventory
+    // Inventory Views
     get('/fmware/products', 'views/admin/products.php');
+
+    // Product Controller
+    any('/fmware/new-product', 'controller/admin/product/new-product.php');
+    any('/fmware/edit-product', 'controller/admin/product/edit-product.php');
+    any('/fmware/disable-product', 'controller/admin/product/disable-product.php');
 
 //*****************************************************************//
 
