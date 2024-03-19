@@ -43,6 +43,7 @@ require_once __DIR__.'/router.php';
     get('/fmware/products', 'views/admin/products.php');
     get('/fmware/stocks', 'views/admin/stocks.php');
     get('/fmware/restocks', 'views/admin/restock.php');
+    get('/fmware/price-list', 'views/admin/price-list.php');
 
     // Product Controller
     any('/fmware/new-product', 'controller/admin/product/new-product.php');
@@ -52,6 +53,9 @@ require_once __DIR__.'/router.php';
     // Stocks Controller
     any('/fmware/add-stock', 'controller/admin/stocks/add-stock.php');
     any('/fmware/restock', 'controller/admin/stocks/restock.php');
+
+    // Price List Controller
+    any('/fmware/new-price', 'controller/admin/price/new-price.php');
 
 //*****************************************************************//
 

@@ -1,19 +1,19 @@
 <?php
   include_once 'session.php';
   require_once 'model/admin/admin.php';
-  require_once 'model/admin/stocksClass.php';
+  require_once 'model/admin/pricelistClass.php';
 
   $admin = new Admin();
   $admin->isAdmin();
 
-  $stocks = new Stocks();
+  $price = new PriceList();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Restock Records | FMWare</title>
+    <title>Price List | FMWare</title>
     <link rel="icon" href="asset/images/store/logo.png" type="image/png">
     <?php 
       include_once 'vendor/Bootstrap/css/bundle.php';
@@ -34,7 +34,7 @@
       <?php include 'views/admin/template/header.php'; ?>
     
       <!-- Content Start -->
-         <?php include 'views/admin/content/restock-content.php'; ?>
+         <?php include 'views/admin/content/price-list-content.php'; ?>
       <!-- Content End -->  
       
       
@@ -44,8 +44,8 @@
   </div>
 
   <!-- Modal Start -->
-  <?php
-      // include_once 'views/admin/modals/stocks-modal.php';
+    <?php
+      include_once 'views/admin/modals/price-list-modal.php';
     ?>
   <!-- Modal End-->
 
@@ -59,6 +59,6 @@
   <script src="asset/js/admin/dashboard.js"></script>
   <script src="asset/js/admin/mini-sidebar.js"></script>
   <script src="asset/js/admin/sidebarmenu.js"></script>
-  <script src="asset/js/admin/stocks.js"></script>
+  <script src="asset/js/admin/price-list.js"></script>
 </body>
 </html>
