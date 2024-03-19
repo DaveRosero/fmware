@@ -17,6 +17,24 @@ $(document).ready(function(){
         }
     });
 
+    $('#restock-table').DataTable({
+        dom: 'lBfrtip',
+        buttons: [
+            {
+                extend: 'print',
+                text: '<i class="fas fa-print"></i>',
+                className: 'btn btn-secondary',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            }
+        ],
+        initComplete: function () {
+            var dataTableButtons = $('.dt-buttons');
+            $('#printButtonContainer').append(dataTableButtons);
+        }
+    });
+
     $('#products').select2({
         dropdownParent: $('#addStock'),
     });

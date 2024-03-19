@@ -42,7 +42,7 @@ require_once __DIR__.'/router.php';
     // Inventory Views
     get('/fmware/products', 'views/admin/products.php');
     get('/fmware/stocks', 'views/admin/stocks.php');
-    get('/fmware/restock', 'views/admin/restock.php');
+    get('/fmware/restocks', 'views/admin/restock.php');
 
     // Product Controller
     any('/fmware/new-product', 'controller/admin/product/new-product.php');
