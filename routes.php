@@ -4,15 +4,14 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
-    // Landing Page
+    // Home Views
     get('/fmware', 'views/home/home.php');
     get('/fmware/about', 'views/home/about.php');
     get('/fmware/shop', 'views/home/shop.php');
-
-//*****************************************************************//
-
-    // Sub Landing Page
     get('/fmware/view-product', 'views/home/view-product.php');
+
+    // Cart Controller
+    any('/fmware/add-cart', 'controller/home/cart/add-cart.php');
 
 //*****************************************************************//
 
