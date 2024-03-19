@@ -74,18 +74,22 @@
             }
         }
 
-        public function getAttributes () {
+        public function isProductExist ($product) {
             $conn = $this->getConnection();
-
-            $query = 'SELECT id, name FROM attribute_data';
+            $query = 'SELECT COUNT(*) FROM product WHERE name = ?';
             $stmt = $conn->prepare($query);
+            $stmt->bind_param('s', $product);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name);
-                    while ($stmt->fetch()) {
-                        echo '<option value="'.$id.'">'.$name.'</option>'; 
-                    }
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
                     $stmt->close();
+
+                    if ($count > 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
@@ -96,36 +100,43 @@
         }
 
         public function newProduct () {
-            $conn = $this->getConnection();
+            if ($this->isProductExist($_POST['name'])) {
+                $json = array('product_feedback' => 'Product already exist.');
+                echo json_encode($json);
+                return;
+            }
 
+            $conn = $this->getConnection();
+            
             $uploadDir = 'asset/images/products/';
             $uploadFile = $uploadDir . basename($_FILES['image']['name']);
             move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile);
 
+            // Product Image
+            $image = basename($uploadFile);
+
             $name = $_POST['name'];
-            $sku = $_POST['sku'];
-            if (empty($_POST['upc'])) {
-                $upc = random_int(100000000, 999999999);
-            } else {
-                $upc = $_POST['upc'];
-            }            
-            $imgPath = $uploadFile;
-            $description = $_POST['description'];
-            $attribute = $_POST['attribute'];
+            $code = $_POST['code'];
+            $supplier_code = $_POST['supplier_code'];
             $brand = $_POST['brand'];
             $category = $_POST['category'];
             $unit = $_POST['unit'];
+            $unit_value = $_POST['unit_value'];
+            $expiration_date = $_POST['expiration_date'];
+            $barcode = $_POST['barcode'];
+            $description = $_POST['description'];
             $active = 1;
 
             $query = 'INSERT INTO product
-                        (name, sku, upc, image, description, attribute_data_id, brand_id, category_id, unit_id, active)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)';
+                        (name, code, supplier_code, barcode, image, description, brand_id, category_id, unit_id, unit_value, expiration_date, user_id, active)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
             $stmt = $conn->prepare($query);
-            $stmt->bind_param('sssssiiiii', $name, $sku, $upc, $imgPath, $description, $attribute, $brand, $category, $unit, $active);
+            $stmt->bind_param('ssssssiiiisii', $name, $code, $supplier_code, $barcode, $image, $description, $brand, $category, $unit, $unit_value, $expiration_date, $_SESSION['user_id'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    header('Location: /fmware/products');
+                    $json = array('redirect' => '/fmware/product');
+                    echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
@@ -135,60 +146,77 @@
             }
         }
 
-        public function getBarcode ($upc) {
-            $data = $upc;
-            $file_name = 'asset/images/products/barcode/'.$data.'_barcode.png';
-            if (file_exists($file_name)) {
-                return $file_name;
-            } else {
-                $barcodeType = 'CODE128';
-                $apiUrl = "https://barcode.tec-it.com/barcode.ashx?data={$data}&type={$barcodeType}";
-                $barcodeImage = file_get_contents($apiUrl);
-                file_put_contents($file_name, $barcodeImage);
-                return $file_name;
-            }
-        }
-
         public function getProducts () {
             $conn = $this->getConnection();
 
-            $query = 'SELECT 
-                        product.id, product.name, product.sku, product.upc, product.image, product.description, 
-                        product.attribute_data_id, product.brand_id, product.category_id, product.unit_id, 
-                        product.date, product.active,
-                        attribute_data.name, brand.name, category.name, unit.name
+            $query = 'SELECT
+                        product.id,
+                        product.name,
+                        product.image,
+                        product.unit_value,
+                        product.active,
+                        user.firstname,
+                        user.lastname,
+                        brand.name,
+                        category.name,
+                        unit.name 
                     FROM product
-                    INNER JOIN attribute_data ON attribute_data.id = product.attribute_data_id
+                    INNER JOIN user ON user.id = product.user_id
                     INNER JOIN brand ON brand.id = product.brand_id
                     INNER JOIN category ON category.id = product.category_id
                     INNER JOIN unit ON unit.id = product.unit_id';
             $stmt = $conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $sku, $upc, $image, $description, $attribute_data_id, $brand_id, $category_id, $unit_id, $date, $active, $attr_name, $brand_name, $category_name, $unit_name);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
-                            $status = 'ACTIVE';
+                            $status = '<div class="form-check form-switch">
+                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'" data-product-status="'.$active.'" checked>
+                                        </div>';
                         } else {
-                            $status = 'INACTIVE';
+                            $status = '<div class="form-check form-switch">
+                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'" data-product-status="'.$active.'">
+                                        </div>';
                         }
-
-                        $barcode = $this->getBarcode($upc);  
-                        
+                        $initial = substr($lname, 0, 1);
+                        $author = $fname.' '.$initial.'.';
                         echo '<tr>
-                                <td><img src="'.$image.'" alt="" srcset="" style="width: 50px;"></td>
-                                <td>'.$name.'</td>
-                                <td><img src="'.$barcode.'" alt="" srcset="" style="width: 100px;"></td>
-                                <td>'.$brand_name.'</td>
-                                <td>'.$category_name.'</td>
-                                <td>'.$unit_name.'</td>
                                 <td>'.$status.'</td>
+                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
+                                <td>'.$name.'</td>
+                                <td>'.$brand.'</td>
+                                <td>'.$category.'</td>
+                                <td>'.$unit_value.' '.$unit.'</td>
                                 <td>
-                                    <a class="text-success mx-2" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    <a class="text-danger" href="#"><i class="fa-solid fa-trash"></i></a>
-                                </td> 
+                                    <button 
+                                        class="btn btn-sm btn-primary view" 
+                                        type="button" 
+                                        data-product-id="'.$id.'" 
+                                        data-product-name="'.$name.'"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </button>                                
+                                    <button 
+                                        class="btn btn-sm btn-success edit" 
+                                        type="button" 
+                                        data-product-id="'.$id.'" 
+                                        data-product-name="'.$name.'"
+                                    >
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button 
+                                        class="btn btn-sm btn-danger delete" 
+                                        type="button" 
+                                        data-product-id="'.$id.'" 
+                                        data-product-name="'.$name.'"
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>                                   
+                                </td>
                             </tr>';
                     }
+                    $stmt->close();
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
