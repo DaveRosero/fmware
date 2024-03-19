@@ -50,7 +50,7 @@ require_once __DIR__.'/router.php';
     get('/fmware/unit', 'views/admin/unit.php');
 
     // Category Controller
-    any('/fmware/new-category', 'controller/admin/category/edit-category.php');
+    any('/fmware/new-category', 'controller/admin/category/new-category.php');
     any('/fmware/disable-category', 'controller/admin/category/disable-category.php');
     any('/fmware/edit-category', 'controller/admin/category/edit-category.php');
 

@@ -1,5 +1,23 @@
 $(document).ready(function(){
-    $('#category-table').DataTable();
+    $('#category-table').DataTable({
+        // DataTables configuration options...
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'print',
+                text: '<i class="fas fa-print"></i>',
+                className: 'btn btn-secondary',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            }
+        ],
+        initComplete: function () {
+            // Move the print button inside the printButtonContainer
+            var dataTableButtons = $('.dt-buttons');
+            $('#printButtonContainer').append(dataTableButtons);
+        }
+    });
 
     $('#new-category').on('submit', function(event){
         event.preventDefault();
@@ -28,7 +46,11 @@ $(document).ready(function(){
                 status : $(this).data('category-status')
             },
             dataType: 'json', 
-            success: function(){}
+            success: function(feedback){
+                if (feedback.redirect) {
+                    window.location.href = feedback.redirect;
+                }
+            }
         });
     });
 

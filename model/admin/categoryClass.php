@@ -146,6 +146,8 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    $json['redirect'] = '/fmware/category';
+                    echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();

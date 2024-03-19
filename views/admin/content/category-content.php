@@ -7,18 +7,18 @@
                     <h5 class="card-title fw-semibold mb-4">Category List</h5>
                 </div>
                 <div class="col text-end">
-                    <div class="d-inline-block me-2"> <!-- Add margin-right to create spacing -->
+                    <div class="d-inline-block me-2">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategory">
                             New Category
                         </button>
                     </div>
-                    <div class="d-inline-block">
-                        <a href="#"><i class="fa-solid fa-print fs-5"></i></a>
+                    <div id="printButtonContainer" class="d-inline-block">
+                        <!-- DataTables print button will be placed here -->
                     </div>
                 </div>
+
             </div>
             
-            <form>
                 <table id="category-table">
                     <thead>
                         <tr>
@@ -33,7 +33,6 @@
                         <?php $category->getCategory(); ?>
                     </tbody>
                 </table>
-            </form>
         </div>
     </div>
     <!--Category Table End-->
