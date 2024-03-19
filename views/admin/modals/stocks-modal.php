@@ -42,9 +42,33 @@
                 <h5 class="modal-title" id="edit-label"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="restock" method="POST">
+            <form id="restock-product" method="POST">
                 <div class="modal-body">
-                    
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label for="" class="form-label">Product</label>
+                            <input type="text" class="form-control" id="product-name" name="product_id" readonly>
+                            <input type="hidden" name="product_id" id="product-id">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label for="" class="form-label">Supplier Order No.<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="supplier_order_no" name="supplier_order_no" required>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label for="" class="form-label">Date of Delivery<span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label for="" class="form-label">Quantity<span class="text-danger">*</span></label>
+                            <input type="number" min="1" class="form-control" id="qty" name="qty" required>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
