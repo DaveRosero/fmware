@@ -59,6 +59,11 @@ require_once __DIR__.'/router.php';
     any('/fmware/edit-brand', 'controller/admin/brand/edit-brand.php');
     any('/fmware/disable-brand', 'controller/admin/brand/disable-brand.php');
 
+    // Unit Controller
+    any('/fmware/new-unit', 'controller/admin/unit/new-unit.php');
+    any('/fmware/edit-unit', 'controller/admin/unit/edit-unit.php');
+    any('/fmware/disable-unit', 'controller/admin/unit/disable-unit.php');
+
 //*****************************************************************//
 
     // Test

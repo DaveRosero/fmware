@@ -17,21 +17,20 @@
                     </div>
                 </div>
             </div>
-            
-                <table id="category-table">
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Date Added</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $category->getCategory(); ?>
-                    </tbody>
-                </table>
+            <table id="category-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Date Added</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $category->getCategory(); ?>
+                </tbody>
+            </table>
         </div>
     </div>
     <!--Category Table End-->

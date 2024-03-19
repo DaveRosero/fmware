@@ -87,7 +87,7 @@
                                 <td>'.$status.'</td>
                                 <td>'.$name.'</td>
                                 <td>'.$author.'</td>
-                                <td>'.date('d F Y | h:i:s A', strtotime($date)).'</td>
+                                <td>'.date('d F Y | h:i A', strtotime($date)).'</td>
                                 <td>
                                     <button 
                                         class="btn text-success edit" 

@@ -17,23 +17,20 @@
                     </div>
                 </div>
             </div>
-            
-            <form>
-                <table id="brand-table">
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Brand</th>
-                            <th>Author</th>
-                            <th>Date Added</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $brand->getBrands(); ?>
-                    </tbody>
-                </table>
-            </form>
+            <table id="brand-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Brand</th>
+                        <th>Author</th>
+                        <th>Date Added</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $brand->getBrands(); ?>
+                </tbody>
+            </table>
         </div>
     </div>
     <!--Brand Table End-->

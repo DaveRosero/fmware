@@ -1,21 +1,12 @@
 <?php
-  if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-  }
-
+  include_once 'session.php';
   require_once 'model/admin/admin.php';
   require_once 'model/admin/unitClass.php';
 
   $admin = new Admin();
-  $admin->isAdmin();
-
   $unit = new Unit();
 
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['action'] == 'create_unit') {
-      $unit->newUnit();
-    }
-  }
+  $admin->isAdmin();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,11 +15,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Manage Unit | FMWare</title>
     <link rel="icon" href="asset/images/store/logo.png" type="image/png">
-    <!--Style-->
-    <link rel="stylesheet" href="asset/css/dashboard.css">
-    <!--Fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <?php 
+      include_once 'vendor/Bootstrap/css/bundle.php';
+      include_once 'vendor/DataTables/css/bundle.php'; 
+    ?>
+    <link rel="stylesheet" href="asset/css/admin/dashboard.css">
 </head>
 <body>
   <!--  Body Wrapper -->
@@ -50,16 +41,21 @@
     </div>
   </div>
 
+  <!-- Modal Start -->
+  <?php
+      include_once 'views/admin/modals/unit-modal.php';
+    ?>
+  <!-- Modal End-->
 
-    <!--jQuery-->
-    <script src="vendor/jQuery/jquery-3.7.1.slim.min.js"></script>
-    <!--Bootstrap JS-->
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!--Font Awesome-->
-    <script src="vendor/fontawesome/js/all.min.js"></script>
-    <!--Scripts-->
-    <script src="asset/js/dashboard.js"></script>
-    <script src="asset/js/mini-sidebar.js"></script>
-    <script src="asset/js/sidebarmenu.js"></script>
+  <?php
+    include_once 'vendor/jQuery/bundle.php';
+    include_once 'vendor/FontAwesome/kit.php';    
+    include_once 'vendor/DataTables/js/bundle.php';
+    include_once 'vendor/Bootstrap/js/bundle.php'; 
+  ?>
+  <script src="asset/js/admin/dashboard.js"></script>
+  <script src="asset/js/admin/mini-sidebar.js"></script>
+  <script src="asset/js/admin/sidebarmenu.js"></script>
+  <script src="asset/js/admin/unit.js"></script>
 </body>
 </html>
