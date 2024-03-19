@@ -28,19 +28,15 @@
                 </ul>
             </div>
             <div class="navbar align-self-center d-flex">
-                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
-                        <div class="input-group-text">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </div>
-                    </div>
-                </div>
-
                 <?php if ($user->isLoggedIn()): ?>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <a class="nav-icon position-relative text-decoration-none" href="/fmware/cart">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" id="cart-count"></span>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" id="cart-count">
+                            <?php
+                                $cart_count = $cart->cartCount($_SESSION['user_id']);
+                                echo $cart_count;
+                            ?>
+                        </span>
                     </a>
                     <div class="dropdown">
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

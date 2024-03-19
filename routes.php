@@ -9,6 +9,7 @@ require_once __DIR__.'/router.php';
     get('/fmware/about', 'views/home/about.php');
     get('/fmware/shop', 'views/home/shop.php');
     get('/fmware/view-product', 'views/home/view-product.php');
+    get('/fmware/cart', 'views/home/cart.php');
 
     // Cart Controller
     any('/fmware/add-cart', 'controller/home/cart/add-cart.php');

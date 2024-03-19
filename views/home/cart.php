@@ -2,11 +2,9 @@
     include_once 'session.php';
     require_once 'model/user/user.php';
     require_once 'model/home/productClass.php';
-    require_once 'model/home/cartClass.php';
 
     $user = new User();
     $product = new Product();
-    $cart = new Cart();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,11 +21,11 @@
     <body>
         <?php include_once 'views/home/template/header.php'; ?>
         
-        <?php include_once 'views/home/template/banner.php'; ?>
+        <?php //include_once 'views/home/template/banner.php'; ?>
 
-        <?php include_once 'views/home/content/home-content.php'; ?>
+        <?php //include_once 'views/home/content/home-content.php'; ?>
 
-        <?php include_once 'views/home/template/footer.php'; ?>
+        <?php //include_once 'views/home/template/footer.php'; ?>
             
         <?php
             include_once 'vendor/jQuery/bundle.php';

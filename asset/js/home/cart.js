@@ -8,8 +8,8 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(feedback) {
-                if (feedback.cart_feedback) {
-                    $('#cart-feedback').text(feedback.cart_feedback);
+                if (feedback.cart_count) {
+                    $('#cart-count').text(feedback.cart_count);
                 }
             }
         });

@@ -22,6 +22,34 @@
                 die("Error in preparing statement: " . $conn->error);
             }
         }
+
+        public function isCartExist ($user_id, $product_id) {
+            $conn = $this->getConnection();
+
+            
+        }
+
+        public function cartCount ($user_id) {
+            $conn = $this->getConnection();
+
+            $query = 'SELECT COUNT(*) FROM cart WHERE user_id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $user_id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+                    return $count;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
         public function addCart () {
             $conn = $this->getConnection();
 
@@ -36,7 +64,8 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('cart_feedback' => 'Added to cart');
+                    $cart_count = $this->cartCount($_SESSION['user_id']);
+                    $json = array('cart_count' => $cart_count);
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
