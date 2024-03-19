@@ -71,6 +71,46 @@
             }
         }
 
+        public function getRestock () {
+            $conn = $this->getConnection();
+
+            $query = 'SELECT restock.supplier_order_no,
+                            restock.qty,
+                            restock.date,
+                            product.image,
+                            product.name,
+                            user.firstname,
+                            user.lastname 
+                    FROM restock
+                    INNER JOIN product ON product.id = restock.product_id
+                    INNER JOIN user ON user.id = restock.user_id';
+            $stmt = $conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($supplier_order_no, $qty, $date, $image, $name, $fname, $lname);
+                    while ($stmt->fetch()) {
+                        $initial = substr($lname, 0, 1);
+                        $author = $fname.' '.$initial.'.';
+                        $dateObj = DateTime::createFromFormat('Y-m-d', $date);
+                        $dateFormat = $dateObj->format('d F Y');
+                        echo '<tr>
+                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
+                                <td>'.$name.'</td>
+                                <td>'.$qty.'</td>
+                                <td>'.$supplier_order_no.'</td>
+                                <td>'.$author.'</td>
+                                <td>'.$dateFormat.'</td>
+                            </tr>';
+                    }
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
         public function addStock () {
             $conn = $this->getConnection();
             
