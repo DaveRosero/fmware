@@ -1,4 +1,4 @@
-<<!-- New Modal -->
+<!-- New Modal -->
 <div class="modal fade" id="newProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -41,23 +41,23 @@
                     <div class="row mb-2">
                         <div class="col">
                             <label for="" class="form-label">Category <span class="text-danger">*</span></label>
-                            <select class="form-select" id="category" name="category">
-                                <option disabled selected>Category</option>
+                            <select class="form-select" id="category" name="category" data-placeholder="Select Category">
+                                <option></option>
                                 <?php $products->getCategory(); ?>
                             </select>
                         </div>
                         <div class="col">
                             <label for="" class="form-label">Brand <span class="text-danger">*</span></label>
-                            <select class="form-select" id="brand" name="brand">
-                                <option disabled selected>Brand</option>
+                            <select class="form-select" id="brand" name="brand" data-placeholder="Select Brand">
+                                <option></option>
                                 <?php $products->getBrands(); ?>
                             </select>
                         </div>
                         <div class="col">
                             <label for="" class="form-label">Unit <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="unit_value">
-                            <select class="form-select" id="unit" name="unit">
-                                <option disabled selected>Unit</option>
+                            <select class="form-select" id="unit" name="unit" data-placeholder="Select Unit">
+                                <option></option>
                                 <?php $products->getUnits(); ?>
                             </select>
                         </div>

@@ -135,7 +135,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/fmware/product');
+                    $json = array('redirect' => '/fmware/products');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);

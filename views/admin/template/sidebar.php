@@ -44,11 +44,11 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/restocks" aria-expanded="false">
+              <a class="sidebar-link" href="/fmware/price-list" aria-expanded="false">
                 <span>
-                <i class="fas fa-dolly fs-4"></i>
+                <i class="fas fa-list-alt"></i>
                 </span>
-                <span class="hide-menu">Restocks</span>
+                <span class="hide-menu">Price List</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -92,6 +92,14 @@
                 <i class="fas fa-file-invoice fs-4"></i>
                 </span>
                 <span class="hide-menu">Orders</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/restocks" aria-expanded="false">
+                <span>
+                <i class="fas fa-dolly fs-4"></i>
+                </span>
+                <span class="hide-menu">Restocks</span>
               </a>
             </li>
             <li class="nav-small-cap">

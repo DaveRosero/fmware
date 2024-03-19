@@ -41,11 +41,15 @@ require_once __DIR__.'/router.php';
 
     // Inventory Views
     get('/fmware/products', 'views/admin/products.php');
+    get('/fmware/stocks', 'views/admin/stocks.php');
 
     // Product Controller
     any('/fmware/new-product', 'controller/admin/product/new-product.php');
     any('/fmware/edit-product', 'controller/admin/product/edit-product.php');
     any('/fmware/disable-product', 'controller/admin/product/disable-product.php');
+
+    // Stocks Controller
+    any('/fmware/add-stock', 'controller/admin/stocks/add-stock.php');
 
 //*****************************************************************//
 
