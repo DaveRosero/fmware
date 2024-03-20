@@ -34,6 +34,7 @@
             include_once 'vendor/FontAwesome/kit.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
+        <script src="vendor/NotifyJS/js/notify.js"></script>
         <script src="asset/js/home/cart.js"></script>
     </body>
 </html>
