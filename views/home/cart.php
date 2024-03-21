@@ -24,12 +24,10 @@
     </head>
     <body>
         <?php include_once 'views/home/template/header.php'; ?>
-        
-        <?php //include_once 'views/home/template/banner.php'; ?>
 
         <?php include_once 'views/home/content/cart-content.php'; ?>
 
-        <?php //include_once 'views/home/template/footer.php'; ?>
+        <?php include_once 'views/home/modals/cart-modal.php'; ?>
             
         <?php
             include_once 'vendor/jQuery/bundle.php';
