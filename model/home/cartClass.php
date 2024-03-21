@@ -100,5 +100,186 @@
                 die("Error in preparing statement: " . $conn->error);
             }
         }
+
+        public function getCart ($id) {
+            $conn = $this->getConnection();
+
+            $query = 'SELECT cart.id,
+                            cart.qty,
+                            cart.subtotal,
+                            product.image,
+                            product.name,
+                            price_list.unit_price
+                    FROM cart
+                    INNER JOIN product ON product.id = cart.product_id
+                    INNER JOIN price_list ON price_list.product_id = product.id
+                    WHERE cart.user_id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            if ($stmt) {
+                if ($stmt->execute()) { 
+                    $stmt->bind_result($id, $qty, $subtotal, $image, $name, $price);
+                    while ($stmt->fetch()) {
+                        echo '<tr>
+                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 100px"></td>
+                                <td>'.$name.'</td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <button 
+                                            class="btn btn-sm btn-danger subQty"
+                                            data-cart-id="'.$id.'"
+                                        >-</button>
+                                        <input type="number" 
+                                            class="form-control form-control-sm text-center qty" 
+                                            value="'.$qty.'" style="width: 50px;" readonly
+                                        >
+                                        <button 
+                                            class="btn btn-sm btn-primary addQty"
+                                            data-cart-id="'.$id.'"
+                                        >+</button>
+                                    </div>
+                                </td>
+                                <td>₱'.number_format($price).'.00</td>
+                                <td class="subtotal fw-semibold">₱'.number_format($subtotal).'.00</td>
+                            </tr>';
+                    }
+                    $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
+        public function getCartTotal ($id) {
+            $conn = $this->getConnection();
+
+            $query = 'SELECT subtotal FROM cart WHERE user_id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($subtotal);
+                    $grandtotal = 0;
+                    while ($stmt->fetch()){
+                        $grandtotal += $subtotal;
+                    }
+                    echo '₱'.number_format($grandtotal).'.00';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
+        public function getNewSubtotal ($id) {
+            $conn = $this->getConnection();
+
+            $query = 'SELECT cart.qty,
+                            price_list.unit_price
+                    FROM cart
+                    INNER JOIN price_list ON price_list.product_id = cart.product_id
+                    WHERE cart.id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($qty, $price);
+                    $stmt->fetch();
+                    $subtotal = $qty * $price;
+                    return [
+                        'qty' => $qty,
+                        'subtotal' => $subtotal
+                    ];
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
+        public function updateSubtotal ($id, $subtotal) {
+            $conn = $this->getConnection();
+
+            $query = 'UPDATE cart SET subtotal = ? WHERE id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ii', $subtotal, $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
+        public function addQty () {
+            $conn = $this->getConnection();
+
+            $id = $_POST['id'];
+            $qty = 1;
+
+            $query = 'UPDATE cart SET qty = qty + ? WHERE id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ii', $qty, $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $new_cart = $this->getNewSubtotal($id);
+                    $this->updateSubtotal($id, $new_cart['subtotal']);
+                    $subtotal = number_format($new_cart['subtotal']);
+                    $subtotal = '₱'.$subtotal.'.00';
+                    $json = array(
+                        'qty' => $new_cart['qty'],
+                        'subtotal' => $subtotal
+                    );
+                    echo json_encode($json);
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
+
+        public function subQty () {
+            $conn = $this->getConnection();
+
+            $id = $_POST['id'];
+            $qty = 1;
+
+            $query = 'UPDATE cart SET qty = qty - ? WHERE id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ii', $qty, $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $new_cart = $this->getNewSubtotal($id);
+                    $this->updateSubtotal($id, $new_cart['subtotal']);
+                    $subtotal = number_format($new_cart['subtotal']);
+                    $subtotal = '₱'.$subtotal.'.00';
+                    $json = array(
+                        'qty' => $new_cart['qty'],
+                        'subtotal' => $subtotal
+                    );
+                    echo json_encode($json);
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
     }
 ?>

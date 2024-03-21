@@ -1,5 +1,5 @@
 <!-- Start Banner Hero -->
-<div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="container">
