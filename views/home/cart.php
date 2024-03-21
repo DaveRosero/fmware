@@ -2,9 +2,13 @@
     include_once 'session.php';
     require_once 'model/user/user.php';
     require_once 'model/home/productClass.php';
+    require_once 'model/home/cartClass.php';
 
     $user = new User();
     $product = new Product();
+    $cart = new Cart();
+
+    $user_info = $user->getUser($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +27,7 @@
         
         <?php //include_once 'views/home/template/banner.php'; ?>
 
-        <?php //include_once 'views/home/content/home-content.php'; ?>
+        <?php include_once 'views/home/content/cart-content.php'; ?>
 
         <?php //include_once 'views/home/template/footer.php'; ?>
             
@@ -32,6 +36,7 @@
             include_once 'vendor/FontAwesome/kit.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
+        <script src="vendor/NotifyJS/js/notify.js"></script>
         <script src="asset/js/home/cart.js"></script>
     </body>
 </html>

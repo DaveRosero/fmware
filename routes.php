@@ -13,6 +13,9 @@ require_once __DIR__.'/router.php';
 
     // Cart Controller
     any('/fmware/add-cart', 'controller/home/cart/add-cart.php');
+    any('/fmware/add-qty', 'controller/home/cart/add-qty.php');
+    any('/fmware/sub-qty', 'controller/home/cart/sub-qty.php');
+    any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
 
 //*****************************************************************//
 
