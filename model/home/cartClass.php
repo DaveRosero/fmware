@@ -281,5 +281,25 @@
                 die("Error in preparing statement: " . $conn->error);
             }
         }
+
+        public function resetCart ($id) {
+            $conn = $this->getConnection();
+
+            $query = 'DELETE FROM cart WHERE user_id = ?';
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $redirect = '/fmware/cart';
+                    echo $redirect;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $conn->error);
+            }
+        }
     }
 ?>

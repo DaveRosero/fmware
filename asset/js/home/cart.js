@@ -14,7 +14,7 @@ $(document).ready(function(){
     }
 
     getCartTotal();
-
+      
     $(document).on('click', '.add-cart', function(){
         var parentButton = $(this).closest('.add-cart');
         $.ajax({
@@ -81,9 +81,23 @@ $(document).ready(function(){
     });
 
     $('#cart-reset').on('click', function(){
-        $.notify('Confirm?', {
-            className: 'error',
-            button: 'Click'
-        });
+        $('#reset-warning').modal('show');
     });
+
+    $('#confirm-reset').on('click', function(){
+        var id = $(this).data('user-id');
+        $.ajax({
+            url: '/fmware/reset-cart',
+            method: 'POST',
+            data: {
+                id: id
+            },
+            dataType: 'text',
+            success: function(feedback){
+                if (feedback) {
+                    window.location.href = feedback;
+                }
+            }
+        });
+    })
 })
