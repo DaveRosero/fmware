@@ -16,9 +16,9 @@
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $image, $price);
                     while ($stmt->fetch()) {
-                        echo '<div class="col-md-4">
+                        echo '<div class="col-md-3">
                                 <div class="card">
-                                    <img src="asset/images/products/'.$image.'" class="card-img-top" alt="">
+                                    <img src="asset/images/products/'.$image.'" class="card-img-top mx-auto d-block" alt="" style="width: 200px;">
                                     <div class="card-body">
                                         <h5 class="card-title">'.$name.'</h5>
                                         <p class="card-text">₱'.$price.'</p>
