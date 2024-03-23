@@ -26,7 +26,7 @@
                 <tr>
                     <th class="text-end" colspan="5">
                         <button class="btn btn-danger" id="cart-reset">Cart Reset</button>
-                        <button class="btn btn-primary">Checkout</button>
+                        <button class="btn btn-primary" id="cart-checkout">Checkout</button>
                     </th>
                 </tr>
             </tfoot>

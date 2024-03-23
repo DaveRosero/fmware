@@ -99,5 +99,9 @@ $(document).ready(function(){
                 }
             }
         });
-    })
+    });
+
+    $('#cart-checkout').on('click', function(){
+        $('#checkout-form').modal('show');
+    });
 })
