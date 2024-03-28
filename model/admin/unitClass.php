@@ -3,9 +3,8 @@
 
     class Unit extends Admin {
         public function isUnitExist ($unit) {
-            $conn = $this->getConnection();
             $query = 'SELECT COUNT(*) FROM unit WHERE name = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $unit);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -23,12 +22,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function newUnit() {
-            $conn = $this->getConnection();
             $unit = $_POST['unit_name'];
             if ($this->isUnitExist($unit)) {
                 $json = array('unit_feedback' => 'Unit already exist.');
@@ -39,7 +37,7 @@
             $query = 'INSERT INTO unit
                         (name, user_id, active)
                     VALUES (?,?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('sii', $unit, $_SESSION['user_id'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -51,13 +49,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getUnits () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT
                         unit.id, 
                         unit.name, 
@@ -67,7 +63,7 @@
                         user.lastname 
                     FROM unit
                     INNER JOIN user ON unit.user_id = user.id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $date, $active, $fname, $lname);
@@ -114,12 +110,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function editUnit () {
-            $conn = $this->getConnection();
             $id = $_POST['unit_id'];
             $unit = $_POST['unit_name'];
             if ($this->isUnitExist($unit)) {
@@ -128,7 +123,7 @@
                 return;
             }
             $query = "UPDATE unit SET name = ? WHERE id = ?";
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('si', $unit, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -140,12 +135,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function disableUnit () {
-            $conn = $this->getConnection();
             $id = $_POST['id'];
             $status = $_POST['status'];
             if ($status == 1) {
@@ -154,7 +148,7 @@
                 $active = 1;
             }
             $query = 'UPDATE unit SET active = ? WHERE id = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $active, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -166,7 +160,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }

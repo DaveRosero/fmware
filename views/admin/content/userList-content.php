@@ -16,7 +16,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $userList->getUserList(); ?>
+                        <?php $user_list->getUserList(); ?>
                     </tbody>
                 </table>
             </div>

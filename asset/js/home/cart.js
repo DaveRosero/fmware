@@ -1,18 +1,45 @@
 $(document).ready(function(){
     function getCartTotal () {
-        var id = $('#cart-total').data('user-id');
+        var id = $('#total').data('user-id');
         $.ajax({
             url: '/fmware/cart-total',
             method: 'POST',
             data: {
                 id : id
             },
+            dataType: 'json',
             success: function(feedback){
-                $('#cart-total').text(feedback);
+                $('#product-total').text(feedback.product_total);
+                $('#total').text(feedback.total);
+                $('#tax').text(feedback.tax);
             }
         });
     }
 
+    function getDeliveryFee () {
+        $.ajax({
+            url: '/fmware/delivery-fee',
+            method: 'POST',
+            dataType: 'json',
+            success: function(feedback){
+                $('#delivery-fee').text(feedback.fee);
+            }
+        })
+    }
+
+    function getVAT () {
+        $.ajax({
+            url: '/fmware/vat',
+            method: 'POST',
+            dataType: 'json',
+            success: function(feedback){
+                $('#vat').text(feedback.vat);
+            }
+        })
+    }
+
+    getDeliveryFee();
+    getVAT();
     getCartTotal();
       
     $(document).on('click', '.add-cart', function(){
@@ -40,8 +67,9 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.addQty', function(){
-        var qty = $(this).siblings('.qty');
-        var subtotal = $(this).closest('tr').find('.subtotal');
+        var id = $(this).data('product-id');
+        var qty = $('.qty_' + id);
+        var subtotal = $('.subtotal_' + id);
         $.ajax({
             url: '/fmware/add-qty',
             method: 'POST',
@@ -58,8 +86,9 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.subQty', function(){
-        var qty = $(this).siblings('.qty');
-        var subtotal = $(this).closest('tr').find('.subtotal');
+        var id = $(this).data('product-id');
+        var qty = $('.qty_' + id);
+        var subtotal = $('.subtotal_' + id);
 
         if (qty.val() == 1) {
             return;
@@ -76,27 +105,6 @@ $(document).ready(function(){
                 qty.val(feedback.qty);
                 subtotal.text(feedback.subtotal);
                 getCartTotal();
-            }
-        });
-    });
-
-    $('#cart-reset').on('click', function(){
-        $('#reset-warning').modal('show');
-    });
-
-    $('#confirm-reset').on('click', function(){
-        var id = $(this).data('user-id');
-        $.ajax({
-            url: '/fmware/reset-cart',
-            method: 'POST',
-            data: {
-                id: id
-            },
-            dataType: 'text',
-            success: function(feedback){
-                if (feedback) {
-                    window.location.href = feedback;
-                }
             }
         });
     });

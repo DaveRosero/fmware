@@ -3,9 +3,8 @@
 
     class Category extends Admin {
         public function isCategoryExist ($category) {
-            $conn = $this->getConnection();
             $query = 'SELECT COUNT(*) FROM category WHERE name = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $category);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -23,12 +22,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function newCategory () {
-            $conn = $this->getConnection();
             $category = $_POST['category_name'];
             if ($this->isCategoryExist($category)) {
                 $json = array('category_feedback' => 'Category already exist.');
@@ -39,7 +37,7 @@
             $query = 'INSERT INTO category
                         (name, user_id, active)
                     VALUES (?,?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('sii', $category, $_SESSION['user_id'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -51,16 +49,15 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function editCategory () {
-            $conn = $this->getConnection();
             $id = $_POST['category_id'];
             $category = $_POST['category_name'];
             $query = "UPDATE category SET name = ? WHERE id = ?";
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('si', $category, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -72,13 +69,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getCategory () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT
                         category.id, 
                         category.name, 
@@ -88,7 +83,7 @@
                         user.lastname 
                     FROM category
                     INNER JOIN user ON category.user_id = user.id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $date, $active, $fname, $lname);
@@ -135,12 +130,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function disableCategory () {
-            $conn = $this->getConnection();
             $id = $_POST['id'];
             $status = $_POST['status'];
             if ($status == 1) {
@@ -149,7 +143,7 @@
                 $active = 1;
             }
             $query = 'UPDATE category SET active = ? WHERE id = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $active, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -161,7 +155,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }

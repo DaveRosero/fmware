@@ -5,8 +5,8 @@
     $cart = new Cart();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'];
-        $cart->resetCart($id);
+        $fee = $cart->getDeliveryFee();
+        echo json_encode($fee);
     } else {
         header('Location: /fmware/404');
         exit();
