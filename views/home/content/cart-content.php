@@ -1,35 +1,66 @@
-<div class="container">
-    <div class="row py-5 text-center">
-        <h1 class="fw-semibold">
-            <?php
-                echo $user_info['fname']." ".substr($user_info['lname'], 0, 1).".'s Cart";
-            ?>
-        </h1>
+<section class="h-100 gradient-custom">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center my-4">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Cart - <?php echo $cart->cartCount($user_info['id']); ?> items</h5>
+          </div>
+          <div class="card-body">
+            <?php $cart->getCart($user_info['id']); ?>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <p><strong>Expected shipping delivery</strong></p>
+            <p class="mb-0">SAME DAY DELIVERY</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Summary</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                Products
+                <span id="product-total"></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                Delivery Fee 
+                <span id="delivery-fee"></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                <div id="vat"></div>
+                <span id="tax"></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                <div>
+                  <strong>Total amount</strong>
+                </div>
+                <span><strong id="total" data-user-id="<?php echo $user_info['id']; ?>"></strong></span>
+              </li>
+            </ul>
+
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+              Go to checkout
+            </button>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body">
+            <p><strong>We accept</strong></p>
+            <img class="me-2" width="100px"
+            src="asset/images/payments/cod.png"
+            alt="COD" />
+            <img class="me-2" width="100px"
+              src="asset/images/payments/gcash.png"
+              alt="GCash" />
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="row py-5 text-center">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $cart->getCart($user_info['id']); ?>
-            </tbody>
-            <tfoot>
-                <th class="text-end" colspan="4">Grand Total :</th>
-                <th id="cart-total" data-user-id="<?php echo $user_info['id']; ?>"></th>
-                <tr>
-                    <th class="text-end" colspan="5">
-                        <button class="btn btn-danger" id="cart-reset">Cart Reset</button>
-                        <button class="btn btn-primary">Checkout</button>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-</div>
+  </div>
+</section>

@@ -3,11 +3,10 @@
 
     class Stocks extends Admin {
         public function getProducts () {
-            $conn = $this->getConnection();
             $query = 'SELECT id, name FROM product 
                     WHERE NOT EXISTS 
                         (SELECT 1 FROM stock WHERE stock.product_id = product.id)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name);
@@ -20,13 +19,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getStocks () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT stock.product_id,
                             stock.qty,
                             stock.critical_level,
@@ -38,7 +35,7 @@
                     INNER JOIN product ON product.id = stock.product_id
                     INNER JOIN brand ON brand.id = product.brand_id
                     INNER JOIN category ON category.id = product.category_id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $qty, $critical_level, $image, $name, $brand, $category);
@@ -67,13 +64,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getRestock () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT restock.supplier_order_no,
                             restock.qty,
                             restock.date,
@@ -84,7 +79,7 @@
                     FROM restock
                     INNER JOIN product ON product.id = restock.product_id
                     INNER JOIN user ON user.id = restock.user_id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($supplier_order_no, $qty, $date, $image, $name, $fname, $lname);
@@ -107,19 +102,17 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function addStock () {
-            $conn = $this->getConnection();
-            
             $id = $_POST['product_id'];
             $critical_level = $_POST['critical_level'];
 
             $query = 'INSERT INTO stock (product_id, critical_level)
                     VALUES (?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $id, $critical_level);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -131,15 +124,13 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function updateQty ($qty, $id) {
-            $conn = $this->getConnection();
-
             $query = 'UPDATE stock SET qty = qty + ? WHERE product_id = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $qty, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -149,13 +140,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function restock () {
-            $conn = $this->getConnection();
-
             $supplier_order_no = $_POST['supplier_order_no'];
             $product_id = $_POST['product_id'];
             $qty = $_POST['qty'];
@@ -164,7 +153,7 @@
             $query = 'INSERT INTO restock
                         (user_id, supplier_order_no, product_id, qty, date)
                     VALUES (?,?,?,?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('isiis', $_SESSION['user_id'], $supplier_order_no, $product_id, $qty, $date);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -177,7 +166,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }

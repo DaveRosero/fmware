@@ -8,7 +8,7 @@ require_once __DIR__.'/router.php';
     get('/fmware', 'views/home/home.php');
     get('/fmware/about', 'views/home/about.php');
     get('/fmware/shop', 'views/home/shop.php');
-    get('/fmware/view-product', 'views/home/view-product.php');
+    get('/fmware/view-product/product/$product_id', 'views/home/view-product.php');
     get('/fmware/cart', 'views/home/cart.php');
 
     // Cart Controller
@@ -16,7 +16,8 @@ require_once __DIR__.'/router.php';
     any('/fmware/add-qty', 'controller/home/cart/add-qty.php');
     any('/fmware/sub-qty', 'controller/home/cart/sub-qty.php');
     any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
-    any('/fmware/reset-cart', 'controller/home/cart/reset-cart.php');
+    any('/fmware/delivery-fee', 'controller/home/cart/delivery-fee.php');
+    any('/fmware/vat', 'controller/home/cart/vat.php');
 
 //*****************************************************************//
 

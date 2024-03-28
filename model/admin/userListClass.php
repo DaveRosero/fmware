@@ -3,15 +3,13 @@
 
     class UserList extends Admin {
         public function getUserList () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT 
                         user.id, user.firstname, user.lastname, user.email, user.phone, user.sex,
                         user_group.user_id, user_group.group_id, groups.name
                     FROM user
                     INNER JOIN user_group ON user_group.user_id = user.id
                     INNER JOIN groups ON user_group.group_id = groups.id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result(
@@ -20,7 +18,7 @@
                     );
 
                     while ($stmt->fetch()) {
-                        if ($group_name == 'admin') {
+                        if ($group_name !== 'user') {
                             continue;
                         }
                         $name = $fname . ' ' . $lname;
@@ -46,20 +44,18 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getStaffList () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT 
                         user.id, user.firstname, user.lastname, user.email, user.phone, user.sex,
                         user_group.user_id, user_group.group_id, groups.name
                     FROM user
                     INNER JOIN user_group ON user_group.user_id = user.id
                     INNER JOIN groups ON user_group.group_id = groups.id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result(
@@ -94,16 +90,15 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getStaff ($email) {
-            $conn = $this->getConnection();
             $query = 'SELECT id, firstname, lastname, email, password, phone, sex
                     FROM user
                     WHERE email = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 $stmt->bind_param('s', $email);
                 if ($stmt->execute()) {
@@ -126,19 +121,16 @@
                     return null;
                 }
             } else {
-                echo "Error preparing statement: " . $conn->error;
+                echo "Error preparing statement: " . $this->conn->error;
                 return null;
             }
         }
 
-        public function addStaff ($id, $group) {
-            $conn = $this->getConnection();
-            $group_id = $group;
-
+        public function addStaff ($id, $group_id) {
             $query = 'INSERT INTO user_group
                         (user_id, group_id)
                     VALUES (?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $id, $group_id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -149,16 +141,13 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }           
         }
 
         public function newStaff () {
-            $conn = $this->getConnection();
-
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
-            $name = $fname.' '.$lname;
             $email = $_POST['email'];
             $password = $_POST['password'];
             $phone = $_POST['phone'];
@@ -168,7 +157,7 @@
             $query = 'INSERT INTO user
                         (firstname, lastname, email, password, phone, sex)
                     VALUES (?,?,?,?,?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('sssssi', $fname, $lname, $email, $password, $phone, $sex);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -185,7 +174,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }

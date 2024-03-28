@@ -3,10 +3,8 @@
 
     class Products extends Admin {
         public function getCategory () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT id, name, active FROM category';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $active);
@@ -22,15 +20,13 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getBrands() {
-            $conn = $this->getConnection();
-
             $query = 'SELECT id, name, active FROM brand';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $active);
@@ -46,15 +42,13 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getUnits () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT id, name, active FROM unit';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $active);
@@ -70,14 +64,13 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function isProductExist ($product) {
-            $conn = $this->getConnection();
             $query = 'SELECT COUNT(*) FROM product WHERE name = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $product);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -95,7 +88,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
@@ -106,8 +99,6 @@
                 return;
             }
 
-            $conn = $this->getConnection();
-            
             $uploadDir = 'asset/images/products/';
             $uploadFile = $uploadDir . basename($_FILES['image']['name']);
             move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile);
@@ -130,7 +121,7 @@
             $query = 'INSERT INTO product
                         (name, code, supplier_code, barcode, image, description, brand_id, category_id, unit_id, unit_value, expiration_date, user_id, active)
                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ssssssiiiisii', $name, $code, $supplier_code, $barcode, $image, $description, $brand, $category, $unit, $unit_value, $expiration_date, $_SESSION['user_id'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -142,13 +133,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function getProducts () {
-            $conn = $this->getConnection();
-
             $query = 'SELECT
                         product.id,
                         product.name,
@@ -165,7 +154,7 @@
                     INNER JOIN brand ON brand.id = product.brand_id
                     INNER JOIN category ON category.id = product.category_id
                     INNER JOIN unit ON unit.id = product.unit_id';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit);
@@ -222,7 +211,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }

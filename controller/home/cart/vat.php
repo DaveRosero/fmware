@@ -5,9 +5,8 @@
     $cart = new Cart();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'];
-        $total = $cart->getCartTotal($id);
-        echo json_encode($total);
+        $fee = $cart->getTax();
+        echo json_encode($fee);
     } else {
         header('Location: /fmware/404');
         exit();

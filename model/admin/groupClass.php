@@ -3,11 +3,9 @@
 
     class Group extends Admin{
         public function getGroups(){
-            $conn = $this->getConnection();
-
             $query = 'SELECT name, permission, active
                     FROM groups';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if($stmt->execute()){
                     $stmt->bind_result($name, $perms, $active);
@@ -34,13 +32,11 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function createGroup() {
-            $conn = $this->getConnection();
-
             $group_name = $_POST['group_name'];
             $permsArray = $_POST['permissions'];
             $perms = implode(', ', $permsArray);
@@ -48,7 +44,7 @@
             $query = 'INSERT INTO groups
                         (name, permission, active)
                     VALUES (?,?,?)';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ssi', $group_name, $perms, $active);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -58,15 +54,13 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
 
         public function displayGroups() {
-            $conn = $this->getConnection();
-
             $query = 'SELECT id, name FROM groups';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name);
@@ -78,7 +72,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }
