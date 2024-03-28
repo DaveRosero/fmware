@@ -370,6 +370,7 @@
             }
         }
 
-        
+        public function cartCheckout ($id) {
+        }
     }
 ?>

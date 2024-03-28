@@ -3,12 +3,15 @@
     require_once 'model/user/user.php';
     require_once 'model/home/productClass.php';
     require_once 'model/home/cartClass.php';
+    require_once 'model/user/addressClass.php';
 
     $user = new User();
     $product = new Product();
     $cart = new Cart();
+    $address = new Address();
 
     $user_info = $user->getUser($_SESSION['user_id']);
+    $user_address = $address->getAddress($user_info['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +21,8 @@
         <title>FMWare</title>
         <link rel="icon" href="asset/images/store/logo.png" type="image/png">
         <?php 
-            include_once 'vendor/Bootstrap/css/bundle.php'; 
+            include_once 'vendor/Bootstrap/css/bundle.php';
+            include_once 'vendor/Select2/css/bundle.php'; 
         ?>
         <link rel="stylesheet" href="asset/css/index.css">
     </head>
@@ -32,6 +36,7 @@
         <?php
             include_once 'vendor/jQuery/bundle.php';
             include_once 'vendor/FontAwesome/kit.php';
+            include_once 'vendor/Select2/js/bundle.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
         <script src="vendor/NotifyJS/js/notify.js"></script>

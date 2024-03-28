@@ -109,7 +109,40 @@ $(document).ready(function(){
         });
     });
 
-    $('#cart-checkout').on('click', function(){
-        $('#checkout-form').modal('show');
+    $('#checkout').on('click', function(){
+        var id = $(this).data('user-id');
+        $.ajax({
+            url: '/fmware/has-address',
+            method: 'POST',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(feedback){
+                console.log(feedback);
+                if (feedback.has_address) {
+                    $('#checkout-form').modal('show');
+                }
+
+                if (feedback.no_address) {
+                    $('#address-label').text(feedback.no_address);
+                    $('#address-form').modal('show');
+                }
+            }
+        });
+    });
+
+    $('#newAddress').on('submit', function(){
+        $.ajax({
+            url: '/fmware/new-address',
+            method: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(feedback){
+                if (feedback.redirect) {
+                    window.location.href = feedback.redirect
+                }
+            }
+        });
     });
 })

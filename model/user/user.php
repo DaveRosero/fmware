@@ -2,17 +2,9 @@
     require_once 'model/database/database.php';
 
     class User{
-        private $conn;
+        protected $conn;
         public function __construct () {
             $this->conn = database();
-        }
-
-        public function isConnectionActive() {
-            return mysqli_ping($this->conn);
-        }
-
-        public function getConnection () {
-            return $this->conn;
         }
 
         public function isLoggedIn () {
@@ -56,12 +48,11 @@
         }
 
         public function getUserGroup ($id) {
-            $conn = $this->getConnection();
             $query = 'SELECT groups.name
                     FROM user_group
                     INNER JOIN groups ON user_group.group_id = groups.id
                     WHERE user_group.user_id = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -75,7 +66,7 @@
                     $stmt->close();
                 }
             }else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }
