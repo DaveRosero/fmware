@@ -77,5 +77,28 @@
                 die("Error in preparing statement: " . $this->conn->error);
             }
         }
+
+        public function displayAddress ($id) {
+            $query = 'SELECT id, house_no, street, brgy, municipality, description
+            FROM address
+            WHERE user_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($address_id, $house_no, $street, $brgy, $municipality, $description);
+                    while ($stmt->fetch()) {
+                        echo '<option vlaue="'.$address_id.'">
+                                '.$house_no.' '.$street.', '.$brgy.', '.$municipality.'
+                            </option>';
+                    }
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
     }
 ?>

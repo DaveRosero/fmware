@@ -11,6 +11,7 @@ $(document).ready(function(){
             success: function(feedback){
                 $('#product-total').text(feedback.product_total);
                 $('#total').text(feedback.total);
+                $('#checkout-total').text(feedback.total);
                 $('#tax').text(feedback.tax);
             }
         });
@@ -130,6 +131,11 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+    
+    $('#checkout-address').on('click', function(){
+        $('#checkout-form').modal('hide');
+        $('#address-form').modal('show');
     });
 
     $('#newAddress').on('submit', function(){

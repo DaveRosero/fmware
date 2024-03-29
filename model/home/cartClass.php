@@ -369,8 +369,5 @@
                 die("Error in preparing statement: " . $this->conn->error);
             }
         }
-
-        public function cartCheckout ($id) {
-        }
     }
 ?>
