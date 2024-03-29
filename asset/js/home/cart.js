@@ -138,7 +138,8 @@ $(document).ready(function(){
         $('#address-form').modal('show');
     });
 
-    $('#newAddress').on('submit', function(){
+    $('#newAddress').on('submit', function(event){
+        event.preventDefault();
         $.ajax({
             url: '/fmware/new-address',
             method: 'POST',
@@ -147,6 +148,22 @@ $(document).ready(function(){
             success: function(feedback){
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect
+                }
+            }
+        });
+    });
+
+    $('#place-order').on('submit', function(event){
+        event.preventDefault();
+        $.ajax({
+            url: '/fmware/checkout',
+            method: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(feedback){
+                console.log(feedback);
+                if (feedback.redirect) {
+                    window.location.href = feedback.redirect;
                 }
             }
         });
