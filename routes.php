@@ -18,6 +18,11 @@ require_once __DIR__.'/router.php';
     any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
     any('/fmware/delivery-fee', 'controller/home/cart/delivery-fee.php');
     any('/fmware/vat', 'controller/home/cart/vat.php');
+    any('/fmware/checkout', 'controller/home/cart/checkout.php');
+
+    // User Controller
+    any('/fmware/has-address', 'controller/home/user/has-address.php');
+    any('/fmware/new-address', 'controller/home/user/new-address.php');
 
 //*****************************************************************//
 

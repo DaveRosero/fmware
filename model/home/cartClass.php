@@ -369,7 +369,5 @@
                 die("Error in preparing statement: " . $this->conn->error);
             }
         }
-
-        
     }
 ?>

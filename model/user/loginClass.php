@@ -14,12 +14,11 @@
         }
 
         public function login () {
-            $conn = $this->getConnection();
             $json = array();
             $query = 'SELECT id, email, password
                     FROM user
                     WHERE email = ?';
-            $stmt = $conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $_POST['email']);
             if ($stmt) {
                 if ($stmt->execute()) {
@@ -46,7 +45,7 @@
                     $stmt->close();
                 }
             } else {
-                die("Error in preparing statement: " . $conn->error);
+                die("Error in preparing statement: " . $this->conn->error);
             }
         }
     }

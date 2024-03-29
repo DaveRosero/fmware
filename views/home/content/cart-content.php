@@ -12,8 +12,8 @@
         </div>
         <div class="card mb-4">
           <div class="card-body">
-            <p><strong>Expected shipping delivery</strong></p>
-            <p class="mb-0">SAME DAY DELIVERY</p>
+            <p><strong>Receive by</strong></p>
+            <p class="mb-0">March 28, 2024 - April 06, 2024</p>
           </div>
         </div>
       </div>
@@ -36,6 +36,13 @@
                 <div id="vat"></div>
                 <span id="tax"></span>
               </li>
+              <!-- <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                <div>Coupon Code</div>
+                <div class="text-end fs-6">
+                  <input class="form-control text-center" type="text" name="" id="" value="">
+                  <button class="btn btn-sm text-primary">Apply Coupon</button>
+                </div>
+              </li> DISCOUNT/PROMO CODES/COUPON-->
               <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                 <div>
                   <strong>Total amount</strong>
@@ -44,7 +51,7 @@
               </li>
             </ul>
 
-            <button type="button" class="btn btn-primary btn-lg btn-block">
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="checkout" data-user-id="<?php echo $user_info['id']; ?>">
               Go to checkout
             </button>
           </div>
