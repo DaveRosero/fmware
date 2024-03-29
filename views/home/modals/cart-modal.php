@@ -69,7 +69,7 @@
             <p class="fs-6 text-muted"><em>*We only accept orders within Bulacan</em></p>
           </div>
           <div class="modal-footer">
-            <input type="hidden" name="user_id" value="<?php echo $user_info['info']; ?>">
+            <input type="hidden" name="user_id" value="<?php echo $user_info['id']; ?>">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary" id="place-order" data-user-id="<?php echo $user_info['id']; ?>">Place Order</button>
           </div>
