@@ -67,8 +67,20 @@
             }
         }
 
-        public function deleteCart () {
-
+        public function deleteCart ($user_id) {
+            $query = 'DELETE FROM cart WHERE user_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $user_id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
         }
 
         public function orderItems($order_ref, $user_id) {
@@ -120,6 +132,7 @@
                 if ($stmt->execute()) {
                     $stmt->close();
                     $this->orderItems($order_ref, $user_id);
+                    $this->deleteCart($user_id);
                     return [
                         'redirect' => '/fmware'
                     ];
