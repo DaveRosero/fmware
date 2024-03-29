@@ -22,7 +22,7 @@
             <label for="">Phone Number</label>
             <input class="form-control mb-2" type="text" name="phone" id="" value="<?php echo $user_info['phone']; ?>">
             <label for="">Address</label>
-            <select class="form-select" name="address" id="address">
+            <select class="form-select" name="address" id="address" required>
               <option selected disabled>Select an Address</option>
               <?php echo $address->displayAddress($user_info['id']); ?>
             </select>
