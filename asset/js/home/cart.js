@@ -161,7 +161,6 @@ $(document).ready(function(){
             data: $(this).serialize(),
             dataType: 'json',
             success: function(feedback){
-                console.log('ajax success');
                 console.log(feedback);
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
