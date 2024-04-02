@@ -25,6 +25,33 @@
               </a>
             </li>
             <li class="nav-small-cap">
+              <span class="hide-menu">Management & Reports</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/manage-company" aria-expanded="false">
+                <span>
+                <i class="fas fa-store fs-4"></i>
+                </span>
+                <span class="hide-menu">Business Info</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/manage-sales" aria-expanded="false">
+                <span>
+                <i class="fas fa-money-bill fs-4"></i>
+                </span>
+                <span class="hide-menu">Sales</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/manage-orders" aria-expanded="false">
+                <span>
+                <i class="fas fa-file-invoice fs-4"></i>
+                </span>
+                <span class="hide-menu">Orders</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
               <span class="hide-menu">Inventory</span>
             </li>
             <li class="sidebar-item">
@@ -36,6 +63,14 @@
               </a>
             </li>
             <li class="sidebar-item">
+              <a class="sidebar-link" href="/fmware/price-list" aria-expanded="false">
+                <span>
+                <i class="fas fa-list-alt"></i>
+                </span>
+                <span class="hide-menu">Price List</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
               <a class="sidebar-link" href="/fmware/stocks" aria-expanded="false">
                 <span>
                 <i class="fas fa-cube fs-4"></i>
@@ -44,11 +79,11 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/price-list" aria-expanded="false">
+              <a class="sidebar-link" href="/fmware/restocks" aria-expanded="false">
                 <span>
-                <i class="fas fa-list-alt"></i>
+                <i class="fas fa-dolly fs-4"></i>
                 </span>
-                <span class="hide-menu">Price List</span>
+                <span class="hide-menu">Restocks</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -73,33 +108,6 @@
                 <i class="fas fa-truck fs-4"></i>
                 </span>
                 <span class="hide-menu">Suppliers</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">Reports</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/sales-report" aria-expanded="false">
-                <span>
-                <i class="fas fa-money-bill fs-4"></i>
-                </span>
-                <span class="hide-menu">Sales</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/orders-report" aria-expanded="false">
-                <span>
-                <i class="fas fa-file-invoice fs-4"></i>
-                </span>
-                <span class="hide-menu">Orders</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/fmware/restocks" aria-expanded="false">
-                <span>
-                <i class="fas fa-dolly fs-4"></i>
-                </span>
-                <span class="hide-menu">Restocks</span>
               </a>
             </li>
             <li class="nav-small-cap">

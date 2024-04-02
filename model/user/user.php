@@ -15,13 +15,13 @@
             }
         }
 
-        public function getUser ($id) {
+        public function getUser ($email) {
             $query = 'SELECT id, firstname, lastname, email, password, phone, sex
                     FROM user
-                    WHERE id = ?';
+                    WHERE email = ?';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
-                $stmt->bind_param('i', $id);
+                $stmt->bind_param('s', $email);
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone, $sex);
                     $stmt->fetch();

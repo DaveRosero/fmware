@@ -10,7 +10,7 @@
     $cart = new Cart();
     $address = new Address();
 
-    $user_info = $user->getUser($_SESSION['user_id']);
+    $user_info = $user->getUser($_SESSION['email']);
     $user_address = $address->getAddress($user_info['id']);
 ?>
 <!DOCTYPE html>

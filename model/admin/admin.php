@@ -40,5 +40,139 @@
                 die("Error in preparing statement: " . $this->conn->error);
             }
         }
+
+        public function getTotalProducts () {
+            $query = 'SELECT COUNT(*) FROM product WHERE active = 1';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+                    echo $count;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getTotalSuppliers () {
+            $query = 'SELECT COUNT(*) FROM supplier WHERE active = 1';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+                    echo $count;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getTotalUsers () {
+            $query = 'SELECT COUNT(*) FROM user';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+                    echo $count;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getDailyOrderNet () {
+            $query = 'SELECT net FROM orders WHERE DATE(date) = CURDATE() AND paid = "paid"';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($net);
+                    $sales = 0;
+                    while ($stmt->fetch()) {
+                        $sales += $net;
+                    }
+                    echo '₱'.number_format($sales).'.00';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getDailyOrderGross () {
+            $query = 'SELECT gross FROM orders WHERE DATE(date) = CURDATE() AND paid = "paid" AND transaction_type_id = 1';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($gross);
+                    $sales = 0;
+                    while ($stmt->fetch()) {
+                        $sales += $gross;
+                    }
+                    echo '₱'.number_format($sales).'.00';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getDailyPOSNet () {
+            $query = 'SELECT net FROM orders WHERE DATE(date) = CURDATE() AND paid = "paid" AND transaction_type_id = 2';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($net);
+                    $sales = 0;
+                    while ($stmt->fetch()) {
+                        $sales += $net;
+                    }
+                    echo '₱'.number_format($sales).'.00';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getDailyPOSGross () {
+            $query = 'SELECT gross FROM orders WHERE DATE(date) = CURDATE() AND paid = "paid" AND transaction_type_id = 2';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($gross);
+                    $sales = 0;
+                    while ($stmt->fetch()) {
+                        $sales += $gross;
+                    }
+                    echo '₱'.number_format($sales).'.00';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
     }
 ?>
