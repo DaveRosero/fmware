@@ -69,6 +69,11 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
+    // Manage Orders
+    get('/fmware/manage-orders', 'views/admin/order.php');
+
+//*****************************************************************//
+
     // Maintenance Views
     get('/fmware/category', 'views/admin/category.php');
     get('/fmware/brands', 'views/admin/brands.php');
