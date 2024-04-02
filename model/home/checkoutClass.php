@@ -102,6 +102,52 @@
             }
         }
 
+        public function getOrderProducts ($order_ref) {
+            $query = 'SELECT product_id, qty FROM order_items WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($product_id, $qty);
+                    $products = array();
+                    while ($stmt->fetch()) {
+                        $products[] = array(
+                            'id' => $product_id,
+                            'qty' => $qty
+                        );
+                    }
+                    $stmt->close();
+                    return $products;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function updateStock ($products) {
+            foreach ($products as $product) {
+                $product_id = $product['id'];
+                $qty = $product['qty'];
+
+                $query = 'UPDATE stock SET qty = qty - ? WHERE product_id = ?';
+                $stmt = $this->conn->prepare($query);
+                $stmt->bind_param('ii', $qty, $product_id);
+                if ($stmt) {
+                    if ($stmt->execute()) {
+                        $stmt->close();
+                    } else {
+                        die("Error in executing statement: " . $stmt->error);
+                        $stmt->close();
+                    }
+                } else {
+                    die("Error in preparing statement: " . $this->conn->error);
+                }
+            }
+        }
+
         public function placeOrder () {
             $this->newCart();
             $query = 'INSERT INTO orders
@@ -133,6 +179,8 @@
                     $stmt->close();
                     $this->orderItems($order_ref, $user_id);
                     $this->deleteCart($user_id);
+                    $products = $this->getOrderProducts($order_ref);
+                    $this->updateStock($products);
                     return [
                         'redirect' => '/fmware'
                     ];
