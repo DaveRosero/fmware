@@ -43,7 +43,7 @@
 
   <!-- Modal Start -->
     <?php
-      //include_once 'views/admin/modals/brand-modal.php';
+      include_once 'views/admin/modals/order-modal.php';
     ?>
   <!-- Modal End-->
 

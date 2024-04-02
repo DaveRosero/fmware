@@ -38,9 +38,11 @@
             $stmt->bind_param('sssssi', $fname, $lname, $email, $password, $phone, $sex);
             if ($stmt) {
                 if ($stmt->execute()) {
+                    $stmt->close();
                     $user = $this->getUser($email);
                     if ($this->newUser($user['id'])) {
                         $_SESSION['user_id'] = $user['id'];
+                        $_SESSION['email'] = $user['email'];
                         $json = array('redirect' => '/fmware');
                         echo json_encode($json);
                     } else {

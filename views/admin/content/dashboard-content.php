@@ -6,15 +6,15 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                <div class="row alig n-items-start">
-                    <div class="col ">
-                    <h5 class="card-title mb-9 fw-semibold">Total Products</h5>
+                    <div class="row align-items-start">
+                        <div class="col ">
+                            <h5 class="card-title mb-9 fw-semibold">Total Products</h5>
+                        </div>
+                        <div class="col">
+                            <h4 class="fw-semibold mb-3"><i class="fas fa-barcode px-4"></i><?php $admin->getTotalProducts(); ?></h4>
+                        </div>
+                        <p class="mb-0 text-end"><a href="/fmware/products">View details ></a></p>
                     </div>
-                    <div class="col">
-                    <h4 class="fw-semibold mb-3">69</h4>
-                    </div>
-                    <p class="mb-0 text-end"><a href="">View details ></a></p>
-                </div>
                 </div>
             </div>
         </div>
@@ -23,15 +23,15 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                <div class="row alig n-items-start">
-                    <div class="col ">
-                    <h5 class="card-title mb-9 fw-semibold">Total Suppliers</h5>
+                    <div class="row align-items-start">
+                        <div class="col ">
+                            <h5 class="card-title mb-9 fw-semibold">Total Suppliers</h5>
+                        </div>
+                        <div class="col">
+                            <h4 class="fw-semibold mb-3"><i class="fas fa-truck px-4"></i><?php $admin->getTotalSuppliers(); ?></h4>
+                        </div>
+                        <p class="mb-0 text-end"><a href="/fmware/suppliers">View details ></a></p>
                     </div>
-                    <div class="col">
-                    <h4 class="fw-semibold mb-3">14</h4>
-                    </div>
-                    <p class="mb-0 text-end"><a href="">View details ></a></p>
-                </div>
                 </div>
             </div>
         </div>
@@ -40,15 +40,15 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                <div class="row alig n-items-start">
-                    <div class="col">
-                    <h5 class="card-title mb-9 fw-semibold">Total Users</h5>
+                    <div class="row align-items-start">
+                        <div class="col">
+                            <h5 class="card-title mb-9 fw-semibold">Total Users</h5>
+                        </div>
+                        <div class="col">
+                            <h4 class="fw-semibold mb-3"><i class="fas fa-users px-4"></i><?php $admin->getTotalUsers(); ?></h4>
+                        </div>
+                        <p class="mb-0 text-end"><a href="/fmware/users">View details ></a></p>
                     </div>
-                    <div class="col">
-                    <h4 class="fw-semibold mb-3">9</h4>
-                    </div>
-                    <p class="mb-0 text-end"><a href="">View details ></a></p>
-                </div>
                 </div>
             </div>
         </div>
@@ -60,16 +60,28 @@
         <!-- Daily Sales - Order Card -->
         <div class="col">
             <div class="card">
-                <div class="card-body">
-                <div class="row alig n-items-start">
-                    <div class="col ">
-                    <h5 class="card-title mb-9 fw-semibold">Daily Sales | Order</h5>
-                    </div>
-                    <div class="col">
-                    <h4 class="fw-semibold mb-3">P69,420</h4>
-                    </div>
-                    <p class="mb-0 text-end"><a href="">View details ></a></p>
+                <div class="card-header">
+                    <h5 class="badge bg-secondary"><strong>ORDERS</strong></h5>
+                    <h5 class="badge bg-success"><strong>Daily Sales</strong></h5>
                 </div>
+                <div class="card-body">
+                    <div class="row align-items-start">
+                        <div class="col ">
+                        <h5 class="card-title mb-9 fw-semibold">Gross Profit</h5>
+                        </div>
+                        <div class="col">
+                        <h4 class="fw-semibold mb-3"><?php $admin->getDailyOrderGross(); ?></h4>
+                        </div>
+                    </div>
+                    <div class="row align-items-start">
+                        <div class="col ">
+                        <h5 class="card-title mb-9 fw-semibold">Net Profit</h5>
+                        </div>
+                        <div class="col">
+                        <h4 class="fw-semibold mb-3 text-success    "><?php $admin->getDailyOrderNet(); ?></h4>
+                        </div>
+                        <p class="mb-0 text-end"><a href="/fmware/manage-orders">View details ></a></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,16 +89,28 @@
         <!-- Daily Sales - POS Card -->
         <div class="col">
             <div class="card">
-                <div class="card-body">
-                <div class="row alig n-items-start">
-                    <div class="col ">
-                    <h5 class="card-title mb-9 fw-semibold">Daily Sales | POS</h5>
-                    </div>
-                    <div class="col">
-                    <h4 class="fw-semibold mb-3">$6,820</h4>
-                    </div>
-                    <p class="mb-0 text-end"><a href="">View details ></a></p>
+                <div class="card-header">
+                    <h5 class="badge bg-secondary"><strong>POINT OF SALE</strong></h5>
+                    <h5 class="badge bg-success"><strong>Daily Sales</strong></h5>
                 </div>
+                <div class="card-body">
+                    <div class="row align-items-start">
+                        <div class="col ">
+                        <h5 class="card-title mb-9 fw-semibold">Gross Profit</h5>
+                        </div>
+                        <div class="col">
+                        <h4 class="fw-semibold mb-3"><?php $admin->getDailyPOSGross(); ?></h4>
+                        </div>
+                    </div>
+                    <div class="row align-items-start">
+                        <div class="col ">
+                        <h5 class="card-title mb-9 fw-semibold">Net Profit</h5>
+                        </div>
+                        <div class="col">
+                        <h4 class="fw-semibold mb-3 text-success    "><?php $admin->getDailyPOSNet(); ?></h4>
+                        </div>
+                        <p class="mb-0 text-end"><a href="/fmware/manage-orders">View details ></a></p>
+                    </div>
                 </div>
             </div>
         </div>

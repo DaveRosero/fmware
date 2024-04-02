@@ -15,13 +15,16 @@
             <table id="order-table">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Order Ref</th>
+                        <th>Customer</th>
                         <th>Order Date</th>
                         <th>Transaction Type</th>
-                        <th>Payment Type</th>
+                        <th>Payment Method</th>
+                        <th>Gross Amount</th>
+                        <th>Net Profit</th>
                         <th>Paid</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
