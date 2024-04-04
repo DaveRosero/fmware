@@ -29,6 +29,7 @@
                     if ($email === $_POST['email'] && $password === $_POST['password']) {
                         $group_name = $this->getUserGroup($id);
                         $_SESSION['user_id'] = $id;
+                        $_SESSION['email'] = $email;
                         if ($group_name == 'user'){
                             $json['redirect'] = '/fmware';
                         } else {
