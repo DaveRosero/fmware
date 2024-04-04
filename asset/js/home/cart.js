@@ -12,7 +12,6 @@ $(document).ready(function(){
                 $('#product-total').text(feedback.product_total);
                 $('#total').text(feedback.total);
                 $('#checkout-total').text(feedback.total);
-                $('#tax').text(feedback.tax);
             }
         });
     }

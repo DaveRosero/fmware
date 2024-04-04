@@ -17,14 +17,14 @@
                     <tr>
                         <th>Order Ref</th>
                         <th>Customer</th>
-                        <th>Order Date</th>
-                        <th>Transaction Type</th>
-                        <th>Payment Method</th>
-                        <th>Gross Amount</th>
-                        <th>Net Profit</th>
+                        <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Payment</th>
+                        <th>Gross</th>
+                        <th>Profit</th>
                         <th>Paid</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th><i class="fas fa-cog"></i></th>
                     </tr>
                 </thead>
                 <tbody>
