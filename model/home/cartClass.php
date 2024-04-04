@@ -206,13 +206,9 @@
                     $delivery_fee = $this->getDeliveryFee();
                     $fee = $delivery_fee['value'];
                     $cart_total = $grandtotal + $fee;
-                    $tax = $this->getTax();
-                    $vat = ($tax['value'] / 100) * $cart_total;
-                    $total = $cart_total + $vat;
                     return [
                         'product_total' => '₱'.number_format($grandtotal).'.00',
-                        'tax' => '₱'.number_format($vat).'.00',
-                        'total' => '₱'.number_format($total).'.00'
+                        'total' => '₱'.number_format($cart_total).'.00'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);

@@ -13,7 +13,7 @@
         <div class="card mb-4">
           <div class="card-body">
             <p><strong>Receive by</strong></p>
-            <p class="mb-0">March 28, 2024 - April 06, 2024</p>
+            <p class="mb-0">#</p>
           </div>
         </div>
       </div>
@@ -28,13 +28,9 @@
                 Products
                 <span id="product-total"></span>
               </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Delivery Fee 
                 <span id="delivery-fee"></span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                <div id="vat"></div>
-                <span id="tax"></span>
               </li>
               <!-- <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                 <div>Coupon Code</div>

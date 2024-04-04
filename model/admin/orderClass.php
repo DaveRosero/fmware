@@ -98,7 +98,7 @@
                                     >
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-secondary printReceipt"
+                                    <button class="btn btn-sm btn-secondary printReceipt mt-2"
                                         data-order-ref="'.$ref.'"
                                         data-customer-name="'.$customer.'"
                                     >
