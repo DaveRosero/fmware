@@ -38,18 +38,9 @@
                             ?>
                         </span>
                     </a>
-                    <a class="nav-icon position-relative text-decoration-none" id="cart" href="/fmware/cart">
-                        <i class="fa fa-fw fa-list text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" id="cart-count">
-                            <?php
-                                // $cart_count = $cart->cartCount($_SESSION['user_id']);
-                                // echo $cart_count;
-                            ?>
-                        </span>
-                    </a>
                     <div class="dropdown">
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">Profile</a>
+                            <a class="dropdown-item" href="/fmware/my-purchases/to-pay">My Purchases (<?php $transaction->getOrderCount($user_info['id']); ?>)</a>
                             <a class="dropdown-item" href="#">Settings</a>
                             <div class="dropdown-divider"></div>
                             <form action="/fmware/logout" method="post">

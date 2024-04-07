@@ -4,11 +4,13 @@
     require_once 'model/home/productClass.php';
     require_once 'model/home/cartClass.php';
     require_once 'model/user/addressClass.php';
+    require_once 'model/user/transactionClass.php';
 
     $user = new User();
     $product = new Product();
     $cart = new Cart();
     $address = new Address();
+    $transaction = new Transaction();
 
     $user_info = $user->getUser($_SESSION['email']);
     $user_address = $address->getAddress($user_info['id']);
