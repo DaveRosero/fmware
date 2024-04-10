@@ -4,7 +4,7 @@
 
         <!-- Total Products Card -->
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row align-items-start">
                         <div class="col ">
@@ -21,7 +21,7 @@
 
         <!-- Total Suppliers Card -->
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row align-items-start">
                         <div class="col ">
@@ -38,7 +38,7 @@
 
         <!-- Total Users Card -->
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row align-items-start">
                         <div class="col">
@@ -59,7 +59,7 @@
 
         <!-- Daily Sales - Order Card -->
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">
                     <h5 class="badge bg-secondary"><strong>ORDERS</strong></h5>
                     <h5 class="badge bg-success"><strong>Daily Sales</strong></h5>
@@ -88,7 +88,7 @@
 
         <!-- Daily Sales - POS Card -->
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">
                     <h5 class="badge bg-secondary"><strong>POINT OF SALE</strong></h5>
                     <h5 class="badge bg-success"><strong>Daily Sales</strong></h5>
@@ -121,7 +121,7 @@
 
         <!-- Recent Transactions Card -->
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col">
@@ -151,7 +151,7 @@
 
         <!-- Logs Card -->
         <div class="col-8">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col">

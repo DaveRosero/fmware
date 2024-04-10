@@ -1,19 +1,19 @@
 <?php
     include_once 'session.php';
     require_once 'model/user/user.php';
-    require_once 'model/home/productClass.php';
     require_once 'model/home/cartClass.php';
-    require_once 'model/user/addressClass.php';
     require_once 'model/user/transactionClass.php';
 
     $user = new User();
-    $product = new Product();
     $cart = new Cart();
-    $address = new Address();
     $transaction = new Transaction();
 
     $user_info = $user->getUser($_SESSION['email']);
-    $user_address = $address->getAddress($user_info['id']);
+    $statusType = array('to-pay', 'pending', 'to-receive', 'delivered', 'completed', 'cancelled');
+    if (!in_array($status, $statusType)) {
+        header('Location: /fmware/404');
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,27 +21,28 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>FMWare</title>
-        <link rel="icon" href="asset/images/store/logo.png" type="image/png">
+        <link rel="icon" href="/fmware/asset/images/store/logo.png" type="image/png">
         <?php 
             include_once 'vendor/Bootstrap/css/bundle.php';
-            include_once 'vendor/Select2/css/bundle.php'; 
+            include_once 'vendor/DataTables/css/bundle.php';
         ?>
-        <link rel="stylesheet" href="asset/css/index.css">
+        <link rel="stylesheet" href="/fmware/asset/css/index.css">
     </head>
     <body>
         <?php include_once 'views/home/template/header.php'; ?>
 
-        <?php include_once 'views/home/content/cart-content.php'; ?>
+        <?php include_once 'views/home/content/my-purchases-content.php'; ?>
 
-        <?php include_once 'views/home/modals/cart-modal.php'; ?>
+        <?php // include_once 'views/home/modals/cart-modal.php'; ?>
             
         <?php
             include_once 'vendor/jQuery/bundle.php';
             include_once 'vendor/FontAwesome/kit.php';
-            include_once 'vendor/Select2/js/bundle.php';
+            include_once 'vendor/DataTables/js/bundle.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
         <script src="vendor/NotifyJS/js/notify.js"></script>
-        <script src="asset/js/home/cart.js"></script>
+        <script src="/fmware/asset/js/home/my-purchases.js"></script>
+        <script src="/fmware/asset/js/home/home.js"></script>
     </body>
 </html>
