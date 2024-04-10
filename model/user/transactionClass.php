@@ -141,96 +141,98 @@
             }
         }
 
-        public function displayButtons ($status, $user_id) {
-            $buttons = '';
-            $to_pay = $this->getToPayCount($user_id);
-            $pending = $this->getPendingCount($user_id);
-            $to_receive = $this->getToReceiveCount($user_id);
-            $delivered = $this->getDeliveredCount($user_id);
-            $completed = $this->getCompletedCount($user_id);
-            $cancelled = $this->getCancelledCount($user_id);
-
-            if ($status === 'to-pay') {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-primary" href="/fmware/my-purchases/to-pay">To Pay '.$to_pay.'</a>
-                            </div>';
-            } else {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-secondary" href="/fmware/my-purchases/to-pay">To Pay '.$to_pay.'</a>
-                            </div>';
-            }
-
-            if ($status === 'pending') {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-primary" href="/fmware/my-purchases/pending">Pending '.$pending.'</a>
-                            </div>';
-            } else {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-secondary" href="/fmware/my-purchases/pending">Pending '.$pending.'</a>
-                            </div>';
-            }
-
-            if ($status === 'to-receive') {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-primary" href="/fmware/my-purchases/to-receive">To Receive '.$to_receive.'</a>
-                            </div>';
-            } else {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-secondary" href="/fmware/my-purchases/to-receive">To Receive '.$to_receive.'</a>
-                            </div>';
-            }
-
-            if ($status === 'delivered') {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-primary" href="/fmware/my-purchases/delivered">Delivered '.$delivered.'</a>
-                            </div>';
-            } else {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-secondary" href="/fmware/my-purchases/delivered">Delivered '.$delivered.'</a>
-                            </div>';
-            }
-
-            if ($status === 'completed') {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-primary" href="/fmware/my-purchases/completed">Completed '.$completed.'</a>
-                            </div>';
-            } else {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-secondary" href="/fmware/my-purchases/completed">Completed '.$completed.'</a>
-                            </div>';
-            }
-
-            if ($status === 'cancelled') {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-primary" href="/fmware/my-purchases/cancelled">Cancelled '.$cancelled.'</a>
-                            </div>';
-            } else {
-                $buttons .= '<div class="col-12 col-md-auto text-center">
-                                <a class="text-decoration-none badge bg-secondary" href="/fmware/my-purchases/cancelled">Cancelled '.$cancelled.'</a>
-                            </div>';
-            }
-
-            echo $buttons;
-        }
-
-        public function getPendingOrder ($user_id) {
-            $query = 'SELECT id, order_ref, gross, date
+        public function getToPayOrder ($user_id) {
+             $query = 'SELECT orders.id,
+                            orders.order_ref,
+                            orders.gross,
+                            orders.date,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.name ORDER BY order_items.id), ",", 1) AS first_product_name,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.image ORDER BY order_items.id), ",", 1) AS first_product_image,
+                            GROUP_CONCAT(product.name SEPARATOR ", ") AS additional_products
                     FROM orders
-                    WHERE user_id = ?
-                    AND status = "pending"';
+                    INNER JOIN order_items ON order_items.order_ref = orders.order_ref
+                    INNER JOIN product ON product.id = order_items.product_id 
+                    WHERE orders.user_id = ?
+                    AND orders.status = "to pay"
+                    GROUP BY orders.order_ref';
+
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $user_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $order_ref, $gross, $date);
+                    $stmt->bind_result($id, $order_ref, $gross, $date, $first_product_name, $first_product_image, $additional_products);
+
                     while ($stmt->fetch()) {
                         echo '<tr>
-                                <td class="text-primary fw-bold">'.$order_ref.'</td>
-                                <td class="fw-semibold">₱'.number_format($gross).'.00</td>
-                                <td>'.date('d F Y h:i', strtotime($date)).'</td>
+                                <td class="text-primary fw-bold">' . $order_ref . '</td>
+                                <td class="fw-semibold">₱' . number_format($gross) . '.00</td>
+                                <td>' . date('d F Y h:i', strtotime($date)) . '</td>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <span>' . $first_product_name;
+
+                        if ($additional_products) {
+                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                        }
+                
+                        echo '          </span>
+                                    </div>
+                                </td>
                                 <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
                             </tr>';
-                    }   
+                    }
+                    $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getPendingOrder ($user_id) {
+            $query = 'SELECT orders.id,
+                            orders.order_ref,
+                            orders.gross,
+                            orders.date,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.name ORDER BY order_items.id), ",", 1) AS first_product_name,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.image ORDER BY order_items.id), ",", 1) AS first_product_image,
+                            GROUP_CONCAT(product.name SEPARATOR ", ") AS additional_products
+                    FROM orders
+                    INNER JOIN order_items ON order_items.order_ref = orders.order_ref
+                    INNER JOIN product ON product.id = order_items.product_id 
+                    WHERE orders.user_id = ?
+                    AND orders.status = "pending"
+                    GROUP BY orders.order_ref';
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $user_id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($id, $order_ref, $gross, $date, $first_product_name, $first_product_image, $additional_products);
+
+                    while ($stmt->fetch()) {
+                        echo '<tr>
+                                <td class="text-primary fw-bold">' . $order_ref . '</td>
+                                <td class="fw-semibold">₱' . number_format($gross) . '.00</td>
+                                <td>' . date('d F Y h:i', strtotime($date)) . '</td>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <span>' . $first_product_name;
+
+                        if ($additional_products) {
+                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                        }
+                
+                        echo '          </span>
+                                    </div>
+                                </td>
+                                <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
+                            </tr>';
+                    }  
                     $stmt->close();
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -242,23 +244,46 @@
         }
 
         public function getToReceiveOrder ($user_id) {
-            $query = 'SELECT id, order_ref, gross, date
+            $query = 'SELECT orders.id,
+                            orders.order_ref,
+                            orders.gross,
+                            orders.date,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.name ORDER BY order_items.id), ",", 1) AS first_product_name,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.image ORDER BY order_items.id), ",", 1) AS first_product_image,
+                            GROUP_CONCAT(product.name SEPARATOR ", ") AS additional_products
                     FROM orders
-                    WHERE user_id = ?
-                    AND status = "delivering"';
+                    INNER JOIN order_items ON order_items.order_ref = orders.order_ref
+                    INNER JOIN product ON product.id = order_items.product_id 
+                    WHERE orders.user_id = ?
+                    AND orders.status = "delivering"
+                    GROUP BY orders.order_ref';
+
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $user_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $order_ref, $gross, $date);
+                    $stmt->bind_result($id, $order_ref, $gross, $date, $first_product_name, $first_product_image, $additional_products);
+
                     while ($stmt->fetch()) {
                         echo '<tr>
-                                <td class="text-primary fw-bold">'.$order_ref.'</td>
-                                <td class="fw-semibold">₱'.number_format($gross).'.00</td>
-                                <td>'.date('d F Y h:i', strtotime($date)).'</td>
+                                <td class="text-primary fw-bold">' . $order_ref . '</td>
+                                <td class="fw-semibold">₱' . number_format($gross) . '.00</td>
+                                <td>' . date('d F Y h:i', strtotime($date)) . '</td>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <span>' . $first_product_name;
+
+                        if ($additional_products) {
+                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                        }
+                
+                        echo '          </span>
+                                    </div>
+                                </td>
                                 <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
                             </tr>';
-                    }   
+                    }  
                     $stmt->close();
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -270,23 +295,46 @@
         }
 
         public function getDeliveredOrder ($user_id) {
-            $query = 'SELECT id, order_ref, gross, date
+            $query = 'SELECT orders.id,
+                            orders.order_ref,
+                            orders.gross,
+                            orders.date,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.name ORDER BY order_items.id), ",", 1) AS first_product_name,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.image ORDER BY order_items.id), ",", 1) AS first_product_image,
+                            GROUP_CONCAT(product.name SEPARATOR ", ") AS additional_products
                     FROM orders
-                    WHERE user_id = ?
-                    AND status = "delivered"';
+                    INNER JOIN order_items ON order_items.order_ref = orders.order_ref
+                    INNER JOIN product ON product.id = order_items.product_id 
+                    WHERE orders.user_id = ?
+                    AND orders.status = "delivered"
+                    GROUP BY orders.order_ref';
+
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $user_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $order_ref, $gross, $date);
+                    $stmt->bind_result($id, $order_ref, $gross, $date, $first_product_name, $first_product_image, $additional_products);
+
                     while ($stmt->fetch()) {
                         echo '<tr>
-                                <td class="text-primary fw-bold">'.$order_ref.'</td>
-                                <td class="fw-semibold">₱'.number_format($gross).'.00</td>
-                                <td>'.date('d F Y h:i', strtotime($date)).'</td>
+                                <td class="text-primary fw-bold">' . $order_ref . '</td>
+                                <td class="fw-semibold">₱' . number_format($gross) . '.00</td>
+                                <td>' . date('d F Y h:i', strtotime($date)) . '</td>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <span>' . $first_product_name;
+
+                        if ($additional_products) {
+                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                        }
+                
+                        echo '          </span>
+                                    </div>
+                                </td>
                                 <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
                             </tr>';
-                    }   
+                    }  
                     $stmt->close();
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -298,23 +346,46 @@
         }
 
         public function getCompletedOrder ($user_id) {
-            $query = 'SELECT id, order_ref, gross, date
+            $query = 'SELECT orders.id,
+                            orders.order_ref,
+                            orders.gross,
+                            orders.date,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.name ORDER BY order_items.id), ",", 1) AS first_product_name,
+                            SUBSTRING_INDEX(GROUP_CONCAT(product.image ORDER BY order_items.id), ",", 1) AS first_product_image,
+                            GROUP_CONCAT(product.name SEPARATOR ", ") AS additional_products
                     FROM orders
-                    WHERE user_id = ?
-                    AND status = "completed"';
+                    INNER JOIN order_items ON order_items.order_ref = orders.order_ref
+                    INNER JOIN product ON product.id = order_items.product_id 
+                    WHERE orders.user_id = ?
+                    AND orders.status = "completed"
+                    GROUP BY orders.order_ref';
+
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $user_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $order_ref, $gross, $date);
+                    $stmt->bind_result($id, $order_ref, $gross, $date, $first_product_name, $first_product_image, $additional_products);
+
                     while ($stmt->fetch()) {
                         echo '<tr>
-                                <td class="text-primary fw-bold">'.$order_ref.'</td>
-                                <td class="fw-semibold">₱'.number_format($gross).'.00</td>
-                                <td>'.date('d F Y h:i', strtotime($date)).'</td>
+                                <td class="text-primary fw-bold">' . $order_ref . '</td>
+                                <td class="fw-semibold">₱' . number_format($gross) . '.00</td>
+                                <td>' . date('d F Y h:i', strtotime($date)) . '</td>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <span>' . $first_product_name;
+
+                        if ($additional_products) {
+                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                        }
+                
+                        echo '          </span>
+                                    </div>
+                                </td>
                                 <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
                             </tr>';
-                    }   
+                    }  
                     $stmt->close();
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -322,6 +393,24 @@
                 }
             } else {
                 die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function displayTitle ($status) {
+            if ($status === 'to-pay') {
+                return 'To Pay';
+            }
+
+            if ($status === 'pending') {
+                return 'Pending';
+            }
+
+            if ($status === 'to-receive') {
+                return 'To Receive';
+            }
+
+            if ($status === '') {
+                return '';
             }
         }
 
@@ -338,8 +427,12 @@
                 $this->getDeliveredOrder($user_id);
             }
 
-            if ($status) {
-                
+            if ($status === 'completed') {
+                $this->getCompletedOrder($user_id);
+            }
+
+            if ($status === 'to-pay') {
+                $this->getToPayOrder($user_id);
             }
         }
     }

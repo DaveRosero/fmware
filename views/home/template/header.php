@@ -40,8 +40,7 @@
                     </a>
                     <div class="dropdown">
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="/fmware/my-purchases/to-pay">My Purchases (<?php $transaction->getOrderCount($user_info['id']); ?>)</a>
-                            <a class="dropdown-item" href="#">Settings</a>
+                            <a class="dropdown-item" href="/fmware/account/settings">My Account</a>
                             <div class="dropdown-divider"></div>
                             <form action="/fmware/logout" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>

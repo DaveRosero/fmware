@@ -49,6 +49,9 @@ $(document).ready(function(){
                 }
             }
         ],
+        order: [
+            [2, 'desc']
+        ],
         initComplete: function () {
             var dataTableButtons = $('.dt-buttons');
             $('#printButtonContainer').append(dataTableButtons);

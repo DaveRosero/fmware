@@ -9,11 +9,6 @@
     $transaction = new Transaction();
 
     $user_info = $user->getUser($_SESSION['email']);
-    $statusType = array('to-pay', 'pending', 'to-receive', 'delivered', 'completed', 'cancelled');
-    if (!in_array($status, $statusType)) {
-        header('Location: /fmware/404');
-    }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +26,7 @@
     <body>
         <?php include_once 'views/home/template/header.php'; ?>
 
-        <?php include_once 'views/home/content/my-purchases-content.php'; ?>
+        <?php include_once 'views/home/content/account-content.php'; ?>
 
         <?php // include_once 'views/home/modals/cart-modal.php'; ?>
             

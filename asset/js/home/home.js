@@ -1,18 +1,32 @@
 'use strict';
 $(document).ready(function() {
-
-    // Accordion
+    // Hide all accordion panels initially
     var all_panels = $('.templatemo-accordion > li > ul').hide();
 
+    // Function to expand/collapse accordion panels
     $('.templatemo-accordion > li > a').click(function() {
-        console.log('Hello world!');
-        var target =  $(this).next();
-        if(!target.hasClass('active')){
+        var target = $(this).next();
+
+        if (!target.hasClass('active')) {
+            // Collapse all other panels and expand the clicked panel
             all_panels.removeClass('active').slideUp();
             target.addClass('active').slideDown();
+
+            // Store the index of the clicked accordion item in localStorage
+            localStorage.setItem('activeAccordion', $(this).parent().index());
         }
-      return false;
+
+        return false; // Prevent default anchor click behavior
     });
+
+    // Check localStorage for active accordion item on page load
+    var activeAccordionIndex = localStorage.getItem('activeAccordion');
+
+    if (activeAccordionIndex !== null) {
+        // Expand the previously active accordion panel
+        var activePanel = $('.templatemo-accordion > li').eq(activeAccordionIndex).find('ul');
+        activePanel.addClass('active').slideDown();
+    }
     // End accordion
 
     // Product detail

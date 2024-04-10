@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('#transaction-table').DataTable({
+    $('#purchase-table').DataTable({
         order: [
             [2, 'desc']
         ]

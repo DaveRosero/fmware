@@ -11,6 +11,9 @@ $(document).ready(function(){
                 }
             }
         ],
+        order: [
+            [2, 'asc']
+        ],
         initComplete: function () {
             var dataTableButtons = $('.dt-buttons');
             $('#printButtonContainer').append(dataTableButtons);
@@ -19,14 +22,30 @@ $(document).ready(function(){
 
     $('#category').select2({
         dropdownParent: $('#newProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or type a category'
     });
 
     $('#brand').select2({
         dropdownParent: $('#newProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or type a brand'
     });
 
     $('#unit').select2({
         dropdownParent: $('#newProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or type a measurement'
+    });
+
+    $('#variant').select2({
+        dropdownParent: $('#newProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select a variant of the product'
     });
 
     $('#new-product').on('submit', function(event){
@@ -42,6 +61,10 @@ $(document).ready(function(){
             success: function(feedback){
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
+                }
+
+                if (feedback.exist) {
+                    $.notify('Product already exist', 'error');
                 }
             }
         });

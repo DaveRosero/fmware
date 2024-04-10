@@ -35,44 +35,5 @@
                 </li>
             </ul>
         </div>
-
-        <div class="col-lg-9">
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="list-inline shop-top-menu pb-3 pt-1">
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="#">Account</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <span class="h3 text-dark text-decoration-none mr-3">></span>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="#">My Purchases</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <span class="h3 text-dark text-decoration-none mr-3">></span>
-                        </li>
-                        <li class="list-inline-item">
-                            <span class="h3 text-dark text-decoration-none"><?php echo $transaction->displayTitle($status); ?></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row">
-                <table id="purchase-table">
-                    <thead>
-                        <th>Order Reference ID</th>
-                        <th>Total Amount</th>
-                        <th>Order Date</th>
-                        <th>Products</th>
-                        <th></th>
-                    </thead>
-                    <tbody>
-                        <?php $transaction->displayHistory($status, $user_info['id']); ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 </div>

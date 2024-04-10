@@ -3,14 +3,12 @@
     require_once 'model/user/user.php';
     require_once 'model/home/productClass.php';
     require_once 'model/home/cartClass.php';
-    require_once 'model/user/transactionClass.php';
 
     $user = new User();
     $product = new Product();
     $cart = new Cart();
-    $transaction = new Transaction();
 
-    $user_info = $user->getUser($_SESSION['email']);
+    $user_info = $user->getUser($_SESSION['email'] ?? null);
 ?>
 <!DOCTYPE html>
 <html lang="en">
