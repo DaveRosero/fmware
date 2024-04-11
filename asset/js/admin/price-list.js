@@ -11,6 +11,9 @@ $(document).ready(function(){
                 }
             }
         ],
+        order: [
+            [1, 'asc']
+        ],
         initComplete: function () {
             var dataTableButtons = $('.dt-buttons');
             $('#printButtonContainer').append(dataTableButtons);
@@ -19,6 +22,8 @@ $(document).ready(function(){
 
     $('#products').select2({
         dropdownParent: $('#newPrice'),
+        width: '100%',
+        placeholder: 'Select a product'
     });
 
     $('#new-price').on('submit', function(event){
