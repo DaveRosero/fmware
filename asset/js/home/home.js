@@ -59,5 +59,4 @@ $(document).ready(function() {
       return false;
     });
     // End roduct detail
-
 });

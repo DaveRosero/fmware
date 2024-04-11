@@ -246,30 +246,6 @@
             }
         }
 
-        // public function isProductExist ($product) {
-        //     $query = 'SELECT COUNT(*) FROM product WHERE name = ?';
-        //     $stmt = $this->conn->prepare($query);
-        //     $stmt->bind_param('s', $product);
-        //     if ($stmt) {
-        //         if ($stmt->execute()) {
-        //             $stmt->bind_result($count);
-        //             $stmt->fetch();
-        //             $stmt->close();
-
-        //             if ($count > 0) {
-        //                 return true;
-        //             } else {
-        //                 return false;
-        //             }
-        //         } else {
-        //             die("Error in executing statement: " . $stmt->error);
-        //             $stmt->close();
-        //         }
-        //     } else {
-        //         die("Error in preparing statement: " . $this->conn->error);
-        //     }
-        // }
-
         public function newProduct () {
             // if ($this->isProductExist($_POST['name'])) {
             //     $json = array('exist' => 'Product already exist.');

@@ -156,6 +156,15 @@ width: 6px;
 height: 6px;
 }
 
+/* CSS to style product images within card */
+.product-image {
+    max-width: 50%; /* Ensure images do not exceed the width of the card */
+    height: auto; /* Maintain aspect ratio of images */
+    display: block; /* Ensure images are displayed as block elements */
+    margin: 0 auto; /* Center-align images horizontally within the card */
+}
+
+
 @media (min-width: 576px) {
 .tempaltemo-carousel .h1 { font-size: 1em !important;}
 }

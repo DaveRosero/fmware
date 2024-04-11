@@ -29,6 +29,8 @@
 
         <?php include_once 'views/home/content/home-content.php'; ?>
 
+        <?php include_once 'views/home/modals/home-modal.php'; ?>
+
         <?php include_once 'views/home/template/footer.php'; ?>
             
         <?php
@@ -37,6 +39,7 @@
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
         <script src="vendor/NotifyJS/js/notify.js"></script>
+        <script src="asset/js/home/home.js"></script>
         <script src="asset/js/home/cart.js"></script>
     </body>
 </html>
