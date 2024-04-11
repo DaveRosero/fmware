@@ -385,7 +385,7 @@
                                 <td>'.$variant.'</td>
                                 <td>'.$brand.'</td>
                                 <td>'.$category.'</td>
-                                <td>'.$unit_value.' '.$unit.'</td>
+                                <td>'.$unit_value.' '.strtoupper($unit).'</td>
                                 <td>
                                     <button 
                                         class="btn btn-sm btn-primary view" 

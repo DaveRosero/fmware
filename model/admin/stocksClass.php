@@ -3,15 +3,17 @@
 
     class Stocks extends Admin {
         public function getProducts () {
-            $query = 'SELECT id, name FROM product 
+            $query = 'SELECT product.id, product.name, product.unit_value, unit.name, variant.name FROM product
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id 
                     WHERE NOT EXISTS 
                         (SELECT 1 FROM stock WHERE stock.product_id = product.id)';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name);
+                    $stmt->bind_result($id, $name, $unit_value, $unit, $variant);
                     while ($stmt->fetch()) {
-                        echo '<option value="'.$id.'">'.$name.'</option>';
+                        echo '<option value="'.$id.'">'.$name.' ('.$variant.') ('.$unit_value.' '.strtoupper($unit).')</option>';
                     }
                     $stmt->close();
                 } else {
@@ -23,30 +25,51 @@
             }
         }
 
+        public function checkCriticalLevel ($qty, $critical_level, $max_stock) {
+            $critical_stock = ($critical_level / 100) * $max_stock;
+            if ($qty < $critical_stock) {
+                $stock = '<span class="badge bg-danger text-wrap">'.$qty.'</span>';
+            } else {
+                $stock = '<span class="badge bg-success text-wrap">'.$qty.'</span>';
+            }
+
+            return $stock;
+        }
+
         public function getStocks () {
             $query = 'SELECT stock.product_id,
                             stock.qty,
                             stock.critical_level,
+                            stock.max_stock,
                             product.image,
                             product.name,
+                            product.unit_value,
+                            variant.name,
+                            unit.name,
                             brand.name,
                             category.name
                     FROM stock
                     INNER JOIN product ON product.id = stock.product_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN brand ON brand.id = product.brand_id
                     INNER JOIN category ON category.id = product.category_id';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $qty, $critical_level, $image, $name, $brand, $category);
+                    $stmt->bind_result($id, $qty, $critical_level, $max_stock, $image, $name, $unit_value, $variant, $unit, $brand, $category);
                     while ($stmt->fetch()) {
+                        $stock = $this->checkCriticalLevel($qty, $critical_level, $max_stock);
                         echo '<tr>
                                 <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
-                                <td>'.$name.'</td>
-                                <td>'.$brand.'</td>
-                                <td>'.$category.'</td>
-                                <td>'.$qty.'</td>
-                                <td>'.$critical_level.'%</td>
+                                <td class="fw-semibold">'.$name.'</td>
+                                <td class="fw-semibold">'.$variant.'</td>
+                                <td class="fw-semibold">'.$unit_value.' '.strtoupper($unit).' </td>
+                                <td class="fw-semibold">'.$brand.'</td>
+                                <td class="fw-semibold">'.$category.'</td>
+                                <td class="fw-semibold">'.$stock.'</td>
+                                <td class="fw-semibold">'.$critical_level.'%</td>
+                                <td class="fw-semibold">'.$max_stock.'</td>
                                 <td>
                                     <button 
                                         type="button" 
@@ -108,12 +131,14 @@
 
         public function addStock () {
             $id = $_POST['product_id'];
+            $initial_stock = $_POST['initial_stock'];
             $critical_level = $_POST['critical_level'];
+            $max_stock = $_POST['max_stock'];   
 
-            $query = 'INSERT INTO stock (product_id, critical_level)
-                    VALUES (?,?)';
+            $query = 'INSERT INTO stock (product_id, qty, critical_level, max_stock)
+                    VALUES (?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ii', $id, $critical_level);
+            $stmt->bind_param('iiii', $id, $initial_stock, $critical_level, $max_stock);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();

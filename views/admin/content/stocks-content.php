@@ -22,10 +22,13 @@
                     <tr>
                         <th>Image</th>
                         <th>Product</th>
+                        <th>Variant</th>
+                        <th>Unit</th>
                         <th>Brand</th>
                         <th>Category</th>
                         <th>Quantity in Stock</th>
                         <th>Critical Level</th>
+                        <th>Maximum Stocks</th>
                         <th>Action</th>
                     </tr>
                 </thead>
