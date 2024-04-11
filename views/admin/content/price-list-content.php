@@ -22,6 +22,9 @@
                     <tr>
                         <th>Image</th>
                         <th>Product</th>
+                        <th>Variant</th>
+                        <th>Brand</th>
+                        <th>Category</th>
                         <th>Base Price</th>
                         <th>Unit Price</th>
                         <th>Action</th>

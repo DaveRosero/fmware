@@ -8,7 +8,7 @@
         </div>
         <form id="new-price" method="POST">
             <div class="modal-body">
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col">
                         <label for="" class="form-label">Product<span class="text-danger">*</span></label>
                         <select name="product_id" id="products" data-placeholder="Select a Product">
@@ -17,7 +17,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col">
                         <label for="" class="form-label">Base Price<span class="text-danger">*</span></label>
                         <input type="number" min="0" class="form-control" name="base_price" required>
