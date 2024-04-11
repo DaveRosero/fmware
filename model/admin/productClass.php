@@ -246,36 +246,36 @@
             }
         }
 
-        public function isProductExist ($product) {
-            $query = 'SELECT COUNT(*) FROM product WHERE name = ?';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('s', $product);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->bind_result($count);
-                    $stmt->fetch();
-                    $stmt->close();
+        // public function isProductExist ($product) {
+        //     $query = 'SELECT COUNT(*) FROM product WHERE name = ?';
+        //     $stmt = $this->conn->prepare($query);
+        //     $stmt->bind_param('s', $product);
+        //     if ($stmt) {
+        //         if ($stmt->execute()) {
+        //             $stmt->bind_result($count);
+        //             $stmt->fetch();
+        //             $stmt->close();
 
-                    if ($count > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
-                }
-            } else {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-        }
+        //             if ($count > 0) {
+        //                 return true;
+        //             } else {
+        //                 return false;
+        //             }
+        //         } else {
+        //             die("Error in executing statement: " . $stmt->error);
+        //             $stmt->close();
+        //         }
+        //     } else {
+        //         die("Error in preparing statement: " . $this->conn->error);
+        //     }
+        // }
 
         public function newProduct () {
-            if ($this->isProductExist($_POST['name'])) {
-                $json = array('exist' => 'Product already exist.');
-                echo json_encode($json);
-                return;
-            }
+            // if ($this->isProductExist($_POST['name'])) {
+            //     $json = array('exist' => 'Product already exist.');
+            //     echo json_encode($json);
+            //     return;
+            // }
 
             if (is_numeric($_POST['brand']) && is_int($_POST['brand'] + 0)) {
                 $brand_id = $_POST['brand'];
@@ -354,16 +354,18 @@
                         user.lastname,
                         brand.name,
                         category.name,
-                        unit.name 
+                        unit.name,
+                        variant.name 
                     FROM product
                     INNER JOIN user ON user.id = product.user_id
                     INNER JOIN brand ON brand.id = product.brand_id
                     INNER JOIN category ON category.id = product.category_id
-                    INNER JOIN unit ON unit.id = product.unit_id';
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch">
@@ -380,6 +382,7 @@
                                 <td>'.$status.'</td>
                                 <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
                                 <td>'.$name.'</td>
+                                <td>'.$variant.'</td>
                                 <td>'.$brand.'</td>
                                 <td>'.$category.'</td>
                                 <td>'.$unit_value.' '.$unit.'</td>
