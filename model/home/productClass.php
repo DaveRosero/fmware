@@ -194,20 +194,39 @@
         public function getVariants ($product_name) {
             $query = 'SELECT product.id,
                             product.name,
+                            product.image,
                             product.unit_value,
                             unit.name,
-                            variant.name
+                            variant.name,
+                            stock.qty
                     FROM product
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN stock ON stock.product_id = product.id
                     WHERE product.name = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $product_name);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $unit_value, $unit, $variant);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $unit, $variant, $stock);
                     while ($stmt->fetch()) {
-                        echo '<option value="'.$id.'">'.$variant.' ('.$unit_value.' '.strtoupper($unit).')</option>';
+                        echo '<div class="col-md-6 mb-2">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="radio" name="payment_type" id="gcash" value="2" placeholder="test" required />
+                                            </div>
+                                            <div class="col">
+                                                <img class="me-2" width="60px" src="/fmware/asset/images/products/'.$image.'" alt="GCash" />
+                                                <p>'.$variant.'</p>
+                                                <p>('.$unit_value.' '.$unit.')</p>
+                                                <p class="text-muted">Stock: '.$stock.'</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
                     }
                 } else {
                     die("Error in executing statement: " . $stmt->error);

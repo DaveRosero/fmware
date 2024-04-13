@@ -1,5 +1,5 @@
 <div class="modal fade" id="product-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add to Cart</h5>
@@ -7,14 +7,8 @@
         </div>
         <form id="new-brand" method="POST">
             <div class="modal-body">
-                <div class="mb-3">
-                    <div class="col">
-                        <label for="" class="form-label">Variant</label>
-                        <select name="variant" id="variant">
-                            <option></option>
-                            <?php $product->getVariants($product_info['name']); ?>
-                        </select>
-                    </div>
+                <div class="row mb-3">
+                    <?php $product->getVariants($product_info['name']); ?>
                 </div>
             </div>
             <div class="modal-footer">

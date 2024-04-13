@@ -105,6 +105,7 @@ require_once __DIR__.'/router.php';
     get('/fmware/test/collapse', 'views/test/collapse.php');
     get('/fmware/dump', 'views/test/vardump.php');
     get('/fmware/test', 'views/test/test.php');
+    get('/fmware/db-array', 'views/test/db_array.php');
 
 //*****************************************************************//
 
