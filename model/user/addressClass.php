@@ -88,11 +88,71 @@
                 if ($stmt->execute()) {
                     $stmt->bind_result($address_id, $house_no, $street, $brgy, $municipality, $description);
                     while ($stmt->fetch()) {
-                        echo '<option value="'.$address_id.'">
+                        echo '<option value="'.$brgy.'">
                                 '.$house_no.' '.$street.', '.$brgy.', '.$municipality.'
                             </option>';
                     }
                     $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getBrgys () {
+            $query = 'SELECT municipality, brgys FROM delivery_fee';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($municipality, $brgys);
+                    $barangaysByMunicipality = [];
+                    while ($stmt->fetch()) {
+                        $barangayArray = explode(',', $brgys);
+
+                        if (!isset($barangaysByMunicipality[$municipality])) {
+                            $barangaysByMunicipality[$municipality] = [];
+                        }
+
+                        $barangaysByMunicipality[$municipality] = array_merge(
+                            $barangaysByMunicipality[$municipality],
+                            $barangayArray
+                        );
+                    }
+                    $stmt->close();
+                    $options = '';
+                    foreach ($barangaysByMunicipality as $municipality => $barangays) {
+                        $options .= '<optgroup label="' . $municipality . '">';
+                        foreach ($barangays as $barangay) {
+                            $options .= '<option value="' . $barangay . '">' . $barangay . '</option>';
+                        }
+                        $options .= '</optgroup>';
+                    }
+                    echo $options;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getMunicipality ($brgy) {
+            $query = 'SELECT municipality FROM delivery_fee WHERE brgys LIKE ?';
+            $stmt = $this->conn->prepare($query);
+            $param = '%'.$brgy.'%';
+            $stmt->bind_param('s', $param);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($municipality, $delivery_fee);
+                    $stmt->fetch();
+                    $stmt->close();
+                    return [
+                        'municipality' => $municipality
+                    ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();

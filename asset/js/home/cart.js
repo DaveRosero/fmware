@@ -1,16 +1,23 @@
 $(document).ready(function(){
     function getCartTotal () {
         var id = $('#checkout').data('user-id');
+        var delivery_fee = $('#delivery-fee-value').val();
         $.ajax({
             url: '/fmware/cart-total',
             method: 'POST',
             data: {
-                id : id
+                id : id,
+                delivery_fee, delivery_fee
             },
             dataType: 'json',
             success: function(feedback){
+                console.log(feedback);
                 if (feedback.product_total) {
                     $('#product-total').text(feedback.product_total);
+                }
+
+                if (feedback.checkout_total) {
+                    $('#checkout-total').text(feedback.checkout_total);
                 }
             }
         });
@@ -68,7 +75,54 @@ $(document).ready(function(){
     //     });
     // });
 
+    $('#brgy').select2({
+        dropdownParent: $('#address-form'),
+        width: '100%',
+        placeholder: 'Select your Baranggay'
+    });
 
+    $('#brgy').change(function(){
+        var brgy = $(this).val();
+        console.log('changed');
+
+        $.ajax({
+            url: '/fmware/get-municipality',
+            method: 'POST',
+            data: {
+                brgy : brgy
+            },
+            dataType: 'json',
+            success: function(feedback){
+                console.log('success');
+                console.log(feedback.municipality);
+                if (feedback.municipality) {
+                    $('#municipality').val(feedback.municipality);
+                }
+            }
+        });
+    });
+
+    $('#address').change(function(){
+        var brgy = $(this).val();
+
+        $.ajax({
+            url: '/fmware/delivery-fee',
+            method: 'POST',
+            data: {
+                brgy : brgy
+            },
+            dataType: 'json',
+            success: function(feedback){
+                if (feedback) {
+                    $('#delivery-fee').text('₱' + feedback.delivery_fee + '.00');
+                    $('#delivery-fee-value').val(feedback.delivery_value);
+
+                    getCartTotal();
+                }
+            }
+        });
+    })
+    
     $(document).on('click', '.addQty', function(){
         var id = $(this).data('product-id');
         var qty = $('.qty_' + id);

@@ -206,20 +206,22 @@
             }
         }
 
-        public function getCartTotal ($id) {
+        public function getCartTotal ($id, $delivery_fee) {
             $query = 'SELECT subtotal FROM cart WHERE user_id = ? AND active = 1';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($subtotal);
-                    $grandtotal = 0;
+                    $product = 0;
                     while ($stmt->fetch()){
-                        $grandtotal += $subtotal;
+                        $product += $subtotal;
                     }
                     $stmt->close();
+                    $checkout = $product + $delivery_fee;
                     return [
-                        'product_total' => '₱'.number_format($grandtotal).'.00'
+                        'product_total' => '₱'.number_format($product).'.00',
+                        'checkout_total' => '₱'.number_format($checkout).'.00'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -358,6 +360,29 @@
                     $stmt->close();
                     return [
                         'unchecked' => 'Unchecked Product'
+                    ];
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getDeliveryFee ($brgy) {
+            $query = 'SELECT delivery_fee FROM delivery_fee WHERE brgys LIKE ?';
+            $stmt = $this->conn->prepare($query);
+            $param = '%'.$brgy.'%';
+            $stmt->bind_param('s', $param);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($delivery_fee);
+                    $stmt->fetch();
+                    $stmt->close();
+                    return [
+                        'delivery_fee' => number_format($delivery_fee),
+                        'delivery_value' => $delivery_fee
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);

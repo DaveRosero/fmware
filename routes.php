@@ -19,13 +19,14 @@ require_once __DIR__.'/router.php';
     any('/fmware/sub-qty', 'controller/home/cart/sub-qty.php');
     any('/fmware/check-product', 'controller/home/cart/check-product.php');
     any('/fmware/uncheck-product', 'controller/home/cart/uncheck-product.php');
-    any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
     any('/fmware/delivery-fee', 'controller/home/cart/delivery-fee.php');
+    any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
     any('/fmware/checkout', 'controller/home/cart/checkout.php');
 
     // User Controller
     any('/fmware/has-address', 'controller/home/user/has-address.php');
     any('/fmware/new-address', 'controller/home/user/new-address.php');
+    any('/fmware/get-municipality', 'controller/home/user/get-municipality.php');
 
 //*****************************************************************//
 
