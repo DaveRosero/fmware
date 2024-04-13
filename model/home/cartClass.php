@@ -65,11 +65,11 @@
         }
 
         public function addCart () {
-            $id = $_POST['id'];
+            $id = $_POST['product_id'];
             $subtotal = $this->getProductPrice($id);
             $qty = 1;
             if ($this->isCartExist($_SESSION['user_id'], $id)) {
-                $json = array('cart_feedback' => 'Product already in cart');
+                $json = array('product_exist' => 'Product already in cart');
                 echo json_encode($json);
                 return;
             }
@@ -82,7 +82,10 @@
                 if ($stmt->execute()) {
                     $stmt->close();
                     $cart_count = $this->cartCount($_SESSION['user_id']);
-                    $json = array('cart_count' => $cart_count);
+                    $json = array(
+                        'cart_count' => $cart_count,
+                        'product_added' => 'Product added to cart.'
+                    );
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);

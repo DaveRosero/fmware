@@ -74,7 +74,6 @@
                                     </a>
                                     <div class="card-body">
                                         <h5 class="card-title text-center fw-bold">'.$name.'</h5>
-                                        <p class="text-muted text-center"><strong>Stock: '.$stock.'</strong></p>
                                     </div>
                                 </div>
                             </div>';
@@ -198,31 +197,35 @@
                             product.unit_value,
                             unit.name,
                             variant.name,
-                            stock.qty
+                            stock.qty,
+                            price_list.unit_price
                     FROM product
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
                     INNER JOIN stock ON stock.product_id = product.id
+                    INNER JOIN price_list ON price_list.product_id = product.id
                     WHERE product.name = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $product_name);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $image, $unit_value, $unit, $variant, $stock);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $unit, $variant, $stock, $price);
                     while ($stmt->fetch()) {
+                        if ($stock == 0) {
+                            $button = '<input type="radio" name="product_id" value="'.$id.'" disabled />';
+                        } else {
+                            $button = '<input type="radio" name="product_id" value="'.$id.'" required />';
+                        }
                         echo '<div class="col-md-6 mb-2">
                                 <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <input type="radio" name="payment_type" id="gcash" value="2" placeholder="test" required />
-                                            </div>
-                                            <div class="col">
-                                                <img class="me-2" width="60px" src="/fmware/asset/images/products/'.$image.'" alt="GCash" />
-                                                <p>'.$variant.'</p>
-                                                <p>('.$unit_value.' '.$unit.')</p>
-                                                <p class="text-muted">Stock: '.$stock.'</p>
-                                            </div>
+                                    <div class="card-body text-center">
+                                        '.$button.'
+                                        <img class="me-2" width="60px" src="/fmware/asset/images/products/'.$image.'" alt="GCash" />
+                                        <div class="mt-2">
+                                            <p class="mb-0">'.$variant.'</p>
+                                            <p class="mb-0">('.$unit_value.' '.$unit.')</p>
+                                            <p class="mb-0 text-muted">Stock: '.$stock.'</p>
+                                            <p class="mb-0">₱'.number_format($price).'.00</p>
                                         </div>
                                     </div>
                                 </div>

@@ -23,10 +23,10 @@
 
                         <div class="row pb-3">
                             <div class="col d-grid">
-                                <button type="submit" class="btn btn-success btn-lg add-to-cart" name="submit" value="buy">Buy</button>
+                                <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
                             </div>
                             <div class="col d-grid">
-                                <button type="submit" class="btn btn-success btn-lg add-to-cart" name="submit" value="addtocard">Add To Cart</button>
+                                <button type="submit" class="btn btn-success btn-lg add-to-cart-btn" name="submit" value="addtocard">Add To Cart</button>
                             </div>
                         </div>
                     </div>
