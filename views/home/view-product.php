@@ -38,7 +38,7 @@
             include_once 'vendor/Select2/js/bundle.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
-        <script src="vendor/NotifyJS/js/notify.js"></script>
+        <script src="/fmware/vendor/NotifyJS/js/notify.js"></script>
         <script src="/fmware/asset/js/home/view-product.js"></script>
     </body>
 </html>
