@@ -68,16 +68,17 @@
             $id = $_POST['product_id'];
             $subtotal = $this->getProductPrice($id);
             $qty = 1;
+            $active = 0;
             if ($this->isCartExist($_SESSION['user_id'], $id)) {
                 $json = array('product_exist' => 'Product already in cart');
                 echo json_encode($json);
                 return;
             }
             $query = 'INSERT INTO cart
-                        (user_id, product_id, qty, subtotal)
-                    VALUES (?,?,?,?)';
+                        (user_id, product_id, qty, subtotal, active)
+                    VALUES (?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('iiii', $_SESSION['user_id'], $id, $qty, $subtotal);
+            $stmt->bind_param('iiiii', $_SESSION['user_id'], $id, $qty, $subtotal, $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -98,9 +99,11 @@
 
         public function getCart ($id) {
             $query = 'SELECT cart.id,
+                            cart.user_id,
                             cart.qty,
                             cart.product_id,
                             cart.subtotal,
+                            cart.active,
                             product.image,
                             product.name,
                             product.unit_value,
@@ -116,73 +119,82 @@
             $stmt->bind_param('i', $id);
             if ($stmt) {
                 if ($stmt->execute()) { 
-                    $stmt->bind_result($cart_id, $qty, $product_id, $subtotal, $image, $name, $unit_value, $description, $price, $unit);
+                    $stmt->bind_result($cart_id, $user_id, $qty, $product_id, $subtotal, $active, $image, $name, $unit_value, $description, $price, $unit);
                     while ($stmt->fetch()) {
-
+                        if ($active == 0) {
+                            $checkbox = '<input class="form-check-input cart-checkbox" type="checkbox" name="selected_products[]" value="'.$product_id.'" data-user-id="'.$user_id.'">';
+                        } else {
+                            $checkbox = '<input class="form-check-input cart-checkbox" type="checkbox" name="selected_products[]" value="'.$product_id.'" data-user-id="'.$user_id.'" checked>';
+                        }
                         echo '<!-- Single item -->
-                            <div class="row">
-                                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                                    <!-- Image -->
-                                    <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                    <img src="asset/images/products/'.$image.'"
-                                        class="w-50" alt="product" />
+                        <div class="row">
+                            <div class="col-lg-1 col-md-2 mb-4 mb-lg-0 mt-5">
+                                <!-- Checkbox -->
+                                <div class="form-check">
+                                    '.$checkbox.'
+                                </div>
+                                <!-- Checkbox -->
+                            </div>
+                        
+                            <div class="col-lg-2 col-md-3 mb-4 mb-lg-0">
+                                <!-- Image -->
+                                <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                                    <img src="asset/images/products/'.$image.'" class="w-100" alt="product" />
                                     <a href="#!">
                                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
                                     </a>
-                                    </div>
-                                    <!-- Image -->
                                 </div>
-                    
-                                <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                                    <!-- Data -->
-                                    <p><strong>'.$name.'</strong></p>
-                                    <p>Unit: '.$unit_value.' '.$unit.' </p>
-                                    <p>Description: '. (!empty($description) ? $description : 'N/A') .'</p>
-                                    <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                                <!-- Image -->
+                            </div>
+                        
+                            <div class="col-lg-4 col-md-5 mb-4 mb-lg-0">
+                                <!-- Data -->
+                                <p><strong>'.$name.'</strong></p>
+                                <p>Unit: '.$unit_value.' '.$unit.' </p>
+                                <p>Description: '. (!empty($description) ? $description : 'N/A') .'</p>
+                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
                                     title="Remove item">
                                     <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-primary btn-sm mb-2" data-mdb-toggle="tooltip"
+                                </button>
+                                <button type="button" class="btn btn-primary btn-sm mb-2" data-mdb-toggle="tooltip"
                                     title="View Product">
                                     <i class="fas fa-eye"></i>
-                                    </button>
-                                    <!-- Data -->
-                                </div>
-                    
-                                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                                    <!-- Quantity -->
-                                    <div class="d-flex mb-4" style="max-width: 300px">
+                                </button>
+                                <!-- Data -->
+                            </div>
+                        
+                            <div class="col-lg-3 col-md-2 mb-4 mb-lg-0">
+                                <!-- Quantity -->
+                                <div class="d-flex mb-4" style="max-width: 300px">
                                     <button class="btn btn-primary px-3 me-2 subQty"
                                         data-product-id="'.$product_id.'"
-                                        data-cart-id="'.$cart_id.'"
-                                    >
+                                        data-cart-id="'.$cart_id.'">
                                         <i class="fas fa-minus"></i>
                                     </button>
-                    
+                        
                                     <div class="form-outline">
                                         <input min="0" name="quantity" value="'.$qty.'" type="number" 
-                                            class="form-control qty_'.$product_id.'" 
-                                        />
+                                            class="form-control qty_'.$product_id.'" />
                                         <label class="form-label">Quantity</label>
                                     </div>
-                    
+                        
                                     <button class="btn btn-primary px-3 ms-2 addQty"
                                         data-product-id="'.$product_id.'"
-                                        data-cart-id="'.$cart_id.'"
-                                    >
+                                        data-cart-id="'.$cart_id.'">
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    </div>
-                                    <!-- Quantity -->
-                    
-                                    <!-- Price -->
-                                    <p class="text-start text-md-center">
-                                    <strong class="subtotal_'.$product_id.'">₱'.number_format($subtotal).'.00</strong>
-                                    </p>
-                                    <!-- Price -->
                                 </div>
+                                <!-- Quantity -->
+                        
+                                <!-- Price -->
+                                <p class="text-start text-md-center">
+                                    <strong class="subtotal_'.$product_id.'">₱'.number_format($subtotal).'.00</strong>
+                                </p>
+                                <!-- Price -->
                             </div>
-                                <!-- Single item -->';
+                        </div>
+                        <!-- Single item -->
+                        ';
                     }
                     $stmt->close();
                 } else {
@@ -195,7 +207,7 @@
         }
 
         public function getCartTotal ($id) {
-            $query = 'SELECT subtotal FROM cart WHERE user_id = ?';
+            $query = 'SELECT subtotal FROM cart WHERE user_id = ? AND active = 1';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
@@ -206,12 +218,8 @@
                         $grandtotal += $subtotal;
                     }
                     $stmt->close();
-                    $delivery_fee = $this->getDeliveryFee();
-                    $fee = $delivery_fee['value'];
-                    $cart_total = $grandtotal + $fee;
                     return [
-                        'product_total' => '₱'.number_format($grandtotal).'.00',
-                        'total' => '₱'.number_format($cart_total).'.00'
+                        'product_total' => '₱'.number_format($grandtotal).'.00'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -320,22 +328,16 @@
             }
         }
 
-        public function getDeliveryFee () {
-            $query = 'SELECT value FROM company WHERE category = ?';
-            $category = 'Delivery Fee';
+        public function checkProduct ($user_id, $product_id) {
+            $active = 1;
+            $query = 'UPDATE cart SET active = ? WHERE user_id = ? AND product_id = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('s', $category);
+            $stmt->bind_param('iii', $active, $user_id, $product_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($delivery_fee);
-                    $stmt->fetch();
                     $stmt->close();
-
-                    $df = '₱'.$delivery_fee.'.00';
-                    $value = intval($delivery_fee);
                     return [
-                        'fee' => $df,
-                        'value' => $value
+                        'checked' => 'Product is selected'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -346,19 +348,16 @@
             }
         }
 
-        public function getTax () {
-            $query = 'SELECT value FROM company WHERE category = ?';
-            $category = 'VAT';
+        public function uncheckProduct ($user_id, $product_id) {
+            $active = 0;
+            $query = 'UPDATE cart SET active = ? WHERE user_id = ? AND product_id = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('s', $category);
+            $stmt->bind_param('iii', $active, $user_id, $product_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($vat);
-                    $stmt->fetch();
                     $stmt->close();
                     return [
-                        'value' => intval($vat),
-                        'vat' => 'VAT ('.$vat.'%)'
+                        'unchecked' => 'Unchecked Product'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);

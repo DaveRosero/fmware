@@ -17,9 +17,10 @@ require_once __DIR__.'/router.php';
     any('/fmware/add-cart', 'controller/home/cart/add-cart.php');
     any('/fmware/add-qty', 'controller/home/cart/add-qty.php');
     any('/fmware/sub-qty', 'controller/home/cart/sub-qty.php');
+    any('/fmware/check-product', 'controller/home/cart/check-product.php');
+    any('/fmware/uncheck-product', 'controller/home/cart/uncheck-product.php');
     any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
     any('/fmware/delivery-fee', 'controller/home/cart/delivery-fee.php');
-    any('/fmware/vat', 'controller/home/cart/vat.php');
     any('/fmware/checkout', 'controller/home/cart/checkout.php');
 
     // User Controller
