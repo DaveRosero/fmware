@@ -1,6 +1,6 @@
 $(document).ready(function(){
     function getCartTotal () {
-        var id = $('#total').data('user-id');
+        var id = $('#checkout').data('user-id');
         $.ajax({
             url: '/fmware/cart-total',
             method: 'POST',
@@ -9,62 +9,65 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(feedback){
-                $('#product-total').text(feedback.product_total);
-                $('#total').text(feedback.total);
-                $('#checkout-total').text(feedback.total);
+                if (feedback.product_total) {
+                    $('#product-total').text(feedback.product_total);
+                }
             }
         });
     }
 
-    function getDeliveryFee () {
-        $.ajax({
-            url: '/fmware/delivery-fee',
-            method: 'POST',
-            dataType: 'json',
-            success: function(feedback){
-                $('#delivery-fee').text(feedback.fee);
-            }
-        })
-    }
-
-    function getVAT () {
-        $.ajax({
-            url: '/fmware/vat',
-            method: 'POST',
-            dataType: 'json',
-            success: function(feedback){
-                $('#vat').text(feedback.vat);
-            }
-        })
-    }
-
-    getDeliveryFee();
-    getVAT();
     getCartTotal();
-      
-    $(document).on('click', '.add-cart', function(){
-        var parentButton = $(this).closest('.add-cart');
-        $.ajax({
-            url: '/fmware/add-cart',
-            method: 'POST',
-            data: {
-                id: $(this).data('product-id')
-            },
-            dataType: 'json',
-            success: function(feedback) {
-                if (feedback.cart_count) {
-                    $('#cart-count').text(feedback.cart_count);
-                }
 
-                if (feedback.cart_feedback) {
-                    parentButton.notify(feedback.cart_feedback, {
-                        position: 'right',
-                        className: 'info'
-                    });
-                }
-            }
-        });
-    });
+    // function getDeliveryFee () {
+    //     $.ajax({
+    //         url: '/fmware/delivery-fee',
+    //         method: 'POST',
+    //         dataType: 'json',
+    //         success: function(feedback){
+    //             $('#delivery-fee').text(feedback.fee);
+    //         }
+    //     })
+    // }
+
+    // function getVAT () {
+    //     $.ajax({
+    //         url: '/fmware/vat',
+    //         method: 'POST',
+    //         dataType: 'json',
+    //         success: function(feedback){
+    //             $('#vat').text(feedback.vat);
+    //         }
+    //     })
+    // }
+
+    // getDeliveryFee();
+    // getVAT();
+    // getCartTotal();
+      
+    // $(document).on('click', '.add-cart', function(){
+    //     var parentButton = $(this).closest('.add-cart');
+    //     $.ajax({
+    //         url: '/fmware/add-cart',
+    //         method: 'POST',
+    //         data: {
+    //             id: $(this).data('product-id')
+    //         },
+    //         dataType: 'json',
+    //         success: function(feedback) {
+    //             if (feedback.cart_count) {
+    //                 $('#cart-count').text(feedback.cart_count);
+    //             }
+
+    //             if (feedback.cart_feedback) {
+    //                 parentButton.notify(feedback.cart_feedback, {
+    //                     position: 'right',
+    //                     className: 'info'
+    //                 });
+    //             }
+    //         }
+    //     });
+    // });
+
 
     $(document).on('click', '.addQty', function(){
         var id = $(this).data('product-id');
@@ -166,5 +169,43 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+
+    $('.cart-checkbox').click(function() {
+        if ($(this).is(':checked')) {
+            console.log('Checkbox clicked and checked', $(this).val(), $(this).data('user-id'));
+
+            $.ajax({
+                url: '/fmware/check-product',
+                method: 'POST',
+                data: {
+                    user_id : $(this).data('user-id'),
+                    product_id : $(this).val()
+                },
+                dataType: 'json',
+                success: function(feedback) {
+                    if (feedback.checked) {
+                        getCartTotal();
+                    }
+                }
+            })
+        } else {
+            console.log('Checkbox clicked and unchecked', $(this).val());
+
+            $.ajax({
+                url: '/fmware/uncheck-product',
+                method: 'POST',
+                data: {
+                    user_id : $(this).data('user-id'),
+                    product_id : $(this).val()
+                },
+                dataType: 'json',
+                success: function(feedback) {
+                    if (feedback.unchecked) {
+                        getCartTotal();
+                    }
+                }
+            })
+        }
     });
 })
