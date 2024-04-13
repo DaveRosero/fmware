@@ -1,11 +1,11 @@
 <?php
     include_once 'session.php';
-    require_once 'model/home/cartClass.php';
+    require_once 'model/user/addressClass.php';
 
-    $cart = new Cart();
+    $user = new Address();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $json = $cart->getDeliveryFee($_POST['brgy']);  
+        $json = $user->getMunicipality($_POST['brgy']);
         echo json_encode($json);
     } else {
         header('Location: /fmware/404');

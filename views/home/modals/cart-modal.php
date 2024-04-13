@@ -56,6 +56,15 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
+                        <p>Delivery Fee</p>
+                      </div>
+                      <div class="col text-end">
+                        <p id="delivery-fee"></p>
+                        <input type="hidden" name="delivery-fee-value" id="delivery-fee-value">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
                         <p>Total Amount</p>
                       </div>
                       <div class="col text-end">
@@ -104,13 +113,16 @@
             <div class="row mt-2">
               <div class="col">
                 <label class="form-label" for="">Barangay <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="brgy" id="brgy" required>
+                <select class="form-select" type="text" name="brgy" id="brgy" required>
+                    <option></option>
+                    <?php $address->getBrgys(); ?>
+                </select>
               </div>
             </div>
             <div class="row mt-2">
               <div class="col">
                 <label class="form-label" for="">Municipality <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="municipality" id="municipality" required>
+                <input class="form-control" type="text" name="municipality" id="municipality" readonly>
               </div>
             </div>
             <div class="row mt-2">
