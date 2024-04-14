@@ -26,6 +26,7 @@
               <option selected disabled>Select an Address</option>
               <?php echo $address->displayAddress($user_info['id']); ?>
             </select>
+            <input type="hidden" name="address_id" id="address_id">
             <div class="d-flex justify-content-end">
               <button type="button" class="btn text-primary" id="checkout-address">Add new address</button>
             </div>

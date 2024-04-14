@@ -88,7 +88,7 @@
                 if ($stmt->execute()) {
                     $stmt->bind_result($address_id, $house_no, $street, $brgy, $municipality, $description);
                     while ($stmt->fetch()) {
-                        echo '<option value="'.$brgy.'">
+                        echo '<option value="'.$brgy.'" data-address-id="'.$address_id.'">
                                 '.$house_no.' '.$street.', '.$brgy.', '.$municipality.'
                             </option>';
                     }

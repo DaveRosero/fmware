@@ -104,7 +104,8 @@ $(document).ready(function(){
 
     $('#address').change(function(){
         var brgy = $(this).val();
-
+        var selected = $(this).find('option:selected');
+        var address_id = selected.data('address-id');
         $.ajax({
             url: '/fmware/delivery-fee',
             method: 'POST',
@@ -116,7 +117,7 @@ $(document).ready(function(){
                 if (feedback) {
                     $('#delivery-fee').text('₱' + feedback.delivery_fee + '.00');
                     $('#delivery-fee-value').val(feedback.delivery_value);
-
+                    $('#address_id').val(address_id);
                     getCartTotal();
                 }
             }
