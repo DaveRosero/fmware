@@ -173,7 +173,13 @@
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
-                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                            // Count the number of commas to determine the number of additional products
+                            $additional_product_count = substr_count($additional_products, ',');
+                            
+                            // Display the number of additional products if there are any
+                            if ($additional_product_count > 0) {
+                                echo ' + ' . $additional_product_count . ' more';
+                            }
                         }
                 
                         echo '          </span>
@@ -224,7 +230,13 @@
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
-                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                            // Count the number of commas to determine the number of additional products
+                            $additional_product_count = substr_count($additional_products, ',');
+                            
+                            // Display the number of additional products if there are any
+                            if ($additional_product_count > 0) {
+                                echo ' + ' . $additional_product_count . ' more';
+                            }
                         }
                 
                         echo '          </span>
@@ -275,7 +287,13 @@
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
-                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                            // Count the number of commas to determine the number of additional products
+                            $additional_product_count = substr_count($additional_products, ',');
+                            
+                            // Display the number of additional products if there are any
+                            if ($additional_product_count > 0) {
+                                echo ' + ' . $additional_product_count . ' more';
+                            }
                         }
                 
                         echo '          </span>
@@ -326,7 +344,13 @@
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
-                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                            // Count the number of commas to determine the number of additional products
+                            $additional_product_count = substr_count($additional_products, ',');
+                            
+                            // Display the number of additional products if there are any
+                            if ($additional_product_count > 0) {
+                                echo ' + ' . $additional_product_count . ' more';
+                            }
                         }
                 
                         echo '          </span>
@@ -377,7 +401,13 @@
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
-                            echo ' + ' . (substr_count($additional_products, ',') + 1) . ' more';
+                            // Count the number of commas to determine the number of additional products
+                            $additional_product_count = substr_count($additional_products, ',');
+                            
+                            // Display the number of additional products if there are any
+                            if ($additional_product_count > 0) {
+                                echo ' + ' . $additional_product_count . ' more';
+                            }
                         }
                 
                         echo '          </span>

@@ -183,7 +183,7 @@
                     $products = $this->getOrderProducts($order_ref);
                     $this->updateStock($products);
                     return [
-                        'redirect' => '/fmware'
+                        'redirect' => '/fmware/my-purchases/pending'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);
