@@ -22,7 +22,8 @@
                             price_list.base_price
                     FROM cart
                     INNER JOIN price_list ON price_list.product_id = cart.product_id
-                    WHERE cart.user_id = ?';
+                    WHERE cart.user_id = ?
+                    AND active = 1';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
@@ -45,7 +46,7 @@
         }
 
         public function getGross ($id, $delivery_fee) {
-            $query = 'SELECT subtotal FROM cart WHERE user_id = ?';
+            $query = 'SELECT subtotal FROM cart WHERE user_id = ? AND active = 1';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
@@ -68,7 +69,7 @@
         }
 
         public function deleteCart ($user_id) {
-            $query = 'DELETE FROM cart WHERE user_id = ?';
+            $query = 'DELETE FROM cart WHERE user_id = ? AND active = 1';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $user_id);
             if ($stmt) {
@@ -87,7 +88,8 @@
             $query = 'INSERT INTO order_items (order_ref, product_id, qty)
                     SELECT ?, product_id, qty
                     FROM cart
-                    WHERE user_id = ?';
+                    WHERE user_id = ?
+                    AND active = 1';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('si', $order_ref, $user_id);
             if ($stmt) {
@@ -151,28 +153,27 @@
         public function placeOrder () {
             $this->newCart();
             $query = 'INSERT INTO orders
-                        (order_ref, firstname, lastname, phone, gross, delivery_fee, vat, net, 
+                        (order_ref, firstname, lastname, phone, gross, delivery_fee, net, 
                         transaction_type_id, payment_type_id, address_id, user_id, paid, status)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
             $user_id = $_POST['user_id'];
             $order_ref = $this->generateRef();
-            $delivery_fee = $this->cart->getDeliveryFee();
+            $delivery_fee = intval($_POST['delivery-fee-value']);
             $net = $this->getNet($user_id);
-            $gross = $this->getGross($user_id, $delivery_fee['value']);
-            $vat = $this->cart->getTax();
+            $gross = $this->getGross($user_id, $delivery_fee);
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
             $phone = $_POST['phone'];
             $transaction_type_id = 1;
             $payment_type_id = $_POST['payment_type'];
-            $address_id = $_POST['address'];
+            $address_id = intval($_POST['address_id']);
             $paid = 'unpaid';
             $status = 'pending';
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sssiiiiiiiiiss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee['value'], 
-                            $vat['value'], $net, $transaction_type_id, $payment_type_id, $address_id, $user_id, 
+            $stmt->bind_param('ssssiiiiiiiss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee, 
+                            $net, $transaction_type_id, $payment_type_id, $address_id, $user_id, 
                             $paid, $status);
             if ($stmt) {
                 if ($stmt->execute()) {
