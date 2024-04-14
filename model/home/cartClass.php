@@ -218,7 +218,8 @@
                         $product += $subtotal;
                     }
                     $stmt->close();
-                    $checkout = $product + $delivery_fee;
+                    $df = intval($delivery_fee);
+                    $checkout = $product + $df;
                     return [
                         'product_total' => '₱'.number_format($product).'.00',
                         'checkout_total' => '₱'.number_format($checkout).'.00'

@@ -59,7 +59,7 @@
                         <p>Delivery Fee</p>
                       </div>
                       <div class="col text-end">
-                        <p id="delivery-fee"></p>
+                        <p id="delivery-fee">-</p>
                         <input type="hidden" name="delivery-fee-value" id="delivery-fee-value">
                       </div>
                     </div>
