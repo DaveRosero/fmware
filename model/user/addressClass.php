@@ -147,7 +147,7 @@
             $stmt->bind_param('s', $param);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($municipality, $delivery_fee);
+                    $stmt->bind_result($municipality);
                     $stmt->fetch();
                     $stmt->close();
                     return [
