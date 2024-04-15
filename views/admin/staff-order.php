@@ -7,6 +7,10 @@
   $order = new Order();
 
 //   $admin->isAdmin();
+  if ($order->checkOrder($order_ref)) {
+      header('Location: /fmware/404');
+      exit();
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +28,7 @@
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
-      <?php include 'views/admin/template/sidebar.php'; ?>
+      <?php // include 'views/admin/template/sidebar.php'; ?>
 
 
     <!--  Main wrapper -->
@@ -54,6 +58,6 @@
   <script src="/fmware/asset/js/admin/dashboard.js"></script>
   <script src="/fmware/asset/js/admin/mini-sidebar.js"></script>
   <script src="/fmware/asset/js/admin/sidebarmenu.js"></script>
-  <script src="/fmware/asset/js/admin/order.js"></script>
+  <script src="/fmware/asset/js/admin/confirm-order.js"></script>
 </body>
 </html>
