@@ -391,5 +391,24 @@
                 die("Error in preparing statement: " . $this->conn->error);
             }
         }
+
+        public function getProofCOD ($order_ref) {
+            $query = 'SELECT proof_of_delivery FROM proof_of_transaction WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($proof);
+                    $stmt->fetch();
+                    $stmt->close();
+                    return '<img src="asset/images/payments/proof/cod/'.$proof.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
     }
 ?>
