@@ -29,8 +29,6 @@
 
         <?php include_once 'views/home/content/home-content.php'; ?>
 
-        <?php include_once 'views/home/modals/home-modal.php'; ?>
-
         <?php include_once 'views/home/template/footer.php'; ?>
             
         <?php

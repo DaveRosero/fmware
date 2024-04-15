@@ -439,8 +439,12 @@
                 return 'To Receive';
             }
 
-            if ($status === '') {
-                return '';
+            if ($status === 'delivered') {
+                return 'Delivered';
+            }
+
+            if ($status === 'completed') {
+                return 'Completed';
             }
         }
 
