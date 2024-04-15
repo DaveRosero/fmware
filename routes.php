@@ -90,6 +90,9 @@ require_once __DIR__.'/router.php';
     // Confirm Order Controller
     any('/fmware/confirm-order-status', 'controller/admin/order/confirm-order.php');
 
+    // Proof of Payment Controller
+    any('/fmware/get-proof', 'controller/admin/order/get-proof.php');
+
 //*****************************************************************//
 
     // Maintenance Views

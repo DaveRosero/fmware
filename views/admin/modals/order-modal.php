@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button class="btn btn-lg btn-primary mb-2">View Proof of Payment/Delivery</button>
+                    <button class="btn btn-lg btn-primary mb-2" id="view-proof">View Proof of Payment/Delivery</button>
                     <button class="btn btn-lg btn-danger mb-2" id="cancel-order">Cancel Order</button>
                 </div>
             </div>
@@ -139,19 +139,18 @@
     </div>
 </div>
 
-<div class="modal fade" id="receipt-modal" tabindex="-1" aria-label="receipt-modalLabel" aria-hidden="true">
+<div class="modal fade" id="proof-modal" tabindex="-1" aria-label="proof-modalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="receipt-modalLabel">Order Receipt</h5>
+                <h5 class="modal-title" id="proof-modalLabel">Proof of Payment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center fw-bold fs-6" id="receipt-content">
+            <div class="modal-body text-center fw-bold fs-6" id="proof-content">
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="print-receipt">Print</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="proof-modal-close">Close</button>
             </div>
         </div>
     </div>

@@ -83,6 +83,22 @@ $(document).ready(function(){
         })
     }
 
+    function getProof () {
+        var order_ref = $('#order_ref').val();
+        
+        $.ajax({
+            url: '/fmware/get-proof',
+            method: 'POST',
+            data: {
+                order_ref : order_ref
+            },
+            dataType: 'html',
+            success: function(html){
+                $('#proof-content').html(html);
+            }
+        });
+    }
+
     $('#order-table').DataTable({
         dom: 'lBfrtip',
         buttons: [
@@ -218,6 +234,17 @@ $(document).ready(function(){
                 $('#order-modal').modal('show');
             }
         });
+    });
+
+    $('#view-proof').on('click', function(){
+        getProof();
+        $('#proof-modal').modal('show');
+        $('#order-modal').modal('hide');
+    });
+
+    $('#proof-modal-close').on('click', function(){
+        $('#proof-modal').modal('hide');
+        $('#order-modal').modal('show');
     });
 
     // $('#order-form').on('submit', function(event){
