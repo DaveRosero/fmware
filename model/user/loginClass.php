@@ -32,7 +32,13 @@
                         $_SESSION['email'] = $email;
                         if ($group_name == 'user'){
                             $json['redirect'] = '/fmware';
-                        } else {
+                        } 
+                        
+                        if ($group_name == 'Delivery Rider') {
+                            $json['redirect'] = '/fmware/confirm-order';
+                        } 
+
+                        if ($group_name == 'admin') {
                             $json['redirect'] = '/fmware/dashboard';
                         }
 

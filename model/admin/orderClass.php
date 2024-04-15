@@ -14,6 +14,68 @@
             return $format;
         }
 
+        public function paidButton($paid) {
+            if ($paid === 'unpaid') {
+                $button = '<div class="col col-auto">  
+                            <button class="btn btn-lg btn-danger" disabled>
+                                <span><i class="fas fa-exclamation-circle"></i></span> 
+                                Unpaid
+                            </button>
+                        </div>
+                        <div class="col col-auto">
+                            <i class="fas fa-arrow-right fa-2x"></i>
+                        </div>
+                        <div class="col col-auto">
+                            <button class="btn btn-lg btn-success" id="paid-btn"><i class="fas fa-check-circle"></i> Paid</button>
+                        </div>';
+            }
+
+            if ($paid === 'paid') {
+                $button = '<p class="text-center fw-bold fs-4">The order has been paid.</p>
+                        <div class="col col-auto">
+                            <button class="btn btn-lg btn-success" disabled><i class="fas fa-check-circle"></i> Paid</button>
+                        </div>';
+            }
+
+            return $button;
+        }
+
+        public function paidStatus ($order_ref) {
+            $query = 'SELECT paid FROM orders WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($paid);
+                    $stmt->fetch();
+                    $stmt->close();
+                    $button = $this->paidButton($paid);
+                    echo $button;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function updatePaidStatus ($order_ref, $paid) {
+            $query = 'UPDATE orders SET paid = ? WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $paid, $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
         public function statusFormat ($status) {
             if ($status === 'pending') {
                 $format = '<span class="badge bg-warning text-wrap">'.strtoupper($status).'</span>';
@@ -30,21 +92,72 @@
             return $format;
         }
 
-        public function updateOrder () {
-            $order_ref = $_POST['order_ref'];
-            $paid = $_POST['paid'];
-            $status = $_POST['status'];
+        public function statusButton ($status) {
+            if ($status === 'pending') {
+                $button = '<div class="col col-auto">
+                            <button class="btn btn-lg btn-warning" disabled><i class="fas fa-hourglass-half"></i> Pending</button>
+                        </div>
+                        <div class="col col-auto">
+                            <i class="fas fa-arrow-right fa-2x"></i>
+                        </div>
+                        <div class="col col-auto">
+                            <button class="btn btn-lg btn-primary" id="delivering-btn"><i class="fas fa-truck"></i> Delivering</button>
+                        </div>';
+            }
 
-            $query = 'UPDATE orders SET paid = ?, status = ? WHERE order_ref = ?';
+            if ($status === 'delivering') {
+                $button = '<div class="col col-auto">
+                            <button class="btn btn-lg btn-primary" disabled><i class="fas fa-truck"></i> Delivering</button>
+                        </div>
+                        <div class="col col-auto">
+                            <i class="fas fa-arrow-right fa-2x"></i>
+                        </div>
+                        <div class="col col-auto">
+                            <button class="btn btn-lg btn-success" id="delivered-btn"><i class="fas fa-check-circle"></i> Delivered</button>
+                        </div>
+                        ';
+            }
+
+            if ($status === 'delivered') {
+                $button = '<p class="text-center fw-bold fs-4">The order has been delivered.</p>
+                        <div class="col col-auto">
+                            <button class="btn btn-lg btn-success" disabled><i class="fas fa-check-circle"></i> Delivered</button>
+                        </div>';
+            }
+
+            return $button;
+        }
+
+        public function orderStatus ($order_ref) {
+            $query = 'SELECT status FROM orders WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sss', $paid, $status, $order_ref);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($status);
+                    $stmt->fetch();
+                    $stmt->close();
+                    $button = $this->statusButton($status);
+                    return [
+                        'html' => $button,
+                        'status' => $status
+                    ];
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function updateOrderStatus ($order_ref, $status) {
+            $query = 'UPDATE orders SET status = ? WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $status, $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array(
-                        'redirect' => '/fmware/manage-orders'
-                    );
-                    echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
@@ -68,18 +181,20 @@
                             payment_type.name
                     FROM orders
                     INNER JOIN transaction_type ON transaction_type.id = orders.transaction_type_id
-                    INNER JOIN payment_type ON payment_type.id = orders.payment_type_id';
+                    INNER JOIN payment_type ON payment_type.id = orders.payment_type_id
+                    ORDER BY orders.date DESC';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $ref, $fname, $lname, $date, $gross, $net, $paid, $status, $transaction, $payment);
+                    $content = '';
                     while ($stmt->fetch()) {
                         $initial = substr($lname, 0, 1);
                         $customer = $fname.' '.$initial.'.';
                         $dateObj = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-                        $dateFormat = $dateObj->format('d F Y');
+                        $dateFormat = $dateObj->format('d F Y H:i');
 
-                        echo '<tr>
+                        $content .= '<tr>
                                 <td><strong>'.$ref.'</strong></td>
                                 <td class="text-primary"><strong>'.$customer.'</strong></td>
                                 <td>'.$dateFormat.'</td>
@@ -107,6 +222,9 @@
                                 </td>
                             </tr>';
                     }
+                    $stmt->close();
+
+                    return $content;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
