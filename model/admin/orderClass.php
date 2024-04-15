@@ -213,7 +213,7 @@
                                     >
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-secondary printReceipt mt-2"
+                                    <button class="btn btn-sm btn-secondary print-receipt mt-2"
                                         data-order-ref="'.$ref.'"
                                         data-customer-name="'.$customer.'"
                                     >
@@ -225,6 +225,164 @@
                     $stmt->close();
 
                     return $content;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function printReceipt ($order_ref) {
+            $query = 'SELECT orders.order_ref,
+                            orders.date,
+                            orders.firstname,
+                            orders.lastname
+                    FROM orders
+                    WHERE orders.order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($order_ref, $date, $fname, $lname);
+                    $stmt->fetch();
+                    $stmt->close();
+                    $initial = substr($lname, 0, 1);
+                    $customer = $fname.' '.$initial.'.';
+                    $dateObj = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+                    $dateFormat = $dateObj->format('d F Y h:i A');
+
+                    return [
+                        'order_ref' => $order_ref,
+                        'date' => $dateFormat,
+                        'customer' => $customer,
+                    ];
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getOrderItems ($order_ref) {
+            $query = 'SELECT order_items.qty,
+                            product.name,
+                            product.unit_value,
+                            price_list.unit_price,
+                            orders.delivery_fee,
+                            orders.gross,
+                            variant.name,
+                            unit.name
+                    FROM order_items
+                    INNER JOIN product ON product.id = order_items.product_id
+                    INNER JOIN price_list ON price_list.product_id = order_items.product_id
+                    INNER JOIN orders ON orders.order_ref = order_items.order_ref
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    WHERE order_items.order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($qty, $name, $unit_value, $price, $delivery_fee, $gross, $variant, $unit);
+                    $content = '';
+                    while ($stmt->fetch()) {
+                        $price *= $qty;
+                        $content .= '<div class="item">
+                                        <span>'.$qty.' x '.$name.' ('.$variant.') ('.$unit_value.' '.$unit.')</span>
+                                        <span class="float-end">₱'.number_format($price).'.00</span>
+                                    </div>';
+                    }
+                    $stmt->close();
+                    $content .= '<hr>
+                                <div class="item">
+                                    <span>Delivery Fee</span>
+                                    <span class="float-end">₱'.number_format($delivery_fee).'.00</span>
+                                </div>
+                                <div class="item">
+                                    <span>Total:</span>
+                                    <span class="float-end">₱'.number_format($gross).'.00</span>
+                                </div>';
+                    echo $content;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function receiptQrCode ($order_ref) {
+            // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/fmware/confirm-order/'.$order_ref;
+            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.19/fmware/confirm-order/'.$order_ref;
+            $filename = $order_ref . '.jpg';
+            $image = file_get_contents($api);
+            $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
+
+            if (file_exists($savePath)) {
+                echo '<img src="/fmware/'.$savePath.'" alt="">';
+                return;
+            }
+
+            if ($image !== false) {
+                $saveResult = file_put_contents($savePath, $image);
+                if ($saveResult !== false) {
+                    echo '<img src="/fmware/'.$savePath.'" alt="">';
+                } else {
+                    echo "Error: Failed to save the image to $savePath";
+                }
+            }else {
+                echo "Error: Failed to fetch image data from $api";
+            }
+        }
+
+        public function confirmOrder () {
+            $targetDir = 'asset/images/payments/proof/cod/';
+            $targetFile = $targetDir . basename($_FILES['image']['name']);
+            move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
+
+            $image = basename($targetFile);
+            $order_ref = $_POST['order_ref'];
+            $query = 'INSERT INTO proof_of_transaction
+                        (order_ref, proof_of_delivery)
+                    VALUES (?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $order_ref, $image);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $status = 'delivered';
+                    $paid = 'paid';
+                    $this->updateOrderStatus($order_ref, $status);
+                    $this->updatePaidStatus($order_ref, $paid);
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function checkOrder ($order_ref) {
+            $query = 'SELECT status FROM orders WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($status);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    if ($status === 'delivered' || $status === 'pending') {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();

@@ -75,9 +75,10 @@ require_once __DIR__.'/router.php';
 
     // Manage Orders Views
     get('/fmware/manage-orders', 'views/admin/order.php');
+    get('/fmware/print-receipt/$order_ref', 'views/admin/receipt.php');
 
-    // Staff Order Views
-    get('/fmware/confirm-order', 'views/admin/staff-order.php');
+    // Confirm Order Views
+    get('/fmware/confirm-order/$order_ref', 'views/admin/staff-order.php');
 
     // Manage Orders Controller
     any('/fmware/get-orders','controller/admin/order/get-orders.php');
@@ -85,6 +86,9 @@ require_once __DIR__.'/router.php';
     any('/fmware/update-paid', 'controller/admin/order/update-paid.php');
     any('/fmware/order-status', 'controller/admin/order/order-status.php');
     any('/fmware/update-status', 'controller/admin/order/update-status.php');
+
+    // Confirm Order Controller
+    any('/fmware/confirm-order-status', 'controller/admin/order/confirm-order.php');
 
 //*****************************************************************//
 

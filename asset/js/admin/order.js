@@ -151,6 +151,12 @@ $(document).ready(function(){
         $('#order-modal').modal('show');
     });
 
+    $('.print-receipt').on('click', function(){
+        var order_ref = $(this).data('order-ref');
+        var printUrl = '/fmware/print-receipt/' + order_ref;
+        window.open(printUrl, '_blank');
+    });
+
     $('#confirm-paid').on('click', function(event){
         event.preventDefault();
         var order_ref = $('#order_ref').val();
