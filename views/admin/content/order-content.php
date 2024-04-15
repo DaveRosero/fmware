@@ -27,8 +27,8 @@
                         <th><i class="fas fa-cog"></i></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php $order->getOrders(); ?>
+                <tbody id="order-table-content">
+                    <?php echo $order->getOrders(); ?>
                 </tbody>
             </table>
         </div>
