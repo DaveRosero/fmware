@@ -21,7 +21,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/new-brand',
+            url: '/new-brand',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -37,7 +37,7 @@ $(document).ready(function(){
 
     $('.status').on('click', function(){
         $.ajax({
-            url: '/fmware/disable-brand',
+            url: '/disable-brand',
             method: 'POST',
             data: {
                 id : $(this).data('brand-id'),
@@ -63,7 +63,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/edit-brand',
+            url: '/edit-brand',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

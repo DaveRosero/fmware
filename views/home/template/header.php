@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-light shadow sticky-top bg-white">
     <div class="container d-flex justify-content-between align-items-center">
 
-        <a class="navbar-brand logo h1 align-self-center" href="/fmware" style="color: #fcc404;">
+        <a class="navbar-brand logo h1 align-self-center" href="/" style="color: #fcc404;">
             FMWare
         </a>
 
@@ -14,22 +14,22 @@
             <div class="flex-fill">
                 <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/fmware">Home</a>
+                        <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/fmware/about">About</a>
+                        <a class="nav-link" href="/about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/fmware/shop">Shop</a>
+                        <a class="nav-link" href="/shop">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/fmware/contact">Contact</a>
+                        <a class="nav-link" href="/contact">Contact</a>
                     </li>
                 </ul>
             </div>
             <div class="navbar align-self-center d-flex">
                 <?php if ($user->isLoggedIn()): ?>
-                    <a class="nav-icon position-relative text-decoration-none" id="cart" href="/fmware/cart">
+                    <a class="nav-icon position-relative text-decoration-none" id="cart" href="/cart">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" id="cart-count">
                             <?php
@@ -40,9 +40,9 @@
                     </a>
                     <div class="dropdown">
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="/fmware/account/settings">My Account</a>
+                            <a class="dropdown-item" href="/account/settings">My Account</a>
                             <div class="dropdown-divider"></div>
-                            <form action="/fmware/logout" method="post">
+                            <form action="/logout" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>
                             </form>
 
@@ -53,10 +53,10 @@
                     </div>
 
                 <?php elseif (!$user->isLoggedIn()): ?>
-                    <a class="nav-icon d-none d-lg-inline text-decoration-none" href="/fmware/login">
+                    <a class="nav-icon d-none d-lg-inline text-decoration-none" href="/login">
                         <i class="fas fa-sign-in-alt text-dark mr-2"></i> Login
                     </a>
-                    <a class="nav-icon d-none d-lg-inline text-decoration-none" href="/fmware/register">
+                    <a class="nav-icon d-none d-lg-inline text-decoration-none" href="/register">
                         <i class="fas fa-user-plus text-dark mr-2"></i> Register
                     </a>
                 <?php endif; ?>

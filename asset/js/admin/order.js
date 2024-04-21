@@ -39,7 +39,7 @@ $(document).ready(function(){
 
     function getOrders () {
         $.ajax({
-            url: '/fmware/get-orders',
+            url: '/get-orders',
             method: 'POST',
             dataType: 'html',
             success: function(html){
@@ -51,7 +51,7 @@ $(document).ready(function(){
     function paidStatus () {
         var order_ref = $('#order_ref').val();
         $.ajax({
-            url: '/fmware/paid-status',
+            url: '/paid-status',
             method: 'POST',
             data: {
                 order_ref : order_ref
@@ -66,7 +66,7 @@ $(document).ready(function(){
     function orderStatus () {
         var order_ref = $('#order_ref').val();
         $.ajax({
-            url: '/fmware/order-status',
+            url: '/order-status',
             method: 'POST',
             data: {
                 order_ref : order_ref
@@ -87,7 +87,7 @@ $(document).ready(function(){
         var order_ref = $('#order_ref').val();
         
         $.ajax({
-            url: '/fmware/get-proof',
+            url: '/get-proof',
             method: 'POST',
             data: {
                 order_ref : order_ref
@@ -169,7 +169,7 @@ $(document).ready(function(){
 
     $('.print-receipt').on('click', function(){
         var order_ref = $(this).data('order-ref');
-        var printUrl = '/fmware/print-receipt/' + order_ref;
+        var printUrl = '/print-receipt/' + order_ref;
         window.open(printUrl, '_blank');
     });
 
@@ -179,7 +179,7 @@ $(document).ready(function(){
         var paid = $('#paid').val();
 
         $.ajax({
-            url: '/fmware/update-paid',
+            url: '/update-paid',
             method: 'POST',
             data: {
                 order_ref : order_ref,
@@ -200,7 +200,7 @@ $(document).ready(function(){
         var status = $('#delivering').val();
 
         $.ajax({
-            url: '/fmware/update-status',
+            url: '/update-status',
             method: 'POST',
             data: {
                 order_ref : order_ref,
@@ -221,7 +221,7 @@ $(document).ready(function(){
         var status = $('#delivered').val();
 
         $.ajax({
-            url: '/fmware/update-status',
+            url: '/update-status',
             method: 'POST',
             data: {
                 order_ref : order_ref,
@@ -252,7 +252,7 @@ $(document).ready(function(){
     //     console.log('form submitted');
 
     //     $.ajax({
-    //         url: '/fmware/update-order',
+    //         url: '/update-order',
     //         method: 'POST',
     //         data: $(this).serialize(),
     //         dataType: 'json',

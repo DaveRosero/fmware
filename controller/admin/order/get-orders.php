@@ -8,7 +8,7 @@
         $content = $order->getOrders();
         echo $content;
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

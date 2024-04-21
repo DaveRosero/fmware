@@ -139,7 +139,7 @@
                             <div class="col-lg-2 col-md-3 mb-4 mb-lg-0">
                                 <!-- Image -->
                                 <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                    <img src="asset/images/products/'.$image.'" class="w-100" alt="product" />
+                                    <img src="/asset/images/products/'.$image.'" class="w-100" alt="product" />
                                     <a href="#!">
                                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
                                     </a>

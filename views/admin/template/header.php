@@ -13,7 +13,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="asset/images/user/default.jpg" alt="" width="70" height="70" class="rounded-circle">
+                  <img src="/asset/images/user/default.jpg" alt="" width="70" height="70" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -25,7 +25,7 @@
                         <i class="fa-solid fa-envelope"></i>
                         <p class="mb-0 fs-3">My Account</p>
                     </a>
-                    <form action="/fmware/logout" method="POST">
+                    <form action="/logout" method="POST">
                       <button type="submit" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
                     </form>
                   </div>

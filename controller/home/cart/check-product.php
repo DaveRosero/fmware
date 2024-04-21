@@ -8,7 +8,7 @@
         $json = $cart->checkProduct($_POST['user_id'], $_POST['product_id']);
         echo json_encode($json);
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">New Staff</h5>
-            <form action="/fmware/staff" method="POST">
+            <form action="/staff" method="POST">
                 <div class="row">
                     <div class="col">
                         <label for="group_name" class="form-label">First Name <span class="text-danger">*</span></label>

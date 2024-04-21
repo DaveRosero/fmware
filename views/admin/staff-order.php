@@ -8,7 +8,7 @@
 
 //   $admin->isAdmin();
   if ($order->checkOrder($order_ref)) {
-      header('Location: /fmware/404');
+      header('Location: /404');
       exit();
   }
 ?>
@@ -18,11 +18,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Manage Orders | FMWare</title>
-    <link rel="icon" href="/fmware/asset/images/store/logo.png" type="image/png">
+    <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php 
       include_once 'vendor/Bootstrap/css/bundle.php';
     ?>
-    <link rel="stylesheet" href="/fmware/asset/css/admin/dashboard.css">
+    <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
 </head>
 <body>
   <!--  Body Wrapper -->
@@ -55,9 +55,9 @@
     include_once 'vendor/FontAwesome/kit.php';
     include_once 'vendor/Bootstrap/js/bundle.php'; 
   ?>
-  <script src="/fmware/asset/js/admin/dashboard.js"></script>
-  <script src="/fmware/asset/js/admin/mini-sidebar.js"></script>
-  <script src="/fmware/asset/js/admin/sidebarmenu.js"></script>
-  <script src="/fmware/asset/js/admin/confirm-order.js"></script>
+  <script src="/asset/js/admin/dashboard.js"></script>
+  <script src="/asset/js/admin/mini-sidebar.js"></script>
+  <script src="/asset/js/admin/sidebarmenu.js"></script>
+  <script src="/asset/js/admin/confirm-order.js"></script>
 </body>
 </html>

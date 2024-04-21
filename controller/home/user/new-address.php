@@ -8,7 +8,7 @@
         $address = $user->newAddress();
         echo json_encode($address);
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

@@ -48,7 +48,7 @@
             $stmt->bind_param('ssi', $group_name, $perms, $active);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    header('Location: /fmware/groups');
+                    header('Location: /groups');
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();

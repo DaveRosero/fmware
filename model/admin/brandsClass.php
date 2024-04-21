@@ -42,7 +42,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/fmware/brands');
+                    $json = array('redirect' => '/brands');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -128,7 +128,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json['redirect'] = '/fmware/brands';
+                    $json['redirect'] = '/brands';
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -153,7 +153,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/fmware/brands');
+                    $json = array('redirect' => '/brands');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);

@@ -14,7 +14,7 @@
         $total = $cart->getCartTotal($id, $delivery_fee);
         echo json_encode($total);
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

@@ -5,7 +5,7 @@
         public function logout () {
             session_start();
             session_destroy();
-            header('Location: /fmware/login');
+            header('Location: /login');
         }
     }
 ?>

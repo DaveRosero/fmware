@@ -21,7 +21,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/new-category',
+            url: '/new-category',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -37,7 +37,7 @@ $(document).ready(function(){
 
     $('.status').on('click', function(){
         $.ajax({
-            url: '/fmware/disable-category',
+            url: '/disable-category',
             method: 'POST',
             data: {
                 id : $(this).data('category-id'),
@@ -63,7 +63,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/edit-category',
+            url: '/edit-category',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

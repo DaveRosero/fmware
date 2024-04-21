@@ -8,7 +8,7 @@
         $fee = $cart->getTax();
         echo json_encode($fee);
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

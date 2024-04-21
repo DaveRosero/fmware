@@ -45,10 +45,10 @@
           <div class="card-body">
             <p><strong>We accept</strong></p>
             <img class="me-2" width="100px"
-            src="asset/images/payments/cod.png"
+            src="/asset/images/payments/cod.png"
             alt="COD" />
             <img class="me-2" width="100px"
-              src="asset/images/payments/gcash.png"
+              src="/asset/images/payments/gcash.png"
               alt="GCash" />
           </div>
         </div>

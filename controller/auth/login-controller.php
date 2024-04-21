@@ -6,11 +6,9 @@
     $login = new Login();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if ($_POST['action'] == 'login') {
-            $login->login();
-        }
+        $login->login();
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

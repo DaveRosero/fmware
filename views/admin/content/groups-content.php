@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">Create Group</h5>
-            <form action="/fmware/groups" method="POST">
+            <form action="/groups" method="POST">
                 <div class="row">
                     <div class="col">
                         <label for="group_name" class="form-label">Group Name <span class="text-danger">*</span></label>
