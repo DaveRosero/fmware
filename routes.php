@@ -33,6 +33,7 @@ require_once __DIR__.'/router.php';
     // Auth
     get('/login', 'views/auth/login.php');
     get('/register', 'views/auth/register.php');
+    get('/verify-account/$code', 'views/auth/verify.php');
 
     // Auth Controller
     any('/user-login', 'controller/auth/login-controller.php');
@@ -122,6 +123,7 @@ require_once __DIR__.'/router.php';
     get('/dump', 'views/test/vardump.php');
     get('/test', 'views/test/test.php');
     get('/db-array', 'views/test/db_array.php');
+    get('/send-mail', 'views/test/send_mail.php');
 
 //*****************************************************************//
 

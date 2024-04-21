@@ -15,31 +15,36 @@
 
         public function login () {
             $json = array();
-            $query = 'SELECT id, email, password
+            $query = 'SELECT id, email, password, active
                     FROM user
                     WHERE email = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $_POST['email']);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $email, $password);
+                    $stmt->bind_result($id, $email, $password, $active);
                     $stmt->fetch();
                     $stmt->close();
 
                     if ($email === $_POST['email'] && $password === $_POST['password']) {
                         $group_name = $this->getUserGroup($id);
                         $_SESSION['user_id'] = $id;
-                        $_SESSION['email'] = $email;
-                        if ($group_name == 'user'){
-                            $json['redirect'] = '/';
-                        } 
                         
-                        if ($group_name == 'Delivery Rider') {
-                            $json['redirect'] = '/confirm-order';
-                        } 
-
-                        if ($group_name == 'admin') {
-                            $json['redirect'] = '/dashboard';
+                        if ($active == 0) {
+                            $json['login_feedback'] = 'Your account is not yet verified. Please click the link sent to your email address to verify.';
+                        } else {
+                            $_SESSION['email'] = $email;
+                            if ($group_name == 'user'){
+                                $json['redirect'] = '/';
+                            } 
+                            
+                            if ($group_name == 'Delivery Rider') {
+                                $json['redirect'] = '/confirm-order';
+                            } 
+    
+                            if ($group_name == 'admin') {
+                                $json['redirect'] = '/dashboard';
+                            }
                         }
 
                         echo json_encode($json);

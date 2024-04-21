@@ -8,7 +8,7 @@
         }
 
         public function isLoggedIn () {
-            if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+            if (isset($_SESSION['email']) && !empty($_SESSION['email'])) {
                 return true;
             } else {
                 return false;
