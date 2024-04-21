@@ -7,7 +7,7 @@
     $user = new User();
     $product = new Product();
     $cart = new Cart();
-
+    
     $user_info = $user->getUser($_SESSION['email'] ?? null);
 ?>
 <!DOCTYPE html>

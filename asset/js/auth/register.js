@@ -8,8 +8,8 @@ $(document).ready(function(){
             data: $(this).serialize(),
             dataType: 'json',
             success: function(feedback){
-                if(feedback.redirect){
-                    window.location.href = feedback.redirect;
+                if(feedback.verify){
+                    $.notify(feedback.verify, 'success');
                 }
             }
         });
