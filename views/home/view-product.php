@@ -8,6 +8,7 @@
     $product = new Product();
     $cart = new Cart();
 
+    $user_info = $user->getUser($_SESSION['email'] ?? null);
     $product_info = $product->getProductInfo($product_id);
 ?>
 <!DOCTYPE html>
