@@ -11,7 +11,7 @@
             if (isset($_SESSION['user_id'])) {
                 $id = $_SESSION['user_id'];
             } else {
-                header('Location: /fmware/404');
+                header('Location: /404');
             }
             
 
@@ -28,7 +28,7 @@
                     $stmt->close();
 
                     if ($group_name == 'user') {
-                        header('Location: /fmware/404');
+                        header('Location: /404');
                     } else {
                         return null;
                     }

@@ -48,7 +48,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/add-stock',
+            url: '/add-stock',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -73,7 +73,7 @@ $(document).ready(function(){
         console.log($(this).serialize());
 
         $.ajax({
-            url: '/fmware/restock',
+            url: '/restock',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

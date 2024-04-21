@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-5 mt-5">
                 <div class="card mb-3">
-                    <img class="card-img img-fluid" src="/fmware/asset/images/products/<?php echo $product_info['image']; ?>" alt="Product Image" id="product-detail">
+                    <img class="card-img img-fluid" src="/asset/images/products/<?php echo $product_info['image']; ?>" alt="Product Image" id="product-detail">
                 </div>
             </div>
             <!-- col end -->
@@ -21,14 +21,25 @@
                         <h6>Description:</h6>
                         <p><?php echo isset($product_info['description']) && empty($product_info['description']) ? 'N/A' : $product_info['description']; ?></p>
 
-                        <div class="row pb-3">
-                            <div class="col d-grid">
-                                <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
+                        <?php if (isset($_SESSION['email'])):?>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <button class="btn btn-success btn-lg" value="buy">Buy</button>
+                                </div>
+                                <div class="col d-grid">
+                                    <button class="btn btn-success btn-lg add-to-cart-btn" value="addtocard">Add To Cart</button>
+                                </div>
                             </div>
-                            <div class="col d-grid">
-                                <button type="submit" class="btn btn-success btn-lg add-to-cart-btn" name="submit" value="addtocard">Add To Cart</button>
+                        <?php else: ?>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <a href="/register" class="btn btn-success btn-lg">Buy</a>
+                                </div>
+                                <div class="col d-grid">
+                                    <a href="/register" class="btn btn-success btn-lg">Add To Cart</a>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

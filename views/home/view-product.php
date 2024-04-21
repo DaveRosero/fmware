@@ -8,6 +8,7 @@
     $product = new Product();
     $cart = new Cart();
 
+    $user_info = $user->getUser($_SESSION['email'] ?? null);
     $product_info = $product->getProductInfo($product_id);
 ?>
 <!DOCTYPE html>
@@ -16,12 +17,12 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>View Product | FMWare</title>
-        <link rel="icon" href="/fmware/asset/images/store/logo.png" type="image/png">
+        <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
         <?php
             include_once 'vendor/Select2/css/bundle.php'; 
             include_once 'vendor/Bootstrap/css/bundle.php'; 
         ?>
-        <link rel="stylesheet" href="/fmware/asset/css/index.css">
+        <link rel="stylesheet" href="/asset/css/index.css">
     </head>
     <body>
         <?php include_once 'views/home/template/header.php'; ?>
@@ -38,7 +39,7 @@
             include_once 'vendor/Select2/js/bundle.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
-        <script src="/fmware/vendor/NotifyJS/js/notify.js"></script>
-        <script src="/fmware/asset/js/home/view-product.js"></script>
+        <script src="/vendor/NotifyJS/js/notify.js"></script>
+        <script src="/asset/js/home/view-product.js"></script>
     </body>
 </html>

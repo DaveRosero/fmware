@@ -21,7 +21,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/new-unit',
+            url: '/new-unit',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -37,7 +37,7 @@ $(document).ready(function(){
 
     $('.status').on('click', function(){
         $.ajax({
-            url: '/fmware/disable-unit',
+            url: '/disable-unit',
             method: 'POST',
             data: {
                 id : $(this).data('unit-id'),
@@ -63,7 +63,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/edit-unit',
+            url: '/edit-unit',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

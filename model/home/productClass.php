@@ -69,8 +69,8 @@
                     while ($stmt->fetch()) {
                         echo '<div class="col-md-4 mb-3">
                                 <div class="card h-100">
-                                    <a href="/fmware/view-product/product/'.$id.'">
-                                        <img src="asset/images/products/'.$image.'" class="card-img-top product-image" alt="'.$name.'">
+                                    <a href="/view-product/product/'.$id.'">
+                                        <img src="/asset/images/products/'.$image.'" class="card-img-top product-image" alt="'.$name.'">
                                     </a>
                                     <div class="card-body">
                                         <h5 class="card-title text-center fw-bold">'.$name.'</h5>
@@ -220,7 +220,7 @@
                                 <div class="card h-100">
                                     <div class="card-body text-center">
                                         '.$button.'
-                                        <img class="me-2" width="60px" src="/fmware/asset/images/products/'.$image.'" alt="GCash" />
+                                        <img class="me-2" width="60px" src="/asset/images/products/'.$image.'" alt="GCash" />
                                         <div class="mt-2">
                                             <p class="mb-0">'.$variant.'</p>
                                             <p class="mb-0">('.$unit_value.' '.$unit.')</p>

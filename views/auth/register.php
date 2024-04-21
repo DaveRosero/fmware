@@ -19,7 +19,7 @@
         <div
           class="col d-flex flex-column align-items-center justify-content-center"
         >
-          <img src="asset/images/store/logo.png" alt="" style="width: 300px" />
+          <img src="/asset/images/store/logo.png" alt="" style="width: 300px" />
           <h1 class="text-dark">FMWARE</h1>
           <h5 class="text-dark">
             RIGHT TOOLS AT THE RIGHT PRICE.
@@ -106,13 +106,13 @@
                 </div>
               </div>
               <div class="col-auto text-end">
-                <p class="text-secondary">Already have an account? <a href="/fmware/login">Login</a></p>
+                <p class="text-secondary">Already have an account? <a href="/login">Login</a></p>
               </div>
             </div>
             <div class="row mb-2">
               <input type="hidden" name="action" value="register">
               <button type="submit" class="btn btn-primary mb-2">Register</button>
-              <a class="btn btn-danger" href="/fmware">Back</a>
+              <a class="btn btn-danger" href="/">Back</a>
             </div>
           </form>
         </div>
@@ -125,6 +125,6 @@
       include_once 'vendor/FontAwesome/kit.php';
       include_once 'vendor/Bootstrap/js/bundle.php'; 
     ?>
-    <script src="asset/js/auth/register.js"></script>
+    <script src="/asset/js/auth/register.js"></script>
   </body>
 </html>

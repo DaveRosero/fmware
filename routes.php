@@ -5,123 +5,123 @@ require_once __DIR__.'/router.php';
 //*****************************************************************//
 
     // Home Views
-    get('/fmware', 'views/home/home.php');
-    get('/fmware/about', 'views/home/about.php');
-    get('/fmware/shop', 'views/home/shop.php');
-    get('/fmware/view-product/product/$product_id', 'views/home/view-product.php');
-    get('/fmware/cart', 'views/home/cart.php');
-    get('/fmware/account/settings', 'views/home/account.php');
-    get('/fmware/my-purchases/$status', 'views/home/my-purchases.php');
+    get('/', 'views/home/home.php');
+    get('/about', 'views/home/about.php');
+    get('/shop', 'views/home/shop.php');
+    get('/view-product/product/$product_id', 'views/home/view-product.php');
+    get('/cart', 'views/home/cart.php');
+    get('/account/settings', 'views/home/account.php');
+    get('/my-purchases/$status', 'views/home/my-purchases.php');
 
     // Cart Controller
-    any('/fmware/add-cart', 'controller/home/cart/add-cart.php');
-    any('/fmware/add-qty', 'controller/home/cart/add-qty.php');
-    any('/fmware/sub-qty', 'controller/home/cart/sub-qty.php');
-    any('/fmware/check-product', 'controller/home/cart/check-product.php');
-    any('/fmware/uncheck-product', 'controller/home/cart/uncheck-product.php');
-    any('/fmware/delivery-fee', 'controller/home/cart/delivery-fee.php');
-    any('/fmware/cart-total', 'controller/home/cart/cart-total.php');
-    any('/fmware/checkout', 'controller/home/cart/checkout.php');
+    any('/add-cart', 'controller/home/cart/add-cart.php');
+    any('/add-qty', 'controller/home/cart/add-qty.php');
+    any('/sub-qty', 'controller/home/cart/sub-qty.php');
+    any('/check-product', 'controller/home/cart/check-product.php');
+    any('/uncheck-product', 'controller/home/cart/uncheck-product.php');
+    any('/delivery-fee', 'controller/home/cart/delivery-fee.php');
+    any('/cart-total', 'controller/home/cart/cart-total.php');
+    any('/checkout', 'controller/home/cart/checkout.php');
 
     // User Controller
-    any('/fmware/has-address', 'controller/home/user/has-address.php');
-    any('/fmware/new-address', 'controller/home/user/new-address.php');
-    any('/fmware/get-municipality', 'controller/home/user/get-municipality.php');
+    any('/has-address', 'controller/home/user/has-address.php');
+    any('/new-address', 'controller/home/user/new-address.php');
+    any('/get-municipality', 'controller/home/user/get-municipality.php');
 
 //*****************************************************************//
 
     // Auth
-    get('/fmware/login', 'views/auth/login.php');
-    get('/fmware/register', 'views/auth/register.php');
+    get('/login', 'views/auth/login.php');
+    get('/register', 'views/auth/register.php');
 
     // Auth Controller
-    any('/fmware/user-login', 'controller/auth/login-controller.php');
-    any('/fmware/user-register', 'controller/auth/register-controller.php');
-    any('/fmware/logout', 'controller/auth/logout-controller.php');
+    any('/user-login', 'controller/auth/login-controller.php');
+    any('/user-register', 'controller/auth/register-controller.php');
+    any('/logout', 'controller/auth/logout-controller.php');
 
 //*****************************************************************//
 
     // Admin Dashboard
-    get('/fmware/dashboard', 'views/admin/dashboard.php');
+    get('/dashboard', 'views/admin/dashboard.php');
 
 //*****************************************************************//
 
     // People
-    get('/fmware/groups', 'views/admin/groups.php');
-    get('/fmware/users', 'views/admin/userList.php');
-    get('/fmware/staff', 'views/admin/staffList.php');
+    get('/groups', 'views/admin/groups.php');
+    get('/users', 'views/admin/userList.php');
+    get('/staff', 'views/admin/staffList.php');
 
 //*****************************************************************//
 
     // Inventory Views
-    get('/fmware/products', 'views/admin/products.php');
-    get('/fmware/stocks', 'views/admin/stocks.php');
-    get('/fmware/restocks', 'views/admin/restock.php');
-    get('/fmware/price-list', 'views/admin/price-list.php');
+    get('/products', 'views/admin/products.php');
+    get('/stocks', 'views/admin/stocks.php');
+    get('/restocks', 'views/admin/restock.php');
+    get('/price-list', 'views/admin/price-list.php');
 
     // Product Controller
-    any('/fmware/new-product', 'controller/admin/product/new-product.php');
-    any('/fmware/edit-product', 'controller/admin/product/edit-product.php');
-    any('/fmware/disable-product', 'controller/admin/product/disable-product.php');
+    any('/new-product', 'controller/admin/product/new-product.php');
+    any('/edit-product', 'controller/admin/product/edit-product.php');
+    any('/disable-product', 'controller/admin/product/disable-product.php');
 
     // Stocks Controller
-    any('/fmware/add-stock', 'controller/admin/stocks/add-stock.php');
-    any('/fmware/restock', 'controller/admin/stocks/restock.php');
+    any('/add-stock', 'controller/admin/stocks/add-stock.php');
+    any('/restock', 'controller/admin/stocks/restock.php');
 
     // Price List Controller
-    any('/fmware/new-price', 'controller/admin/price/new-price.php');
+    any('/new-price', 'controller/admin/price/new-price.php');
 
 //*****************************************************************//
 
     // Manage Orders Views
-    get('/fmware/manage-orders', 'views/admin/order.php');
-    get('/fmware/print-receipt/$order_ref', 'views/admin/receipt.php');
+    get('/manage-orders', 'views/admin/order.php');
+    get('/print-receipt/$order_ref', 'views/admin/receipt.php');
 
     // Confirm Order Views
-    get('/fmware/confirm-order/$order_ref', 'views/admin/staff-order.php');
+    get('/confirm-order/$order_ref', 'views/admin/staff-order.php');
 
     // Manage Orders Controller
-    any('/fmware/get-orders','controller/admin/order/get-orders.php');
-    any('/fmware/paid-status', 'controller/admin/order/paid-status.php');
-    any('/fmware/update-paid', 'controller/admin/order/update-paid.php');
-    any('/fmware/order-status', 'controller/admin/order/order-status.php');
-    any('/fmware/update-status', 'controller/admin/order/update-status.php');
+    any('/get-orders','controller/admin/order/get-orders.php');
+    any('/paid-status', 'controller/admin/order/paid-status.php');
+    any('/update-paid', 'controller/admin/order/update-paid.php');
+    any('/order-status', 'controller/admin/order/order-status.php');
+    any('/update-status', 'controller/admin/order/update-status.php');
 
     // Confirm Order Controller
-    any('/fmware/confirm-order-status', 'controller/admin/order/confirm-order.php');
+    any('/confirm-order-status', 'controller/admin/order/confirm-order.php');
 
     // Proof of Payment Controller
-    any('/fmware/get-proof', 'controller/admin/order/get-proof.php');
+    any('/get-proof', 'controller/admin/order/get-proof.php');
 
 //*****************************************************************//
 
     // Maintenance Views
-    get('/fmware/category', 'views/admin/category.php');
-    get('/fmware/brands', 'views/admin/brands.php');
-    get('/fmware/unit', 'views/admin/unit.php');
+    get('/category', 'views/admin/category.php');
+    get('/brands', 'views/admin/brands.php');
+    get('/unit', 'views/admin/unit.php');
 
     // Category Controller
-    any('/fmware/new-category', 'controller/admin/category/new-category.php');
-    any('/fmware/disable-category', 'controller/admin/category/disable-category.php');
-    any('/fmware/edit-category', 'controller/admin/category/edit-category.php');
+    any('/new-category', 'controller/admin/category/new-category.php');
+    any('/disable-category', 'controller/admin/category/disable-category.php');
+    any('/edit-category', 'controller/admin/category/edit-category.php');
 
     // Brand Controller
-    any('/fmware/new-brand', 'controller/admin/brand/new-brand.php');
-    any('/fmware/edit-brand', 'controller/admin/brand/edit-brand.php');
-    any('/fmware/disable-brand', 'controller/admin/brand/disable-brand.php');
+    any('/new-brand', 'controller/admin/brand/new-brand.php');
+    any('/edit-brand', 'controller/admin/brand/edit-brand.php');
+    any('/disable-brand', 'controller/admin/brand/disable-brand.php');
 
     // Unit Controller
-    any('/fmware/new-unit', 'controller/admin/unit/new-unit.php');
-    any('/fmware/edit-unit', 'controller/admin/unit/edit-unit.php');
-    any('/fmware/disable-unit', 'controller/admin/unit/disable-unit.php');
+    any('/new-unit', 'controller/admin/unit/new-unit.php');
+    any('/edit-unit', 'controller/admin/unit/edit-unit.php');
+    any('/disable-unit', 'controller/admin/unit/disable-unit.php');
 
 //*****************************************************************//
 
     // Test
-    get('/fmware/test/collapse', 'views/test/collapse.php');
-    get('/fmware/dump', 'views/test/vardump.php');
-    get('/fmware/test', 'views/test/test.php');
-    get('/fmware/db-array', 'views/test/db_array.php');
+    get('/test/collapse', 'views/test/collapse.php');
+    get('/dump', 'views/test/vardump.php');
+    get('/test', 'views/test/test.php');
+    get('/db-array', 'views/test/db_array.php');
 
 //*****************************************************************//
 

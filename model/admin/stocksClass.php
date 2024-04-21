@@ -61,7 +61,7 @@
                     while ($stmt->fetch()) {
                         $stock = $this->checkCriticalLevel($qty, $critical_level, $max_stock);
                         echo '<tr>
-                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
+                                <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
                                 <td class="fw-semibold">'.$name.'</td>
                                 <td class="fw-semibold">'.$variant.'</td>
                                 <td class="fw-semibold">'.$unit_value.' '.strtoupper($unit).' </td>
@@ -112,7 +112,7 @@
                         $dateObj = DateTime::createFromFormat('Y-m-d', $date);
                         $dateFormat = $dateObj->format('d F Y');
                         echo '<tr>
-                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
+                                <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
                                 <td>'.$name.'</td>
                                 <td>'.$qty.'</td>
                                 <td>'.$supplier_order_no.'</td>
@@ -142,7 +142,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/fmware/stocks');
+                    $json = array('redirect' => '/stocks');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -184,7 +184,7 @@
                 if ($stmt->execute()) {
                     $stmt->close();
                     $this->updateQty($qty, $product_id);
-                    $json = array('redirect' => '/fmware/stocks');
+                    $json = array('redirect' => '/stocks');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);

@@ -25,9 +25,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Manage Staff | FMWare</title>
-    <link rel="icon" href="asset/images/store/logo.png" type="image/png">
+    <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <!--Style-->
-    <link rel="stylesheet" href="asset/css/dashboard.css">
+    <link rel="stylesheet" href="/asset/css/dashboard.css">
     <!--Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
@@ -54,14 +54,14 @@
 
 
     <!--jQuery-->
-    <script src="vendor/jQuery/jquery-3.7.1.slim.min.js"></script>
+    <script src="/vendor/jQuery/jquery-3.7.1.slim.min.js"></script>
     <!--Bootstrap JS-->
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!--Font Awesome-->
-    <script src="vendor/fontawesome/js/all.min.js"></script>
+    <script src="/vendor/fontawesome/js/all.min.js"></script>
     <!--Scripts-->
-    <script src="asset/js/dashboard.js"></script>
-    <script src="asset/js/mini-sidebar.js"></script>
-    <script src="asset/js/sidebarmenu.js"></script>
+    <script src="/asset/js/dashboard.js"></script>
+    <script src="/asset/js/mini-sidebar.js"></script>
+    <script src="/asset/js/sidebarmenu.js"></script>
 </body>
 </html>

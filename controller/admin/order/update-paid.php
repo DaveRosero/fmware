@@ -7,7 +7,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $order->updatePaidStatus($_POST['order_ref'], $_POST['paid']);
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

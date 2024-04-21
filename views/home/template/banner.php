@@ -3,17 +3,17 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="container">
-                        <img class="img-fluid" src="asset/images/store/caroBanner1.png" alt="">
+                        <img class="img-fluid" src="/asset/images/store/caroBanner1.png" alt="">
                     </div>
                 </div>
                 <div class="carousel-item">
                     <div class="container">
-                        <img class="img-fluid" src="asset/images/store/caroBanner2.png" alt="">
+                        <img class="img-fluid" src="/asset/images/store/caroBanner2.png" alt="">
                     </div>
                 </div>
                 <div class="carousel-item">
                     <div class="container">
-                        <img class="img-fluid" src="asset/images/store/caroBanner3.png" alt="">
+                        <img class="img-fluid" src="/asset/images/store/caroBanner3.png" alt="">
                     </div>
                 </div>
             </div>

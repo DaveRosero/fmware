@@ -30,7 +30,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({    
-            url: '/fmware/new-price',
+            url: '/new-price',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

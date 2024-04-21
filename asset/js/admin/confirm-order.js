@@ -4,7 +4,7 @@ $(document).ready(function(){
         var formData = new FormData(this);
         
         $.ajax({
-            url: '/fmware/confirm-order-status',
+            url: '/confirm-order-status',
             method: 'POST',
             contentType: false,
             processData: false,

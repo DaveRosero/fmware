@@ -38,7 +38,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/fmware/price-list');
+                    $json = array('redirect' => '/price-list');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -73,7 +73,7 @@
                     $stmt->bind_result($price_id, $base_price, $unit_price, $product_id, $name, $image, $unit_value, $unit, $variant, $brand, $category);
                     while ($stmt->fetch()) {
                         echo '<tr>
-                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
+                                <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
                                 <td class="fw-semibold">'.$name.'</td>
                                 <td class="fw-semibold">'.$variant.'</td>
                                 <td class="fw-semibold">'.$brand.'</td>

@@ -317,21 +317,21 @@
         }
 
         public function receiptQrCode ($order_ref) {
-            // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/fmware/confirm-order/'.$order_ref;
-            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.19/fmware/confirm-order/'.$order_ref;
+            // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/confirm-order/'.$order_ref;
+            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.19/confirm-order/'.$order_ref;
             $filename = $order_ref . '.jpg';
             $image = file_get_contents($api);
-            $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
+            $savePath = '/asset/images/payments/receipts/qr_code/' . $filename;
 
             if (file_exists($savePath)) {
-                echo '<img src="/fmware/'.$savePath.'" alt="">';
+                echo '<img src="/'.$savePath.'" alt="">';
                 return;
             }
 
             if ($image !== false) {
                 $saveResult = file_put_contents($savePath, $image);
                 if ($saveResult !== false) {
-                    echo '<img src="/fmware/'.$savePath.'" alt="">';
+                    echo '<img src="/'.$savePath.'" alt="">';
                 } else {
                     echo "Error: Failed to save the image to $savePath";
                 }
@@ -341,7 +341,7 @@
         }
 
         public function confirmOrder () {
-            $targetDir = 'asset/images/payments/proof/cod/';
+            $targetDir = '/asset/images/payments/proof/cod/';
             $targetFile = $targetDir . basename($_FILES['image']['name']);
             move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
 
@@ -401,7 +401,7 @@
                     $stmt->bind_result($proof);
                     $stmt->fetch();
                     $stmt->close();
-                    return '<img src="asset/images/payments/proof/cod/'.$proof.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                    return '<img src="/asset/images/payments/proof/cod/'.$proof.'" alt="" srcset="" style="width: 300px; height: 500px;">';
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();

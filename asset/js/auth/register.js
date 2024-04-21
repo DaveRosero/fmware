@@ -3,7 +3,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/user-register',
+            url: '/user-register',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

@@ -31,15 +31,15 @@
                         $_SESSION['user_id'] = $id;
                         $_SESSION['email'] = $email;
                         if ($group_name == 'user'){
-                            $json['redirect'] = '/fmware';
+                            $json['redirect'] = '/';
                         } 
                         
                         if ($group_name == 'Delivery Rider') {
-                            $json['redirect'] = '/fmware/confirm-order';
+                            $json['redirect'] = '/confirm-order';
                         } 
 
                         if ($group_name == 'admin') {
-                            $json['redirect'] = '/fmware/dashboard';
+                            $json['redirect'] = '/dashboard';
                         }
 
                         echo json_encode($json);

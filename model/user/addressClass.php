@@ -40,7 +40,7 @@
                 if ($stmt->execute()) {
                     $stmt->close();
                     return [
-                        'redirect' => '/fmware/cart'
+                        'redirect' => '/cart'
                     ];
                 } else {
                     die("Error in executing statement: " . $stmt->error);

@@ -12,7 +12,7 @@
                         <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
-                        <li><a class="text-decoration-none" href="/fmware/account/settings">Settings</a></li>
+                        <li><a class="text-decoration-none" href="/account/settings">Settings</a></li>
                         <li><a class="text-decoration-none" href="#">Addresses</a></li>
                     </ul>
                 </li>
@@ -25,12 +25,12 @@
                         <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
-                        <li><a class="text-decoration-none" href="/fmware/my-purchases/to-pay">To Pay <?php echo $transaction->getToPayCount($user_info['id']); ?></a></li>
-                        <li><a class="text-decoration-none" href="/fmware/my-purchases/pending">Pending <?php echo $transaction->getPendingCount($user_info['id']); ?></a></li>
-                        <li><a class="text-decoration-none" href="/fmware/my-purchases/to-receive">To Receive <?php echo $transaction->getToReceiveCount($user_info['id']); ?></a></li>
-                        <li><a class="text-decoration-none" href="/fmware/my-purchases/delivered">Delivered <?php echo $transaction->getDeliveredCount($user_info['id']); ?></a></li>
-                        <li><a class="text-decoration-none" href="/fmware/my-purchases/completed">Completed <?php echo $transaction->getCompletedCount($user_info['id']); ?></a></li>
-                        <li><a class="text-decoration-none" href="/fmware/my-purchases/others">Cancellations & Returns <?php echo $transaction->getCancelledCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/to-pay">To Pay <?php echo $transaction->getToPayCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/pending">Pending <?php echo $transaction->getPendingCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/to-receive">To Receive <?php echo $transaction->getToReceiveCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/delivered">Delivered <?php echo $transaction->getDeliveredCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/completed">Completed <?php echo $transaction->getCompletedCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/others">Cancellations & Returns <?php echo $transaction->getCancelledCount($user_info['id']); ?></a></li>
                     </ul>
                 </li>
             </ul>

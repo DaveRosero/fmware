@@ -7,7 +7,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/add-cart',
+            url: '/add-cart',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

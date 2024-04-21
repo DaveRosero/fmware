@@ -7,7 +7,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $brand->editBrand();
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

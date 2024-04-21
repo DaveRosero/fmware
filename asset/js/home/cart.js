@@ -3,7 +3,7 @@ $(document).ready(function(){
         var id = $('#checkout').data('user-id');
         var delivery_fee = $('#delivery-fee-value').val();
         $.ajax({
-            url: '/fmware/cart-total',
+            url: '/cart-total',
             method: 'POST',
             data: {
                 id : id,
@@ -27,7 +27,7 @@ $(document).ready(function(){
 
     // function getDeliveryFee () {
     //     $.ajax({
-    //         url: '/fmware/delivery-fee',
+    //         url: '/delivery-fee',
     //         method: 'POST',
     //         dataType: 'json',
     //         success: function(feedback){
@@ -38,7 +38,7 @@ $(document).ready(function(){
 
     // function getVAT () {
     //     $.ajax({
-    //         url: '/fmware/vat',
+    //         url: '/vat',
     //         method: 'POST',
     //         dataType: 'json',
     //         success: function(feedback){
@@ -54,7 +54,7 @@ $(document).ready(function(){
     // $(document).on('click', '.add-cart', function(){
     //     var parentButton = $(this).closest('.add-cart');
     //     $.ajax({
-    //         url: '/fmware/add-cart',
+    //         url: '/add-cart',
     //         method: 'POST',
     //         data: {
     //             id: $(this).data('product-id')
@@ -86,7 +86,7 @@ $(document).ready(function(){
         console.log('changed');
 
         $.ajax({
-            url: '/fmware/get-municipality',
+            url: '/get-municipality',
             method: 'POST',
             data: {
                 brgy : brgy
@@ -107,7 +107,7 @@ $(document).ready(function(){
         var selected = $(this).find('option:selected');
         var address_id = selected.data('address-id');
         $.ajax({
-            url: '/fmware/delivery-fee',
+            url: '/delivery-fee',
             method: 'POST',
             data: {
                 brgy : brgy
@@ -129,7 +129,7 @@ $(document).ready(function(){
         var qty = $('.qty_' + id);
         var subtotal = $('.subtotal_' + id);
         $.ajax({
-            url: '/fmware/add-qty',
+            url: '/add-qty',
             method: 'POST',
             data: {
                 id: $(this).data('cart-id')
@@ -153,7 +153,7 @@ $(document).ready(function(){
         }
 
         $.ajax({
-            url: '/fmware/sub-qty',
+            url: '/sub-qty',
             method: 'POST',
             data: {
                 id: $(this).data('cart-id')
@@ -170,7 +170,7 @@ $(document).ready(function(){
     $('#checkout').on('click', function(){
         var id = $(this).data('user-id');
         $.ajax({
-            url: '/fmware/has-address',
+            url: '/has-address',
             method: 'POST',
             data: {
                 id: id
@@ -198,7 +198,7 @@ $(document).ready(function(){
     $('#newAddress').on('submit', function(event){
         event.preventDefault();
         $.ajax({
-            url: '/fmware/new-address',
+            url: '/new-address',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -213,7 +213,7 @@ $(document).ready(function(){
     $('#place-order').on('submit', function(event){
         event.preventDefault();
         $.ajax({
-            url: '/fmware/checkout',
+            url: '/checkout',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -231,7 +231,7 @@ $(document).ready(function(){
             console.log('Checkbox clicked and checked', $(this).val(), $(this).data('user-id'));
 
             $.ajax({
-                url: '/fmware/check-product',
+                url: '/check-product',
                 method: 'POST',
                 data: {
                     user_id : $(this).data('user-id'),
@@ -248,7 +248,7 @@ $(document).ready(function(){
             console.log('Checkbox clicked and unchecked', $(this).val());
 
             $.ajax({
-                url: '/fmware/uncheck-product',
+                url: '/uncheck-product',
                 method: 'POST',
                 data: {
                     user_id : $(this).data('user-id'),

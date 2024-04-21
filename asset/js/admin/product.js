@@ -52,7 +52,7 @@ $(document).ready(function(){
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: '/fmware/new-product',
+            url: '/new-product',
             method: 'POST',
             data: formData,
             processData: false,  // Prevent jQuery from processing the data
@@ -72,7 +72,7 @@ $(document).ready(function(){
 
     $('.status').on('click', function(){
         $.ajax({
-            url: '/fmware/disable-product',
+            url: '/disable-product',
             method: 'POST',
             data: {
                 id : $(this).data('product-id'),
@@ -98,7 +98,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         $.ajax({
-            url: '/fmware/edit-product',
+            url: '/edit-product',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',

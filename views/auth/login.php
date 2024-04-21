@@ -5,7 +5,7 @@
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>FMWare</title>
-      <link rel="icon" href="asset/images/store/logo.png" type="image/png">
+      <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
       <?php 
         include_once 'vendor/Bootstrap/css/bundle.php'; 
       ?>
@@ -21,7 +21,7 @@
         <div
           class="col d-flex flex-column align-items-center justify-content-center"
         >
-          <img src="asset/images/store/logo.png" alt="" style="width: 300px" />
+          <img src="/asset/images/store/logo.png" alt="" style="width: 300px" />
           <h1 class="text-dark">FMWARE</h1>
           <h5 class="text-dark">
             RIGHT TOOLS AT THE RIGHT PRICE.
@@ -93,11 +93,11 @@
             <div class="row mb-2">
               <input type="hidden" name="action" value="login">
               <button type="submit" class="btn btn-primary mb-2">Login</button>
-              <a class="btn btn-danger" href="/fmware">Back</a>
+              <a class="btn btn-danger" href="/">Back</a>
             </div>
           </form>
             <div class="row text-center">
-              <p>Don't have an account? <a href="/fmware/register">Register</a></p>
+              <p>Don't have an account? <a href="/register">Register</a></p>
             </div>
         </div>
       </div>
@@ -109,6 +109,6 @@
       include_once 'vendor/FontAwesome/kit.php';
       include_once 'vendor/Bootstrap/js/bundle.php'; 
     ?>
-    <script src="asset/js/auth/login.js"></script>
+    <script src="/asset/js/auth/login.js"></script>
   </body>
 </html>

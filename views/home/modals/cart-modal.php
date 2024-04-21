@@ -37,7 +37,7 @@
                   <div class="card h-100">
                       <div class="card-body d-flex align-items-center justify-content-center">
                           <input type="radio" name="payment_type" id="cod" value="1" required>
-                          <img class="me-2" width="100px" src="asset/images/payments/cod.png" alt="COD" />
+                          <img class="me-2" width="100px" src="/asset/images/payments/cod.png" alt="COD" />
                       </div>
                   </div>
               </div>
@@ -45,7 +45,7 @@
                   <div class="card h-100">
                       <div class="card-body d-flex align-items-center justify-content-center">
                           <input type="radio" name="payment_type" id="gcash" value="2" required>
-                          <img class="me-2" width="100px" src="asset/images/payments/gcash.png" alt="GCash" />
+                          <img class="me-2" width="100px" src="/asset/images/payments/gcash.png" alt="GCash" />
                       </div>
                   </div>
               </div>

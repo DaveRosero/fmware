@@ -8,7 +8,7 @@
         $proof = $order->getProofCOD($_POST['order_ref']);
         echo $proof;
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

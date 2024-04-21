@@ -8,7 +8,7 @@
         $json = $order->orderStatus($_POST['order_ref']);
         echo json_encode($json);
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

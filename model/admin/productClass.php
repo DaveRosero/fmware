@@ -285,7 +285,7 @@
                 }
             }
 
-            $uploadDir = 'asset/images/products/';
+            $uploadDir = '/asset/images/products/';
             $uploadFile = $uploadDir . basename($_FILES['image']['name']);
             move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile);
 
@@ -308,7 +308,7 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/fmware/products');
+                    $json = array('redirect' => '/products');
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -356,7 +356,7 @@
                         $author = $fname.' '.$initial.'.';
                         echo '<tr>
                                 <td>'.$status.'</td>
-                                <td><img src="asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
+                                <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
                                 <td>'.$name.'</td>
                                 <td>'.$variant.'</td>
                                 <td>'.$brand.'</td>

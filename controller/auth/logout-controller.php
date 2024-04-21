@@ -9,7 +9,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logout->logout();
     } else {
-        header('Location: /fmware/404');
+        header('Location: /404');
         exit();
     }
 ?>

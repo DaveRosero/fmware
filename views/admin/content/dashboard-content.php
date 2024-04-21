@@ -13,7 +13,7 @@
                         <div class="col">
                             <h4 class="fw-semibold mb-3"><i class="fas fa-barcode px-4"></i><?php $admin->getTotalProducts(); ?></h4>
                         </div>
-                        <p class="mb-0 text-end"><a href="/fmware/products">View details ></a></p>
+                        <p class="mb-0 text-end"><a href="/products">View details ></a></p>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                         <div class="col">
                             <h4 class="fw-semibold mb-3"><i class="fas fa-truck px-4"></i><?php $admin->getTotalSuppliers(); ?></h4>
                         </div>
-                        <p class="mb-0 text-end"><a href="/fmware/suppliers">View details ></a></p>
+                        <p class="mb-0 text-end"><a href="/suppliers">View details ></a></p>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                         <div class="col">
                             <h4 class="fw-semibold mb-3"><i class="fas fa-users px-4"></i><?php $admin->getTotalUsers(); ?></h4>
                         </div>
-                        <p class="mb-0 text-end"><a href="/fmware/users">View details ></a></p>
+                        <p class="mb-0 text-end"><a href="/users">View details ></a></p>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                         <div class="col">
                         <h4 class="fw-semibold mb-3 text-success    "><?php $admin->getDailyOrderNet(); ?></h4>
                         </div>
-                        <p class="mb-0 text-end"><a href="/fmware/manage-orders">View details ></a></p>
+                        <p class="mb-0 text-end"><a href="/manage-orders">View details ></a></p>
                     </div>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                         <div class="col">
                         <h4 class="fw-semibold mb-3 text-success    "><?php $admin->getDailyPOSNet(); ?></h4>
                         </div>
-                        <p class="mb-0 text-end"><a href="/fmware/manage-orders">View details ></a></p>
+                        <p class="mb-0 text-end"><a href="/manage-orders">View details ></a></p>
                     </div>
                 </div>
             </div>

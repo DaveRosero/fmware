@@ -169,7 +169,7 @@
                                 <td>' . date('d F Y h:i', strtotime($date)) . '</td>
                                 <td>
                                     <div style="display: flex; align-items: center;">
-                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <img src="/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
@@ -226,7 +226,7 @@
                                 <td>' . date('d F Y h:i', strtotime($date)) . '</td>
                                 <td>
                                     <div style="display: flex; align-items: center;">
-                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <img src="/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
@@ -283,7 +283,7 @@
                                 <td>' . date('d F Y h:i', strtotime($date)) . '</td>
                                 <td>
                                     <div style="display: flex; align-items: center;">
-                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <img src="/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
@@ -340,7 +340,7 @@
                                 <td>' . date('d F Y h:i', strtotime($date)) . '</td>
                                 <td>
                                     <div style="display: flex; align-items: center;">
-                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <img src="/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
@@ -397,7 +397,7 @@
                                 <td>' . date('d F Y h:i', strtotime($date)) . '</td>
                                 <td>
                                     <div style="display: flex; align-items: center;">
-                                        <img src="/fmware/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
+                                        <img src="/asset/images/products/' . $first_product_image . '" class="img-fluid" style="width: 50px; margin-right: 10px;">
                                         <span>' . $first_product_name;
 
                         if ($additional_products) {
