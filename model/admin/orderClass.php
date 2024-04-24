@@ -336,9 +336,29 @@
             }
         }
 
+        public function getCode ($order_ref) {
+            $query = 'SELECT code FROM orders WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($code);
+                    $stmt->fetch();
+                    $stmt->close();
+                    return $code;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
         public function receiptQrCode ($order_ref) {
+            $code = $this->getCode($order_ref);
             // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/confirm-order/'.$order_ref;
-            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.16/confirm-order/'.$order_ref;
+            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.16/confirm-order/'.$code.'/'.$order_ref;
             $filename = $order_ref . '.jpg';
             $image = file_get_contents($api);
             $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
@@ -361,18 +381,10 @@
             }
         }
 
-        public function confirmOrder () {
-            $targetDir = 'asset/images/payments/proof/cod/';
-            $targetFile = $targetDir . basename($_FILES['image']['name']);
-            move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
-
-            $image = basename($targetFile);
-            $order_ref = $_POST['order_ref'];
-            $query = 'INSERT INTO proof_of_transaction
-                        (order_ref, proof_of_delivery)
-                    VALUES (?,?)';
+        public function confirmOrder ($order_ref) {
+            $query = 'UPDATE orders SET code = NULL WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ss', $order_ref, $image);
+            $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -380,6 +392,7 @@
                     $paid = 'paid';
                     $this->updateOrderStatus($order_ref, $status);
                     $this->updatePaidStatus($order_ref, $paid);
+                    return true;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
@@ -419,21 +432,21 @@
             }
         }
 
-        public function checkOrder ($order_ref) {
-            $query = 'SELECT status FROM orders WHERE order_ref = ?';
+        public function checkOrder ($order_ref, $urlCode) {
+            $query = 'SELECT status, code FROM orders WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($status);
+                    $stmt->bind_result($status, $code);
                     $stmt->fetch();
-                    $stmt->close();
+                    $stmt->close(); 
 
-                    if ($status === 'delivered' || $status === 'pending') {
+                    if ($status === 'delivered' || $status === 'pending' || $status === 'to pay' || $urlCode !== $code) {
                         return true;
-                    } else {
-                        return false;
                     }
+
+                    return false;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
