@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button class="btn btn-lg btn-primary mb-2" id="view-proof">View Proof of Payment/Delivery</button>
+                    <button class="btn btn-lg btn-primary mb-2" id="view-proof">View Proof of Payment</button>
                     <button class="btn btn-lg btn-danger mb-2" id="cancel-order">Cancel Order</button>
                 </div>
             </div>

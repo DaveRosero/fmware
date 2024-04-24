@@ -14,9 +14,13 @@
             return $format;
         }
 
-        public function paidButton($paid, $payment) {
+        public function paidButton($paid, $payment, $status) {
             if ($payment == 1) {
                 return '<img src="/asset/images/payments/cod.png" alt="COD" style="width: 250px;">';
+            }
+           
+            if ($status === 'to pay') {
+                return '<p>Awaiting for buyer to upload proof of payment...</p>';
             }
 
             if ($paid === 'unpaid') {
@@ -45,15 +49,15 @@
         }
 
         public function paidStatus ($order_ref) {
-            $query = 'SELECT paid, payment_type_id FROM orders WHERE order_ref = ?';
+            $query = 'SELECT paid, payment_type_id, status FROM orders WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($paid, $payment);
+                    $stmt->bind_result($paid, $payment, $status);
                     $stmt->fetch();
                     $stmt->close();
-                    $button = $this->paidButton($paid, $payment);
+                    $button = $this->paidButton($paid, $payment, $status);
                     echo $button;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -100,7 +104,15 @@
             return $format;
         }
 
-        public function statusButton ($status) {
+        public function statusButton ($status, $paid, $payment) {
+            if ($status === 'to pay') {
+                return'<p>Awaiting approval of the payment...</p>';
+            }
+
+            if ($payment == 2 && $paid === 'unpaid') {
+                return'<p>Awaiting approval of the payment...</p>';
+            }
+
             if ($status === 'pending') {
                 $button = '<div class="col col-auto">
                             <button class="btn btn-lg btn-warning" disabled><i class="fas fa-hourglass-half"></i> Pending</button>
@@ -121,7 +133,7 @@
                             <i class="fas fa-arrow-right fa-2x"></i>
                         </div>
                         <div class="col col-auto">
-                            <button class="btn btn-lg btn-success" id="delivered-btn"><i class="fas fa-check-circle"></i> Delivered</button>
+                            <button class="btn btn-lg btn-success" id="delivered-btn" disabled><i class="fas fa-check-circle"></i> Delivered</button>
                         </div>
                         ';
             }
@@ -137,15 +149,15 @@
         }
 
         public function orderStatus ($order_ref) {
-            $query = 'SELECT status FROM orders WHERE order_ref = ?';
+            $query = 'SELECT status, paid, payment_type_id FROM orders WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($status);
+                    $stmt->bind_result($status, $paid, $payment);
                     $stmt->fetch();
                     $stmt->close();
-                    $button = $this->statusButton($status);
+                    $button = $this->statusButton($status, $paid, $payment);
                     return [
                         'html' => $button,
                         'status' => $status
@@ -379,17 +391,17 @@
 
         public function uploadPayment () {
             $targetDir = 'asset/images/payments/proof/gcash/';
-            $targetFile = $targetDir . basename($_FILES['image']['name']);
+            $uniqueFilename = uniqid() . '_' . time() . '_' . mt_rand(1000, 9999) . '_' . basename($_FILES['image']['name']);
+            $targetFile = $targetDir . $uniqueFilename;
             move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
 
-            $image = basename($targetFile);
+            $image = $uniqueFilename;
             $order_ref = $_POST['order_ref'];
-            $newImage = $order_ref . $image;
             $query = 'INSERT INTO proof_of_transaction
                         (order_ref, proof_of_payment)
                     VALUES (?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ss', $order_ref, $newImage);
+            $stmt->bind_param('ss', $order_ref, $image);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -432,15 +444,18 @@
         }
 
         public function getProofCOD ($order_ref) {
-            $query = 'SELECT proof_of_delivery FROM proof_of_transaction WHERE order_ref = ?';
+            $query = 'SELECT  proof_of_payment, proof_of_delivery FROM proof_of_transaction WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($proof);
+                    $stmt->bind_result($payment, $delivery);
                     $stmt->fetch();
                     $stmt->close();
-                    return '<img src="/asset/images/payments/proof/cod/'.$proof.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                    if ($payment === NULL) {
+                        return '<img src="/asset/images/payments/proof/cod/'.$delivery.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                    }
+                    return '<img src="/asset/images/payments/proof/gcash/'.$payment.'" alt="" srcset="" style="width: 300px; height: 500px;">';
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
