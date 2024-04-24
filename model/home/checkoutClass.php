@@ -154,8 +154,8 @@
             $this->newCart();
             $query = 'INSERT INTO orders
                         (order_ref, firstname, lastname, phone, gross, delivery_fee, net, 
-                        transaction_type_id, payment_type_id, address_id, user_id, paid, status)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                        transaction_type_id, payment_type_id, address_id, user_id, paid, status, code)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
             $user_id = $_POST['user_id'];
             $order_ref = $this->generateRef();
@@ -174,11 +174,12 @@
             } else {
                 $status = 'to pay';
             }
+            $code = bin2hex(random_bytes(50));
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ssssiiiiiiiss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee, 
+            $stmt->bind_param('ssssiiiiiiisss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee, 
                             $net, $transaction_type_id, $payment_type_id, $address_id, $user_id, 
-                            $paid, $status);
+                            $paid, $status, $code);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
