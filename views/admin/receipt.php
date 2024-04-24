@@ -82,7 +82,6 @@
                     <p>Thank you for your purchase !</p>
                     <p>This will serve as an official receipt valid until <?php echo date('F j, Y', strtotime('+7 days')); ?></p>
                     <p>Visit us at fmware.com</p>
-                    <?php $order->receiptQrCode($order_ref); ?>
                 </div>
             </div>
         </div>

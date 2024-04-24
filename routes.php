@@ -28,6 +28,10 @@ require_once __DIR__.'/router.php';
     any('/new-address', 'controller/home/user/new-address.php');
     any('/get-municipality', 'controller/home/user/get-municipality.php');
 
+    // My Purchases Controller
+    any('/get-qr', 'controller/home/my-purchases/get-qr.php');
+    any('/order-details', 'controller/home/my-purchases/get-order-details.php');
+
 //*****************************************************************//
 
     // Auth

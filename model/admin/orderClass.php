@@ -14,19 +14,23 @@
             return $format;
         }
 
-        public function paidButton($paid) {
+        public function paidButton($paid, $payment) {
+            if ($payment == 1) {
+                return '<img src="/asset/images/payments/cod.png" alt="COD" style="width: 250px;">';
+            }
+
             if ($paid === 'unpaid') {
                 $button = '<div class="col col-auto">  
-                            <button class="btn btn-lg btn-danger" disabled>
-                                <span><i class="fas fa-exclamation-circle"></i></span> 
-                                Unpaid
+                            <button class="btn btn-lg btn-danger">
+                                <span><i class="fas fa-circle-xmark"></i></span> 
+                                Deny
                             </button>
                         </div>
                         <div class="col col-auto">
                             <i class="fas fa-arrow-right fa-2x"></i>
                         </div>
                         <div class="col col-auto">
-                            <button class="btn btn-lg btn-success" id="paid-btn"><i class="fas fa-check-circle"></i> Paid</button>
+                            <button class="btn btn-lg btn-success" id="paid-btn"><i class="fas fa-check-circle"></i> Approve</button>
                         </div>';
             }
 
@@ -41,15 +45,15 @@
         }
 
         public function paidStatus ($order_ref) {
-            $query = 'SELECT paid FROM orders WHERE order_ref = ?';
+            $query = 'SELECT paid, payment_type_id FROM orders WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($paid);
+                    $stmt->bind_result($paid, $payment);
                     $stmt->fetch();
                     $stmt->close();
-                    $button = $this->paidButton($paid);
+                    $button = $this->paidButton($paid, $payment);
                     echo $button;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -318,20 +322,21 @@
 
         public function receiptQrCode ($order_ref) {
             // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/confirm-order/'.$order_ref;
-            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.19/confirm-order/'.$order_ref;
+            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.16/confirm-order/'.$order_ref;
             $filename = $order_ref . '.jpg';
             $image = file_get_contents($api);
-            $savePath = '/asset/images/payments/receipts/qr_code/' . $filename;
+            $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
 
             if (file_exists($savePath)) {
-                echo '<img src="/'.$savePath.'" alt="">';
-                return;
+                $qrcode = '<img src="/'.$savePath.'" alt="">';
+                return $qrcode;
             }
 
             if ($image !== false) {
                 $saveResult = file_put_contents($savePath, $image);
                 if ($saveResult !== false) {
-                    echo '<img src="/'.$savePath.'" alt="">';
+                    $qrcode = '<img src="/'.$savePath.'" alt="">';
+                    return $qrcode;
                 } else {
                     echo "Error: Failed to save the image to $savePath";
                 }
@@ -341,7 +346,7 @@
         }
 
         public function confirmOrder () {
-            $targetDir = '/asset/images/payments/proof/cod/';
+            $targetDir = 'asset/images/payments/proof/cod/';
             $targetFile = $targetDir . basename($_FILES['image']['name']);
             move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
 
@@ -402,6 +407,53 @@
                     $stmt->fetch();
                     $stmt->close();
                     return '<img src="/asset/images/payments/proof/cod/'.$proof.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function getOrderDetails ($order_ref) {
+            $query = 'SELECT order_items.product_id,
+                            order_items.qty,
+                            product.name,
+                            product.image,
+                            product.unit_value,
+                            unit.name,
+                            variant.name,
+                            price_list.unit_price
+                    FROM order_items
+                    INNER JOIN product ON product.id = order_items.product_id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN price_list on price_list.product_id = product.id
+                    WHERE order_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $order_ref);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($id, $qty, $name, $image, $unit_value, $unit, $variant, $price);
+                    $order_details = '';
+                    while ($stmt->fetch()) {
+                        $subtotal = $qty * $price;
+                        $order_details .= '<div class="row g-3">
+                                            <div class="col-auto">
+                                                <img src="/asset/images/products/'.$image.'" alt="" class="img-fluid" style="max-width: 100px;">
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-1">'.$name.' ('.$variant.') ('.$unit_value.' '.strtoupper($unit).')</p>
+                                                <p class="mb-0">x'.$qty.'</p>
+                                            </div>
+                                            <div class="col-auto">
+                                                <p class="mb-0">₱'.number_format($subtotal).'.00</p>
+                                            </div>
+                                        </div>';
+                    }
+                    $stmt->close();
+                    return $order_details;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
