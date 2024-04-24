@@ -15,6 +15,7 @@
 
         public function login () {
             $json = array();
+
             $query = 'SELECT id, email, password, active
                     FROM user
                     WHERE email = ?';
@@ -22,11 +23,11 @@
             $stmt->bind_param('s', $_POST['email']);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $email, $password, $active);
+                    $stmt->bind_result($id, $email, $hash, $active);
                     $stmt->fetch();
                     $stmt->close();
 
-                    if ($email === $_POST['email'] && $password === $_POST['password']) {
+                    if (password_verify($_POST['password'], $hash)) {
                         $group_name = $this->getUserGroup($id);
                         $_SESSION['user_id'] = $id;
                         
