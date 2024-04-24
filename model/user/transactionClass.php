@@ -185,7 +185,7 @@
                         echo '          </span>
                                     </div>
                                 </td>
-                                <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
+                                <td><button class="btn btn-sm btn-primary viewOrder" data-order-ref="'.$order_ref.'"><i class="fas fa-eye"></i></button></td>
                             </tr>';
                     }
                     $stmt->close();
@@ -242,7 +242,7 @@
                         echo '          </span>
                                     </div>
                                 </td>
-                                <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
+                                <td><button class="btn btn-sm btn-primary viewOrder" data-order-ref="'.$order_ref.'"><i class="fas fa-eye"></i></button></td>
                             </tr>';
                     }  
                     $stmt->close();
@@ -299,7 +299,7 @@
                         echo '          </span>
                                     </div>
                                 </td>
-                                <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
+                                <td><button class="btn btn-sm btn-primary viewOrder" data-order-ref="'.$order_ref.'"><i class="fas fa-eye"></i></button></td>
                             </tr>';
                     }  
                     $stmt->close();
@@ -356,7 +356,7 @@
                         echo '          </span>
                                     </div>
                                 </td>
-                                <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
+                                <td><button class="btn btn-sm btn-primary viewOrder" data-order-ref="'.$order_ref.'"><i class="fas fa-eye"></i></button></td>
                             </tr>';
                     }  
                     $stmt->close();
@@ -413,7 +413,7 @@
                         echo '          </span>
                                     </div>
                                 </td>
-                                <td><button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button></td>
+                                <td><button class="btn btn-sm btn-primary viewOrder" data-order-ref="'.$order_ref.'"><i class="fas fa-eye"></i></button></td>
                             </tr>';
                     }  
                     $stmt->close();

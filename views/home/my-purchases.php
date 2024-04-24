@@ -3,10 +3,12 @@
     require_once 'model/user/user.php';
     require_once 'model/home/cartClass.php';
     require_once 'model/user/transactionClass.php';
+    require_once 'model/admin/orderClass.php';
 
     $user = new User();
     $cart = new Cart();
     $transaction = new Transaction();
+    $order = new Order();
 
     $user_info = $user->getUser($_SESSION['email']);
     $statusType = array('to-pay', 'pending', 'to-receive', 'delivered', 'completed', 'cancelled');
@@ -33,7 +35,7 @@
 
         <?php include_once 'views/home/content/my-purchases-content.php'; ?>
 
-        <?php // include_once 'views/home/modals/cart-modal.php'; ?>
+        <?php include_once 'views/home/modals/my-purchases-modal.php'; ?>
             
         <?php
             include_once 'vendor/jQuery/bundle.php';
