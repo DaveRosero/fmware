@@ -130,7 +130,7 @@ $(document).ready(function(){
 
     $(document).on('click', '#paid-btn', function(event){
         event.preventDefault();
-        $('#paid-modal-warning').html('Are you sure you want to set the paid status of this order <span class="text-primary">' + $('#order_ref').val() + '</span> to <span class="text-success">PAID</span>?');
+        $('#paid-modal-warning').html('Do you want to approve the payment of this order <span class="text-primary">' + $('#order_ref').val() + '</span>?');
         $('#order-modal').modal('hide');
         $('#paid-modal').modal('show');
     });
@@ -187,6 +187,7 @@ $(document).ready(function(){
             },
             success: function(){
                 paidStatus();
+                orderStatus();
                 getOrders();
                 $('#paid-modal').modal('hide');
                 $('#order-modal').modal('show');
