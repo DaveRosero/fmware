@@ -169,7 +169,11 @@
             $payment_type_id = $_POST['payment_type'];
             $address_id = intval($_POST['address_id']);
             $paid = 'unpaid';
-            $status = 'pending';
+            if ($payment_type_id == 1) {
+                $status = 'unpaid';
+            } else {
+                $status = 'to pay';
+            }
 
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ssssiiiiiiiss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee, 
@@ -182,9 +186,17 @@
                     $this->deleteCart($user_id);
                     $products = $this->getOrderProducts($order_ref);
                     $this->updateStock($products);
-                    return [
-                        'redirect' => '/my-purchases/pending'
-                    ];
+
+                    if ($status === 'to pay') {
+                        return [
+                            'redirect' => '/my-purchases/to-pay'
+                        ];
+                    } else {
+                        return [
+                            'redirect' => '/my-purchases/pending'
+                        ];
+                    }
+                    
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();

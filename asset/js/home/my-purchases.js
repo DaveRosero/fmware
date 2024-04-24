@@ -41,4 +41,26 @@ $(document).ready(function(){
         getQrCode(order_ref);
         getOrderDetails(order_ref);
     });
+
+    $('#viewOrderModal').on('hidden.bs.modal', function(){
+        $('#order-details').empty();
+        $('#qr-code').empty();
+    });
+
+    $('#upload-proof-form').submit(function(event){
+        event.preventDefault();
+        var formData = new FormData(this);
+        
+        $.ajax({
+            url: '/upload-proof',
+            method: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: 'json',
+            success: function(feedback){
+                window.location.href = feedback.redirect;
+            }
+        });
+    });
 })
