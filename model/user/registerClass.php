@@ -72,9 +72,63 @@
             } catch (Exception $e) {
                 return false; // Failed to send email
             }
-        }        
+        }
+        
+        public function accountExist ($email) {
+            $query = 'SELECT COUNT(*) FROM user WHERE email = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $email);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+                    if ($count > 0) {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function checkPasswordLength ($password) {
+            return strlen($password) === 8;
+        }
+
+        public function isAlphanumeric ($password) {
+            return preg_match('/[a-zA-Z]/', $password) && preg_match('/[0-9]/', $password);
+        }
 
         public function register () {
+            if ($this->accountExist($_POST['email'])) {
+                $json =  array(
+                    'exist' => 'This email is registered to an existing account'
+                );
+                echo json_encode($json);
+                return;
+            }
+
+            if (!$this->checkPasswordLength($_POST['password'])) {
+                $json = array(
+                    'password' => 'Password must be 8 characters'
+                );
+                echo json_encode($json);
+                return;
+            }
+
+            if (!$this->isAlphanumeric($_POST['password'])) {
+                $json = array(
+                    'password' => 'Password must consist of letters and numbers'
+                );
+                echo json_encode($json);
+                return;
+            }
+
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
             $email = $_POST['email'];
@@ -83,12 +137,14 @@
             $sex = $_POST['sex'];
             $verify = $this->generateLink();
             $active = 0;
+
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
             $query = 'INSERT INTO user
                         (firstname, lastname, email, password, phone, sex, code, active)
                     VALUES (?,?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sssssisi', $fname, $lname, $email, $password, $phone, $sex, $verify['code'], $active);
+            $stmt->bind_param('sssssisi', $fname, $lname, $email, $hashedPassword, $phone, $sex, $verify['code'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -98,7 +154,8 @@
                     $this->sendConfirmationEmail($email, $name, $verify['link']);
                     $_SESSION['user_id'] = $user['id'];
                     $json = array(
-                        'verify' => 'Confirmation Email Sent'
+                        'verify' => 'Confirmation Email Sent',
+                        'redirect' => '/login'
                     );
                     echo json_encode($json);
                 } else {
