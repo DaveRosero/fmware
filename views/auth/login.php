@@ -9,7 +9,6 @@
       <?php 
         include_once 'vendor/Bootstrap/css/bundle.php'; 
       ?>
-      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body class="bg-light">
     <!--Content-->
@@ -80,16 +79,6 @@
                 <div><a href="">Forgot password</a></div>
               </div>
             </div>
-              <!--Captcha-->
-              <div class="container">
-                <div class="row">
-                <div class="col-12 d-flex justify-content-center align-items-center text-danger" id="captcha_response"></div>
-                    <div class="col-12 d-flex justify-content-center align-items-center mb-2">
-                      <div class="g-recaptcha" data-sitekey="6LfXNBMlAAAAAAL8J97bmb_be_LaBtwcAb6ZpJzJ"></div>
-                    </div>
-                </div>
-              </div>
-              <!--Captcha-->
             <div class="row mb-2">
               <input type="hidden" name="action" value="login">
               <button type="submit" class="btn btn-primary mb-2">Login</button>
