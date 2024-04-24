@@ -379,17 +379,17 @@
 
         public function uploadPayment () {
             $targetDir = 'asset/images/payments/proof/gcash/';
-            $targetFile = $targetDir . basename($_FILES['image']['name']);
+            $uniqueFilename = uniqid() . '_' . time() . '_' . mt_rand(1000, 9999) . '_' . basename($_FILES['image']['name']);
+            $targetFile = $targetDir . $uniqueFilename;
             move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
 
-            $image = basename($targetFile);
+            $image = $uniqueFilename;
             $order_ref = $_POST['order_ref'];
-            $newImage = $order_ref . $image;
             $query = 'INSERT INTO proof_of_transaction
                         (order_ref, proof_of_payment)
                     VALUES (?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ss', $order_ref, $newImage);
+            $stmt->bind_param('ss', $order_ref, $image);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -432,15 +432,18 @@
         }
 
         public function getProofCOD ($order_ref) {
-            $query = 'SELECT proof_of_delivery FROM proof_of_transaction WHERE order_ref = ?';
+            $query = 'SELECT  proof_of_payment, proof_of_delivery FROM proof_of_transaction WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($proof);
+                    $stmt->bind_result($payment, $delivery);
                     $stmt->fetch();
                     $stmt->close();
-                    return '<img src="/asset/images/payments/proof/cod/'.$proof.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                    if ($payment === NULL) {
+                        return '<img src="/asset/images/payments/proof/cod/'.$delivery.'" alt="" srcset="" style="width: 300px; height: 500px;">';
+                    }
+                    return '<img src="/asset/images/payments/proof/gcash/'.$payment.'" alt="" srcset="" style="width: 300px; height: 500px;">';
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
