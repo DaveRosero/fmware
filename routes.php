@@ -31,6 +31,7 @@ require_once __DIR__.'/router.php';
     // My Purchases Controller
     any('/get-qr', 'controller/home/my-purchases/get-qr.php');
     any('/order-details', 'controller/home/my-purchases/get-order-details.php');
+    any('/upload-proof', 'controller/home/my-purchases/upload-proof.php');
 
 //*****************************************************************//
 

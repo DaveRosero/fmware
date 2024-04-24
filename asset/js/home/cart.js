@@ -263,4 +263,14 @@ $(document).ready(function(){
             })
         }
     });
+
+    $('input[name="payment_type"]').on('change', function() {
+        var selectedValue = $('input[name="payment_type"]:checked').val();
+        if (selectedValue === '1') {
+            console.log('COD selected');
+        } else if (selectedValue === '2') {
+            console.log('GCash selected');
+            
+        }
+    });
 })

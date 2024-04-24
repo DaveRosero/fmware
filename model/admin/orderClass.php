@@ -81,6 +81,10 @@
         }
 
         public function statusFormat ($status) {
+            if ($status === 'to pay') {
+                $format = '<span class="badge bg-secondary text-wrap">'.strtoupper($status).'</span>';
+            }
+
             if ($status === 'pending') {
                 $format = '<span class="badge bg-warning text-wrap">'.strtoupper($status).'</span>';
             }
@@ -373,6 +377,36 @@
             }
         }
 
+        public function uploadPayment () {
+            $targetDir = 'asset/images/payments/proof/gcash/';
+            $targetFile = $targetDir . basename($_FILES['image']['name']);
+            move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
+
+            $image = basename($targetFile);
+            $order_ref = $_POST['order_ref'];
+            $newImage = $order_ref . $image;
+            $query = 'INSERT INTO proof_of_transaction
+                        (order_ref, proof_of_payment)
+                    VALUES (?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $order_ref, $newImage);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    $status = 'pending';
+                    $this->updateOrderStatus($order_ref, $status);
+                    return [
+                        'redirect' => '/my-purchases/pending'
+                    ];
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
         public function checkOrder ($order_ref) {
             $query = 'SELECT status FROM orders WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);
@@ -424,18 +458,20 @@
                             product.unit_value,
                             unit.name,
                             variant.name,
-                            price_list.unit_price
+                            price_list.unit_price,
+                            orders.payment_type_id
                     FROM order_items
                     INNER JOIN product ON product.id = order_items.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
                     INNER JOIN price_list on price_list.product_id = product.id
-                    WHERE order_ref = ?';
+                    INNER JOIN orders ON orders.order_ref = order_items.order_ref
+                    WHERE order_items.order_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $order_ref);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $qty, $name, $image, $unit_value, $unit, $variant, $price);
+                    $stmt->bind_result($id, $qty, $name, $image, $unit_value, $unit, $variant, $price, $payment);
                     $order_details = '';
                     while ($stmt->fetch()) {
                         $subtotal = $qty * $price;
@@ -453,6 +489,15 @@
                                         </div>';
                     }
                     $stmt->close();
+                    if ($payment == 2) {
+                        $proof = '<div class="row mt-4 mb-4">
+                                    <label for="imageInput" class="form-label">Upload Proof of Payment <span class="text-danger">*</span>
+                                    <input type="file" class="form-control" id="imageInput" name="image" accept="image/*" required>
+                                    <input type="hidden" name="order_ref" id="order_ref" value="'.$order_ref.'">
+                                    <button type="submit" class="btn btn-primary mt-2">Upload Proof of Payment</button>
+                                </div>';
+                        return $order_details . $proof;
+                    }
                     return $order_details;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
