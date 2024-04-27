@@ -25,8 +25,8 @@ function generatePrintableContent() {
       qty +
       '</td><td class="center">' +
       price +
-      '</td><td class="center">' +
-      discount +
+      '</td><td class="center">₱' +
+      discount + 
       "</td></tr>";
   });
 
