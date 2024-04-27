@@ -66,14 +66,18 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $qty, $id);
       <div class="col right-section border-end">
         <div class="col-body mt-2">
           <div class="table-container" style="height: calc(100vh - 12vh);overflow-y: auto;">
-            
-            <div class="col">
+            <!-- <div class="col">
                 <form id="barcode-form">
                     <label for="barcode">Scan Barcode here</label>
                     <input type="text" name="barcode" id="barcode">
                     <button type="submit" class="cart-button">Search</button>
                 </form>
-            </div>
+            </div> -->
+
+            <form class="d-flex" role="search" id="barcode-form">
+              <input class="form-control me-2" type="text" name="barcode" id="barcode" placeholder="Search">
+              <button class="btn btn-outline-success cart-button" type="submit">Search</button>
+            </form>
             <br>
             <table class="table table-hover">
               <thead class="sticky-header" style="position: sticky;top: 0;">
