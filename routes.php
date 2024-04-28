@@ -123,6 +123,22 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
+    any('/pos', 'views/pos/pos.php');
+    any('/pos-cart', 'views/pos/price_list_cart.php');
+    any('/pos-addqty', 'views/pos/add-qty.php');
+    any('/pos-minusqty', 'views/pos/minus-qty.php');
+    any('/pos-ctbody', 'views/pos/cart-body.php');
+    any('/pos-reset', 'views/pos/reset-card.php');
+    any('/pos-removecart', 'views/pos/remove_cart.php');
+    any('/pos-ctdiscount', 'views/pos/cart-discount.php');
+    any('/pos-barcode', 'views/pos/barcode.php');
+    any('/pos-addpos', 'views/pos/addPos.php');
+    any('/pos-getpos', 'views/pos/getPos.php');
+    any('/pos-updateqty', 'views/pos/update-qty.php');
+
+
+//*****************************************************************//
+
     // Test
     get('/test/collapse', 'views/test/collapse.php');
     get('/dump', 'views/test/vardump.php');
