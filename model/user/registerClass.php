@@ -32,7 +32,7 @@
 
         public function generateLink () {
             $code = bin2hex(random_bytes(50));
-            $link = 'fmware-online.000webhostapp.com/verify-account/'.$code;
+            $link = 'fmware.shop/verify-account/'.$code;
             return [
                 'code' => $code,
                 'link' => $link

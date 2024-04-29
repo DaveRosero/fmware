@@ -358,7 +358,7 @@
         public function receiptQrCode ($order_ref) {
             $code = $this->getCode($order_ref);
             // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/confirm-order/'.$order_ref;
-            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.16/confirm-order/'.$code.'/'.$order_ref;
+            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware.shop/confirm-order/'.$code.'/'.$order_ref;
             $filename = $order_ref . '.jpg';
             $image = file_get_contents($api);
             $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
