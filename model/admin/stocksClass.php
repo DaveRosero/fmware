@@ -25,9 +25,10 @@
             }
         }
 
-        public function checkCriticalLevel ($qty, $critical_level, $max_stock) {
-            $critical_stock = ($critical_level / 100) * $max_stock;
-            if ($qty < $critical_stock) {
+        public function checkCriticalLevel ($qty, $critical_level) {
+            if ($qty == 0 ) {
+                $stock = '<span class="badge bg-dark text-wrap">'.$qty.'</span>';
+            } else if ($qty < $critical_level) {
                 $stock = '<span class="badge bg-danger text-wrap">'.$qty.'</span>';
             } else {
                 $stock = '<span class="badge bg-success text-wrap">'.$qty.'</span>';
@@ -40,7 +41,7 @@
             $query = 'SELECT stock.product_id,
                             stock.qty,
                             stock.critical_level,
-                            stock.max_stock,
+                            stock.date,
                             product.image,
                             product.name,
                             product.unit_value,
@@ -57,9 +58,9 @@
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $qty, $critical_level, $max_stock, $image, $name, $unit_value, $variant, $unit, $brand, $category);
+                    $stmt->bind_result($id, $qty, $critical_level, $date, $image, $name, $unit_value, $variant, $unit, $brand, $category);
                     while ($stmt->fetch()) {
-                        $stock = $this->checkCriticalLevel($qty, $critical_level, $max_stock);
+                        $stock = $this->checkCriticalLevel($qty, $critical_level);
                         echo '<tr>
                                 <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
                                 <td class="fw-semibold">'.$name.'</td>
@@ -68,8 +69,8 @@
                                 <td class="fw-semibold">'.$brand.'</td>
                                 <td class="fw-semibold">'.$category.'</td>
                                 <td class="fw-semibold">'.$stock.'</td>
-                                <td class="fw-semibold">'.$critical_level.'%</td>
-                                <td class="fw-semibold">'.$max_stock.'</td>
+                                <td class="fw-semibold">'.$critical_level.'</td>
+                                <td class="fw-semibold">'.date('d F Y', strtotime($date)).'</td>
                                 <td>
                                     <button 
                                         type="button" 
@@ -133,7 +134,6 @@
             $id = $_POST['product_id'];
             $initial_stock = $_POST['initial_stock'];
             $critical_level = $_POST['critical_level'];
-            $max_stock = $_POST['max_stock'];   
 
             $query = 'INSERT INTO stock (product_id, qty, critical_level, max_stock)
                     VALUES (?,?,?,?)';
