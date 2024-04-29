@@ -25,14 +25,8 @@
                 </div>
                 <div class="row mb-2">
                     <div class="col">
-                        <label for="" class="form-label">Critical Level (Percentage %)</label>
+                        <label for="" class="form-label">Critical Level</label>
                         <input type="number" class="form-control" name="critical_level" min="1">
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col">
-                        <label for="" class="form-label">Maximum Stock</label>
-                        <input type="number" class="form-control" name="max_stock" min="1">
                     </div>
                 </div>
             </div>

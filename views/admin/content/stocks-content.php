@@ -28,7 +28,7 @@
                         <th>Category</th>
                         <th>Quantity in Stock</th>
                         <th>Critical Level</th>
-                        <th>Maximum Stocks</th>
+                        <th>Last Restock</th>
                         <th>Action</th>
                     </tr>
                 </thead>
