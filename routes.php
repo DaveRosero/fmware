@@ -60,6 +60,9 @@ require_once __DIR__.'/router.php';
     get('/users', 'views/admin/userList.php');
     get('/staff', 'views/admin/staffList.php');
 
+    // Staff Controller
+    any('/new-staff', 'controller/admin/staff/new-staff.php');
+
 //*****************************************************************//
 
     // Inventory Views
@@ -87,6 +90,7 @@ require_once __DIR__.'/router.php';
     get('/print-receipt/$order_ref', 'views/admin/receipt.php');
 
     // Confirm Order Views
+    get('/scan-qr', 'views/admin/scan-qr.php');
     get('/confirm-order/$code/$order_ref', 'views/admin/confirm-order.php');
 
     // Manage Orders Controller

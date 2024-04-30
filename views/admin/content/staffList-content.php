@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">New Staff</h5>
-            <form action="/staff" method="POST">
+            <form id="new-staff">
                 <div class="row">
                     <div class="col">
                         <label for="group_name" class="form-label">First Name <span class="text-danger">*</span></label>
@@ -71,7 +71,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $userList->getStaffList(); ?>
+                        <?php $user_list->getStaffList(); ?>
                     </tbody>
                 </table>
             </div>

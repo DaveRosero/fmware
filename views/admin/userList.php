@@ -49,6 +49,5 @@
   <script src="/asset/js/admin/dashboard.js"></script>
   <script src="/asset/js/admin/mini-sidebar.js"></script>
   <script src="/asset/js/admin/sidebarmenu.js"></script>
-  <script src="/asset/js/admin/unit.js"></script>
 </body>
 </html>
