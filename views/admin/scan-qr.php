@@ -1,3 +1,10 @@
+<?php
+	include_once 'session.php';
+	require_once 'model/admin/admin.php';
+
+	$admin = new Admin();
+	$admin->isDelivery();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
