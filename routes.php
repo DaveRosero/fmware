@@ -7,7 +7,7 @@ require_once __DIR__.'/router.php';
     // Home Views
     get('/', 'views/home/home.php');
     get('/about', 'views/home/about.php');
-    get('/shop', 'views/home/shop.php');
+    get('/shop/$filter', 'views/home/shop.php');
     get('/view-product/product/$product_id', 'views/home/view-product.php');
     get('/cart', 'views/home/cart.php');
     get('/account/settings', 'views/home/account.php');
@@ -32,6 +32,9 @@ require_once __DIR__.'/router.php';
     any('/get-qr', 'controller/home/my-purchases/get-qr.php');
     any('/order-details', 'controller/home/my-purchases/get-order-details.php');
     any('/upload-proof', 'controller/home/my-purchases/upload-proof.php');
+
+    // Shop Controller
+    any('/search-product', 'controller/home/shop/search-product.php');
 
 //*****************************************************************//
 
