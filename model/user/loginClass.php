@@ -40,7 +40,7 @@
                             } 
                             
                             if ($group_name == 'Delivery Rider') {
-                                $json['redirect'] = '/confirm-order';
+                                $json['redirect'] = '/scan-qr';
                             } 
     
                             if ($group_name == 'admin') {

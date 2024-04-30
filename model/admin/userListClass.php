@@ -164,7 +164,7 @@
                     $stmt->close();
                     $staff = $this->getStaff($email);
                     if ($this->addStaff($staff['id'], $group)) {
-                        header('Location: /staff');
+                        return '/staff';
                     } else {
                         die("Error in executing statement: " . $stmt->error);
                         $stmt->close();

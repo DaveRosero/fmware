@@ -259,5 +259,4 @@
 	webcamButton.addEventListener('click', showWebcam);
 	</script>
 </body>
-
 </html>
