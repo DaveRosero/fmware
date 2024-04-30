@@ -23,10 +23,13 @@
         if (in_array($filter, $categories)) {
             $id = $shop->getCategoryId($filter);
             $html = $shop->searchProductbyCategory($search, $id);
-        } else {
-            $html = 'No Product Found.';
         }
-        echo $html;
+
+        if ($html === '') {
+            echo '<h3>No Product Found.</h3>';
+        } else {
+            echo $html;
+        }
     } else {
         header('Location: /404');
         exit();
