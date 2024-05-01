@@ -11,17 +11,23 @@ $query = 'SELECT price_list.unit_price,
                   product.image,
                   product.name,
                   product.barcode,
+                  product.unit_value,
                   stock.qty,
-                  product.id
+                  product.id,
+                  unit.name,
+                  variant.name
                   FROM price_list
                   INNER JOIN stock ON price_list.product_id = stock.product_id
                   INNER JOIN product ON price_list.product_id = product.id
-                  WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode = ?';
+                  INNER JOIN variant ON variant.id = product.variant_id
+                  INNER JOIN unit ON unit.id = product.unit_id
+                  WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode = ?
+                  ORDER BY product.name ASC';
 
 $stmt = $mysqli->prepare($query);
 $stmt->bind_param('ss', $search, $search); // Bind search parameter twice for both placeholders
 $stmt->execute();
-$stmt->bind_result($unit_price, $image, $name, $barcode, $qty, $id);
+$stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id, $unit, $variant);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +90,8 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $qty, $id);
                 <tr class="table-secondary">
                   <td>Image</td>
                   <td>Product Name</td>
+                  <td>Unit</td>
+                  <td>Variant</td>
                   <td>Barcode</td>
                   <td>Stock</td>
                   <td>Price</td>
@@ -93,9 +101,13 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $qty, $id);
               <tbody>
                 <?php
                 while ($stmt->fetch()) {
+                  $disabled = ($qty == 0) ? 'disabled' : '';
+
                   echo '<tr>
                                 <td class="align-middle"><img src="asset/images/products/' . $image . '" alt="" srcset="" style="width: 90px;"></td>
                                 <td class="align-middle">' . $name . '</td>
+                                <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
+                                <td class="align-middle">' . $variant . '</td>
                                 <td class="align-middle">' . $barcode . '</td>
                                 <td class="align-middle">' . $qty . '</td>
                                 <td class="align-middle">₱' . number_format($unit_price) . '</td>
@@ -103,12 +115,14 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $qty, $id);
                                     <button class="btn btn-primary cart-button" 
                                       data-product-id="' . $id . '"
                                       data-product-price="' . $unit_price . '"
+                                      ' . $disabled. '
                                     >
                                     <i class="fas fa-cart-plus"></i>
                                     </button>
                                 </td>
                             </tr>';
                 }
+                $stmt->close();
                 ?>
               </tbody>
             </table>
