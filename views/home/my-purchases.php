@@ -1,15 +1,18 @@
 <?php
     include_once 'session.php';
     require_once 'model/user/user.php';
+    require_once 'model/home/home.php';
     require_once 'model/home/cartClass.php';
     require_once 'model/user/transactionClass.php';
     require_once 'model/admin/orderClass.php';
 
+    $home = new Home();
     $user = new User();
     $cart = new Cart();
     $transaction = new Transaction();
     $order = new Order();
 
+    $home->redirectUser();
     $user_info = $user->getUser($_SESSION['email']);
     $statusType = array('to-pay', 'pending', 'to-receive', 'delivered', 'completed', 'cancelled');
     if (!in_array($status, $statusType)) {
