@@ -135,10 +135,10 @@
             $initial_stock = $_POST['initial_stock'];
             $critical_level = $_POST['critical_level'];
 
-            $query = 'INSERT INTO stock (product_id, qty, critical_level, max_stock)
+            $query = 'INSERT INTO stock (product_id, qty, critical_level)
                     VALUES (?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('iiii', $id, $initial_stock, $critical_level, $max_stock);
+            $stmt->bind_param('iiii', $id, $initial_stock, $critical_level);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
