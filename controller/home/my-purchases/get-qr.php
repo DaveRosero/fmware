@@ -5,7 +5,7 @@
     $order = new Order();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $qrcode = $order->receiptQrCode($_POST['order_ref']);
+        $qrcode = $order->generateQrCode($_POST['order_ref']);
         echo $qrcode;
     } else {
         header('Location: /404');

@@ -149,7 +149,7 @@ require_once __DIR__.'/router.php';
     // Test
     get('/test/collapse', 'views/test/collapse.php');
     get('/dump', 'views/test/vardump.php');
-    get('/test', 'views/test/test.php');
+    any('/test/$code/$ref', 'views/test/test.php');
     get('/db-array', 'views/test/db_array.php');
     get('/send-mail', 'views/test/send_mail.php');
 
