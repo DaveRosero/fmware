@@ -9,9 +9,11 @@ $(document).ready(function(){
             dataType: 'html',
             success: function(feedback) {
                 $('#order-details').html(feedback);
+                $('#loadingIndicator').hide();
             }
         });
     }
+    
 
     function getQrCode(order_ref) {
         $.ajax({
@@ -20,10 +22,11 @@ $(document).ready(function(){
             data: {
                 order_ref: order_ref
             },
-            dataType: 'html',
+            dataType: 'text',
             success: function(feedback) {
                 $('#loadingIndicator').hide();
-                $('#qr-code').html('<p>Present this QR Code to our delivery driver upon receiving your order.</p>' + feedback);
+                $('#qr-code').html('<p>Present this QR Code to our delivery driver upon receiving your order.</p>');
+                jQuery('#qr-code').qrcode(feedback);
             }
         });
     }

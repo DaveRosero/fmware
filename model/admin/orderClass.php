@@ -355,30 +355,36 @@
             }
         }
 
-        public function receiptQrCode ($order_ref) {
+        // public function receiptQrCode ($order_ref) {
+        //     $code = $this->getCode($order_ref);
+        //     // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/confirm-order/'.$order_ref;
+        //     $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.16/confirm-order/'.$code.'/'.$order_ref;
+        //     $filename = $order_ref . '.jpg';
+        //     $image = file_get_contents($api);
+        //     $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
+
+        //     if (file_exists($savePath)) {
+        //         $qrcode = '<img src="/'.$savePath.'" alt="">';
+        //         return $qrcode;
+        //     }
+
+        //     if ($image !== false) {
+        //         $saveResult = file_put_contents($savePath, $image);
+        //         if ($saveResult !== false) {
+        //             $qrcode = '<img src="/'.$savePath.'" alt="">';
+        //             return $qrcode;
+        //         } else {
+        //             echo "Error: Failed to save the image to $savePath";
+        //         }
+        //     }else {
+        //         echo "Error: Failed to fetch image data from $api";
+        //     }
+        // }
+
+        public function generateQrCode ($order_ref) {
             $code = $this->getCode($order_ref);
-            // $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=fmware-store.000webhostapp.com/confirm-order/'.$order_ref;
-            $api = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=192.168.1.16/confirm-order/'.$code.'/'.$order_ref;
-            $filename = $order_ref . '.jpg';
-            $image = file_get_contents($api);
-            $savePath = 'asset/images/payments/receipts/qr_code/' . $filename;
-
-            if (file_exists($savePath)) {
-                $qrcode = '<img src="/'.$savePath.'" alt="">';
-                return $qrcode;
-            }
-
-            if ($image !== false) {
-                $saveResult = file_put_contents($savePath, $image);
-                if ($saveResult !== false) {
-                    $qrcode = '<img src="/'.$savePath.'" alt="">';
-                    return $qrcode;
-                } else {
-                    echo "Error: Failed to save the image to $savePath";
-                }
-            }else {
-                echo "Error: Failed to fetch image data from $api";
-            }
+            $url = 'https://fmware.shop/confirm-order/'.$code.'/'.$order_ref;
+            return $url;
         }
 
         public function confirmOrder ($order_ref) {

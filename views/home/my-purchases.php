@@ -46,6 +46,9 @@
             include_once 'vendor/DataTables/js/bundle.php';
             include_once 'vendor/Bootstrap/js/bundle.php'; 
         ?>
+        
+        <script src="/vendor/jQueryQr/src/jquery.qrcode.js"></script>
+        <script src="/vendor/jQueryQr/src/qrcode.js"></script>
         <script src="/vendor/NotifyJS/js/notify.js"></script>
         <script src="/asset/js/home/my-purchases.js"></script>
         <script src="/asset/js/home/home.js"></script>
