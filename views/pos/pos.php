@@ -21,7 +21,8 @@ $query = 'SELECT price_list.unit_price,
                   INNER JOIN product ON price_list.product_id = product.id
                   INNER JOIN variant ON variant.id = product.variant_id
                   INNER JOIN unit ON unit.id = product.unit_id
-                  WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode = ?';
+                  WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode = ?
+                  ORDER BY product.name ASC';
 
 $stmt = $mysqli->prepare($query);
 $stmt->bind_param('ss', $search, $search); // Bind search parameter twice for both placeholders
@@ -100,6 +101,8 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
               <tbody>
                 <?php
                 while ($stmt->fetch()) {
+                  $disabled = ($qty == 0) ? 'disabled' : '';
+
                   echo '<tr>
                                 <td class="align-middle"><img src="asset/images/products/' . $image . '" alt="" srcset="" style="width: 90px;"></td>
                                 <td class="align-middle">' . $name . '</td>
@@ -112,6 +115,7 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
                                     <button class="btn btn-primary cart-button" 
                                       data-product-id="' . $id . '"
                                       data-product-price="' . $unit_price . '"
+                                      ' . $disabled. '
                                     >
                                     <i class="fas fa-cart-plus"></i>
                                     </button>
