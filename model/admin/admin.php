@@ -27,7 +27,7 @@
                     $stmt->fetch();
                     $stmt->close();
 
-                    if ($group_name == 'user') {
+                    if ($group_name !== 'admin') {
                         header('Location: /404');
                     } else {
                         return null;

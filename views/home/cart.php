@@ -1,17 +1,20 @@
 <?php
     include_once 'session.php';
     require_once 'model/user/user.php';
+    require_once 'model/home/home.php';
     require_once 'model/home/productClass.php';
     require_once 'model/home/cartClass.php';
     require_once 'model/user/addressClass.php';
     require_once 'model/user/transactionClass.php';
 
+    $home = new Home();
     $user = new User();
     $product = new Product();
     $cart = new Cart();
     $address = new Address();
     $transaction = new Transaction();
 
+    $home->redirectUser();
     $user_info = $user->getUser($_SESSION['email']);
     $user_address = $address->getAddress($user_info['id']);
 ?>

@@ -1,12 +1,16 @@
 <?php
     include_once 'session.php';
     require_once 'model/user/user.php';
+    require_once 'model/home/home.php';
     require_once 'model/home/cartClass.php';
     require_once 'model/home/shopClass.php';
 
+    $home = new Home();
     $user = new User();
     $cart = new Cart();
     $shop = new Shop();
+
+    $home->redirectUser();
 
     if ($shop->notFilter($filter)) {
         header('Location: /404');
