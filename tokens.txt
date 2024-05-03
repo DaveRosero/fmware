@@ -1,9 +1,0 @@
-site key - LOCALHOST
-6LfXNBMlAAAAAAL8J97bmb_be_LaBtwcAb6ZpJzJ
-<div class="g-recaptcha" data-sitekey="6LfXNBMlAAAAAAL8J97bmb_be_LaBtwcAb6ZpJzJ"></div>
-
-secret key - LOCALHOST
-6LfXNBMlAAAAACUbJ5PhZSx59hZpJecKV-DYx9-P
-
-SMTP Password
-mboi hjvb lbud zkrk

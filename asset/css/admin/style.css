@@ -1,4 +1,0 @@
-/* Custom styles for the toggle switch */
-.custom-control-input:checked ~ .custom-control-label .custom-control-description::before {
-    transform: translateX(30px);
-}
