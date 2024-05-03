@@ -1,23 +1,36 @@
 <?php
-	$url = 'https://fmware.shop/confirm-order/'.$code.'/'.$ref;
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Generator</title>
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <!-- Include jquery-qrcode -->
-    <script type="text/javascript" src="/vendor/jQueryQr/src/jquery.qrcode.js"></script>
-	<script type="text/javascript" src="/vendor/jQueryQr/src/qrcode.js"></script>
-</head>
-<body>
-	<div id="qrcode"></div>
+    require_once 'vendor/PHPMailer/src/PHPMailer.php';
+    require_once 'vendor/PHPMailer/src/SMTP.php';
+    require_once 'vendor/PHPMailer/src/Exception.php';
 
-	<script>
-		jQuery('#qrcode').qrcode("<?php echo $url; ?>");
-	</script>
-</body>
-</html>
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    $mail = new PHPMailer(true);
+    
+    try {
+        // Server settings
+        $mail->isSMTP();                                            // Set mailer to use SMTP
+        $mail->Host       = 'smtp.hostinger.com';                   // Specify main and backup SMTP servers
+        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+        $mail->Username   = 'no-reply@fmware.shop';               // SMTP username
+        $mail->Password   = 'Fmware2024!';                        // SMTP password
+        $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+        $mail->Port       = 587;                                    // TCP port to connect to
+    
+        // Recipients
+        $mail->setFrom('no-reply@fmware.shop', 'FMWare');
+        $mail->addAddress('kurei7476@gmail.com', 'Israle Gonzales');     // Add a recipient
+    
+        // Content
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->Subject = 'Hindi ako nagpunta dito para makipag away';
+        $mail->Body    = '<h1>Natatae ako pre</h1>';
+    
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+?>

@@ -16,14 +16,14 @@
         }
 
         public function getUser ($email) {
-            $query = 'SELECT id, firstname, lastname, email, password, phone, sex
+            $query = 'SELECT id, firstname, lastname, email, password, phone
                     FROM user
                     WHERE email = ?';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 $stmt->bind_param('s', $email);
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone, $sex);
+                    $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone);
                     $stmt->fetch();
                     $stmt->close();
 
@@ -33,8 +33,7 @@
                         'lname' => $lname,
                         'email' => $newEmail,
                         'password' => $password,
-                        'phone' => $phone,
-                        'sex' => $sex
+                        'phone' => $phone
                     ];
                 } else {
                     echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;

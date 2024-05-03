@@ -141,9 +141,9 @@
         }
 
         public function getMunicipality ($brgy) {
-            $query = 'SELECT municipality FROM delivery_fee WHERE brgys LIKE ?';
+            $query = 'SELECT municipality FROM delivery_fee WHERE brgys REGEXP ?';
             $stmt = $this->conn->prepare($query);
-            $param = '%'.$brgy.'%';
+            $param = '[[:<:]]'.$brgy.'[[:>:]]';
             $stmt->bind_param('s', $param);
             if ($stmt) {
                 if ($stmt->execute()) {
