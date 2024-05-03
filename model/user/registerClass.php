@@ -166,8 +166,8 @@
                 return;
             }
 
-            $fname = $_POST['fname'];
-            $lname = $_POST['lname'];
+            $fname = ucfirst($_POST['fname']);
+            $lname = ucfirst($_POST['lname']);
             $email = $_POST['email'];
             $password = $_POST['password'];
             $phone = $_POST['phone'];
