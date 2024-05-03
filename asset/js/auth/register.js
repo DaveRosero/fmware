@@ -21,6 +21,14 @@ $(document).ready(function(){
                     $.notify(feedback.password, 'error');
                 }
 
+                if (feedback.confirm) {
+                    $.notify(feedback.confirm, 'error');
+                }
+
+                if (feedback.phone) {
+                    $.notify(feedback.phone, 'error');
+                }
+
                 if (feedback.redirect){
                     $('#overlay').show();
                     setTimeout(function() {
@@ -31,6 +39,37 @@ $(document).ready(function(){
             },
             complete: function(){
                 $('#loadingOverlay').hide();
+            }
+        });
+    });
+
+    $('#show_password').change(function(){
+        if($(this).is(':checked')) {
+            $('#password').prop('type', 'text');
+            $('#confirm').prop('type', 'text');  
+        } else {
+            $('#password').prop('type', 'password');
+            $('#confirm').prop('type', 'password');  
+        }
+    });
+    
+    $('#brgy').change(function(){
+        var brgy = $(this).val();
+        console.log('changed');
+
+        $.ajax({
+            url: '/get-municipality',
+            method: 'POST',
+            data: {
+                brgy : brgy
+            },
+            dataType: 'json',
+            success: function(feedback){
+                console.log('success');
+                console.log(feedback.municipality);
+                if (feedback.municipality) {
+                    $('#municipality').val(feedback.municipality);
+                }
             }
         });
     });

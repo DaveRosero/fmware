@@ -4,7 +4,7 @@
   <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>FMWare</title>
+      <title>Login | FMWare</title>
       <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
       <?php 
         include_once 'vendor/Bootstrap/css/bundle.php'; 

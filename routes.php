@@ -41,7 +41,8 @@ require_once __DIR__.'/router.php';
     // Auth
     get('/login', 'views/auth/login.php');
     get('/register', 'views/auth/register.php');
-    get('/verify-account/$code', 'views/auth/verify.php');
+    get('/verify-account/$code/$email', 'views/auth/verify.php');
+    get('/verify-success', 'views/auth/verify-success.php');
 
     // Auth Controller
     any('/user-login', 'controller/auth/login-controller.php');
@@ -149,7 +150,7 @@ require_once __DIR__.'/router.php';
     // Test
     get('/test/collapse', 'views/test/collapse.php');
     get('/dump', 'views/test/vardump.php');
-    any('/test/$code/$ref', 'views/test/test.php');
+    any('/test', 'views/test/test.php');
     get('/db-array', 'views/test/db_array.php');
     get('/send-mail', 'views/test/send_mail.php');
 

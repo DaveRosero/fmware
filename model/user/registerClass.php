@@ -30,6 +30,27 @@
             }           
         }
 
+        public function newAddress ($house, $street, $brgy, $municipality, $description, $user_id){
+            $query = 'INSERT INTO address
+                        (house_no, street, brgy, municipality, description, user_id)
+                    VALUES (?,?,?,?,?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('sssssi', $house, $street, $brgy, $municipality, $description, $user_id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    return [
+                        'redirect' => '/cart'
+                    ];
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
         public function generateLink () {
             $code = bin2hex(random_bytes(50));
             $link = 'localhost/verify-account/'.$code;
@@ -44,15 +65,15 @@
         
             // Server settings
             $mail->isSMTP(); // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com'; // Specify SMTP server
+            $mail->Host = 'smtp.hostinger.com'; // Specify SMTP server
             $mail->SMTPAuth = true; // Enable SMTP authentication
-            $mail->Username = '21shingie@gmail.com'; // SMTP username
-            $mail->Password = 'mboi hjvb lbud zkrk'; // SMTP password
+            $mail->Username = 'no-reply@fmware.shop'; // SMTP username
+            $mail->Password = 'Fmware2024!'; // SMTP password
             $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
             $mail->Port = 587; // TCP port to connect to
         
             // Recipients
-            $mail->setFrom('21shingie@gmail.com', 'FMWare');
+            $mail->setFrom('no-reply@fmware.shop', 'FMWare');
             $mail->addAddress($email, $name);
         
             // Email content
@@ -62,7 +83,7 @@
             // Email body with the confirmation link
             $mail->Body = '<h1>Hello, ' . $name . '</h1>
                            <p>Thank you for signing up with FMWare! Please click the following link to verify your account:</p>
-                           <p><a href="' . $link . '">Verify Account</a></p>
+                           <p><a href="' . $link . '/' . $email . '">Verify Account</a></p>
                            <p>If you did not sign up for an account with FMWare, you can ignore this email.</p>';
         
             // Send the email
@@ -97,7 +118,7 @@
         }
 
         public function checkPasswordLength ($password) {
-            return strlen($password) === 8;
+            return strlen($password) >= 8;
         }
 
         public function isAlphanumeric ($password) {
@@ -129,28 +150,49 @@
                 return;
             }
 
+            if ($_POST['password'] !== $_POST['confirm']) {
+                $json = array(
+                    'confirm' => 'Passwords does not match'
+                );
+                echo json_encode($json);
+                return;
+            }
+
+            if (substr($_POST['phone'], 0, 2) !== '09' && strlen($_POST['phone']) !== 11) {
+                $json = array(
+                    'phone' => 'Mobile number must be 09XXXXXXXXX'
+                );
+                echo json_encode($json);
+                return;
+            }
+
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
             $email = $_POST['email'];
             $password = $_POST['password'];
             $phone = $_POST['phone'];
-            $sex = $_POST['sex'];
+            $house = $_POST['house'];
+            $street = $_POST['street'];
+            $brgy = $_POST['brgy'];
+            $municipality = $_POST['municipality'];
+            $description = $_POST['description'];
             $verify = $this->generateLink();
             $active = 0;
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
             $query = 'INSERT INTO user
-                        (firstname, lastname, email, password, phone, sex, code, active)
-                    VALUES (?,?,?,?,?,?,?,?)';
+                        (firstname, lastname, email, password, phone, code, active)
+                    VALUES (?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sssssisi', $fname, $lname, $email, $hashedPassword, $phone, $sex, $verify['code'], $active);
+            $stmt->bind_param('ssssssi', $fname, $lname, $email, $hashedPassword, $phone, $verify['code'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
                     $name = $fname.' '.$lname;
                     $user = $this->getUser($email);
                     $this->newUser($user['id']);
+                    $this->newAddress($house, $street, $brgy, $municipality, $description, $user['id']);
                     $this->sendConfirmationEmail($email, $name, $verify['link']);
                     $_SESSION['user_id'] = $user['id'];
                     $json = array(
@@ -167,10 +209,10 @@
             }
         }
 
-        public function verifyAccount($id) {
-            $query = 'UPDATE user SET code = NULL, active = 1 WHERE id = ?';
+        public function verifyAccount($email) {
+            $query = 'UPDATE user SET code = NULL, active = 1 WHERE email = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('i', $id);
+            $stmt->bind_param('s', $email);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -183,10 +225,10 @@
             }
         }
 
-        public function verifyCode ($code, $id) {
-            $query = 'SELECT code FROM user WHERE id = ?';
+        public function verifyCode ($code, $email) {
+            $query = 'SELECT code FROM user WHERE email = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('i', $id);
+            $stmt->bind_param('s', $email);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($user_code);
@@ -194,7 +236,7 @@
                     $stmt->close();
 
                     if ($code === $user_code) {
-                        $this->verifyAccount($id);
+                        $this->verifyAccount($email);
                         header('Location: /login');
                     } else {
                         header('Location: /404');
