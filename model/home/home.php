@@ -27,11 +27,27 @@
                     $stmt->fetch();
                     $stmt->close();
 
-                    if ($group_name !== 'user') {
-                        header('Location: /404');
-                    } else {
-                        return null;
+                    if ($group_name === 'user') {
+                        header('Location: /');
+                        return;
                     }
+
+                    if ($group_name === 'admin') {
+                        header('Location: /dashboard');
+                        return;
+                    }
+
+                    if ($group_name === 'cashier') {
+                        header('Location: /pos');
+                        return;
+                    }
+
+                    if ($group_name === 'delivery') {
+                        header('Location: /scan-qr');
+                        return;
+                    }
+
+                    return null;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
