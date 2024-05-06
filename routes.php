@@ -62,6 +62,7 @@ require_once __DIR__.'/router.php';
 
     // Staff Controller
     any('/add-staff', 'controller/admin/staff/add-staff.php');
+    any('/update-staff', 'controller/admin/staff/update-status.php');
 
 //*****************************************************************//
 
