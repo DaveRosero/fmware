@@ -1,11 +1,11 @@
 <?php
     include_once 'session.php';
-    require_once 'model/admin/userListClass.php';
+    require_once 'model/admin/staffClass.php';
 
-    $user = new UserList();
+    $staff = new Staff();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $json = $user->newStaff();
+        $json = $staff->regStaff();
         echo $json;
     } else {
         header('Location: /404');

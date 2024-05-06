@@ -57,12 +57,11 @@ require_once __DIR__.'/router.php';
 //*****************************************************************//
 
     // People
-    get('/groups', 'views/admin/groups.php');
-    get('/users', 'views/admin/userList.php');
-    get('/staff', 'views/admin/staffList.php');
+    get('/users', 'views/admin/user.php');
+    get('/staff', 'views/admin/staff.php');
 
     // Staff Controller
-    any('/new-staff', 'controller/admin/staff/new-staff.php');
+    any('/add-staff', 'controller/admin/staff/add-staff.php');
 
 //*****************************************************************//
 

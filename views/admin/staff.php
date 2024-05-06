@@ -1,34 +1,25 @@
 <?php
-  if (session_status() == PHP_SESSION_NONE) {
-      session_start();
-  }
-
+  include_once 'session.php';
   require_once 'model/admin/admin.php';
-  require_once 'model/admin/groupClass.php';
+  require_once 'model/admin/staffClass.php';
 
   $admin = new Admin();
-  $group = new Group();
+  $staff = new Staff();
 
   $admin->isAdmin();
-
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['action'] == 'create_group') {
-      $group->createGroup();
-    }
-  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Manage Groups | FMWare</title>
+    <title>Manage Users | FMWare</title>
     <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php 
-      include_once 'vendor/Bootstrap/css/bundle.php'; 
+      include_once 'vendor/Bootstrap/css/bundle.php';
+      include_once 'vendor/DataTables/css/bundle.php'; 
     ?>
     <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
-    <link rel="stylesheet" href="/asset/css/admin/style.css">
 </head>
 <body>
   <!--  Body Wrapper -->
@@ -36,27 +27,29 @@
     data-sidebar-position="fixed" data-header-position="fixed">
       <?php include 'views/admin/template/sidebar.php'; ?>
 
-
     <!--  Main wrapper -->
     <div class="body-wrapper">
       <?php include 'views/admin/template/header.php'; ?>
     
 
       <!-- Content Start -->
-        <?php include 'views/admin/content/groups-content.php'; ?>
+        <?php include 'views/admin/content/staff-content.php'; ?>
       <!-- Content End -->  
       
-      
+      <?php include 'views/admin/modals/staff-modal.php'; ?>
     </div>
   </div>
 
   <?php
     include_once 'vendor/jQuery/bundle.php';
-    include_once 'vendor/FontAwesome/kit.php';
+    include_once 'vendor/FontAwesome/kit.php';    
+    include_once 'vendor/DataTables/js/bundle.php';
     include_once 'vendor/Bootstrap/js/bundle.php'; 
   ?>
   <script src="/asset/js/admin/dashboard.js"></script>
   <script src="/asset/js/admin/mini-sidebar.js"></script>
   <script src="/asset/js/admin/sidebarmenu.js"></script>
+  <script src="/vendor/NotifyJS/js/notify.js"></script>
+  <script src="/asset/js/admin/staff.js"></script>
 </body>
 </html>

@@ -114,14 +114,6 @@
               <span class="hide-menu">People</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/groups" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-users fs-4"></i>
-                </span>
-                <span class="hide-menu">Groups</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
               <a class="sidebar-link" href="/users" aria-expanded="false">
                 <span>
                 <i class="fa-solid fa-user fs-4"></i>
