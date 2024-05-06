@@ -24,11 +24,20 @@
 
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch">
-                                        <input class="form-check-input status" type="checkbox" id="toggleSwitch" checked>
+                                        <input class="form-check-input status" 
+                                            type="checkbox" 
+                                            id="toggleSwitch"
+                                            data-user-id='.$user_id.'
+                                            checked
+                                        >
                                     </div>';
                         } else {
                             $status = '<div class="form-check form-switch">
-                                        <input class="form-check-input status" type="checkbox" id="toggleSwitch">
+                                        <input class="form-check-input status" 
+                                            type="checkbox" 
+                                            id="toggleSwitch"
+                                            data-user-id='.$user_id.'
+                                        >
                                     </div>';
                         }
 
@@ -196,6 +205,23 @@
                     $stmt->close();
                     $staff = $this->getStaff($email);
                     $this->addStaffGroup($staff['id'], $group);
+                    return '/staff';
+                } else {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+            } else {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+        }
+
+        public function updateStaff ($active, $id) {
+            $query = 'UPDATE user SET active = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $active, $id);
+            if ($stmt) {
+                if ($stmt->execute()) {
+                    $stmt->close();
                     return '/staff';
                 } else {
                     die("Error in executing statement: " . $stmt->error);
