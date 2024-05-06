@@ -56,6 +56,9 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
+    // Management and Reports
+    get('/manage-business', 'views/admin/manage-business.php');
+
     // People
     get('/users', 'views/admin/user.php');
     get('/staff', 'views/admin/staff.php');

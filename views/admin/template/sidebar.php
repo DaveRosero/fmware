@@ -28,11 +28,11 @@
               <span class="hide-menu">Management & Reports</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/manage-company" aria-expanded="false">
+              <a class="sidebar-link" href="/manage-business" aria-expanded="false">
                 <span>
                 <i class="fas fa-store fs-4"></i>
                 </span>
-                <span class="hide-menu">Business Info</span>
+                <span class="hide-menu">Manage Business</span>
               </a>
             </li>
             <li class="sidebar-item">
