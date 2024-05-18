@@ -10,30 +10,40 @@
             <div class="modal-body">
                 <div class="row mb-2">
                     <div class="col">
-                        <label for="" class="form-label">First Name<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="fname">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" name="fname" placeholder="" required>
+                            <label for="" class="form-label">First Name<span class="text-danger">*</span></label>
+                        </div>
                     </div>
                     <div class="col">
-                        <label for="" class="form-label">Last Name<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="lname" required>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col">
-                        <label for="" class="form-label">Email<span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" name="email" required>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" name="lname" placeholder="" required>
+                            <label for="" class="form-label">Last Name<span class="text-danger">*</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col">
-                        <label for="" class="form-label">Password<span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="password" id="password" required>
+                        <div class="form-floating mb-2">
+                            <input type="email" class="form-control" name="email" placeholder="" required>
+                            <label for="" class="form-label">Email<span class="text-danger">*</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col">
-                        <label for="" class="form-label">Confirm Password<span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="confirm" id="confirm" required>
+                        <div class="form-floating mb-2">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="" required>
+                            <label for="" class="form-label">Password<span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-floating mb-2">
+                            <input type="password" class="form-control" name="confirm" id="confirm" placeholder="" required>
+                            <label for="" class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3 form-check">
@@ -48,16 +58,20 @@
                 </div>
                 <div class="row mb-2">
                     <div class="col">
-                        <label for="" class="form-label">Mobile Number<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="phone" id="phone" required>
+                        <div class="form-floating mb-2">
+                            <input type="number" class="form-control" name="phone" id="phone" placeholder="" required>
+                            <label for="" class="form-label">Mobile Number<span class="text-danger">*</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col">
-                        <label for="" class="form-label">Position<span class="text-danger">*</span></label><br>
-                        <select class="form-select" name="group" required>
-                            <?php $staff->getPositions(); ?>
-                        </select>
+                        <div class="form-floating mb-2">
+                            <select class="form-select" name="group" required>
+                                <?php $staff->getPositions(); ?>
+                            </select>
+                            <label for="" class="form-label">Position<span class="text-danger">*</span></label>
+                        </div>
                     </div>
                 </div>
             </div>

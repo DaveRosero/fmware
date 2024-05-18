@@ -19,23 +19,7 @@ $(document).ready(function(){
         });
     }
 
-    $('#staff-table').DataTable({
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                className: 'btn btn-secondary',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
-        initComplete: function () {
-            var dataTableButtons = $('.dt-buttons');
-            $('#printButtonContainer').append(dataTableButtons);
-        }
-    });
+    $('#staff-table').DataTable();
 
     $('#show_password').change(function(){
         if ($(this).is(':checked')) {

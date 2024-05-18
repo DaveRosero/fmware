@@ -100,24 +100,9 @@ $(document).ready(function(){
     }
 
     $('#order-table').DataTable({
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                className: 'btn btn-secondary',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
         order: [
             [2, 'desc']
-        ],
-        initComplete: function () {
-            var dataTableButtons = $('.dt-buttons');
-            $('#printButtonContainer').append(dataTableButtons);
-        }
+        ]
     });
 
     $(document).on('click', '.viewOrder', function(){

@@ -20,8 +20,9 @@
       include_once 'vendor/DataTables/css/bundle.php'; 
     ?>
     <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
+    <link rel="stylesheet" href="/asset/css/admin/style.css">
 </head>
-<body>
+<body class="bg-light">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">

@@ -7,9 +7,7 @@
                     <h5 class="card-title fw-semibold mb-4">Order List</h5>
                 </div>
                 <div class="col text-end">
-                    <div id="printButtonContainer" class="d-inline-block">
-                        <!-- DataTables print button will be placed here -->
-                    </div>
+                    <button class="btn btn-secondary print"><i class="fa-solid fa-print"></i></button>
                 </div>
             </div>
             <table id="order-table">
@@ -20,7 +18,7 @@
                         <th>Date</th>
                         <th>Transaction</th>
                         <th>Payment</th>
-                        <th>Gross</th>
+                        <th>Total</th>
                         <th>Profit</th>
                         <th>Paid</th>
                         <th>Status</th>
