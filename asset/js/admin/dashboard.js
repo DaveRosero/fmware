@@ -54,7 +54,7 @@ $(document).ready(function(){
     curve: 'straight'
   },
   title: {
-    text: 'Product Trends by Month',
+    text: 'Weekly Sales Trend',
     align: 'left'
   },
   grid: {
