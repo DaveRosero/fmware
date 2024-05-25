@@ -1,17 +1,17 @@
     <!-- Sidebar Start -->
-    <aside class="left-sidebar">
+    <aside class="left-sidebar bg-dark"  style="height: 100vh; overflow-y: auto;">
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
           <a href="/dashboard" class="text-nowrap logo-img">
-            <img src="/asset/images/store/logo.png" width="180" alt="" />
+            <img src="/asset/images/store/logo.png" width="180" alt=""/>
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
           <i class="fa-solid fa-xmark fs-8"></i>
           </div>
         </div>
         <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+        <nav class="sidebar-nav p-2" data-simplebar="">
           <ul id="sidebarnav">
             <li class="nav-small-cap">
               <span class="hide-menu">Home</span>
@@ -160,8 +160,7 @@
               <span class="hide-menu">Archive</span>
             </li>
           </ul>
-          <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
-          </div> 
+          <div></div> 
         </nav>
         <!-- End Sidebar navigation -->
       </div>

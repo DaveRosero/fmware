@@ -12,9 +12,7 @@
                             Register Staff
                         </button>
                     </div>
-                    <div id="printButtonContainer" class="d-inline-block">
-                        <!-- DataTables print button will be placed here -->
-                    </div>
+                    <button class="btn btn-secondary print"><i class="fa-solid fa-print"></i></button>
                 </div>
             </div>
             <table id="staff-table">
