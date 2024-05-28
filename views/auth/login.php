@@ -68,11 +68,9 @@
                   <input
                     type="checkbox"
                     class="form-check-input"
-                    id="keepLogcheck"
+                    id="show_password"
                   />
-                  <label class="form-check-label" for="keepLogcheck"
-                    >Keep me logged in.</label
-                  >
+                  <label class="form-check-label" for="showPasscheck">Show password</label>
                 </div>
               </div>
               <div class="col-auto text-end">

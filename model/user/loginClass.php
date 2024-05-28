@@ -29,28 +29,28 @@
 
                     if (password_verify($_POST['password'], $hash)) {
                         $group_name = $this->getUserGroup($id);
-                        $_SESSION['user_id'] = $id;
-                        
+
                         if ($active == 0 && $code == NULL) {
                             $json['login_feedback'] = 'Your account has been disabled.';
                         } else if ($active == 0) {
                             $json['login_feedback'] = 'Your account is not yet verified. Please click the link sent to your email address to verify.';
                         } else {
                             $_SESSION['email'] = $email;
-                            if ($group_name == 'user'){
-                                $json['redirect'] = '/';
-                            } 
-                            
-                            if ($group_name == 'Delivery Rider') {
-                                $json['redirect'] = '/scan-qr';
-                            } 
-    
-                            if ($group_name == 'admin') {
-                                $json['redirect'] = '/dashboard';
-                            }
+                            $_SESSION['user_id'] = $id;
 
-                            if ($group_name == 'cashier') {
-                                $json['redirect'] == '/pos';
+                            switch ($group_name) {
+                                case 'user':
+                                    $json['redirect'] = '/';
+                                    break;
+                                case 'delivery':
+                                    $json['redirect'] = '/';
+                                    break;
+                                case 'admin':
+                                    $json['redirect'] = '/dashboard';
+                                    break;
+                                default:
+                                    $json['redirect'] = '/pos';
+                                    break;
                             }
                         }
 

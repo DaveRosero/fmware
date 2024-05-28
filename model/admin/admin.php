@@ -60,7 +60,7 @@
                     $stmt->fetch();
                     $stmt->close();
 
-                    if ($group_name == 'Delivery Rider') {
+                    if ($group_name == 'delivery') {
                         return null;
                     } else {
                         header('Location: /404');
