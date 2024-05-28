@@ -16,14 +16,14 @@
         public function login () {
             $json = array();
 
-            $query = 'SELECT id, email, password, active
+            $query = 'SELECT id, email, password, active, code
                     FROM user
                     WHERE email = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $_POST['email']);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $email, $hash, $active);
+                    $stmt->bind_result($id, $email, $hash, $active, $code);
                     $stmt->fetch();
                     $stmt->close();
 
@@ -31,7 +31,9 @@
                         $group_name = $this->getUserGroup($id);
                         $_SESSION['user_id'] = $id;
                         
-                        if ($active == 0) {
+                        if ($active == 0 && $code == NULL) {
+                            $json['login_feedback'] = 'Your account has been disabled.';
+                        } else if ($active == 0) {
                             $json['login_feedback'] = 'Your account is not yet verified. Please click the link sent to your email address to verify.';
                         } else {
                             $_SESSION['email'] = $email;
@@ -45,6 +47,10 @@
     
                             if ($group_name == 'admin') {
                                 $json['redirect'] = '/dashboard';
+                            }
+
+                            if ($group_name == 'cashier') {
+                                $json['redirect'] == '/pos';
                             }
                         }
 

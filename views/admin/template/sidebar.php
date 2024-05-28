@@ -24,9 +24,6 @@
                 <span class="hide-menu">Dashboard</span>
               </a>
             </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">Management & Reports</span>
-            </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="/manage-business" aria-expanded="false">
                 <span>
@@ -35,12 +32,15 @@
                 <span class="hide-menu">Manage Business</span>
               </a>
             </li>
+            <li class="nav-small-cap">
+              <span class="hide-menu">Transactions</span>
+            </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="/manage-sales" aria-expanded="false">
                 <span>
                 <i class="fas fa-money-bill fs-4"></i>
                 </span>
-                <span class="hide-menu">Sales</span>
+                <span class="hide-menu">Point of Sales</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -48,42 +48,7 @@
                 <span>
                 <i class="fas fa-file-invoice fs-4"></i>
                 </span>
-                <span class="hide-menu">Orders</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">Inventory</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/products" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-barcode fs-4"></i>
-                </span>
-                <span class="hide-menu">Products</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/price-list" aria-expanded="false">
-                <span>
-                <i class="fas fa-list-alt"></i>
-                </span>
-                <span class="hide-menu">Price List</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/stocks" aria-expanded="false">
-                <span>
-                <i class="fas fa-cube fs-4"></i>
-                </span>
-                <span class="hide-menu">Stocks</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/restocks" aria-expanded="false">
-                <span>
-                <i class="fas fa-dolly fs-4"></i>
-                </span>
-                <span class="hide-menu">Restocks</span>
+                <span class="hide-menu">Online Orders</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -100,6 +65,41 @@
                 <i class="fa-solid fa-arrow-right-arrow-left fs-4"></i>
                 </span>
                 <span class="hide-menu">Replacements</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <span class="hide-menu">Inventory</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/products" aria-expanded="false">
+                <span>
+                <i class="fa-solid fa-barcode fs-4"></i>
+                </span>
+                <span class="hide-menu">Products</span>
+              </a>
+            </li>
+            <!-- <li class="sidebar-item">
+              <a class="sidebar-link" href="/price-list" aria-expanded="false">
+                <span>
+                <i class="fas fa-list-alt"></i>
+                </span>
+                <span class="hide-menu">Price List</span>
+              </a>
+            </li> -->
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/stocks" aria-expanded="false">
+                <span>
+                <i class="fas fa-cube fs-4"></i>
+                </span>
+                <span class="hide-menu">Stocks</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/restocks" aria-expanded="false">
+                <span>
+                <i class="fas fa-dolly fs-4"></i>
+                </span>
+                <span class="hide-menu">Restocks</span>
               </a>
             </li>
             <li class="sidebar-item">
