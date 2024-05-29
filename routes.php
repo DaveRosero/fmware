@@ -43,11 +43,14 @@ require_once __DIR__.'/router.php';
     get('/register', 'views/auth/register.php');
     get('/verify-account/$code/$email', 'views/auth/verify.php');
     get('/verify-success', 'views/auth/verify-success.php');
+    get('/reset-password/$code/$email', 'views/auth/reset-password.php');
 
     // Auth Controller
     any('/user-login', 'controller/auth/login-controller.php');
     any('/user-register', 'controller/auth/register-controller.php');
     any('/logout', 'controller/auth/logout-controller.php');
+    any('/forgot-password', 'controller/auth/forgot-password.php');
+    any('/new-password', 'controller/auth/new-password.php');
 
 //*****************************************************************//
 
