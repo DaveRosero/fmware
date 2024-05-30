@@ -1,5 +1,6 @@
 <?php
     require_once 'model/user/user.php';
+    require_once 'model/user/registerClass.php';
     require_once 'vendor/PHPMailer/src/PHPMailer.php';
     require_once 'vendor/PHPMailer/src/SMTP.php';
     require_once 'vendor/PHPMailer/src/Exception.php';
@@ -221,6 +222,20 @@
         }
 
         public function resetPassword ($email, $password, $confirm) {
+            $register = new Register();
+
+            if (!$register->checkPasswordLength($password)) {
+                $json['reset_feedback'] = 'Password must be 8 characters';
+                echo json_encode($json);
+                return;
+            }
+
+            if (!$register->isAlphanumeric($password)) {
+                $json['reset_feedback'] = 'Password must consist of letters and numbers';
+                echo json_encode($json);
+                return;
+            }
+
             if ($password !== $confirm) {
                 $json['reset_feedback'] = 'Password does not match.';
                 echo json_encode($json);
