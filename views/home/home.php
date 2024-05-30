@@ -10,7 +10,9 @@
     $product = new Product();
     $cart = new Cart();
 
-    $home->redirectUser();
+    if (isset($_SESSION['group']) && isset($_SESSION['user_id']) && $_SESSION['group'] !== 'user') {
+        $home->redirectUser($_SESSION['group']);
+    }
     $user_info = $user->getUser($_SESSION['email'] ?? null);
 ?>
 <!DOCTYPE html>

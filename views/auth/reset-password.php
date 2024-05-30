@@ -1,4 +1,14 @@
-<?php include_once 'session.php'; ?>
+<?php 
+  include_once 'session.php'; 
+  require_once 'model/user/loginClass.php';
+
+  $login = new Login();
+
+  if (!$login->verifyCode($email, $code)) {
+    header('Location: /404');
+    exit();
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,42 +37,31 @@
           </h5>
         </div>
         <div class="col shadow bg-light p-4 rounded">
-          <form id="login">
+          <form id="reset-form">
             <div class="row mb-2">
-              <h1>Login</h1>
+              <h1>Reset Password</h1>
             </div><div class="container">
-              <p class="text-danger" id="login_feedback"></p>
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-center align-items-center mb-2">
-                        <div id="login_response" class="text-danger"></div>
-                    </div>
-                </div>
-              </div>
-            <div class="form-floating mb-2">
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                aria-describedby="emailHelp"
-                name="email"
-                required
-              />
-              <div id="emailHelp" class="form-text">Enter your email here.</div>
-              <label for="email">Email Address</label>
-            </div>
             <div class="form-floating mb-2">
               <input
                 type="password"
                 class="form-control"
                 id="password"
-                aria-describedby="passwordHelp"
+                aria-describedby="emailHelp"
                 name="password"
-                required
               />
-              <div id="passwordHelp" class="form-text">
-                Enter your password here.
-              </div>
-              <label for="password">Password</label>
+              <div  class="form-text">Enter your new password here.</div>
+              <label for="">New Password</label>
+            </div>
+            <div class="form-floating mb-2">
+              <input
+                type="password"
+                class="form-control"
+                id="confirm"
+                aria-describedby="emailHelp"
+                name="confirm"
+              />
+              <div  class="form-text">Confirm your new password here.</div>
+              <label for="">Confirm New Password</label>
             </div>
             <div class="row mb-2">
               <div class="col">
@@ -70,29 +69,22 @@
                   <input
                     type="checkbox"
                     class="form-check-input"
-                    id="show_password"
+                    id="show_new"
                   />
                   <label class="form-check-label" for="showPasscheck">Show password</label>
                 </div>
               </div>
-              <div class="col-auto text-end">
-                <div><a class="btn btn-ustyled text-primary" id="forgot-password">Forgot password</a></div>
-              </div>
             </div>
             <div class="row mb-2">
-              <button type="submit" class="btn btn-primary mb-2">Login</button>
-              <a class="btn btn-danger" href="/">Back</a>
+              <input type="hidden" name="email" value="<?php echo $email;?>">
+              <button type="submit" class="btn btn-primary mb-2">Reset Password</button>
+              <a class="btn btn-danger" href="/login">Back</a>
             </div>
           </form>
-            <div class="row text-center">
-              <p>Don't have an account? <a href="/register">Register</a></p>
-            </div>
         </div>
       </div>
     </div>
     <!--Content-->
-
-    <?php include_once 'views/auth/modals/forgot-password-modal.php'; ?>
 
     <?php
       include_once 'vendor/jQuery/bundle.php';
