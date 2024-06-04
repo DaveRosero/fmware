@@ -151,6 +151,7 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
           <div class="d-grid gap-2">
             <button class="btn btn-danger reset-cart">Clear</button>
             <button class="btn btn-success print">Print</button>
+            <button class="btn btn-success print">accept payment</button>
           </div>
         </div>
       </div>
