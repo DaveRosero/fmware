@@ -14,7 +14,7 @@
         <nav class="sidebar-nav p-2" data-simplebar="">
           <ul id="sidebarnav">
             <li class="nav-small-cap">
-              <span class="hide-menu">Homes</span>
+              <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="/dashboard" aria-expanded="false">
