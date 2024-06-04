@@ -149,7 +149,7 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
           </div>
           <h2 class="text-end" id="cart-total">Total: ₱0</h2>
           <div class="d-grid gap-2">
-            <button class="btn btn-danger reset-cart">TESTING</button>
+            <button class="btn btn-danger reset-cart">Clear</button>
             <button class="btn btn-success print">Print</button>
           </div>
         </div>
