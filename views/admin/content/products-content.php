@@ -12,12 +12,9 @@
                             New Product
                         </button>
                     </div>
-                    <div id="printButtonContainer" class="d-inline-block">
-                        <!-- DataTables print button will be placed here -->
-                    </div>
                 </div>
             </div>
-            <table id="product-table">
+            <table class="table table-borderless" id="product-table">
                 <thead>
                     <tr>
                         <th>Status</th>
