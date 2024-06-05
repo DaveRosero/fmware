@@ -10,10 +10,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Register | FMWare</title>
-    <?php 
-        include_once 'vendor/Bootstrap/css/bundle.php';
-        include_once 'vendor/Select2/css/bundle.php'; 
-      ?>
+    <?php
+      require_once 'config/load_vendors.php'; 
+    ?>
   </head>
   <body class="bg-light">
     <!--Content-->
@@ -213,12 +212,6 @@
     </div>
   </div>
 
-    <?php
-      include_once 'vendor/jQuery/bundle.php';
-      include_once 'vendor/FontAwesome/kit.php';
-      include_once 'vendor/Select2/js/bundle.php';
-      include_once 'vendor/Bootstrap/js/bundle.php'; 
-    ?>
     <script src="/vendor/NotifyJS/js/notify.js"></script>
     <script src="/asset/js/auth/register.js"></script>
   </body>

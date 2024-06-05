@@ -1,23 +1,8 @@
 $(document).ready(function(){
     $('#product-table').DataTable({
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                className: 'btn btn-secondary',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
         order: [
             [2, 'asc']
-        ],
-        initComplete: function () {
-            var dataTableButtons = $('.dt-buttons');
-            $('#printButtonContainer').append(dataTableButtons);
-        }
+        ]
     });
 
     $('#category').select2({
