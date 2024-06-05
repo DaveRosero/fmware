@@ -39,12 +39,7 @@
       
     </div>
   </div>
-
-
-  <?php
-    include_once 'vendor/jQuery/bundle.php';
-    include_once 'vendor/FontAwesome/kit.php';
-  ?>
+  
   <script src="/asset/js/admin/dashboard.js"></script>
   <script src="/asset/js/admin/mini-sidebar.js"></script>
   <script src="/asset/js/admin/sidebarmenu.js"></script>

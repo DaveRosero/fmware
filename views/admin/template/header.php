@@ -10,11 +10,35 @@
           </ul>
           <div class="navbar-collapse px-0" id="navbarNav">
             <div class="row">
-              <div class="col position-relative">
-                <i class="fa-solid fa-bell text-secondary fs-6"></i>
-                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                    5
-                </span>
+              <div class="col">
+                <button class="btn btn-primary text-black fw-semibold mx-2">
+                  <i class="fas fa-shipping-fast"></i>
+                  Deliveries Today: 6
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-success text-black fw-semibold mx-2">
+                  <i class="fas fa-cash-register"></i>
+                  Sales Today: 6
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-warning text-black fw-semibold mx-2">
+                  <i class="fas fa-spinner"></i>
+                  Pending Orders: 6
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-danger text-black fw-semibold mx-2">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  Low on Stocks: 6
+                </button>
               </div>
             </div>
           </div>
