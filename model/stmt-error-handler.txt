@@ -8,3 +8,12 @@ if ($stmt) {
 } else {
     die("Error in preparing statement: " . $this->conn->error);
 }
+
+if (!$stmt) {
+    die("Error in preparing statement: " . $this->conn->error);
+}
+
+if (!$stmt->execute()) {
+    die("Error in executing statement: " . $stmt->error);
+    $stmt->close();
+}
