@@ -12,7 +12,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <table class="table">
+                        <table class="table table-borderless" id="expenses-table">
                             <thead>
                                 <th>Description</th>
                                 <th>Amount</th>
@@ -35,16 +35,20 @@
                 <div class="card-body">
                     <div class="row align-items-start">
                         <div class="col ">
-                            <h5 class="card-title mb-9 fw-semibold">Salaries</h5>
+                            <h5 class="card-title mb-9 fw-semibold">Daily Wages</h5>
+                        </div>
+                        <div class="col text-end">
+                            <button class="btn btn-primary" id="add-expenses">Pay Employees</button>
                         </div>
                     </div>
                     <div class="row">
-                        <table class="table">
+                        <table class="table table-borderless" id="wage-table">
                             <thead>
                                 <th>Employee</th>
                                 <th>Position</th>
                                 <th>Amount</th>
                                 <th>Date</th>
+                                <th></th>
                             </thead>
                             <tbody>
                                 <tr>
