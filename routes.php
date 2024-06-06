@@ -64,6 +64,7 @@ require_once __DIR__.'/router.php';
 
     // Add Expenses Controller
     any('/add-expenses', 'controller/admin/manage-business/add-expenses.php');
+    any('/pay-employees', 'controller/admin/manage-business/pay-employees.php');
 
     // People
     get('/users', 'views/admin/user.php');
