@@ -45,22 +45,18 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
 <body style="max-height: 100vh;overflow-y: hidden;">
   <nav class="navbar navbar-expand-lg border-bottom">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png" alt="logo-img" style="width: 30px;" />FMWare</a>
+      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png" alt="logo-img" style="width: 30px;" />FMWare|POS</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
         </ul>
         <div class="dropdown">
           <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Username
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><a class="dropdown-item" href="#">Logout</a></li>
           </ul>
         </div>
@@ -106,7 +102,7 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
                   echo '<tr>
                                 <td class="align-middle"><img src="asset/images/products/' . $image . '" alt="" srcset="" style="width: 90px;"></td>
                                 <td class="align-middle">' . $name . '</td>
-                                <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
+                                <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
                                 <td class="align-middle">' . $variant . '</td>
                                 <td class="align-middle">' . $barcode . '</td>
                                 <td class="align-middle">' . $qty . '</td>
@@ -115,7 +111,7 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
                                     <button class="btn btn-primary cart-button" 
                                       data-product-id="' . $id . '"
                                       data-product-price="' . $unit_price . '"
-                                      ' . $disabled. '
+                                      ' . $disabled . '
                                     >
                                     <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -131,15 +127,15 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
       </div>
       <div class="col-5 left-section">
         <div class="col-body mt-2">
-          <div class="table-container" style="height: calc(100vh - 25vh);overflow-y: auto;">
+          <div class="table-container" style="height: calc(100vh - 31vh);overflow-y: auto;">
             <table class="table table-hover">
               <thead class="sticky-header" style="position: sticky;top: 0;">
                 <tr class="table-secondary">
                   <td>Product Name</td>
-                  <td>Price</td>
+                  <td>Unit</td>
+                  <td>Variant</td>
                   <td>QTY</td>
-                  <td>Discount</td>
-                  <td>Total Price</td>
+                  <td>Price</td>
                   <td>Action</td>
                 </tr>
               </thead>
@@ -147,11 +143,27 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
               </tbody>
             </table>
           </div>
-          <h2 class="text-end" id="cart-total">Total: ₱0</h2>
+          <h5 class="text-end" id="cart-total">Total: ₱0</h5>
+          <h5 class="text-end" id="change">Change: ₱0</h5>
+          <div class="d-flex gap-2 mb-2">
+            <div class="d-flex flex-column">
+              <label for="cart-discount" class="form-label">Cart Discount:</label>
+              <div class="input-group">
+                <input type="number" class="form-control" placeholder="0" id="cart-discount">
+                <button class="btn btn-outline-success discount-btn" type="button">Apply</button>
+              </div>
+            </div>
+            <div class="d-flex flex-column">
+              <label for="cash-received" class="form-label">Cash Received:</label>
+              <div class="input-group">
+                <input type="number" class="form-control" placeholder="0" id="cash-received">
+                <button class="btn btn-outline-success cashReceived-btn" type="button">Apply</button>
+              </div>
+            </div>
+          </div>
           <div class="d-grid gap-2">
             <button class="btn btn-danger reset-cart">Clear</button>
             <button class="btn btn-success print">Print</button>
-            <button class="btn btn-success print">Accept Payment</button>
           </div>
         </div>
       </div>
