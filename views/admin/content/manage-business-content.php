@@ -19,11 +19,7 @@
                                 <th>Date</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Gas</td>
-                                    <td>P100.00</td>
-                                    <td>May 26, 2024</td>
-                                </tr>
+                                <?php $manage->showExpenses(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -35,29 +31,22 @@
                 <div class="card-body">
                     <div class="row align-items-start">
                         <div class="col ">
-                            <h5 class="card-title mb-9 fw-semibold">Daily Wages</h5>
+                            <h5 class="card-title mb-9 fw-semibold">Daily Wages | <?php echo date('F j, Y'); ?></h5>
                         </div>
                         <div class="col text-end">
-                            <button class="btn btn-primary" id="add-expenses">Pay Employees</button>
+                            <button class="btn btn-primary" id="pay-employees">Pay Employees</button>
                         </div>
                     </div>
                     <div class="row">
                         <table class="table table-borderless" id="wage-table">
                             <thead>
-                                <th>Employee</th>
+                                <th>Name</th>
                                 <th>Position</th>
                                 <th>Amount</th>
-                                <th>Date</th>
-                                <th></th>
+                                <th>Status</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Yogi</td>
-                                    <td>Gas</td>
-                                    <td>P100.00</td>
-                                    <td>May 26, 2024</td>
-                                    <td><button class="btn btn-sm btn-secondary"><i class="fas fa-pencil-alt"></i></button></td>
-                                </tr>
+                                <?php $manage->showEmployees(); ?>
                             </tbody>
                         </table>
                     </div>

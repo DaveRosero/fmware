@@ -11,34 +11,38 @@
           <div class="navbar-collapse px-0" id="navbarNav">
             <div class="row">
               <div class="col">
-                <button class="btn btn-primary text-black fw-semibold mx-2">
-                  <i class="fas fa-shipping-fast"></i>
-                  Deliveries Today: 6
-                </button>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <button class="btn btn-success text-black fw-semibold mx-2">
+                <span class="badge bg-success text-black fw-semibold mx-2 py-6">
                   <i class="fas fa-cash-register"></i>
                   Sales Today: 6
-                </button>
+                </span>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <button class="btn btn-warning text-black fw-semibold mx-2">
-                  <i class="fas fa-spinner"></i>
-                  Pending Orders: 6
-                </button>
+                <span class="badge bg-primary text-black fw-semibold mx-2 py-6">
+                  <i class="fas fa-shipping-fast"></i>
+                  Deliveries Today: 6
+                </span>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <button class="btn btn-danger text-black fw-semibold mx-2">
-                  <i class="fas fa-exclamation-triangle"></i>
-                  Low on Stocks: 6
-                </button>
+                <a href="/manage-orders">
+                  <span class="badge bg-warning text-black fw-semibold mx-2 py-6">
+                    <i class="fas fa-spinner"></i>
+                    Pending Orders: 6
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <a href="/purchase-order">
+                  <span class="badge bg-danger text-black fw-semibold mx-2 py-6">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Low on Stocks: 6
+                  </span>
+                </a>
               </div>
             </div>
           </div>

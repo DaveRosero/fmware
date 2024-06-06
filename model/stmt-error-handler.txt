@@ -17,3 +17,9 @@ if (!$stmt->execute()) {
     die("Error in executing statement: " . $stmt->error);
     $stmt->close();
 }
+
+,
+error: function(jqXHR, textStatus, errorThrown) {
+    console.log("Error:", textStatus, errorThrown);
+    console.log("Response:", jqXHR.responseText);
+}
