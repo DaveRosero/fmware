@@ -103,7 +103,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/suppliers" aria-expanded="false">
+              <a class="sidebar-link" href="/manage-suppliers" aria-expanded="false">
                 <span>
                 <i class="fas fa-truck fs-4"></i>
                 </span>

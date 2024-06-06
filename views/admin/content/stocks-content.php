@@ -40,4 +40,3 @@
     </div>
     <!--Stocks Table End-->
 </div>
-

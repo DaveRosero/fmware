@@ -23,3 +23,22 @@ error: function(jqXHR, textStatus, errorThrown) {
     console.log("Error:", textStatus, errorThrown);
     console.log("Response:", jqXHR.responseText);
 }
+
+if ($active == 1) {
+    $status = '<div class="form-check form-switch">
+                <input class="form-check-input status" 
+                    type="checkbox" 
+                    id="toggleSwitch"
+                    data-user-id='.$user_id.'
+                    checked
+                >
+            </div>';
+} else {
+    $status = '<div class="form-check form-switch">
+                <input class="form-check-input status" 
+                    type="checkbox" 
+                    id="toggleSwitch"
+                    data-user-id='.$user_id.'
+                >
+            </div>';
+}
