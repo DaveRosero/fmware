@@ -19,11 +19,7 @@
                                 <th>Date</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Gas</td>
-                                    <td>P100.00</td>
-                                    <td>May 26, 2024</td>
-                                </tr>
+                                <?php $manage->showExpenses(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -36,6 +32,7 @@
                     <div class="row align-items-start">
                         <div class="col ">
                             <h5 class="card-title mb-9 fw-semibold">Daily Wages</h5>
+                            <?php echo time(); ?>
                         </div>
                         <div class="col text-end">
                             <button class="btn btn-primary" id="add-expenses">Pay Employees</button>

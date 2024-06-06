@@ -2,9 +2,11 @@
     include_once 'session.php';
     require_once 'model/admin/admin.php';
     require_once 'model/user/logoutClass.php';
+    require_once 'model/admin/manageClass.php';
 
     $admin = new Admin();
     $logout = new Logout();
+    $manage = new Manage();
     $admin->isAdmin();
 ?>
 <!DOCTYPE html>
