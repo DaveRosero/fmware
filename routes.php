@@ -119,6 +119,14 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
+    // Manage Supplier Views
+    get('/manage-suppliers', 'views/admin/suppliers.php');
+
+    // Manage Supplier Controller
+    any('/add-supplier', 'controller/admin/supplier/add-supplier.php');
+
+//*****************************************************************//
+
     // Maintenance Views
     get('/category', 'views/admin/category.php');
     get('/brands', 'views/admin/brands.php');
