@@ -9,7 +9,7 @@
     <title>FMWare</title>
     <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php 
-        include_once 'vendor/Bootstrap/css/bundle.php'; 
+      require_once 'config/load_vendors.php'; 
     ?>
   <style>
     body {

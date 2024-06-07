@@ -17,7 +17,7 @@
       <title>Login | FMWare</title>
       <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
       <?php 
-        include_once 'vendor/Bootstrap/css/bundle.php'; 
+        require_once 'config/load_vendors.php'; 
       ?>
   </head>
   <body class="bg-light">
@@ -86,11 +86,6 @@
     </div>
     <!--Content-->
 
-    <?php
-      include_once 'vendor/jQuery/bundle.php';
-      include_once 'vendor/FontAwesome/kit.php';
-      include_once 'vendor/Bootstrap/js/bundle.php'; 
-    ?>
     <script src="/asset/js/auth/login.js"></script>
   </body>
 </html>

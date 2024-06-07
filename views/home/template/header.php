@@ -39,17 +39,16 @@
                         </span>
                     </a>
                     <div class="dropdown">
+                        <a class="nav-icon position-relative text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="/account/settings">My Account</a>
                             <div class="dropdown-divider"></div>
                             <form action="/logout" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>
                             </form>
-
                         </div>
-                        <a class="nav-icon position-relative text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                        </a>
                     </div>
 
                 <?php elseif (!$user->isLoggedIn()): ?>

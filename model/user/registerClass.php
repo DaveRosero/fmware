@@ -65,10 +65,10 @@
         
             // Server settings
             $mail->isSMTP(); // Set mailer to use SMTP
-            $mail->Host = 'smtp.hostinger.com'; // Specify SMTP server
+            $mail->Host = 'smtp.gmail.com'; // Specify SMTP server
             $mail->SMTPAuth = true; // Enable SMTP authentication
-            $mail->Username = 'no-reply@fmware.shop'; // SMTP username
-            $mail->Password = 'Fmware2024!'; // SMTP password
+            $mail->Username = '21shingie@gmail.com'; // SMTP username
+            $mail->Password = 'mboi hjvb lbud zkrk'; // SMTP password
             $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
             $mail->Port = 587; // TCP port to connect to
         

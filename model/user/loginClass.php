@@ -38,19 +38,128 @@
             }
         }
 
+        public function getAttempts ($email) {
+            $query = 'SELECT attempts FROM user WHERE email = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $email);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($attempts);
+            $stmt->fetch();
+            $stmt->close();
+
+            return $attempts;
+        }
+
+        public function minusAttempt ($email) {
+            $attempts = $this->getAttempts($email);
+            if ($attempts === NULL) {
+                $newAttempts = 5;
+            } else {
+                $newAttempts = $attempts - 1;
+            }
+
+            $query = 'UPDATE user SET attempts = ? WHERE email = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('is', $newAttempts, $email);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function setNullAttempt ($email) {
+            $query = 'UPDATE user SET attempts = NULL WHERE email = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $email);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function lockAccount ($email) {
+            $active = 0;
+            $query = 'UPDATE user SET active = ? WHERE email = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('is', $active, $email);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function activateAccount ($email) {
+            $active = 1;
+            $query = 'UPDATE user SET active = ? WHERE email = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('is', $active, $email);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
         public function login () {
             $json = array();
 
-            $query = 'SELECT id, email, password, active, code
+            $query = 'SELECT id, email, password, active, code, attempts
                     FROM user
                     WHERE email = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $_POST['email']);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $email, $hash, $active, $code);
+                    $stmt->bind_result($id, $email, $hash, $active, $code, $attempts);
                     $stmt->fetch();
                     $stmt->close();
+
+                    if ($attempts == 0 && $attempts !== NULL) {
+                        $this->lockAccount($email);
+                        $json['login_feedback'] = 'Your account has been disabled indefinitely due to security reason. Please change your password using forgot password.';
+                        echo json_encode($json);
+                        return;
+                    }
 
                     if (password_verify($_POST['password'], $hash)) {
                         $group_name = $this->getUserGroup($id);
@@ -94,7 +203,9 @@
                         return;
                         return;
                     } else {
-                        $json['login_feedback'] = 'Invalid Email or Password. Please try again.';
+                        $this->minusAttempt($email);
+                        $attempts = $this->getAttempts($email);
+                        $json['login_feedback'] = 'Invalid Email or Password. Remaining attempts: '.$attempts;
                         echo json_encode($json);
                     }
                 } else {    
@@ -250,6 +361,8 @@
                 if ($stmt->execute()) {
                     $stmt->close();
                     $this->setCodeNull($email);
+                    $this->setNullAttempt($email);
+                    $this->activateAccount($email);
                     $json['redirect'] = '/login';
                     echo json_encode($json);
                     return;
