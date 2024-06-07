@@ -144,23 +144,6 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
             </table>
           </div>
           <h5 class="text-end" id="cart-total">Total: ₱0</h5>
-          <h5 class="text-end" id="change">Change: ₱0</h5>
-          <div class="d-flex gap-2 mb-2">
-            <div class="d-flex flex-column">
-              <label for="cart-discount" class="form-label">Cart Discount:</label>
-              <div class="input-group">
-                <input type="number" class="form-control" placeholder="0" id="cart-discount">
-                <button class="btn btn-outline-success discount-btn" type="button">Apply</button>
-              </div>
-            </div>
-            <div class="d-flex flex-column">
-              <label for="cash-received" class="form-label">Cash Received:</label>
-              <div class="input-group">
-                <input type="number" class="form-control" placeholder="0" id="cash-received">
-                <button class="btn btn-outline-success cashReceived-btn" type="button">Apply</button>
-              </div>
-            </div>
-          </div>
           <div class="d-grid gap-2">
             <button class="btn btn-danger reset-cart">Clear</button>
             <button class="btn btn-success print">Print</button>

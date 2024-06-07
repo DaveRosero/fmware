@@ -6,7 +6,6 @@ $mysqli = database();
 $query = 'SELECT price_list.unit_price,
                     product.image,
                     product.name,
-                    product.barcode,
                     stock.qty,
                     product.id
             FROM price_list
@@ -14,12 +13,11 @@ $query = 'SELECT price_list.unit_price,
             INNER JOIN product ON price_list.product_id = product.id';
 $stmt = $mysqli->prepare($query);
 $stmt->execute();
-$stmt->bind_result($unit_price, $image, $name, $barcode, $qty, $id);
+$stmt->bind_result($unit_price, $image, $name, $qty, $id);
 while ($stmt->fetch()) {
     echo '<tr>
               <td class="align-middle"><img src="asset/images/products/' . $image . '" alt="" srcset="" style="width: 90px;"></td>
               <td class="align-middle">' . $name . '</td>
-              <td class="align-middle">' . $barcode . '</td>
               <td class="align-middle">' . $qty . '</td>
               <td class="align-middle">₱' . number_format($unit_price) . '</td>
               <td class="align-middle">
