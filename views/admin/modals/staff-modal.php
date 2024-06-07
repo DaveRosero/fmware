@@ -67,12 +67,6 @@
                 <div class="row mb-2">
                     <div class="col">
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control" name="daily_wage" id="daily_wage" placeholder="" min="0" required>
-                            <label for="" class="form-label">Daily Wage<span class="text-danger">*</span></label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-floating mb-2">
                             <select class="form-select" name="group" required>
                                 <?php $staff->getPositions(); ?>
                             </select>
