@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-strip bg-danger"></div>
                 <div class="card-body">
-                    <h3>Wages & Expenses</h3>
+                    <h3>Expenses</h3>
                     <div class="row  align-items-center">
                         <div class="col-6">
                             <h5 class="text-center">P1,269,420.00</h5>
