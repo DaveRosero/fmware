@@ -10,7 +10,6 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 $query = 'SELECT price_list.unit_price,
                   product.image,
                   product.name,
-                  product.barcode,
                   product.unit_value,
                   stock.qty,
                   product.id,
@@ -27,7 +26,7 @@ $query = 'SELECT price_list.unit_price,
 $stmt = $mysqli->prepare($query);
 $stmt->bind_param('ss', $search, $search); // Bind search parameter twice for both placeholders
 $stmt->execute();
-$stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id, $unit, $variant);
+$stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $variant);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,9 +85,8 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
                 <tr class="table-secondary">
                   <td>Image</td>
                   <td>Product Name</td>
-                  <td>Unit</td>
                   <td>Variant</td>
-                  <td>Barcode</td>
+                  <td>Unit</td>
                   <td>Stock</td>
                   <td>Price</td>
                   <td>Action</td>
@@ -98,13 +96,11 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
                 <?php
                 while ($stmt->fetch()) {
                   $disabled = ($qty == 0) ? 'disabled' : '';
-
                   echo '<tr>
                                 <td class="align-middle"><img src="asset/images/products/' . $image . '" alt="" srcset="" style="width: 90px;"></td>
                                 <td class="align-middle">' . $name . '</td>
-                                <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
                                 <td class="align-middle">' . $variant . '</td>
-                                <td class="align-middle">' . $barcode . '</td>
+                                <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
                                 <td class="align-middle">' . $qty . '</td>
                                 <td class="align-middle">₱' . number_format($unit_price) . '</td>
                                 <td class="align-middle">
@@ -132,8 +128,8 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
               <thead class="sticky-header" style="position: sticky;top: 0;">
                 <tr class="table-secondary">
                   <td>Product Name</td>
-                  <td>Unit</td>
                   <td>Variant</td>
+                  <td>Unit</td>
                   <td>QTY</td>
                   <td>Price</td>
                   <td>Action</td>
@@ -144,23 +140,6 @@ $stmt->bind_result($unit_price, $image, $name, $barcode, $unit_value, $qty, $id,
             </table>
           </div>
           <h5 class="text-end" id="cart-total">Total: ₱0</h5>
-          <h5 class="text-end" id="change">Change: ₱0</h5>
-          <div class="d-flex gap-2 mb-2">
-            <div class="d-flex flex-column">
-              <label for="cart-discount" class="form-label">Cart Discount:</label>
-              <div class="input-group">
-                <input type="number" class="form-control" placeholder="0" id="cart-discount">
-                <button class="btn btn-outline-success discount-btn" type="button">Apply</button>
-              </div>
-            </div>
-            <div class="d-flex flex-column">
-              <label for="cash-received" class="form-label">Cash Received:</label>
-              <div class="input-group">
-                <input type="number" class="form-control" placeholder="0" id="cash-received">
-                <button class="btn btn-outline-success cashReceived-btn" type="button">Apply</button>
-              </div>
-            </div>
-          </div>
           <div class="d-grid gap-2">
             <button class="btn btn-danger reset-cart">Clear</button>
             <button class="btn btn-success print">Print</button>

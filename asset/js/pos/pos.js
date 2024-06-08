@@ -9,24 +9,28 @@ function generatePrintableContent() {
   var total = $("#cart-total").text();
   var salesReceiptNumber = "FMx0001";
   var customerName = "Customer Name";
-  var vat = 0.12;
-  var expiryDate = "03-31-24";
+  var address = "Address";
+  var delivererName = "Deliverer Name ";
+  var purchasedDate = new Date().toLocaleDateString(); // Get the current date
 
   $("#cart-body tr").each(function () {
     var name = $(this).find("td:eq(0)").text();
+    var variant = $(this).find("td:eq(1)").text();
+    var unit = $(this).find("td:eq(2)").text();
     var qty = $(this).find(".qty-input").val();
     var price = $(this).find("td:eq(4)").text();
-    var discount = $(this).find(".discount").val();
 
     content +=
       '<tr><td class="center">' +
       name +
       '</td><td class="center">' +
+      variant +
+      '</td><td class="center">' +
+      unit +
+      '</td><td class="center">' +
       qty +
       '</td><td class="center">' +
       price +
-      '</td><td class="center">₱' +
-      discount + 
       "</td></tr>";
   });
 
@@ -42,8 +46,6 @@ function generatePrintableContent() {
     ".center { text-align: center; }" +
     ".signature { margin-top: 30px; }" +
     ".signature p { text-align: center; margin-top: 50px; }" +
-    ".vat { text-align: right; }" +
-    ".discount { text-align: right; }" +
     "</style>" +
     '<div class="receipt">' +
     '<div class="header">' +
@@ -60,14 +62,25 @@ function generatePrintableContent() {
     "<p>Customer Name: " +
     customerName +
     "</p>" +
+    "<p>Address: " +
+    address +
+    "</p>" +
+    "<p>Deliverer: " +
+    delivererName +
+    "</p>" +
+    "<p>Date of Purchase: " +
+    purchasedDate +
+    "</p>" +
     "<table>" +
-    "<thead><tr><th>Item</th><th>Quantity</th><th>Price</th><th>Discount</th></tr></thead>" +
+    "<thead><tr><th>Item</th><th>Variant</th><th>Unit</th><th>Quantity</th><th>Price</th></tr></thead>" +
     "<tbody>" +
     content +
     "</tbody>" +
     "</table>" +
     '<div class="total">' +
+    "<p>Discount: ₱</p>" +
     total +
+    "<p>Change: ₱</p>" +
     "</span></div>" +
     '<div class="signature">' +
     "<p>Staff Signature:__________</p>" +
@@ -90,14 +103,25 @@ function generatePrintableContent() {
     "<p>Customer Name: " +
     customerName +
     "</p>" +
+    "<p>Address: " +
+    address +
+    "</p>" +
+    "<p>Deliverer: " +
+    delivererName +
+    "</p>" +
+    "<p>Date of Purchase: " +
+    purchasedDate +
+    "</p>" +
     "<table>" +
-    "<thead><tr><th>Item</th><th>Quantity</th><th>Price</th><th>Discount</th></tr></thead>" +
+    "<thead><tr><th>Item</th><th>Variant</th><th>Unit</th><th>Quantity</th><th>Price</th></tr></thead>" +
     "<tbody>" +
     content +
     "</tbody>" +
     "</table>" +
     '<div class="total">' +
+    "<p>Discount: ₱</p>" +
     total +
+    "<p>Change: ₱</p>" +
     "</span></div>" +
     '<div class="signature">' +
     "<p>Staff Signature:__________</p>" +

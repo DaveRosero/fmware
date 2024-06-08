@@ -6,24 +6,25 @@ $mysqli = database();
 $query = 'SELECT pos_cart.product_id,
                     pos_cart.qty,
                     pos_cart.price,
-                    pos_cart.discount,
-                    product.name
+                    product.name,
+                    product.unit_value,
+                    unit.name,
+                    variant.name
                 FROM pos_cart
-                INNER JOIN product ON pos_cart.product_id = product.id';
+                INNER JOIN product ON pos_cart.product_id = product.id
+                INNER JOIN variant ON variant.id = product.variant_id
+                INNER JOIN unit ON unit.id = product.unit_id';
 $stmt = $mysqli->prepare($query);
 $stmt->execute();
-$stmt->bind_result($id, $qty, $price, $discount, $name);
+$stmt->bind_result($id, $qty, $price, $name, $unit_value, $unit, $variant);
 $tbody = '';
 $cart_total = array();
 while ($stmt->fetch()) {
     $total_price = $price * $qty;   
-    if ($discount != 0) {
-        // $discount_value = $total_price * ($discount / 100);
-        $total_price -= $discount;
-    }
     $tbody .= '<tr>
                     <td class="align-middle">' . $name . '</td>
-                    <td class="align-middle">₱' . $price . '</td>
+                    <td class="align-middle">' . $variant . '</td>
+                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
                     <td class="align-middle">
                         <div class="input-group">
                             <button 
@@ -38,7 +39,7 @@ while ($stmt->fetch()) {
                                 type="text" 
                                 class="form-control text-center w-20 qty-input" 
                                 value="' . $qty . '" 
-                                style="max-width: 100px;"
+                                style="max-width: 50px;"
                             >
                             <button 
                                 class="btn btn-sm btn-outline-secondary add-qty" 
@@ -47,24 +48,6 @@ while ($stmt->fetch()) {
                                 data-product-qty="' . $qty . '"
                             >
                             <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td class="align-middle">
-                        <div class="input-group">
-                            <input 
-                                type="number" 
-                                class="form-control text-center w-20 discount" 
-                                value="' . $discount . '"
-                                style="max-width: 80px;"
-                            >
-                            <button 
-                            class="btn btn-sm btn-outline-secondary apply-discount" 
-                            type="button"
-                            data-product-id="' . $id . '"
-                            data-product-discount="' . $discount . '"
-                            >
-                            Apply
                             </button>
                         </div>
                     </td>
