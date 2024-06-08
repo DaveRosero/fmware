@@ -47,6 +47,7 @@ function generatePrintableContent() {
     ".signature { margin-top: 30px; }" +
     ".signature p { text-align: center; margin-top: 50px; }" +
     "</style>" +
+    
     '<div class="receipt">' +
     '<div class="header">' +
     '<img src="' +
@@ -55,48 +56,6 @@ function generatePrintableContent() {
     "<h1>F.M. ODULIOS ENTERPRISES AND GEN. MERCHANDISE</h1>" +
     "<p>Mc Arthur HI-way, Poblacion II, Marilao, Bulacan</p>" +
     "</div>" +
-    "<h2>Sales Receipt - Original Copy</h2>" +
-    "<p>Sales Receipt Number: " +
-    salesReceiptNumber +
-    "</p>" +
-    "<p>Customer Name: " +
-    customerName +
-    "</p>" +
-    "<p>Address: " +
-    address +
-    "</p>" +
-    "<p>Deliverer: " +
-    delivererName +
-    "</p>" +
-    "<p>Date of Purchase: " +
-    purchasedDate +
-    "</p>" +
-    "<table>" +
-    "<thead><tr><th>Item</th><th>Variant</th><th>Unit</th><th>Quantity</th><th>Price</th></tr></thead>" +
-    "<tbody>" +
-    content +
-    "</tbody>" +
-    "</table>" +
-    '<div class="total">' +
-    "<p>Discount: ₱</p>" +
-    total +
-    "<p>Change: ₱</p>" +
-    "</span></div>" +
-    '<div class="signature">' +
-    "<p>Staff Signature:__________</p>" +
-    "<p>Customer Signature:__________</p>" +
-    "</div>" +
-    "</div>" +
-
-    '<div class="receipt">' +
-    '<div class="header">' +
-    '<img src="' +
-    logosrc +
-    '" alt="Company Logo" class="logo">' +
-    "<h1>F.M. ODULIOS ENTERPRISES AND GEN. MERCHANDISE</h1>" +
-    "<p>Mc Arthur HI-way, Poblacion II, Marilao, Bulacan</p>" +
-    "</div>" +
-    "<h2>Sales Receipt - Customer Copy</h2>" +
     "<p>Sales Receipt Number: " +
     salesReceiptNumber +
     "</p>" +
@@ -128,7 +87,6 @@ function generatePrintableContent() {
     "<p>Customer Signature:__________</p>" +
     "</div>" +
     "</div>";
-
   return printableContent;
 }
 

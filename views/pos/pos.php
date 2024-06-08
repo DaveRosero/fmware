@@ -56,7 +56,7 @@ $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $v
             Username
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="/login">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -67,55 +67,41 @@ $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $v
       <div class="col right-section border-end">
         <div class="col-body mt-2">
           <div class="table-container" style="height: calc(100vh - 12vh);overflow-y: auto;">
-            <!-- <div class="col">
-                <form id="barcode-form">
-                    <label for="barcode">Scan Barcode here</label>
-                    <input type="text" name="barcode" id="barcode">
-                    <button type="submit" class="cart-button">Search</button>
-                </form>
-            </div> -->
 
             <form class="d-flex" role="search" id="barcode-form">
               <input class="form-control me-2" type="text" name="barcode" id="barcode" placeholder="Search">
               <button class="btn btn-outline-success cart-button" type="submit">Search</button>
             </form>
             <br>
-            <table class="table table-hover">
-              <thead class="sticky-header" style="position: sticky;top: 0;">
-                <tr class="table-secondary">
-                  <td>Image</td>
-                  <td>Product Name</td>
-                  <td>Variant</td>
-                  <td>Unit</td>
-                  <td>Stock</td>
-                  <td>Price</td>
-                  <td>Action</td>
-                </tr>
-              </thead>
               <tbody>
-                <?php
-                while ($stmt->fetch()) {
-                  $disabled = ($qty == 0) ? 'disabled' : '';
-                  echo '<tr>
-                                <td class="align-middle"><img src="asset/images/products/' . $image . '" alt="" srcset="" style="width: 90px;"></td>
-                                <td class="align-middle">' . $name . '</td>
-                                <td class="align-middle">' . $variant . '</td>
-                                <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
-                                <td class="align-middle">' . $qty . '</td>
-                                <td class="align-middle">₱' . number_format($unit_price) . '</td>
-                                <td class="align-middle">
+                <div class="row">
+                  <?php
+                  while ($stmt->fetch()) {
+                      $disabled = ($qty == 0) ? 'disabled' : '';
+                      echo '
+                        <div class="col-md-4 mb-4">
+                            <div class="card" style="width: 18rem;">
+                                <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '" style="height: 200px; object-fit: contain;">
+                                <div class="card-body">
+                                    <h5 class="card-title">' . $name . '</h5>
+                                    <p class="card-text">Variant: ' . $variant . '</p>
+                                    <p class="card-text">Unit: ' . $unit_value . ' ' . strtoupper($unit) . '</p>
+                                    <p class="card-text">Stock: ' . $qty . '</p>
+                                    <p class="card-text">Price: ₱' . number_format($unit_price) . '</p>
                                     <button class="btn btn-primary cart-button" 
-                                      data-product-id="' . $id . '"
-                                      data-product-price="' . $unit_price . '"
-                                      ' . $disabled . '
+                                        data-product-id="' . $id . '"
+                                        data-product-price="' . $unit_price . '"
+                                        ' . $disabled . '
                                     >
-                                    <i class="fas fa-cart-plus"></i>
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
                                     </button>
-                                </td>
-                            </tr>';
-                }
-                $stmt->close();
-                ?>
+                                </div>
+                            </div>
+                      </div>';
+                  }
+                  $stmt->close();
+                  ?>
+                </div>
               </tbody>
             </table>
           </div>
@@ -143,6 +129,7 @@ $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $v
           <div class="d-grid gap-2">
             <button class="btn btn-danger reset-cart">Clear</button>
             <button class="btn btn-success print">Print</button>
+            <!-- <button class="btn btn-success print">Print</button> -->
           </div>
         </div>
       </div>
@@ -154,5 +141,4 @@ $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $v
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
   <script src="asset/js/pos/pos.js"></script>
 </body>
-
 </html>
