@@ -1,14 +1,3 @@
-if ($stmt) {
-    if ($stmt->execute()) {
-
-    } else {
-        die("Error in executing statement: " . $stmt->error);
-        $stmt->close();
-    }
-} else {
-    die("Error in preparing statement: " . $this->conn->error);
-}
-
 if (!$stmt) {
     die("Error in preparing statement: " . $this->conn->error);
 }

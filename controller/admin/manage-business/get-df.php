@@ -4,7 +4,7 @@
     $manage = new Manage();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $manage->payEmployees($_POST['staff']);
+        $manage->getDeliveryFee($_POST['id']);
     } else {
         header('Location: /404');
         exit();
