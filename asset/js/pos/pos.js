@@ -130,7 +130,7 @@ $(document).ready(function () {
         console.log("AJAX call successful");
         console.log("Response:", response);
         $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Total: ₱" + response.cart_total);
+        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
       }
     })
   }
@@ -193,7 +193,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Total: ₱" + response.cart_total);
+        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
       },
     });
   });
@@ -212,7 +212,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Total: ₱" + response.cart_total);
+        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
       },
     });
   });
@@ -231,12 +231,12 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Total: ₱" + response.cart_total);
+        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
       },
     });
   });
 
-  $(".cart-button").on("click", function () {
+  $(document).on("click", ".cart-button", function () {
     var id = $(this).data("product-id");
     var price = $(this).data("product-price");
     $.ajax({
@@ -251,7 +251,7 @@ $(document).ready(function () {
         console.log("AJAX call successful");
         console.log("Response:", response);
         $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Total: ₱" + response.cart_total);
+        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
       },
       error: function (xhr, status, error) {
         console.log("AJAX call failed");
@@ -277,7 +277,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Total: ₱" + response.cart_total);
+        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
       },
     });
   });
@@ -287,7 +287,7 @@ $(document).ready(function () {
       success: function () {
         $("#cart-body").empty();
         $("#cart-total").empty();
-        $("#cart-total").text("Total: ₱0");
+        $("#cart-total").text("Subtotal: ₱0");
       },
     });
   });
