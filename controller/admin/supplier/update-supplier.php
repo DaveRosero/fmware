@@ -5,7 +5,7 @@
     $supplier = new Supplier();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $supplier->adddSupplier($_POST['supplier'], $_POST['email'], $_POST['contact'], $_POST['phone'], $_POST['address']);
+        $supplier->updateSupplierStatus($_POST['active'], $_POST['id']);
     } else {
         header('Location: /404');
         exit();

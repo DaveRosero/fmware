@@ -183,6 +183,7 @@
                         $_SESSION['email'] = $email;
                         $_SESSION['user_id'] = $id;
                         $_SESSION['group'] = $group_name;
+                        $this->setNullAttempt($email);
 
                         switch ($group_name) {
                             case 'user':
