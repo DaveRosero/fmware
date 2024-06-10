@@ -12,16 +12,19 @@
                             Add Supplier
                         </button>
                     </div>
-                    <button class="btn btn-secondary print"><i class="fa-solid fa-print"></i></button>
+                    <!-- <button class="btn btn-secondary print"><i class="fa-solid fa-print"></i></button> -->
                 </div>
             </div>
             <table class="table table-borderless" id="suppliers-table">
                 <thead>
-                    <th></th>
+                    <th>Status</th>
                     <th>Supplier</th>
                     <th>Email</th>
+                    <th>Contact Person</th>
                     <th>Phone</th>
                     <th>Address</th>
+                    <th>Date Added</th>
+                    <th></th>
                 </thead>
                 <tbody>
                     <?php $supplier->showSupplier(); ?>

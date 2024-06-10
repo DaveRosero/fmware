@@ -128,6 +128,9 @@ require_once __DIR__.'/router.php';
 
     // Manage Supplier Controller
     any('/add-supplier', 'controller/admin/supplier/add-supplier.php');
+    any('/get-supplier', 'controller/admin/supplier/get-supplier.php');
+    any('/edit-supplier', 'controller/admin/supplier/edit-supplier.php');
+    any('/update-supplier', 'controller/admin/supplier/update-supplier.php');
 
 //*****************************************************************//
 
