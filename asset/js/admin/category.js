@@ -1,20 +1,8 @@
 $(document).ready(function(){
     $('#category-table').DataTable({
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                className: 'btn btn-secondary',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
-        initComplete: function () {
-            var dataTableButtons = $('.dt-buttons');
-            $('#printButtonContainer').append(dataTableButtons);
-        }
+        order: [
+            [1, 'asc']
+        ]
     });
 
     $('#new-category').on('submit', function(event){
