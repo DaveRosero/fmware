@@ -72,24 +72,25 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
               <thead class="table-secondary">
                 <tr>
                   <th>Item Name</th>
-                  <th>Unit</th>
                   <th>Variant</th>
+                  <th>Unit</th>
                   <th>Quantity</th>
                   <th>Price</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id= "cart-body">
+              <tbody id="cart-body">
               </tbody>
             </table>
           </div>
           <div class="row cartSection-footer border-top">
             <h5 class="text-end" id="cart-total">Subtotal: ₱0</h5>
             <div class="d-grid gap-2">
-            <button class="btn btn-danger reset-cart">Clear</button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal">
-              Checkout
-            </button>
+              <button class="btn btn-danger reset-cart">Clear</button>
+              <!-- Checkout Button -->
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal" id="checkout-button">
+                Checkout
+              </button>
             </div>
           </div>
           <?php include_once 'modal/checkout-modal.php' ?>
