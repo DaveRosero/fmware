@@ -27,6 +27,16 @@
             </div>
             <div class="row">
               <div class="col">
+                <a href="/purchase-order">
+                  <span class="badge bg-secondary text-black fw-semibold mx-2 py-6">
+                    <i class="fas fa-undo"></i>
+                    Returns Today: 6
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
                 <a href="/manage-orders">
                   <span class="badge bg-warning text-black fw-semibold mx-2 py-6">
                     <i class="fas fa-spinner"></i>

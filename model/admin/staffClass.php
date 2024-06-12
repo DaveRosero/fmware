@@ -5,17 +5,16 @@
         public function getStaffList () {
             $query = 'SELECT 
                         user.id, user.firstname, user.lastname, user.email, user.phone, user.active,
-                        user_group.user_id, user_group.group_id, groups.name, daily_wage.amount
+                        user_group.user_id, user_group.group_id, groups.name
                     FROM user
                     INNER JOIN user_group ON user_group.user_id = user.id
-                    INNER JOIN groups ON user_group.group_id = groups.id
-                    INNER JOIN daily_wage ON daily_wage.user_id = user.id';
+                    INNER JOIN groups ON user_group.group_id = groups.id';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result(
                         $id, $fname, $lname, $email, $phone, $active,
-                        $user_id, $group_id, $group_name, $daily_wage
+                        $user_id, $group_id, $group_name
                     );
 
                     while ($stmt->fetch()) {
@@ -48,7 +47,6 @@
                                 <td>'.$name.'</td>
                                 <td>'.$email.'</td>
                                 <td>'.$phone.'</td>
-                                <td>₱'.number_format($daily_wage, 2).'</td>
                                 <td>'.ucfirst($group_name).'</td>
                             </tr>';
                     }
@@ -165,26 +163,6 @@
             return strlen($password) >= 8;
         }
 
-        public function addWage ($id, $amount) {
-            $query = 'INSERT INTO daily_wage
-                        (amount, user_id)
-                    VALUES (?,?)';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ii', $amount, $id);
-
-            if (!$stmt) {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-            
-            if (!$stmt->execute()) {
-                die("Error in executing statement: " . $stmt->error);
-                $stmt->close();
-            }
-
-            $stmt->close();
-            return;
-        }
-
         public function regStaff () {
             $fname = ucfirst($_POST['fname']);
             $lname = ucfirst($_POST['lname']);
@@ -193,7 +171,6 @@
             $confirm = $_POST['confirm'];
             $phone = $_POST['phone'];
             $group = $_POST['group'];
-            $daily_wage = $_POST['daily_wage'];
             $active = 1;
 
             if ($this->accountExist($email)){ 
@@ -228,7 +205,6 @@
                     $stmt->close();
                     $staff = $this->getStaff($email);
                     $this->addStaffGroup($staff['id'], $group);
-                    $this->addWage($staff['id'], $daily_wage);
                     return '/staff';
                 } else {
                     die("Error in executing statement: " . $stmt->error);

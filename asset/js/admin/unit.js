@@ -1,20 +1,8 @@
 $(document).ready(function(){
     $('#unit-table').DataTable({
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                className: 'btn btn-secondary',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
-        initComplete: function () {
-            var dataTableButtons = $('.dt-buttons');
-            $('#printButtonContainer').append(dataTableButtons);
-        }
+        order: [
+            [1, 'asc']
+        ]
     });
 
     $('#new-unit').on('submit', function(event){

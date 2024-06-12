@@ -17,14 +17,13 @@
                     </div>
                 </div>
             </div>
-            <table id="category-table">
+            <table class="table table-borderless" id="category-table">
                 <thead>
                     <tr>
                         <th>Status</th>
                         <th>Category</th>
-                        <th>Author</th>
                         <th>Date Added</th>
-                        <th>Action</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>

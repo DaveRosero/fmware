@@ -59,14 +59,14 @@
                 <span class="hide-menu">Returns</span>
               </a>
             </li>
-            <li class="sidebar-item">
+            <!-- <li class="sidebar-item">
               <a class="sidebar-link" href="/replacements" aria-expanded="false">
                 <span>
                 <i class="fa-solid fa-arrow-right-arrow-left fs-4"></i>
                 </span>
                 <span class="hide-menu">Replacements</span>
               </a>
-            </li>
+            </li> -->
             <li class="nav-small-cap">
               <span class="hide-menu">Inventory</span>
             </li>
