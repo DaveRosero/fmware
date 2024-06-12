@@ -1,4 +1,25 @@
 $(document).ready(function(){
+    function updateProductStatus (active, id) {
+        $.ajax({
+            url: '/disable-product',
+            method: 'POST',
+            data: {
+                active : active,
+                id : id
+            },
+            dataType: 'json',
+            success: function(json) {
+                if (json.redirect) {
+                    window.location.href = json.redirect;
+                }
+                $('#discount').val(json.cart_total);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        })
+    }
     $('#product-table').DataTable({
         order: [
             [2, 'asc']
@@ -9,28 +30,32 @@ $(document).ready(function(){
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select or type a category'
+        placeholder: 'Select or type a category',
+        theme: 'bootstrap-5'
     });
 
     $('#brand').select2({
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select or type a brand'
+        placeholder: 'Select or type a brand',
+        theme: 'bootstrap-5'
     });
 
     $('#unit').select2({
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select or type a measurement'
+        placeholder: 'Select or type a measurement',
+        theme: 'bootstrap-5'
     });
 
     $('#variant').select2({
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select a variant of the product'
+        placeholder: 'Select a variant of the product',
+        theme: 'bootstrap-5'
     });
 
     $('#new-product').on('submit', function(event){
@@ -55,22 +80,17 @@ $(document).ready(function(){
         });
     });
 
-    $('.status').on('click', function(){
-        $.ajax({
-            url: '/disable-product',
-            method: 'POST',
-            data: {
-                id : $(this).data('product-id'),
-                status : $(this).data('product-status')
-            },
-            dataType: 'json', 
-            success: function(feedback){
-                if (feedback.redirect) {
-                    window.location.href = feedback.redirect;
-                }
-            }
-        });
-    });
+    $('.status').change(function(){
+        if ($(this).is(':checked')) {
+            var id = $(this).data('product-id');
+            var active = 1;
+            updateProductStatus(active, id);
+        } else {
+            var id = $(this).data('product-id');
+            var active = 0;
+            updateProductStatus(active, id);
+        }
+    })
 
     $('.edit').on('click', function(){
         $('#edit-label').html('Editing <strong>"' + $(this).data('product-name') + '</strong>"');

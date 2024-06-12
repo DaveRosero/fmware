@@ -319,6 +319,20 @@
             }
         }
 
+        public function stockLegend ($qty, $critical_level) {
+            if ($qty == 0) {
+
+            }
+
+            if ($qty <= $critical_level) {
+
+            }
+
+            if ($qty > $critical_level) {
+
+            }
+        }
+
         public function getProducts () {
             $query = 'SELECT
                         product.id,
@@ -331,29 +345,34 @@
                         brand.name,
                         category.name,
                         unit.name,
-                        variant.name 
+                        variant.name,
+                        price_list.base_price,
+                        price_list.unit_price,
+                        stock.qty,
+                        stock.critical_level 
                     FROM product
                     INNER JOIN user ON user.id = product.user_id
                     INNER JOIN brand ON brand.id = product.brand_id
                     INNER JOIN category ON category.id = product.category_id
                     INNER JOIN unit ON unit.id = product.unit_id
-                    INNER JOIN variant ON variant.id = product.variant_id';
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN price_list ON price_list.product_id = product.id
+                    INNER JOIN stock ON stock.product_id = product.id';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant, $base_price, $selling_price, $stock, $critical_level);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch">
-                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'" data-product-status="'.$active.'" checked>
+                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'" checked>
                                         </div>';
                         } else {
                             $status = '<div class="form-check form-switch">
-                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'" data-product-status="'.$active.'">
+                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'">
                                         </div>';
                         }
-                        $initial = substr($lname, 0, 1);
-                        $author = $fname.' '.$initial.'.';
+
                         echo '<tr>
                                 <td>'.$status.'</td>
                                 <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
@@ -362,6 +381,9 @@
                                 <td>'.$brand.'</td>
                                 <td>'.$category.'</td>
                                 <td>'.$unit_value.' '.strtoupper($unit).'</td>
+                                <td>₱'.number_format($base_price, 2).'</td>
+                                <td>₱'.number_format($selling_price, 2).'</td>
+                                <td>'.$stock.'</td>
                                 <td>
                                     <button 
                                         class="btn btn-sm btn-primary view" 
@@ -378,15 +400,7 @@
                                         data-product-name="'.$name.'"
                                     >
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button 
-                                        class="btn btn-sm btn-danger delete" 
-                                        type="button" 
-                                        data-product-id="'.$id.'" 
-                                        data-product-name="'.$name.'"
-                                    >
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>                                   
+                                    </button>                               
                                 </td>
                             </tr>';
                     }
@@ -398,6 +412,28 @@
             } else {
                 die("Error in preparing statement: " . $this->conn->error);
             }
+        }
+
+        public function disableProduct ($active, $id) {
+            $query = 'UPDATE product SET active = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $active, $id);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'redirect' => '/products'
+            );
+            echo json_encode($json);
+            return;
         }
     }
 ?>
