@@ -1,13 +1,3 @@
-<?php
-require_once 'model/database/database.php';
-
-$mysqli = database();
-
-// Check if search parameter is set
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-
-?>
-
 <!-- Modals -->
 <div class="modal fade" id="checkoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -34,20 +24,20 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
                                         <th>Total</th>
                                     </tr>
                                 </thead>
-                                <tbody id="cart-body">
+                                <tbody id="cart-body-modal">
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="col-5">
                         <div class="row text-center border-bottom mb-2">
-                            <h1 class="text-danger" id="cart-total">₱0.00</h1>
+                            <h1 class="text-danger" id="cart-total-modal">₱0.00</h1>
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">
                             <form action="" class="mb-2">
                                 <label for="discount-input" class="form-label">Discount</label>
-                                <input type="number" class="form-control" id="discount-input" />
+                                <input type="number" class="form-control apply-discount"/>
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
                                 <input type="number" class="form-control" id="cashRec-input" />
                             </form>
