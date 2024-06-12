@@ -12,17 +12,13 @@
                             New Unit
                         </button>
                     </div>
-                    <div id="printButtonContainer" class="d-inline-block">
-                        <!-- DataTables print button will be placed here -->
-                    </div>
                 </div>
             </div>
-            <table id="unit-table">
+            <table class="table table-borderless" id="unit-table">
                 <thead>
                     <tr>
                         <th>Status</th>
                         <th>Unit</th>
-                        <th>Author</th>
                         <th>Date Added</th>
                         <th>Action</th>
                     </tr>
