@@ -131,6 +131,8 @@ $(document).ready(function () {
         console.log("Response:", response);
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-body-modal").html(response.tbody_modal);
       }
     })
   }
@@ -194,6 +196,8 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-body-modal").html(response.tbody_modal);
       },
     });
   });
@@ -213,6 +217,8 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-body-modal").html(response.tbody_modal);
       },
     });
   });
@@ -232,6 +238,8 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-body-modal").html(response.tbody_modal);
       },
     });
   });
@@ -252,6 +260,8 @@ $(document).ready(function () {
         console.log("Response:", response);
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-body-modal").html(response.tbody_modal);
       },
       error: function (xhr, status, error) {
         console.log("AJAX call failed");
@@ -261,7 +271,7 @@ $(document).ready(function () {
     });
   });
 
-  $(document).on("click", ".apply-discount", function () {
+  $(document).on("input", ".apply-discount", function () {
     var row = $(this).closest("td");
     var discount = row.find(".discount");
     var value = discount.val();
@@ -278,6 +288,8 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-body-modal").html(response.tbody_modal);
       },
     });
   });
@@ -286,8 +298,12 @@ $(document).ready(function () {
       url: "/pos-reset",
       success: function () {
         $("#cart-body").empty();
+        $("#cart-body-modal").empty();
+        $("#cart-total-modal").empty();
         $("#cart-total").empty();
         $("#cart-total").text("Subtotal: ₱0");
+        $("#cart-total-modal").text("Total: ₱0");
+        $("#cart-body-modal").html(response.tbody_modal);
       },
     });
   });
