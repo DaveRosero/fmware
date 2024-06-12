@@ -8,10 +8,10 @@
         </div>
         <form id="new-unit" method="POST">
             <div class="modal-body">
-                <div class="mb-3">
+                <p class="text-danger" id="unit_feedback"></p>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="unit_name" placeholder="" required>
                     <label for="" class="form-label">Unit Name<span class="text-danger">*</span></label>
-                    <p class="text-danger" id="unit_feedback"></p>
-                    <input type="text" class="form-control" name="unit_name" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -34,14 +34,14 @@
             </div>
             <form id="edit-unit" method="POST">
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <p class="text-danger" id="edit_feedback"></p>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="" required>
                         <label for="" class="form-label">New Unit Name<span class="text-danger">*</span></label>
-                        <p class="text-danger" id="edit_feedback"></p>
-                        <input type="text" class="form-control" id="unit_name" name="unit_name" required>
-                        <input type="hidden" name="unit_id" id="unit_id">
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="unit_id" id="unit_id">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
