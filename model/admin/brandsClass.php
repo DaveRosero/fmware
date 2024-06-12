@@ -82,8 +82,7 @@
                         echo '<tr>
                                 <td>'.$status.'</td>
                                 <td>'.$name.'</td>
-                                <td>'.$author.'</td>
-                                <td>'.date('d F Y | h:i A', strtotime($date)).'</td>
+                                <td>'.date('F j, Y', strtotime($date)).'</td>
                                 <td>
                                     <button 
                                         class="btn btn-sm btn-success edit" 
@@ -92,15 +91,7 @@
                                         data-brand-name="'.$name.'"
                                     >
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button 
-                                        class="btn btn-sm btn-danger delete" 
-                                        type="button" 
-                                        data-brand-id="'.$id.'" 
-                                        data-brand-name="'.$name.'"
-                                    >
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>                                   
+                                    </button>                                  
                                 </td>
                             </tr>';
                     }
