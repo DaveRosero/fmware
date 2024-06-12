@@ -20,7 +20,7 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
   <link rel="stylesheet" href="asset/css/pos/pos.css">
 </head>
 
-<body style="max-height: 100vh;overflow-y: hidden;">
+<body style="overflow: hidden;">
   <nav class="navbar navbar-expand-lg border-bottom">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png" alt="logo-img" style="width: 30px;" />FMWare|POS</a>
@@ -29,6 +29,17 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Returns & Refunds
+            </a>
+            <ul class="dropdown-menu">
+              <!--return modal toggle-->
+              <li><a class="dropdown-item" data-bs-target="#retunsModaltoggle" data-bs-toggle="modal">Returns</a></li>
+              <!--refund modal toggle-->
+              <li><a class="dropdown-item" href="#">Refunds</a></li>
+            </ul>
+          </li>
         </ul>
         <div class="dropdown">
           <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -94,6 +105,115 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
             </div>
           </div>
           <?php include_once 'modal/checkout-modal.php' ?>
+        </div>
+      </div>
+    </div>
+    <!--Return&Refund Modal-->
+    <div class="modal fade" id="retunsModaltoggle" aria-hidden="true" aria-labelledby="retunsModaltoggleLabel" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Returns</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!--searchbar-->
+            <form class="invoice-search mb-3" action="">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search">
+                <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
+              </div>
+            </form>
+            <!--results-->
+            <table class="table align-middle">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Date</th>
+                  <th>Total Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    1234567890
+                  </td>
+                  <td>09/11/2001</td>
+                  <td>$999.00</td>
+                  <td>
+                    <!--Sale Info modal toggle-->
+                    <button class="btn btn-primary" data-bs-target="#viewSalesToggle" data-bs-toggle="modal">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Sale Info  modal-->
+    <div class="modal fade" id="viewSalesToggle" aria-hidden="true" aria-labelledby="viewSalesToggleLabel" tabindex="-1">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">1234567890</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body returnModal-content">
+            <div class="row ">
+              <div class="col returnModal-list">
+                <table class="table text-center align-middle">
+                  <thead class="table-secondary">
+                    <tr>
+                      <th></th>
+                      <th>Item Name</th>
+                      <th>Unit</th>
+                      <th>Variant</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Quantity Returned</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="form-check ">
+                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                      </td>
+                      <td>Boysen Paint (W)</td>
+                      <td>1 liter</td>
+                      <td>White</td>
+                      <td>$99.00</td>
+                      <td>50</td>
+                      <td>
+                        <div class="input-group my-auto mb-3">
+                          <button class="btn btn-outline-secondary" type="button" id="button-addon1"><i class="fas fa-minus"></i></button>
+                          <input type="number" class="form-control text-center" placeholder="0" style="max-width: 50px;">
+                          <button class="btn btn-outline-secondary" type="button" id="button-addon1"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex justify-content-between mb-3">
+                  <h5>Returned Value:</h5>
+                  <h1>$999.00</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger">Cancel</button>
+            <button class="btn btn-success">Return Items</button>
+          </div>
         </div>
       </div>
     </div>

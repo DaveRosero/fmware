@@ -1,32 +1,47 @@
+body {
+  overflow: hidden;
+}
 
 .main-content {
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .item-section,
-  .cart-section {
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .item-list {
-    height: calc(100vh - 56px - 48px);
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .cart-list {
-    height: calc(100vh - 56px - 210px);
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .modalItem-list {
-    height: calc(100vh - 56px - 400px);
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+  height: 100vh;
+  overflow: hidden;
+}
+
+.item-section,
+.cart-section {
+  height: 100%;
+  overflow: hidden;
+}
+
+.item-list {
+  height: calc(100vh - 56px - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.cart-list {
+  height: calc(100vh - 56px - 190px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.modalItem-list {
+  height: calc(100vh - 56px - 275px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.returnModal-content {
+  height: 75vh;
+  overflow: hidden;
+}
+
+.returnModal-list {
+  height: calc(75vh - 56px - 30px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
