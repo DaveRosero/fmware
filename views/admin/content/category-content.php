@@ -23,7 +23,7 @@
                         <th>Status</th>
                         <th>Category</th>
                         <th>Date Added</th>
-                        <th></th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>

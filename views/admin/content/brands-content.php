@@ -17,12 +17,11 @@
                     </div>
                 </div>
             </div>
-            <table id="brand-table">
+            <table class="table table-borderless" id="brand-table">
                 <thead>
                     <tr>
                         <th>Status</th>
                         <th>Brand</th>
-                        <th>Author</th>
                         <th>Date Added</th>
                         <th>Action</th>
                     </tr>

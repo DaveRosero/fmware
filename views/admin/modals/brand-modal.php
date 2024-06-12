@@ -8,10 +8,10 @@
         </div>
         <form id="new-brand" method="POST">
             <div class="modal-body">
-                <div class="mb-3">
+                <p class="text-danger" id="brand_feedback"></p>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="brand_name" placeholder="" required>
                     <label for="" class="form-label">Brand Name<span class="text-danger">*</span></label>
-                    <p class="text-danger" id="brand_feedback"></p>
-                    <input type="text" class="form-control" name="brand_name" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -34,14 +34,14 @@
             </div>
             <form id="edit-brand" method="POST">
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <p class="text-danger" id="edit_feedback"></p>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="" required>
                         <label for="" class="form-label">New Brand Name<span class="text-danger">*</span></label>
-                        <p class="text-danger" id="edit_feedback"></p>
-                        <input type="text" class="form-control" id="brand_name" name="brand_name" required>
-                        <input type="hidden" name="brand_id" id="brand_id">
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="brand_id" id="brand_id">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
