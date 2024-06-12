@@ -21,6 +21,7 @@ $tbody = '';
 $tbody_modal ='';
 $cart_total = array();
 while ($stmt->fetch()) {
+    
     $total_price = $price * $qty;  
     $tbody .= '<tr>
                     <td class="align-middle">' . $name . '</td>
