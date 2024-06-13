@@ -11,5 +11,4 @@ $stmt = $mysqli->prepare($query);
 $stmt->bind_param('ii', $discount, $id);
 $stmt->execute();
 $stmt->close();
-
-include_once 'cart-body.php';
+?>

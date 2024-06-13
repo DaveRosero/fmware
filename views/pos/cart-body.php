@@ -75,8 +75,12 @@ while ($stmt->fetch()) {
 
 $stmt->close();
 
+// Assuming a discount value passed from the client, else default to 0
+$discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
+$total_with_discount = array_sum($cart_total) - $discount;
+
 $json = array();
 $json['tbody'] = $tbody;
 $json['tbody_modal'] = $tbody_modal;
-$json['cart_total'] = array_sum($cart_total);
+$json['cart_total'] = number_format($total_with_discount, 2);
 echo json_encode($json);
