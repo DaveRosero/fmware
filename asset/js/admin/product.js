@@ -20,9 +20,17 @@ $(document).ready(function(){
             }
         })
     }
+
+    function generateBarcode() {
+        var min = 100000000000; // Minimum 12-digit number
+        var max = 999999999999; // Maximum 12-digit number
+        var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        return randomNumber.toString();
+    }
+
     $('#product-table').DataTable({
         order: [
-            [2, 'asc']
+            [9, 'asc']
         ]
     });
 
@@ -30,32 +38,44 @@ $(document).ready(function(){
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select or type a category',
-        theme: 'bootstrap-5'
+        placeholder: 'Select or type a category <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
     });
 
     $('#brand').select2({
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select or type a brand',
-        theme: 'bootstrap-5'
+        placeholder: 'Select or type a brand <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
     });
 
     $('#unit').select2({
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select or type a measurement',
-        theme: 'bootstrap-5'
+        placeholder: 'Select or type a unit <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
     });
 
     $('#variant').select2({
         dropdownParent: $('#newProduct'),
         tags: true,
         width: '100%',
-        placeholder: 'Select a variant of the product',
-        theme: 'bootstrap-5'
+        placeholder: 'Select a variant of the product <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
     });
 
     $('#new-product').on('submit', function(event){
@@ -114,5 +134,32 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+
+    $('#generate_barcode').change(function(){
+        if ($(this).is(':checked')) {
+            var barcode = generateBarcode();
+            $('#barcode').val(barcode);
+            $('#barcode').prop('readonly', true);
+        } else {
+            $('#barcode').val('');
+            $('#barcode').prop('readonly', false);
+        }
+    });
+
+    $('#non-stockable').change(function(){
+        if ($(this).is(':checked')) {
+            $('#stockable').val(0);
+            $('#initial_stock').val(0);
+            $('#critical_level').val(0);
+            $('#initial_stock').prop('readonly', true);
+            $('#critical_level').prop('readonly', true);
+        } else {
+            $('#stockable').val(1);
+            $('#initial_stock').val('');
+            $('#critical_level').val('');
+            $('#initial_stock').prop('readonly', false);
+            $('#critical_level').prop('readonly', false);
+        }
     });
 });

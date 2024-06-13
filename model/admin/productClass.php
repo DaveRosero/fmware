@@ -246,6 +246,46 @@
             }
         }
 
+        public function insertPrice ($id, $base_price, $selling_price) {
+            $query = 'INSERT INTO price_list 
+                        (product_id, base_price, unit_price)
+                    VALUES (?,?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('idd', $id, $base_price, $selling_price);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function insertStock ($id, $qty, $critical_level, $stockable) {
+            $query = 'INSERT INTO stock
+                        (product_id, qty, critical_level, stockable)
+                    VALUES (?,?,?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('iiii', $id, $qty, $critical_level, $stockable);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
         public function newProduct () {
             // if ($this->isProductExist($_POST['name'])) {
             //     $json = array('exist' => 'Product already exist.');
@@ -309,6 +349,9 @@
                 if ($stmt->execute()) {
                     $stmt->close();
                     $json = array('redirect' => '/products');
+                    $last_id = $this->conn->insert_id;
+                    $this->insertPrice($last_id, $_POST['base_price'], $_POST['selling_price']);
+                    $this->insertStock($last_id, $_POST['initial_stock'], $_POST['critical_level'], $_POST['stockable']);
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -321,15 +364,15 @@
 
         public function stockLegend ($qty, $critical_level) {
             if ($qty == 0) {
-
+                return '<span class="badge bg-dark fw-semibold text-wrap">'.$qty.'</span>';
             }
 
             if ($qty <= $critical_level) {
-
+                return '<span class="badge bg-danger fw-semibold text-wrap">'.$qty.'</span>';
             }
 
             if ($qty > $critical_level) {
-
+                return '<span class="badge bg-success fw-semibold text-wrap">'.$qty.'</span>';
             }
         }
 
@@ -373,6 +416,8 @@
                                         </div>';
                         }
 
+                        $legend = $this->stockLegend($stock, $critical_level);
+
                         echo '<tr>
                                 <td>'.$status.'</td>
                                 <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
@@ -383,18 +428,10 @@
                                 <td>'.$unit_value.' '.strtoupper($unit).'</td>
                                 <td>₱'.number_format($base_price, 2).'</td>
                                 <td>₱'.number_format($selling_price, 2).'</td>
-                                <td>'.$stock.'</td>
-                                <td>
+                                <td>'.$legend.'</td>
+                                <td>                            
                                     <button 
-                                        class="btn btn-sm btn-primary view" 
-                                        type="button" 
-                                        data-product-id="'.$id.'" 
-                                        data-product-name="'.$name.'"
-                                    >
-                                        <i class="fas fa-eye"></i>
-                                    </button>                                
-                                    <button 
-                                        class="btn btn-sm btn-success edit" 
+                                        class="btn btn-sm btn-primary edit" 
                                         type="button" 
                                         data-product-id="'.$id.'" 
                                         data-product-name="'.$name.'"
