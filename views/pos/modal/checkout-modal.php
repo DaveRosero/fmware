@@ -34,17 +34,18 @@
                             <h1 class="text-danger" id="cart-total-modal">₱0.00</h1>
                             <p class="text-secondary">Total Price</p>
                         </div>
+                        <!-- Discount and Total Section in Modal Body -->
                         <div class="col border-bottom mb-2">
-                            <form action="" class="mb-2">
+                            <form id="discount-form" class="mb-2">
                                 <label for="discount-input" class="form-label">Discount</label>
-                                <input type="number" class="form-control apply-discount"/>
+                                <input type="number" class="form-control apply-discount" id="discount-input" />
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
                                 <input type="number" class="form-control" id="cashRec-input" />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
                                     <h5 class="text-secondary my-auto">Change:</h5>
-                                    <h1 class="text-success">₱0.00</h1>
+                                    <h1 class="text-success" id="change-display">₱0.00</h1>
                                 </div>
                             </div>
                         </div>

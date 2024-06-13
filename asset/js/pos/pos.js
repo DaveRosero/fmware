@@ -310,3 +310,33 @@ $(document).ready(function () {
 });
 
 
+$(document).ready(function() {
+  function calculateChange() {
+      const total = parseFloat($('#cart-total-modal').text().replace('₱', '')) || 0;
+      const discount = parseFloat($('#discount-input').val()) || 0;
+      const cashReceived = parseFloat($('#cashRec-input').val()) || 0;
+      const finalTotal = total - discount;
+      const change = cashReceived - finalTotal;
+      $('#change-display').text(`₱${change.toFixed(2)}`);
+  }
+
+  $('#discount-input').on('input', calculateChange);
+  $('#cashRec-input').on('input', calculateChange);
+
+  // Function to update total price
+  function updateTotal() {
+      let total = 0;
+      $('#cart-body-modal tr').each(function() {
+          const itemTotal = parseFloat($(this).find('td').eq(5).text().replace('₱', '')) || 0;
+          total += itemTotal;
+      });
+      $('#cart-total-modal').text(`₱${total.toFixed(2)}`);
+      calculateChange(); // Recalculate change after updating total
+  }
+  
+  // Simulate adding items to cart and updating the total
+  updateTotal(); // Call this after updating the cart items
+});
+
+
+
