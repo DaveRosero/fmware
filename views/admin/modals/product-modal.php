@@ -9,78 +9,126 @@
             <form id="new-product" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <div class="row mb-2">
+                        <div class="row mb-4">
                             <div class="col-md-6">
-                                <label for="imageInput" class="form-label">Choose an image <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" id="imageInput" name="image" accept="image/*">
+                                <div class="form-floating">
+                                    <input type="file" class="form-control" id="imageInput" name="image" accept="image/*" placeholder="">
+                                    <label class="form-label py-2" for="imageInput">Product Image <span class="text-danger">*</span></label>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Product Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="name" >
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Item Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="code" >
-                            </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Supplier Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="supplier_code" >
+                            <div class="form-floating col-md-6">
+                                <input type="text" class="form-control" name="name" placeholder="" required>
+                                <label for="" class="form-label mx-2">Product Name <span class="text-danger">*</span></label>
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Description</label>
-                                <input type="text" class="form-control" name="description">
+                        <div class="row mb-4">
+                            <div class="form-floating col-md-6">
+                                <input type="text" class="form-control" name="code" placeholder="" required>
+                                <label for="" class="form-label mx-2">Item Code <span class="text-danger">*</span></label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="expiration_date" class="form-label">Expiration Date</label>
+                            <div class="form-floating col-md-6">
+                                <input type="text" class="form-control" name="supplier_code" placeholder="" required>
+                                <label for="" class="form-label mx-2">Supplier Code <span class="text-danger">*</span></label>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="form-floating col-md-6">
+                                <input type="text" class="form-control" name="description" placeholder="">
+                                <label for="" class="form-label mx-2">Description</label>
+                            </div>
+                            <div class="form-floating col-md-6">
                                 <input type="date" class="form-control" id="expiration_date" name="expiration_date">
+                                <label for="expiration_date" class="form-label mx-2">Expiration Date</label>
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Brand <span class="text-danger">*</span></label>
+                        <div class="row mb-4">
+                            <div class="form-floating col-md-6">
                                 <select class="form-select" id="brand" name="brand">
                                     <option></option>
                                     <?php $products->getBrands(); ?>
                                 </select>
+                                <label for="" class="form-label">Brand <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-md-6">
-                                <label for="" class="form-label">Unit <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="unit_value">
-                                <select class="form-select" id="unit" name="unit">
-                                    <option></option>
-                                    <?php $products->getUnits(); ?>
-                                </select>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" name="unit_value" placeholder="Enter unit value" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class="form-select" id="unit" name="unit" placeholder="">
+                                            <option></option>
+                                            <?php $products->getUnits(); ?>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Category <span class="text-danger">*</span></label>
+                        <div class="row mb-4">
+                            <div class="form-floating col-md-6">
                                 <select class="form-select" id="category" name="category">
                                     <option></option>
                                     <?php $products->getCategory(); ?>
                                 </select>
+                                <label for="" class="form-label">Category <span class="text-danger">*</span></label>
                             </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Variant <span class="text-danger">*</span></label>
+                            <div class="form-floating col-md-6">
                                 <select class="form-select" id="variant" name="variant">
                                     <option></option>
                                     <?php $products->getVariants(); ?>
                                 </select>
+                                <label for="" class="form-label">Variant <span class="text-danger">*</span></label>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="form-floating col-md-6">
+                                        <input class="form-control" type="number" name="base_price" id="base_price" min="1" step="any" placeholder="" required>
+                                        <label for="" class="form-label mx-2">Base Price <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="form-floating col-md-6">
+                                        <input class="form-control" type="number" name="selling_price" id="selling_price" min="1" step="any" placeholder="" required>
+                                        <label for="" class="form-label mx-2">Selling Price <span class="text-danger">*</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="form-floating col-md-4">
+                                        <input class="form-control" type="number" name="initial_stock" id="initial_stock" min="0" placeholder="" required>
+                                        <label for="" class="form-label mx-2">Initial Stock <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="form-floating col-md-4">
+                                        <input class="form-control" type="number" name="critical_level" id="critical_level" min="0" placeholder="" required>
+                                        <label for="" class="form-label mx-2">Critical Level <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <div class="form-check my-auto">
+                                            <input class="form-check-input" type="checkbox" value="" id="non-stockable">
+                                            <label class="form-check-label text-primary" for="non-stockable">
+                                                Non-Stockable
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Barcode</label>
-                                <input type="text" class="form-control" name="barcode">
+                            <div class="form-floating col-md-6">
+                                <input type="text" class="form-control" name="barcode" id="barcode" placeholder="" required>
+                                <label for="" class="form-label mx-2">Barcode <span class="text-danger">*</span></label>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" value="" id="generate_barcode">
+                                    <label class="form-check-label text-primary" for="flexCheckDefault">
+                                        Generate Barcode
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="stockable" id="stockable">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

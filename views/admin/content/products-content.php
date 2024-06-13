@@ -24,6 +24,9 @@
                         <th>Brand</th>
                         <th>Category</th>
                         <th>Unit</th>
+                        <th>Base Price</th>
+                        <th>Selling Price</th>
+                        <th>Stock</th>
                         <th>Action</th>
                     </tr>
                 </thead>

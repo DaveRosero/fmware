@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="/vendor/DataTables/datatables.min.css">
     <link rel="stylesheet" href="/vendor/FontAwesome/css/all.min.css">
     <link rel="stylesheet" href="/vendor/Select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="/vendor/Select2-Theme/select2-bootstrap-5-theme.min.css">
 <!-- CSS CLOSE -->
 
 <!-- SCRIPT OPEN -->
