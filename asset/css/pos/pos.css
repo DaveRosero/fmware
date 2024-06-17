@@ -29,17 +29,6 @@ body {
   overflow-x: hidden;
 }
 
-.returnModal-content {
-  height: 75vh;
-  overflow: hidden;
-}
-
-.returnModal-list {
-  height: calc(75vh - 56px - 30px);
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
