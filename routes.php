@@ -81,10 +81,10 @@ require_once __DIR__.'/router.php';
 //*****************************************************************//
 
     // Inventory Views
-    get('/products', 'views/admin/products.php');
-    get('/stocks', 'views/admin/stocks.php');
-    get('/restocks', 'views/admin/restock.php');
-    get('/price-list', 'views/admin/price-list.php');
+    get('/manage-products', 'views/admin/products.php');
+    // get('/stocks', 'views/admin/stocks.php');
+    // get('/restocks', 'views/admin/restock.php');
+    // get('/price-list', 'views/admin/price-list.php');
 
     // Product Controller
     any('/new-product', 'controller/admin/product/new-product.php');

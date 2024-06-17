@@ -71,7 +71,7 @@
               <span class="hide-menu">Inventory</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/products" aria-expanded="false">
+              <a class="sidebar-link" href="/manage-products" aria-expanded="false">
                 <span>
                 <i class="fa-solid fa-barcode fs-4"></i>
                 </span>

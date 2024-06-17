@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <!--Product Table Start-->
     <div class="card">
-        <div class="card-body">
+        <div class="card-body" style="width: 100%; overflow-x: auto;">
             <div class="row justify-content-between">
                 <div class="col">
                     <h5 class="card-title fw-semibold mb-4">Product List</h5>
@@ -20,7 +20,6 @@
                         <th>Status</th>
                         <th>Image</th>
                         <th>Product</th>
-                        <th>Variant</th>
                         <th>Brand</th>
                         <th>Category</th>
                         <th>Unit</th>
