@@ -25,12 +25,12 @@ $(document).ready(function(){
         var min = 100000000000; // Minimum 12-digit number
         var max = 999999999999; // Maximum 12-digit number
         var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-        return randomNumber.toString();
+        return 'FM' + randomNumber.toString();
     }
 
     $('#product-table').DataTable({
         order: [
-            [9, 'asc']
+            [8, 'asc']
         ]
     });
 
@@ -78,6 +78,17 @@ $(document).ready(function(){
         }
     });
 
+    $('#supplier').select2({
+        dropdownParent: $('#newProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select a supplier <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+
     $('#new-product').on('submit', function(event){
         event.preventDefault();
         var formData = new FormData(this);
@@ -96,6 +107,10 @@ $(document).ready(function(){
                 if (feedback.exist) {
                     $.notify('Product already exist', 'error');
                 }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
             }
         });
     });

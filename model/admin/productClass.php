@@ -1,4 +1,5 @@
 <?php
+    include_once 'session.php';
     require_once 'model/admin/admin.php';
 
     class Products extends Admin {
@@ -326,29 +327,39 @@
             }
 
             $uploadDir = '/asset/images/products/';
-            $uploadFile = $uploadDir . basename($_FILES['image']['name']);
-            move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile);
+            $default = 'default-product.png';
 
-            // Product Image
-            $image = basename($uploadFile);
+            if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+                $uploadFile = $uploadDir . basename($_FILES['image']['name']);
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                    $image = basename($uploadFile);
+                } else {
+                    $image = $default;
+                }
+            } else {
+                $image = $default;
+            }
+
             $name = $_POST['name'];
             $code = $_POST['code'];
-            $supplier_code = $_POST['supplier_code'];
+            $supplier_id = $_POST['supplier'];
             $unit_value = $_POST['unit_value'];
             $expiration_date = $_POST['expiration_date'];
             $barcode = $_POST['barcode'];
             $description = $_POST['description'];
             $active = 1;
+            $currentDate = date('F j, Y');
 
             $query = 'INSERT INTO product
-                        (name, code, supplier_code, barcode, image, description, brand_id, category_id, unit_id, unit_value, variant_id, expiration_date, user_id, active)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                        (name, code, supplier_id, barcode, image, description, brand_id, category_id, unit_id, unit_value, variant_id, expiration_date, user_id, date, active)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ssssssiiiissii', $name, $code, $supplier_code, $barcode, $image, $description, $brand_id, $category_id, $unit_id, $unit_value, $variant_id, $expiration_date, $_SESSION['user_id'], $active);
+            $stmt->bind_param('ssssssiiisssisi', $name, $code, $supplier_id, $barcode, $image, $description, $brand_id, $category_id, $unit_id, $unit_value, $variant_id, $expiration_date, $_SESSION['user_id'], $currentDate, $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
-                    $json = array('redirect' => '/products');
+                    $json = array('redirect' => '/manage-products');
                     $last_id = $this->conn->insert_id;
                     $this->insertPrice($last_id, $_POST['base_price'], $_POST['selling_price']);
                     $this->insertStock($last_id, $_POST['initial_stock'], $_POST['critical_level'], $_POST['stockable']);
@@ -364,15 +375,21 @@
 
         public function stockLegend ($qty, $critical_level) {
             if ($qty == 0) {
-                return '<span class="badge bg-dark fw-semibold text-wrap">'.$qty.'</span>';
+                return '<span class="badge bg-dark fw-semibold text-wrap"
+                            data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
+                        >'.$qty.'</span>';
             }
 
             if ($qty <= $critical_level) {
-                return '<span class="badge bg-danger fw-semibold text-wrap">'.$qty.'</span>';
+                return '<span class="badge bg-danger fw-semibold text-wrap"
+                            data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
+                        >'.$qty.'</span>';
             }
 
             if ($qty > $critical_level) {
-                return '<span class="badge bg-success fw-semibold text-wrap">'.$qty.'</span>';
+                return '<span class="badge bg-success fw-semibold text-wrap"
+                            data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
+                        >'.$qty.'</span>';
             }
         }
 
@@ -419,24 +436,29 @@
                         $legend = $this->stockLegend($stock, $critical_level);
 
                         echo '<tr>
-                                <td>'.$status.'</td>
-                                <td><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 70px;"></td>
-                                <td>'.$name.'</td>
-                                <td>'.$variant.'</td>
-                                <td>'.$brand.'</td>
-                                <td>'.$category.'</td>
-                                <td>'.$unit_value.' '.strtoupper($unit).'</td>
-                                <td>₱'.number_format($base_price, 2).'</td>
-                                <td>₱'.number_format($selling_price, 2).'</td>
-                                <td>'.$legend.'</td>
-                                <td>                            
+                                <td class="text-start">'.$status.'</td>
+                                <td class="text-start"><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 50px;"></td>
+                                <td class="text-start">'.$name.' ('.$variant.')</td>
+                                <td class="text-start">'.$brand.'</td>
+                                <td class="text-start">'.$category.'</td>
+                                <td class="text-center">'.$unit_value.' '.strtoupper($unit).'</td>
+                                <td class="text-start">₱'.number_format($base_price, 2).'</td>
+                                <td class="text-start">₱'.number_format($selling_price, 2).'</td>
+                                <td class="text-start">'.$legend.'</td>
+                                <td class="text-start">
+                                    <button 
+                                        class="btn btn-sm btn-secondary view" 
+                                        type="button" 
+                                        data-product-id="'.$id.'"
+                                    >
+                                        <i class="fa-solid fa-eye fs-1"></i>
+                                    </button>                             
                                     <button 
                                         class="btn btn-sm btn-primary edit" 
                                         type="button" 
-                                        data-product-id="'.$id.'" 
-                                        data-product-name="'.$name.'"
+                                        data-product-id="'.$id.'"
                                     >
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="fa-solid fa-pen-to-square fs-1"></i>
                                     </button>                               
                                 </td>
                             </tr>';
@@ -467,9 +489,33 @@
 
             $stmt->close();
             $json = array(
-                'redirect' => '/products'
+                'redirect' => '/manage-products'
             );
             echo json_encode($json);
+            return;
+        }
+
+        public function supplierOptions () {
+            $query = 'SELECT id, name, active FROM supplier WHERE active = 1';
+            $stmt = $this->conn->prepare($query);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($id, $supplier, $active);
+            $content = '';
+            while ($stmt->fetch()) {
+                $content .= '<option value="'.$id.'">'.$supplier.'</option>';
+            }
+
+            $stmt->close();
+            echo $content;
             return;
         }
     }

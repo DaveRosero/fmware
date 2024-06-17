@@ -13,7 +13,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input type="file" class="form-control" id="imageInput" name="image" accept="image/*" placeholder="">
-                                    <label class="form-label py-2" for="imageInput">Product Image <span class="text-danger">*</span></label>
+                                    <label class="form-label py-2" for="imageInput">Product Image</label>
                                 </div>
                             </div>
                             <div class="form-floating col-md-6">
@@ -23,12 +23,15 @@
                         </div>
                         <div class="row mb-4">
                             <div class="form-floating col-md-6">
-                                <input type="text" class="form-control" name="code" placeholder="" required>
-                                <label for="" class="form-label mx-2">Item Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="code" placeholder="">
+                                <label for="" class="form-label mx-2">Item Code</label>
                             </div>
-                            <div class="form-floating col-md-6">
-                                <input type="text" class="form-control" name="supplier_code" placeholder="" required>
-                                <label for="" class="form-label mx-2">Supplier Code <span class="text-danger">*</span></label>
+                            <div class="col-md-6">
+                                <select class="form-select" name="supplier" id="supplier" required>
+                                    <option></option>
+                                    <?php $products->supplierOptions(); ?>
+                                </select>
+                                <a href="/manage-suppliers" class="text-decoration-underline mx-2">New Supplier</a>
                             </div>
                         </div>
                         <div class="row mb-4">
@@ -128,7 +131,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="stockable" id="stockable">
+                    <input type="hidden" name="stockable" id="stockable" value="1">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
