@@ -320,10 +320,6 @@ $(document).ready(function() {
       $('#change-display').text(`₱${change.toFixed(2)}`);
   }
 
-  $('#discount-input').on('input', calculateChange);
-  $('#cashRec-input').on('input', calculateChange);
-
-  // Function to update total price
   function updateTotal() {
       let total = 0;
       $('#cart-body-modal tr').each(function() {
@@ -333,10 +329,15 @@ $(document).ready(function() {
       $('#cart-total-modal').text(`₱${total.toFixed(2)}`);
       calculateChange(); // Recalculate change after updating total
   }
-  
-  // Simulate adding items to cart and updating the total
-  updateTotal(); // Call this after updating the cart items
+
+  $('#discount-input').on('input', function() {
+      updateTotal();
+      calculateChange(); // Recalculate change after applying discount
+  });
+
+  $('#cashRec-input').on('input', calculateChange);
+
+  // Initial update for total and change
+  updateTotal();
 });
-
-
 
