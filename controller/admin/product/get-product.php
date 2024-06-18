@@ -5,7 +5,8 @@
     $products = new Products();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $products->editProduct($_POST['edit_id']);
+        $json = $products->getProductInfo($_POST['id']);
+        echo json_encode($json);
     } else {
         header('Location: /404');
         exit();

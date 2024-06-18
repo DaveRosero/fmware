@@ -35,8 +35,7 @@
       <!-- Content Start -->
         <?php include 'views/admin/content/products-content.php'; ?>
       <!-- Content End -->  
-      
-      
+
     </div>
 
     

@@ -10,6 +10,7 @@
           <i class="fa-solid fa-xmark fs-8"></i>
           </div>
         </div>
+        <p class="text-muted text-center mb-0 py-0 mt-0">&copy; <?php echo date('Y'); ?> FMWARE. PDM Capstone</p>
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav p-2" data-simplebar="">
           <ul id="sidebarnav">
@@ -86,14 +87,14 @@
                 <span class="hide-menu">Price List</span>
               </a>
             </li> -->
-            <li class="sidebar-item">
+            <!-- <li class="sidebar-item">
               <a class="sidebar-link" href="/stocks" aria-expanded="false">
                 <span>
                 <i class="fas fa-cube fs-4"></i>
                 </span>
                 <span class="hide-menu">Stocks</span>
               </a>
-            </li>
+            </li> -->
             <li class="sidebar-item">
               <a class="sidebar-link" href="/restocks" aria-expanded="false">
                 <span>
