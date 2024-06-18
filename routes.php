@@ -90,6 +90,7 @@ require_once __DIR__.'/router.php';
     any('/new-product', 'controller/admin/product/new-product.php');
     any('/edit-product', 'controller/admin/product/edit-product.php');
     any('/disable-product', 'controller/admin/product/disable-product.php');
+    any('/get-product', 'controller/admin/product/get-product.php');
 
     // Stocks Controller
     any('/add-stock', 'controller/admin/stocks/add-stock.php');

@@ -22,15 +22,48 @@ $(document).ready(function(){
     }
 
     function generateBarcode() {
-        var min = 100000000000; // Minimum 12-digit number
-        var max = 999999999999; // Maximum 12-digit number
+        var min = 100000000000;
+        var max = 999999999999;
         var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
         return 'FM' + randomNumber.toString();
     }
 
+    function getProductInfo (id) {
+        $.ajax({
+            url:'/get-product',
+            method: 'POST',
+            data: {
+                id : id
+            },
+            dataType: 'json',
+            success: function(json) {
+                $('#edit_name').val(json.name);
+                $('#edit_code').val(json.code);
+                $('#edit_supplier').val(json.supplier).change();
+                $('#edit_description').val(json.description);
+                $('#edit_expiration_date').val(json.expiration);
+                $('#edit_brand').val(json.brand).change();
+                $('#edit_unit_value').val(json.unit_value);
+                $('#edit_unit').val(json.unit).change();
+                $('#edit_category').val(json.category).change();
+                $('#edit_variant').val(json.variant).change();
+                $('#edit_base_price').val(json.base_price);
+                $('#edit_selling_price').val(json.selling_price);
+                $('#edit_stock').val(json.stock);
+                $('#edit_critical_level').val(json.critical_level);
+                $('#edit_barcode').val(json.barcode);
+                $('#edit_id').val(json.id);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        })
+    }
+
     $('#product-table').DataTable({
         order: [
-            [8, 'asc']
+            [7, 'asc']
         ]
     });
 
@@ -89,6 +122,66 @@ $(document).ready(function(){
         }
     });
 
+    $('#edit_category').select2({
+        dropdownParent: $('#editProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or type a category <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+
+    $('#edit_brand').select2({
+        dropdownParent: $('#editProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or type a brand <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+
+    $('#edit_unit').select2({
+        dropdownParent: $('#editProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or type a unit <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+
+    $('#edit_variant').select2({
+        dropdownParent: $('#editProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select a variant of the product <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+
+    $('#edit_supplier').select2({
+        dropdownParent: $('#editProduct'),
+        tags: true,
+        width: '100%',
+        placeholder: 'Select a supplier <span class="text-danger">*</span>',
+        theme: 'bootstrap-5',
+        escapeMarkup: function(markup) {
+            return markup;
+        }
+    });
+
+    $('.edit').click(function(){
+        var id = $(this).data('product-id');
+        getProductInfo(id);
+    });
+
     $('#new-product').on('submit', function(event){
         event.preventDefault();
         var formData = new FormData(this);
@@ -125,30 +218,6 @@ $(document).ready(function(){
             var active = 0;
             updateProductStatus(active, id);
         }
-    })
-
-    $('.edit').on('click', function(){
-        $('#edit-label').html('Editing <strong>"' + $(this).data('product-name') + '</strong>"');
-        $('#product_name').val($(this).data('product-name'));
-        $('#product_id').val($(this).data('product-id'));
-        $('#editProduct').modal('show');
-    });
-
-    $('#edit-product').on('submit', function(event){
-        event.preventDefault();
-
-        $.ajax({
-            url: '/edit-product',
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(feedback){
-                $('#edit_feedback').text(feedback.edit_feedback);
-                if (feedback.redirect) {
-                    window.location.href = feedback.redirect;
-                }
-            }
-        });
     });
 
     $('#generate_barcode').change(function(){
@@ -176,5 +245,25 @@ $(document).ready(function(){
             $('#initial_stock').prop('readonly', false);
             $('#critical_level').prop('readonly', false);
         }
+    });
+
+    $('#edit-product').on('submit', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            url: '/edit-product',
+            method: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(json) {
+                if (json.redirect) {
+                    window.location.href =  json.redirect;
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
     });
 });

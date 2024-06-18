@@ -341,7 +341,7 @@
                 $image = $default;
             }
 
-            $name = $_POST['name'];
+            $name = ucwords($_POST['name']);
             $code = $_POST['code'];
             $supplier_id = $_POST['supplier'];
             $unit_value = $_POST['unit_value'];
@@ -375,19 +375,19 @@
 
         public function stockLegend ($qty, $critical_level) {
             if ($qty == 0) {
-                return '<span class="badge bg-dark fw-semibold text-wrap"
+                return '<span class="badge bg-dark fw-semibold text-wrap cursor-pointer"
                             data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
                         >'.$qty.'</span>';
             }
 
             if ($qty <= $critical_level) {
-                return '<span class="badge bg-danger fw-semibold text-wrap"
+                return '<span class="badge bg-danger fw-semibold text-wrap cursor-pointer"
                             data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
                         >'.$qty.'</span>';
             }
 
             if ($qty > $critical_level) {
-                return '<span class="badge bg-success fw-semibold text-wrap"
+                return '<span class="badge bg-success fw-semibold text-wrap cursor-pointer"
                             data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
                         >'.$qty.'</span>';
             }
@@ -438,28 +438,31 @@
                         echo '<tr>
                                 <td class="text-start">'.$status.'</td>
                                 <td class="text-start"><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 50px;"></td>
-                                <td class="text-start">'.$name.' ('.$variant.')</td>
+                                <td class="text-start">'.$name.' ('.$variant.') '.$unit_value.' '.strtoupper($unit).'</td>
                                 <td class="text-start">'.$brand.'</td>
                                 <td class="text-start">'.$category.'</td>
-                                <td class="text-center">'.$unit_value.' '.strtoupper($unit).'</td>
                                 <td class="text-start">₱'.number_format($base_price, 2).'</td>
                                 <td class="text-start">₱'.number_format($selling_price, 2).'</td>
                                 <td class="text-start">'.$legend.'</td>
                                 <td class="text-start">
-                                    <button 
-                                        class="btn btn-sm btn-secondary view" 
-                                        type="button" 
-                                        data-product-id="'.$id.'"
-                                    >
-                                        <i class="fa-solid fa-eye fs-1"></i>
-                                    </button>                             
-                                    <button 
-                                        class="btn btn-sm btn-primary edit" 
-                                        type="button" 
-                                        data-product-id="'.$id.'"
-                                    >
-                                        <i class="fa-solid fa-pen-to-square fs-1"></i>
-                                    </button>                               
+                                    <div class="d-flex">
+                                        <button 
+                                            class="btn btn-sm btn-secondary view me-1" 
+                                            type="button" 
+                                            data-product-id="'.$id.'"
+                                        >
+                                            <i class="fa-solid fa-eye fs-1"></i>
+                                        </button>   
+                                        <button 
+                                            class="btn btn-sm btn-primary edit" 
+                                            type="button" 
+                                            data-product-id="'.$id.'"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editProduct"
+                                        >
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </div>                              
                                 </td>
                             </tr>';
                     }
@@ -516,6 +519,99 @@
 
             $stmt->close();
             echo $content;
+            return;
+        }
+
+        public function getProductInfo ($id) {
+            $query = 'SELECT product.name,
+                            product.code,
+                            product.supplier_id,
+                            product.description,
+                            product.expiration_date,
+                            product.brand_id,
+                            product.unit_value,
+                            product.unit_id,
+                            product.category_id,
+                            product.variant_id,
+                            product.barcode,
+                            price_list.base_price,
+                            price_list.unit_price,
+                            stock.qty,
+                            stock.critical_level
+                    FROM product
+                    INNER JOIN price_list ON price_list.product_id = product.id
+                    INNER JOIN stock ON stock.product_id = product.id
+                    WHERE product.id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($name, $code, $supplier, $description, $expiration, $brand, $unit_value, $unit,
+                            $category, $variant, $barcode, $base_price, $selling_price, $stock, $critical_level);
+            $stmt->fetch();
+            $stmt->close();
+
+            $json = array(
+                'id' => $id,
+                'name' => $name,
+                'code' => $code,
+                'supplier' => $supplier,
+                'description' => $description,
+                'expiration' => $expiration,
+                'brand' => $brand,
+                'unit_value' => $unit_value,
+                'unit' => $unit,
+                'category' => $category,
+                'variant' => $variant,
+                'base_price' => $base_price,
+                'selling_price' => $selling_price,
+                'stock' => $stock,
+                'critical_level' => $critical_level,
+                'barcode' => $barcode
+            );
+            return $json;
+        }
+
+        public function editProductName ($name, $id) {
+            $query = 'UPDATE product SET name = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $name, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editProduct ($id) {
+            $product = $this->getProductInfo($id);
+
+            if ($product && $product['name'] !== $_POST['edit_name']) {
+                $name = ucwords($_POST['edit_name']);
+                $this->editProductName($name, $id);
+            }
+
+
+            $json = array(
+                'redirect' => '/manage-products'
+            );
+
+            echo json_encode($json);
             return;
         }
     }
