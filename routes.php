@@ -156,6 +156,7 @@ require_once __DIR__.'/router.php';
 
 //*****************************************************************//
 
+    // POS Controller
     any('/pos', 'views/pos/pos.php');
     any('/pos-cart', 'views/pos/price_list_cart.php');
     any('/pos-addqty', 'views/pos/add-qty.php');

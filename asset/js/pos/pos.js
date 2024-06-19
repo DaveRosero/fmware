@@ -310,7 +310,7 @@ $(document).ready(function () {
   });
 });
 
-
+// Discount and Change on the modal module start here
 $(document).ready(function () {
   function calculateDiscount() {
     var originalTotal = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
@@ -325,7 +325,11 @@ $(document).ready(function () {
     var finalTotal = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
     var cashReceived = parseFloat($('#cashRec-input').val()) || 0;
     var change = cashReceived - finalTotal;
+    if (change < 0) {
+      change = 0;
+    }
     $('#change-display').text(`₱${change.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
+    toggleCheckoutButton(change);
   }
 
   // Function to update the original total price before discount
@@ -338,6 +342,14 @@ $(document).ready(function () {
     $('#cart-total-modal').text(`₱${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
   }
 
+  function toggleCheckoutButton(change) {
+    if (change >= 0) {
+      $('.print').prop('disabled', false);
+    } else {
+      $('.print').prop('disabled', true);
+    }
+  }
+
   // Event listeners for input changes
   $('#discount-input').on('input', function () {
     updateOriginalTotal();
@@ -348,6 +360,7 @@ $(document).ready(function () {
   // Initial update for original total and change
   updateOriginalTotal();
   calculateChange(); // Ensure initial change calculation
+  toggleCheckoutButton(-1); // Ensure the checkout button is initially disabled
 
 });
-
+// Discount and Change on the modal module end here
