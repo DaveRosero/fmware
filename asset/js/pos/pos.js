@@ -47,7 +47,7 @@ function generatePrintableContent() {
     ".signature { margin-top: 30px; }" +
     ".signature p { text-align: center; margin-top: 50px; }" +
     "</style>" +
-    
+
     '<div class="receipt">' +
     '<div class="header">' +
     '<img src="' +
@@ -131,8 +131,9 @@ $(document).ready(function () {
         console.log("Response:", response);
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-total-modal").text("₱" + response.cart_total);
         $("#cart-body-modal").html(response.tbody_modal);
+
       }
     })
   }
@@ -196,7 +197,7 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-total-modal").text("₱" + response.cart_total);
         $("#cart-body-modal").html(response.tbody_modal);
       },
     });
@@ -217,7 +218,7 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-total-modal").text("₱" + response.cart_total);
         $("#cart-body-modal").html(response.tbody_modal);
       },
     });
@@ -238,7 +239,7 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-total-modal").text("₱" + response.cart_total);
         $("#cart-body-modal").html(response.tbody_modal);
       },
     });
@@ -260,7 +261,7 @@ $(document).ready(function () {
         console.log("Response:", response);
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-total-modal").text("₱" + response.cart_total);
         $("#cart-body-modal").html(response.tbody_modal);
       },
       error: function (xhr, status, error) {
@@ -288,7 +289,7 @@ $(document).ready(function () {
       success: function (response) {
         $("#cart-body").html(response.tbody);
         $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("Total: ₱" + response.cart_total);
+        $("#cart-total-modal").text("₱" + response.cart_total);
         $("#cart-body-modal").html(response.tbody_modal);
       },
     });
@@ -302,7 +303,7 @@ $(document).ready(function () {
         $("#cart-total-modal").empty();
         $("#cart-total").empty();
         $("#cart-total").text("Subtotal: ₱0");
-        $("#cart-total-modal").text("Total: ₱0");
+        $("#cart-total-modal").text("₱0");
         $("#cart-body-modal").html(response.tbody_modal);
       },
     });
@@ -310,34 +311,43 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function() {
+$(document).ready(function () {
+  function calculateDiscount() {
+    var originalTotal = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
+    var discount = parseFloat($('#discount-input').val()) || 0;
+    var finalTotal = originalTotal - discount;
+    $('#cart-total-modal').text(`₱${finalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
+    calculateChange(); // Recalculate change after applying discount
+  }
+
+  // Function to calculate and update the change
   function calculateChange() {
-      const total = parseFloat($('#cart-total-modal').text().replace('₱', '')) || 0;
-      const discount = parseFloat($('#discount-input').val()) || 0;
-      const cashReceived = parseFloat($('#cashRec-input').val()) || 0;
-      const finalTotal = total - discount;
-      const change = cashReceived - finalTotal;
-      $('#change-display').text(`₱${change.toFixed(2)}`);
+    var finalTotal = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
+    var cashReceived = parseFloat($('#cashRec-input').val()) || 0;
+    var change = cashReceived - finalTotal;
+    $('#change-display').text(`₱${change.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
   }
 
-  function updateTotal() {
-      let total = 0;
-      $('#cart-body-modal tr').each(function() {
-          const itemTotal = parseFloat($(this).find('td').eq(5).text().replace('₱', '')) || 0;
-          total += itemTotal;
-      });
-      $('#cart-total-modal').text(`₱${total.toFixed(2)}`);
-      calculateChange(); // Recalculate change after updating total
+  // Function to update the original total price before discount
+  function updateOriginalTotal() {
+    let total = 0;
+    $('#cart-body-modal tr').each(function () {
+      var itemTotal = parseFloat($(this).find('td').eq(5).text().replace('₱', '').replace(/,/g, '')) || 0;
+      total += itemTotal;
+    });
+    $('#cart-total-modal').text(`₱${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
   }
 
-  $('#discount-input').on('input', function() {
-      updateTotal();
-      calculateChange(); // Recalculate change after applying discount
+  // Event listeners for input changes
+  $('#discount-input').on('input', function () {
+    updateOriginalTotal();
+    calculateDiscount(); // Recalculate total after applying discount
   });
-
   $('#cashRec-input').on('input', calculateChange);
 
-  // Initial update for total and change
-  updateTotal();
+  // Initial update for original total and change
+  updateOriginalTotal();
+  calculateChange(); // Ensure initial change calculation
+
 });
 
