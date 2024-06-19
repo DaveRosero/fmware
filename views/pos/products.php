@@ -27,7 +27,7 @@ while ($stmt->fetch()) {
   $disabled = ($qty == 0) ? 'disabled' : '';
   echo '
     <div class="col item-card">
-        <div class="card h-100">
+        <div class="card">
             <div>
             <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '">    
             <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ '. number_format($unit_price) .' </h5>
