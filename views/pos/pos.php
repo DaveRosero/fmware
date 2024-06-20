@@ -32,7 +32,11 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <!--Open Return & Refunds Modal (transaction search modal)-->
-            <a class="nav-link" data-bs-target="#transactionSearch-Modal" data-bs-toggle="modal">Returns & Refunds</a>
+            <a class="nav-link" data-bs-target="#transactionSearch-Modal" data-bs-toggle="modal">Replacements & Refunds</a>
+          </li>
+          <li class="nav-item">
+            <!--Pick Up Modal (for pick up transaction search modal)-->
+            <a class="nav-link" data-bs-target="#pickup-searchModal" data-bs-toggle="modal">Pick-Up</a>
           </li>
         </ul>
         <div class="dropdown">
@@ -107,9 +111,16 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
     <!--Transaction View Modal-->
     <?php include_once 'modal/transaction-viewModal.php' ?>
     <!--Confirm Return Modal-->
-    <?php include_once 'modal/return-confirmationModal.php' ?>
+    <?php include_once 'modal/replace-confirmationModal.php' ?>
     <!--Confirm Return Modal-->
     <?php include_once 'modal/refund-confirmationModal.php' ?>
+    <!--Pickup Search Modal-->
+    <?php include_once 'modal/pickup-searchModal.php' ?>
+    <!--Pickup View Modal-->
+    <?php include_once 'modal/pickup-viewModal.php' ?>
+    <!--Pickup Confirmation Modal-->
+    <?php include_once 'modal/pickup-confirmationModal.php' ?>
+
 
 
   </div>
