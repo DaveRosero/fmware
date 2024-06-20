@@ -4,9 +4,9 @@ logo.src = logosrc;
 
 //Printing Functionality
 // Define a function to generate printable receipt content
-function generatePrintableContent() {
+function generatePrintableContent(transaction) {
   var content = "";
-  var total = $("#cart-total").text();
+  var total = $("#cart-total-modal").text();
   var salesReceiptNumber = "FMx0001";
   var customerName = "Customer Name";
   var address = "Address";
@@ -93,7 +93,7 @@ function generatePrintableContent() {
 //Printing Functionality
 $(".print").on("click", function () {
   function printReceiptWithLogo() {
-    var printableContent = generatePrintableContent();
+    var printableContent = generatePrintableContent(transaction);
 
     var printWindow = window.open("", "_blank");
     printWindow.document.write(
