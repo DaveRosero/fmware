@@ -350,12 +350,14 @@
             $description = $_POST['description'];
             $active = 1;
             $currentDate = date('F j, Y');
+            $pickup = $_POST['pickup'];
+            $delivery = $_POST['delivery'];
 
             $query = 'INSERT INTO product
-                        (name, code, supplier_id, barcode, image, description, brand_id, category_id, unit_id, unit_value, variant_id, expiration_date, user_id, date, active)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                        (name, code, supplier_id, barcode, image, description, brand_id, category_id, unit_id, unit_value, variant_id, expiration_date, user_id, date, pickup, delivery, active)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ssssssiiisssisi', $name, $code, $supplier_id, $barcode, $image, $description, $brand_id, $category_id, $unit_id, $unit_value, $variant_id, $expiration_date, $_SESSION['user_id'], $currentDate, $active);
+            $stmt->bind_param('ssssssiiisssisiii', $name, $code, $supplier_id, $barcode, $image, $description, $brand_id, $category_id, $unit_id, $unit_value, $variant_id, $expiration_date, $_SESSION['user_id'], $currentDate, $pickup, $delivery, $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();

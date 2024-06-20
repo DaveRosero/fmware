@@ -247,6 +247,22 @@ $(document).ready(function(){
         }
     });
 
+    $('#pickup_checkbox').change(function(){
+        if ($(this).is(':checked')) {
+            $('#pickup').val(1);
+        } else {
+            $('#pickup').val(0);
+        }
+    });
+
+    $('#delivery_checkbox').change(function(){
+        if ($(this).is(':checked')) {
+            $('#delivery').val(1);
+        } else {
+            $('#delivery').val(0);
+        }
+    });
+
     $('#edit-product').on('submit', function(event){
         event.preventDefault();
 
