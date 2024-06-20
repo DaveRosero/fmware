@@ -582,6 +582,32 @@
             return $json;
         }
 
+        public function editProduct ($id) {
+            $product = $this->getProductInfo($id);
+
+            if ($product && $product['name'] !== $_POST['edit_name']) {
+                $name = ucwords($_POST['edit_name']);
+                $this->editProductName($name, $id);
+            }
+
+            if ($product && $product['code'] !== $_POST['edit_code']) {
+                $code = strtoupper($_POST['edit_code']);
+                $this->editItemCode($code, $id);
+            }
+
+            if ($product && $product['supplier'] !== $_POST['edit_supplier']) {
+                $this->editSupllier($_POST['edit_supplier'], $id);
+            }
+
+
+            $json = array(
+                'redirect' => '/manage-products'
+            );
+
+            echo json_encode($json);
+            return;
+        }
+
         public function editProductName ($name, $id) {
             $query = 'UPDATE product SET name = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
@@ -600,20 +626,39 @@
             return;
         }
 
-        public function editProduct ($id) {
-            $product = $this->getProductInfo($id);
+        public function editSupllier ($supplier, $id) {
+            $query = 'UPDATE product SET supplier_id = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $supplier, $id);
 
-            if ($product && $product['name'] !== $_POST['edit_name']) {
-                $name = ucwords($_POST['edit_name']);
-                $this->editProductName($name, $id);
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
             }
 
+            $stmt->close();
+            return;
+        }
 
-            $json = array(
-                'redirect' => '/manage-products'
-            );
+        public function editItemCode ($code, $id) {
+            $query = 'UPDATE product SET code = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $code, $id);
 
-            echo json_encode($json);
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
             return;
         }
     }
