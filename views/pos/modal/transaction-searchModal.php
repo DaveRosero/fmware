@@ -16,8 +16,9 @@
                     <thead class="table-secondary">
                         <tr>
                             <th scope="col">Transaction #</th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Transaction Date</th>
                             <th scope="col">Total Price</th>
+                            <th scope="col">Validity</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -26,6 +27,13 @@
                             <th scope="row">1234567890</th>
                             <td>09/11/2001</td>
                             <td>$100.00</td>
+                            <td><span class="badge text-bg-primary">Valid</span></td>
+                            <!--transaction status-->
+                            
+                            <!-- <span class="badge text-bg-primary">Valid</span>
+                            <span class="badge text-bg-danger">Not Valid</span>
+                            <span class="badge text-bg-secondary">Replaced/Refunded</span>  -->
+                           
                             <!--Toggle Transaction View Modal-->
                             <td>
                                 <button class="btn btn-primary" data-bs-target="#transactionView" data-bs-toggle="modal">View</button>

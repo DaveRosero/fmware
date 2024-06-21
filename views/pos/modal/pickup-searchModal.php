@@ -16,8 +16,9 @@
                     <thead class="table-secondary">
                         <tr>
                             <th scope="col">Transaction #</th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Order Date</th>
                             <th scope="col">Total Price</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -26,6 +27,14 @@
                             <th scope="row">1234567890</th>
                             <td>09/11/2001</td>
                             <td>$100.00</td>
+                            <td><span class="badge text-bg-primary">Claimable</span></td>
+                            <!--transaction status-->
+                            <!--                                                         
+                            <span class="badge text-bg-primary">Claimable</span>
+                            <span class="badge text-bg-secondary">Claimed</span>
+                            <span class="badge text-bg-danger">Unclaimed</span> 
+                            -->
+                            <!--Toggle Transaction View Modal-->
                             <!--Toggle Transaction View Modal-->
                             <td>
                                 <button class="btn btn-primary" data-bs-target="#pickupView" data-bs-toggle="modal">View</button>

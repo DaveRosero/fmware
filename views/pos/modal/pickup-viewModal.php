@@ -55,13 +55,13 @@
                             <form action="" class="transactionType-form">
                                 <div class="d-flex justify-content-end gap-2">
                                     <select class="form-select   w-50" aria-label="Default select example" disabled>
-                                        <option value="1">Paid in Cash</option>
-                                        <option value="2">Paid Online</option>
+                                        <option value="1">Claimable</option>
+                                        <option value="2">Claimed</option>
+                                        <option value="3">Unclaimed</option>
                                     </select>
-                                    <select class="form-select w-50" aria-label="Default select example" disabled>
-                                        <option value="1">walk-in</option>
-                                        <option value="2">deliver</option>
-                                        <option value="2">online order</option>
+                                    <select class="form-select   w-50" aria-label="Default select example" disabled>
+                                        <option value="1">Un-Paid</option>
+                                        <option value="2">Paid</option>
                                     </select>
                                 </div>
                                 <!--Show the details  of customer this can be blank-->
@@ -71,8 +71,6 @@
                                     <input type="text" class="form-control" placeholder="Jhon" id="fName-input" disabled />
                                     <label for="lName-input" class="form-label">Last Name:</label>
                                     <input type="text" class="form-control" placeholder="Doe" id="lName-input" disabled />
-                                    <label for="address-input" class="form-label">Address:</label>
-                                    <input type="text" class="form-control" placeholder="#123 Somewhere Street, Nowhere City" id="address-input" disabled />
                                     <label for="contact-input" class="form-label">Contact:</label>
                                     <input type="text" class="form-control" placeholder="1231-1231-1231" id="contact-input" disabled />
                                 </form>
@@ -87,7 +85,7 @@
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#claimConfirmationModal">Claimed</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#claimConfirmationModal">Claim</button>
             </div>
         </div>
     </div>
