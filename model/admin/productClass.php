@@ -599,6 +599,9 @@
                 $this->editSupllier($_POST['edit_supplier'], $id);
             }
 
+            if ($product && $product['description'] !== $_POST['edit_description']) {
+                $this->editDescription($_POST['edit_description'], $id);
+            }
 
             $json = array(
                 'redirect' => '/manage-products'
@@ -658,6 +661,42 @@
                 $stmt->close();
             }
 
+            $stmt->close();
+            return;
+        }
+
+        public function editDescription ($description, $id) {
+            $query = 'UPDATE product SET description = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $description, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+        
+        public function editExpirationDate ($expiration, $id) {
+            $query = 'UPDATE product SET expiration_date = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $expiration, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
             $stmt->close();
             return;
         }
