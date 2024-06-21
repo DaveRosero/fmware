@@ -19,6 +19,7 @@
                             <th scope="col">Order Date</th>
                             <th scope="col">Total Price</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Claimed Date</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -27,13 +28,14 @@
                             <th scope="row">1234567890</th>
                             <td>09/11/2001</td>
                             <td>$100.00</td>
-                            <td><span class="badge text-bg-primary">Claimable</span></td>
+                            <td><span class="badge text-bg-secondary">Claimed</span></td>
+                            <td>09/12/2002</td>
                             <!--transaction status-->
-                            <!--                                                         
+<!-- 
                             <span class="badge text-bg-primary">Claimable</span>
                             <span class="badge text-bg-secondary">Claimed</span>
-                            <span class="badge text-bg-danger">Unclaimed</span> 
-                            -->
+                            <span class="badge text-bg-danger">Unclaimed</span> -->
+
                             <!--Toggle Transaction View Modal-->
                             <!--Toggle Transaction View Modal-->
                             <td>

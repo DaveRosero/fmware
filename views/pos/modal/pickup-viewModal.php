@@ -40,6 +40,11 @@
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">
+                            <select class="form-select   w-50" aria-label="Default select example">
+                                <option value="1">G-Cash</option>
+                                <option value="2">Cash</option>
+
+                            </select>
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
                                 <input type="number" class="form-control" id="cashRec-input" />
@@ -61,7 +66,8 @@
                                     </select>
                                     <select class="form-select   w-50" aria-label="Default select example" disabled>
                                         <option value="1">Un-Paid</option>
-                                        <option value="2">Paid</option>
+                                        <option value="2">Paid Online</option>
+                                        <option value="2">Paid Cash</option>
                                     </select>
                                 </div>
                                 <!--Show the details  of customer this can be blank-->

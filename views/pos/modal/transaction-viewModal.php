@@ -74,12 +74,17 @@
                                         <option value="1">broken items</option>
                                         <option value="2">wrong items</option>
                                         <option value="2">item change</option>
+                                        <option value="2">others</option>
                                     </select>
                                     <select class="form-select w-50" aria-label="Default select example" disabled>
                                         <option value="1">walk-in</option>
                                         <option value="2">deliver</option>
                                         <option value="2">online order</option>
                                     </select>
+                                </div>
+                                <div> 
+                                    <label for="other=reasons" class="form-label">If other specify:</label>
+                                    <input type="text" class="form-control"  id="other=reasons"  />
                                 </div>
                                 <!--Show the details  of customer this can be blank-->
                                 <h3>Customer Details</h3>
