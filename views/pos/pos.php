@@ -1,7 +1,10 @@
 <?php
 require_once 'model/database/database.php';
+require_once 'model/user/addressClass.php';
 
 $mysqli = database();
+
+$posaddress = new Address();
 
 // Check if search parameter is set
 $search = isset($_GET['search']) ? $_GET['search'] : '';
