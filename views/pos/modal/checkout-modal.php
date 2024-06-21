@@ -37,8 +37,9 @@
                                 <input type="number" class="form-control apply-discount" id="discount-input" />
                             </form>
                             <div class="d-flex justify-content-end">
-                                <h5 class="text-secondary my-auto">Delivery Fee: </h5>
-                                <h1 class="text-danger" id="">₱0.00</h1>
+                                <h5 class="text-secondary my-auto" id="delivery-fee">Delivery Fee: </h5>
+                                <!-- <input type="hidden" name="delivery-fee-value" id="delivery-fee-value"> -->
+                                <h1 class="text-danger" name = "delivery-fee-value" id="delivery-fee-value">₱0.00</h1>
                             </div>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
@@ -55,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col" id="address-form">
                             <form action="" class="transaction-form">
                                 <div class="d-flex justify-content-end">
                                     <select class="form-select w-50" aria-label="Default select example">
@@ -81,6 +82,7 @@
                                         <label for="address-input" class="form-label">Baranggay:</label>
                                         <select class="form-select" type="text" name="brgy" id="brgy" required>
                                             <option></option>
+                                            <?php $posaddress->getBrgys(); ?>
                                         </select>
                                     </div>
                                     <div class="mb-3">
