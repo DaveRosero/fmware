@@ -603,6 +603,22 @@
                 $this->editDescription($_POST['edit_description'], $id);
             }
 
+            if ($product && $product['expiration'] !== $_POST['edit_expiration_date']) {
+                $this->editExpirationDate($_POST['edit_expiration_date'], $id);
+            }
+
+            if ($product && $product['brand'] !== $_POST['edit_brand']) {
+                $this->editBrand($_POST['edit_brand'], $id);
+            }
+
+            if ($product && $product['unit_value'] !== $_POST['edit_unit_value']) {
+                $this->editUnitValue($_POST['edit_unit_value'], $id);
+            }
+
+            if ($product && $product['unit'] !== $_POST['edit_unit']) {
+                $this->editUnit($_POST['edit_unit'], $id);
+            }
+
             $json = array(
                 'redirect' => '/manage-products'
             );
@@ -697,6 +713,60 @@
                 $stmt->close();
             }
             
+            $stmt->close();
+            return;
+        }
+
+        public function editBrand ($brand, $id) {
+            $query = 'UPDATE product SET brand_id = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $brand, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editUnitValue ($unit_value, $id) {
+            $query = 'UPDATE product SET unit_value = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $unit_value, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->close();
+            return;
+        }
+
+        public function editUnit ($unit, $id) {
+            $query = 'UPDATE product SET unit_id = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $unit, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
             $stmt->close();
             return;
         }
