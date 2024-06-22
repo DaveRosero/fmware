@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    var stock;
+    var critical_level;
+
     function updateProductStatus (active, id) {
         $.ajax({
             url: '/disable-product',
@@ -37,6 +40,9 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
+                stock = json.stock;
+                critical_level = json.critical_level;
+
                 $('#edit_name').val(json.name);
                 $('#edit_code').val(json.code);
                 $('#edit_supplier').val(json.supplier).change();
@@ -53,6 +59,32 @@ $(document).ready(function(){
                 $('#edit_critical_level').val(json.critical_level);
                 $('#edit_barcode').val(json.barcode);
                 $('#edit_id').val(json.id);
+
+                if (json.stockable == 1) {
+                    $('#edit_non_stockable_checkbox').prop('checked', false);
+                    $('#edit_stockable').val(json.stockable);
+                } else {
+                    $('#edit_non_stockable_checkbox').prop('checked', true);
+                    $('#edit_stockable').val(json.stockable);
+                    $('#edit_stock').prop('readonly', true);
+                    $('#edit_critical_level').prop('readonly', true);
+                }
+                
+                if (json.pickup == 1) {
+                    $('#edit_pickup_checkbox').prop('checked', true);
+                    $('#edit_pickup').val(json.pickup);
+                } else {
+                    $('#edit_pickup_checkbox').prop('checked', false);
+                    $('#edit_pickup').val(json.pickup);
+                }
+
+                if (json.delivery == 1) {
+                    $('#edit_delivery_checkbox').prop('checked', true);
+                    $('#edit_delivery').val(json.delivery);
+                } else {
+                    $('#edit_delivery_checkbox').prop('checked', false);
+                    $('#edit_delivery').val(json.delivery);
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -281,5 +313,37 @@ $(document).ready(function(){
                 console.log("Response:", jqXHR.responseText);
             }
         });
+    });
+
+    $('#edit_non_stockable_checkbox').change(function(){
+        if ($(this).is(':checked')) {
+            $('#edit_stock').val(0);
+            $('#edit_critical_level').val(0);
+            $('#edit_stock').prop('readonly', true);
+            $('#edit_critical_level').prop('readonly', true);
+            $('#edit_stockable').val(0);
+        } else {
+            $('#edit_stock').val(stock);
+            $('#edit_critical_level').val(stock);
+            $('#edit_stock').prop('readonly', false);
+            $('#edit_critical_level').prop('readonly', false);
+            $('#edit_stockable').val(1);
+        }
+    });
+
+    $('#edit_pickup_checkbox').change(function(){
+        if ($(this).is(':checked')) {
+            $('#edit_pickup').val(1);
+        } else {
+            $('#edit_pickup').val(0);
+        }
+    });
+
+    $('#edit_delivery_checkbox').change(function(){
+        if ($(this).is(':checked')) {
+            $('#edit_delivery').val(1);
+        } else {
+            $('#edit_delivery').val(0);
+        }
     });
 });

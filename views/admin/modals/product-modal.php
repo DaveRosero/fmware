@@ -265,13 +265,22 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="form-floating col-md-6">
-                                        <input class="form-control" type="number" name="edit_stock" id="edit_stock" min="0" placeholder="" readonly required>
+                                    <div class="form-floating col-md-4">
+                                        <input class="form-control" type="number" name="edit_stock" id="edit_stock" min="0" placeholder="" required>
                                         <label for="" class="form-label mx-2">Stock <span class="text-danger">*</span></label>
                                     </div>
-                                    <div class="form-floating col-md-6">
-                                        <input class="form-control" type="number" name="edit_critical_level" id="edit_critical_level" min="0" placeholder="" readonly required>
+                                    <div class="form-floating col-md-4">
+                                        <input class="form-control" type="number" name="edit_critical_level" id="edit_critical_level" min="0" placeholder="" required>
                                         <label for="" class="form-label mx-2">Critical Level <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <div class="form-check my-auto">
+                                            <input class="form-check-input" type="checkbox" value="" id="edit_non_stockable_checkbox">
+                                            <input type="hidden" name="edit_stockable" id="edit_stockable">
+                                            <label class="form-check-label fw-semibold" for="non-stockable">
+                                                Non-Stockable
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -282,6 +291,32 @@
                                 <label class="form-label mx-2" for="flexCheckDefault">
                                     Barcode <span class="text-danger">*</span>
                                 </label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="edit_pickup_checkbox">
+                                                    <input type="hidden" name="edit_pickup" id="edit_pickup">
+                                                    <label class="form-check-label fw-semibold" for="checkbox1">
+                                                        For Pickup
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="edit_delivery_checkbox">
+                                                    <input type="hidden" name="edit_delivery" id="edit_delivery">
+                                                    <label class="form-check-label fw-semibold" for="checkbox2">
+                                                        For Delivery
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

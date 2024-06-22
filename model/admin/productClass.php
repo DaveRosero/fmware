@@ -375,7 +375,13 @@
             }
         }
 
-        public function stockLegend ($qty, $critical_level) {
+        public function stockLegend ($qty, $critical_level, $stockable) {
+            if ($stockable == 0) {
+                return '<span class="badge bg-dark text-light fw-semibold text-wrap cursor-pointer"
+                            data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
+                        >N/A</span>';
+            }
+
             if ($qty == 0) {
                 return '<span class="badge bg-dark fw-semibold text-wrap cursor-pointer"
                             data-bs-toggle="tooltip" title="Critical Level: '.$critical_level.'"
@@ -411,7 +417,8 @@
                         price_list.base_price,
                         price_list.unit_price,
                         stock.qty,
-                        stock.critical_level 
+                        stock.critical_level,
+                        stock.stockable 
                     FROM product
                     INNER JOIN user ON user.id = product.user_id
                     INNER JOIN brand ON brand.id = product.brand_id
@@ -423,7 +430,7 @@
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant, $base_price, $selling_price, $stock, $critical_level);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant, $base_price, $selling_price, $stock, $critical_level, $stockable);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch">
@@ -435,7 +442,7 @@
                                         </div>';
                         }
 
-                        $legend = $this->stockLegend($stock, $critical_level);
+                        $legend = $this->stockLegend($stock, $critical_level, $stockable);
 
                         echo '<tr>
                                 <td class="text-start">'.$status.'</td>
@@ -539,7 +546,11 @@
                             price_list.base_price,
                             price_list.unit_price,
                             stock.qty,
-                            stock.critical_level
+                            stock.critical_level,
+                            product.pickup,
+                            product.delivery,
+                            stock.stockable,
+                            product.image
                     FROM product
                     INNER JOIN price_list ON price_list.product_id = product.id
                     INNER JOIN stock ON stock.product_id = product.id
@@ -557,7 +568,8 @@
             }
 
             $stmt->bind_result($name, $code, $supplier, $description, $expiration, $brand, $unit_value, $unit,
-                            $category, $variant, $barcode, $base_price, $selling_price, $stock, $critical_level);
+                            $category, $variant, $barcode, $base_price, $selling_price, $stock, $critical_level,
+                            $pickup, $delivery, $stockable, $image);
             $stmt->fetch();
             $stmt->close();
 
@@ -577,7 +589,11 @@
                 'selling_price' => $selling_price,
                 'stock' => $stock,
                 'critical_level' => $critical_level,
-                'barcode' => $barcode
+                'barcode' => $barcode,
+                'pickup' => $pickup,
+                'delivery' => $delivery,
+                'stockable' => $stockable,
+                'image' => $image
             );
             return $json;
         }
@@ -617,6 +633,46 @@
 
             if ($product && $product['unit'] !== $_POST['edit_unit']) {
                 $this->editUnit($_POST['edit_unit'], $id);
+            }
+
+            if ($product && $product['category'] !== $_POST['edit_category']) {
+                $this->editCategory($_POST['edit_category'], $id);
+            }
+
+            if ($product && $product['variant'] !== $_POST['edit_variant']) {
+                $this->editVariant($_POST['edit_variant'], $id);
+            }
+            
+            if ($product && $product['base_price'] !== $_POST['edit_base_price']) {
+                $this->editBasePrice($_POST['edit_base_price'], $id);
+            }
+            
+            if ($product && $product['selling_price'] !== $_POST['edit_selling_price']) {
+                $this->editSellingPrice($_POST['edit_selling_price'], $id);
+            }
+            
+            if ($product && $product['stock'] !== $_POST['edit_stock']) {
+                $this->editStock($_POST['edit_stock'], $id);
+            }
+            
+            if ($product && $product['critical_level'] !== $_POST['edit_critical_level']) {
+                $this->editCriticalLevel($_POST['edit_critical_level'], $id);
+            }
+            
+            if ($product && $product['stockable'] !== $_POST['edit_stockable']) {
+                $this->editStockable($_POST['edit_stockable'], $id);
+            }
+            
+            if ($product && $product['barcode'] !== $_POST['edit_barcode']) {
+                $this->editBarcode($_POST['edit_barcode'], $id);
+            }
+            
+            if ($product && $product['pickup'] !== $_POST['edit_pickup']) {
+                $this->editPickup($_POST['edit_pickup'], $id);
+            }
+            
+            if ($product && $product['delivery'] !== $_POST['edit_delivery']) {
+                $this->editDelivery($_POST['edit_delivery'], $id);
             }
 
             $json = array(
@@ -757,6 +813,186 @@
             $query = 'UPDATE product SET unit_id = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $unit, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editCategory ($category, $id) {
+            $query = 'UPDATE product SET category_id = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $category, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editVariant ($variant, $id) {
+            $query = 'UPDATE product SET variant_id = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $variant, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editBasePrice ($base_price, $id) {
+            $query = 'UPDATE price_list SET base_price = ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('di', $base_price, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editSellingPrice ($selling_price, $id) {
+            $query = 'UPDATE price_list SET unit_price = ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('di', $selling_price, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editStock ($stock, $id) {
+            $query = 'UPDATE stock SET qty = ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $stock, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editCriticalLevel ($critical_level, $id) {
+            $query = 'UPDATE stock SET critical_level = ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $critical_level, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editStockable ($stockable, $id) {
+            $query = 'UPDATE stock SET stockable = ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $stockable, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editBarcode ($barcode, $id) {
+            $query = 'UPDATE product SET barcode = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $barcode, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editPickup ($pickup, $id) {
+            $query = 'UPDATE product SET pickup = ? WHERE id= ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $pickup, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function editDelivery ($delivery, $id) {
+            $query = 'UPDATE product SET delivery = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $delivery, $id);
 
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
