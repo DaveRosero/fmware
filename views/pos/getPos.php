@@ -18,12 +18,13 @@ $stmt = $mysqli->prepare($query);
 $stmt->execute();
 $stmt->bind_result($id, $qty, $price, $name, $unit_value, $unit, $variant);
 $tbody = '';
+$tbody_modal ='';
 $cart_total = array();
 while ($stmt->fetch()) {
-    $total_price = $price * $qty;   
+    $total_price = $price * $qty;
     $tbody .= '<tr>
                     <td class="align-middle">' . $name . '</td>
-                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
+                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
                     <td class="align-middle">' . $variant . '</td>
                     <td class="align-middle">
                         <div class="input-group">
@@ -60,12 +61,28 @@ while ($stmt->fetch()) {
                         </button>
                     </td>
                 </tr>';
+    $tbody_modal.= '<tr>
+                    <td class="align-middle">' . $name . '</td>
+                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
+                    <td class="align-middle">' . $variant . '</td>
+                    <td class="align-middle">₱' . $price . '</td>
+                    <td class="align-middle text-center">'. $qty . '</td>
+                    <td class="align-middle">₱' . $total_price . '</td>
+                </tr>';
+
     $cart_total[] = $total_price;
 }
 
 $stmt->close();
 
+
+
+// Assuming a discount value passed from the client, else default to 0
+$discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
+$total_with_discount = array_sum($cart_total) - $discount;
+
 $json = array();
 $json['tbody'] = $tbody;
-$json['cart_total'] = array_sum($cart_total);
+$json['tbody_modal'] = $tbody_modal;
+$json['cart_total'] = number_format($total_with_discount, 2);
 echo json_encode($json);
