@@ -68,6 +68,10 @@
                                     <label for="contact-input" class="form-label">Contact:</label>
                                     <input type="text" class="form-control" id="contact-input" />
                                 </div>
+                                <div class="col d-flex justify-content-end">
+                                    <p class="text-secondary">Request fulfilled by:</p>
+                                    <p class="ms-2">Username</p>
+                                </div>
                             </form>
                         </div>
                     </div>
