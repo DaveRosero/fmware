@@ -297,11 +297,14 @@ $(document).ready(function(){
 
     $('#edit-product').on('submit', function(event){
         event.preventDefault();
+        var formData = new FormData(this);
 
         $.ajax({
             url: '/edit-product',
             method: 'POST',
-            data: $(this).serialize(),
+            data: formData,
+            processData: false,  // Prevent jQuery from processing the data
+            contentType: false,
             dataType: 'json',
             success: function(json) {
                 if (json.redirect) {
