@@ -2,6 +2,48 @@ $(document).ready(function(){
     var stock;
     var critical_level;
 
+    function convertDateFormat(dateString) {
+        if (dateString === null || dateString === undefined) {
+            return null;
+        }
+
+        // Split the date string into components
+        const parts = dateString.split('-');
+        
+        // Ensure we have year, month, and day parts
+        if (parts.length !== 3) {
+            return null;
+        }
+        
+        const year = parts[0];
+        const month = parts[1];
+        const day = parts[2];
+
+        // Convert the month number to a month name
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Validate month number
+        if (isNaN(parseInt(month)) || parseInt(month) < 1 || parseInt(month) > 12) {
+            return null;
+        }
+
+        // Convert the month number to a month name
+        const monthName = monthNames[parseInt(month) - 1];
+
+        // Validate day number
+        if (isNaN(parseInt(day)) || parseInt(day) < 1 || parseInt(day) > 31) {
+            return null;
+        }
+
+        // Create the new format Month DD, YYYY
+        const formattedDate = `${monthName} ${parseInt(day)}, ${year}`;
+
+        return formattedDate;
+    }
+
     function updateProductStatus (active, id) {
         $.ajax({
             url: '/disable-product',
@@ -103,10 +145,26 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(json) {
                 var image = '/asset/images/products/' + json.image;
+                var expiration_date = convertDateFormat(json.expiration_date);
+
                 $('#view_image').attr('src', image);
                 $('#view_name').text(json.name);
                 $('#view_code').text(json.code);
                 $('#view_supplier').text(json.supplier);
+                $('#view_description').text(json.description);
+                $('#view_expiration_date').text(expiration_date);
+                $('#view_category').text(json.category);
+                $('#view_brand').text(json.brand);
+                $('#view_unit').text(json.unit);
+                $('#view_variant').text(json.variant);
+                $('#view_base_price').text(json.base_price);
+                $('#view_selling_price').text(json.selling_price);
+                $('#view_stock').text(json.stock);
+                $('#view_critical_level').text(json.critical_level);
+                $('#view_barcode').text(json.barcode);
+                $('#view_pickup').html(json.pickup);
+                $('#view_delivery').html(json.delivery);
+                $('#view-edit-button').data('product-id', json.id);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
