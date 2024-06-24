@@ -30,43 +30,69 @@
                         </div>
                     </div>
                     <div class="col-5">
-                        <div class="row text-center border-bottom mb-2">
-                            <h1 class="text-danger" id="cart-total-modal">₱0.00</h1>
-                            <p class="text-secondary">Total Price</p>
-                        </div>
                         <!-- Discount and Total Section in Modal Body -->
                         <div class="col border-bottom mb-2">
                             <form id="discount-form" class="mb-2">
                                 <label for="discount-input" class="form-label">Discount</label>
                                 <input type="number" class="form-control apply-discount" id="discount-input" />
-                                <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="cashRec-input" />
                             </form>
+                            <div class="d-flex justify-content-end">
+                                <h5 class="text-secondary my-auto" id="delivery-fee">Delivery Fee: </h5>
+                                <!-- <input type="hidden" name="delivery-fee-value" id="delivery-fee-value"> -->
+                                <h1 class="text-danger" name = "delivery-fee-value" id="delivery-fee-value">₱0.00</h1>
+                            </div>
                             <div class="mb-2">
+                                <div class="d-flex justify-content-end">
+                                    <h5 class="text-secondary my-auto">Total Price:</h5>
+                                    <h1 class="text-danger" id="cart-total-modal">₱0.00</h1>
+                                </div>
+                                <form id="discount-form" class="mb-2">
+                                    <label for="cashRec-input" class="form-label">Cash Received</label>
+                                    <input type="number" class="form-control" id="cashRec-input" />
+                                </form>
                                 <div class="d-flex justify-content-end">
                                     <h5 class="text-secondary my-auto">Change:</h5>
                                     <h1 class="text-success" id="change-display">₱0.00</h1>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col" id="address-form">
                             <form action="" class="transaction-form">
                                 <div class="d-flex justify-content-end">
                                     <select class="form-select w-50" aria-label="Default select example">
-                                        <option value="1">walk-in</option>
-                                        <option value="2">deliver</option>
+                                        <option value="0">POS</option>
+                                        <option value="1">Walk-in</option>
                                     </select>
                                 </div>
                                 <h3>Customer Details</h3>
                                 <div>
-                                    <label for="fName-input" class="form-label">First Name:</label>
-                                    <input type="text" class="form-control" id="fName-input" />
-                                    <label for="lName-input" class="form-label">Last Name:</label>
-                                    <input type="text" class="form-control" id="lName-input" />
-                                    <label for="address-input" class="form-label">Address:</label>
-                                    <input type="text" class="form-control" id="address-input" />
-                                    <label for="contact-input" class="form-label">Contact:</label>
-                                    <input type="text" class="form-control" id="contact-input" />
+                                    <div class="mb-3">
+                                        <label for="fName-input" class="form-label">First Name:</label>
+                                        <input type="text" class="form-control" id="fName-input" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lName-input" class="form-label">Last Name:</label>
+                                        <input type="text" class="form-control" id="lName-input" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address-input" class="form-label">Street:</label>
+                                        <input type="text" class="form-control" id="street-input" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address-input" class="form-label">Baranggay:</label>
+                                        <select class="form-select" type="text" name="brgy" id="brgy" required>
+                                            <option></option>
+                                            <?php $posaddress->getBrgys(); ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address-input" class="form-label">Municipality:</label>
+                                        <input type="text" class="form-control" id="municipality" readonly />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="contact-input" class="form-label">Contact:</label>
+                                        <input type="text" class="form-control" id="contact-input" required/>
+                                    </div>
                                 </div>
                                 <div class="col d-flex justify-content-end">
                                     <p class="text-secondary">Request fulfilled by:</p>
@@ -81,7 +107,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Close
                 </button>
-                <button class="btn btn-success print">Checkout</button>
+                <button class="btn btn-success print" disabled>Checkout</button>
             </div>
         </div>
     </div>

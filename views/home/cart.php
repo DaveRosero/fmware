@@ -13,7 +13,7 @@
     $cart = new Cart();
     $address = new Address();
     $transaction = new Transaction();
-
+    
     $home->redirectUser();
     $user_info = $user->getUser($_SESSION['email']);
     $user_address = $address->getAddress($user_info['id']);

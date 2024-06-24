@@ -65,7 +65,7 @@ while ($stmt->fetch()) {
                     <td class="align-middle">' . $name . '</td>
                     <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
                     <td class="align-middle">' . $variant . '</td>
-                    <td class="align-middle">' . $price . '</td>
+                    <td class="align-middle">₱' . $price . '</td>
                     <td class="align-middle text-center">'. $qty . '</td>
                     <td class="align-middle">₱' . $total_price . '</td>
                 </tr>';
@@ -74,6 +74,8 @@ while ($stmt->fetch()) {
 }
 
 $stmt->close();
+
+
 
 // Assuming a discount value passed from the client, else default to 0
 $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;

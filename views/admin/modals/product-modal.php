@@ -108,7 +108,7 @@
                                     <div class="col-md-4 d-flex justify-content-center">
                                         <div class="form-check my-auto">
                                             <input class="form-check-input" type="checkbox" value="" id="non-stockable">
-                                            <label class="form-check-label text-primary" for="non-stockable">
+                                            <label class="form-check-label fw-semibold" for="non-stockable">
                                                 Non-Stockable
                                             </label>
                                         </div>
@@ -122,9 +122,35 @@
                                 <label for="" class="form-label mx-2">Barcode <span class="text-danger">*</span></label>
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" value="" id="generate_barcode">
-                                    <label class="form-check-label text-primary" for="flexCheckDefault">
+                                    <label class="form-check-label fw-semibold" for="flexCheckDefault">
                                         Generate Barcode
                                     </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="pickup_checkbox">
+                                                    <input type="hidden" name="pickup" id="pickup" value="0">
+                                                    <label class="form-check-label fw-semibold" for="checkbox1">
+                                                        For Pickup
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="delivery_checkbox">
+                                                    <input type="hidden" name="delivery" id="delivery" value="0">
+                                                    <label class="form-check-label fw-semibold" for="checkbox2">
+                                                        For Delivery
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +166,7 @@
     </div>
 </div>
 
-<form id="edit-product" method="POST">
+<form id="edit-product" method="POST" enctype="multipart/form-data">
     <!-- Edit Modal -->
     <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -240,18 +266,19 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="form-floating col-md-4">
-                                        <input class="form-control" type="number" name="edit_stock" id="edit_stock" min="0" placeholder="" readonly required>
+                                        <input class="form-control" type="number" name="edit_stock" id="edit_stock" min="0" placeholder="" required>
                                         <label for="" class="form-label mx-2">Stock <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="form-floating col-md-4">
-                                        <input class="form-control" type="number" name="edit_critical_level" id="edit_critical_level" min="0" placeholder="" readonly required>
+                                        <input class="form-control" type="number" name="edit_critical_level" id="edit_critical_level" min="0" placeholder="" required>
                                         <label for="" class="form-label mx-2">Critical Level <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-4 d-flex justify-content-center">
                                         <div class="form-check my-auto">
-                                            <input class="form-check-input" type="checkbox" value="" id="edit_stock_request">
-                                            <label class="form-check-label text-primary" for="non-stockable">
-                                                Edit Stock
+                                            <input class="form-check-input" type="checkbox" value="" id="edit_non_stockable_checkbox">
+                                            <input type="hidden" name="edit_stockable" id="edit_stockable">
+                                            <label class="form-check-label fw-semibold" for="non-stockable">
+                                                Non-Stockable
                                             </label>
                                         </div>
                                     </div>
@@ -264,6 +291,32 @@
                                 <label class="form-label mx-2" for="flexCheckDefault">
                                     Barcode <span class="text-danger">*</span>
                                 </label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="edit_pickup_checkbox">
+                                                    <input type="hidden" name="edit_pickup" id="edit_pickup">
+                                                    <label class="form-check-label fw-semibold" for="checkbox1">
+                                                        For Pickup
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="edit_delivery_checkbox">
+                                                    <input type="hidden" name="edit_delivery" id="edit_delivery">
+                                                    <label class="form-check-label fw-semibold" for="checkbox2">
+                                                        For Delivery
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
