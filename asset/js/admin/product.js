@@ -93,6 +93,28 @@ $(document).ready(function(){
         })
     }
 
+    function viewProductInfo (id) {
+        $.ajax({
+            url: '/view-product',
+            method: 'POST',
+            data: {
+                id : id
+            },
+            dataType: 'json',
+            success: function(json) {
+                var image = '/asset/images/products/' + json.image;
+                $('#view_image').attr('src', image);
+                $('#view_name').text(json.name);
+                $('#view_code').text(json.code);
+                $('#view_supplier').text(json.supplier);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    }
+
     $('#product-table').DataTable({
         order: [
             [7, 'asc']
@@ -212,6 +234,11 @@ $(document).ready(function(){
     $('.edit').click(function(){
         var id = $(this).data('product-id');
         getProductInfo(id);
+    });
+
+    $('.view').click(function(){
+        var id = $(this).data('product-id');
+        viewProductInfo(id);
     });
 
     $('#new-product').on('submit', function(event){
