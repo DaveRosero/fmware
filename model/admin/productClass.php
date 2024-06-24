@@ -326,7 +326,7 @@
                 }
             }
 
-            $uploadDir = '/asset/images/products/';
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/asset/images/products/';
             $default = 'default-product.png';
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
@@ -601,6 +601,21 @@
         public function editProduct ($id) {
             $product = $this->getProductInfo($id);
 
+            if ($_FILES['edit_image']['error'] === UPLOAD_ERR_OK && !empty($_FILES['edit_image']['tmp_name'])) {
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/asset/images/products/';
+
+                if ($_FILES['edit_image']['name'] === 'default-product.png') {
+                    $uploadFile = basename($_FILES['edit_image']['name']);
+                } else {
+                    $uploadFile = uniqid('image_') . $_FILES['edit_image']['name'];
+                }
+
+                $path = $uploadDir . $uploadFile;
+                move_uploaded_file($_FILES['edit_image']['tmp_name'], $path);
+                $image = $uploadFile;
+                $this->editImage($image, $id);
+            }
+
             if ($product && $product['name'] !== $_POST['edit_name']) {
                 $name = ucwords($_POST['edit_name']);
                 $this->editProductName($name, $id);
@@ -680,6 +695,24 @@
             );
 
             echo json_encode($json);
+            return;
+        }
+
+        public function editImage ($image, $id) {
+            $query = 'UPDATE product SET image = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $image, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
             return;
         }
 
