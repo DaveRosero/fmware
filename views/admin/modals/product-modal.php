@@ -50,7 +50,6 @@
                                     <option></option>
                                     <?php $products->getBrands(); ?>
                                 </select>
-                                <label for="" class="form-label">Brand <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
@@ -72,14 +71,12 @@
                                     <option></option>
                                     <?php $products->getCategory(); ?>
                                 </select>
-                                <label for="" class="form-label">Category <span class="text-danger">*</span></label>
                             </div>
                             <div class="form-floating col-md-6">
                                 <select class="form-select" id="variant" name="variant">
                                     <option></option>
                                     <?php $products->getVariants(); ?>
                                 </select>
-                                <label for="" class="form-label">Variant <span class="text-danger">*</span></label>
                             </div>
                         </div>
                         <div class="row mb-4">
@@ -218,7 +215,6 @@
                                     <option></option>
                                     <?php $products->getBrands(); ?>
                                 </select>
-                                <label for="" class="form-label">Brand <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
@@ -240,14 +236,12 @@
                                     <option></option>
                                     <?php $products->getCategory(); ?>
                                 </select>
-                                <label for="" class="form-label">Category <span class="text-danger">*</span></label>
                             </div>
                             <div class="form-floating col-md-6">
                                 <select class="form-select" id="edit_variant" name="edit_variant">
                                     <option></option>
                                     <?php $products->getVariants(); ?>
                                 </select>
-                                <label for="" class="form-label">Variant <span class="text-danger">*</span></label>
                             </div>
                         </div>
                         <div class="row mb-4">
@@ -344,14 +338,65 @@
                             <img src="#" alt="Product Image" srcset="" id="view_image">
                         </div>
                         <div class="col-md-6">
-                            <h5>NAME: <span class="text-decoration-underline" id="view_name"></span></h5>
-                            <h5>CODE: <span class="text-decoration-underline" id="view_code"></span></h5>
-                            <h5>SUPPLIER: <span class="text-decoration-underline" id="view_supplier"></span></h5>
+                            <dl class="row">
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">NAME:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_name"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">CODE:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_code"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">SUPPLIER:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_supplier"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">DESCRIPTION:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_description"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">EXPIRATION DATE:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_expiration_date"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">CATEGORY:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_category"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">BRAND:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_brand"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">UNIT:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_unit"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">VARIANT:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_variant"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">BASE PRICE:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_base_price"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">SELLING PRICE:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_selling_price"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">STOCKS:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_stock"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">CRITICAL LEVEL:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_critical_level"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">BARCODE:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_barcode"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">FOR PICKUP:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_pickup"></dd>
+
+                                <dt class="col-sm-4 fw-semibold text-primary text-end">FOR DELIVERY:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_delivery"></dd>
+                            </dl>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary edit"
+                        id = "view-edit-button" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#editProduct"
+                    >Edit</button>
                 </div>
             </div>
         </div>
