@@ -331,6 +331,32 @@
     </div>
 </form>
 
+<div class="modal fade" id="viewProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="view-label">View Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="#" alt="Product Image" srcset="" id="view_image">
+                        </div>
+                        <div class="col-md-6">
+                            <h5>NAME: <span class="text-decoration-underline" id="view_name"></span></h5>
+                            <h5>CODE: <span class="text-decoration-underline" id="view_code"></span></h5>
+                            <h5>SUPPLIER: <span class="text-decoration-underline" id="view_supplier"></span></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+</div>
+
 <!-- Loading Modal -->
 <div class="modal" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">

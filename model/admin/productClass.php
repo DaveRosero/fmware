@@ -459,6 +459,8 @@
                                             class="btn btn-sm btn-secondary view me-1" 
                                             type="button" 
                                             data-product-id="'.$id.'"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#viewProduct";
                                         >
                                             <i class="fa-solid fa-eye fs-1"></i>
                                         </button>   
@@ -1038,6 +1040,40 @@
 
             $stmt->close();
             return;
+        }
+
+        public function viewProduct ($id) {
+            $query = 'SELECT product.image,
+                            product.code,
+                            product.name,
+                            supplier.name
+                    FROM product
+                    INNER JOIN supplier ON supplier.id = product.supplier_id
+                    WHERE product.id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($image, $code, $name, $supplier);
+            $stmt->fetch();
+            $stmt->close();
+
+            $json = array(
+                'image' => $image,
+                'name' => $name,
+                'code' => $code,
+                'supplier' => $supplier
+            );
+
+            return $json;
         }
     }
 ?>
