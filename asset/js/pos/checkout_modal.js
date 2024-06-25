@@ -12,7 +12,6 @@ $(document).ready(function () {
     var $contactInput = $("#contact-input");
     var $deliveryFeeContainer = $("#delivery-fee");
     var $deliveryFeeValue = $("#delivery-fee-value");
-    var $delivererSelect = $("#deliverer");
 
     // Function to generate a unique sales receipt number
     function generateRef() {
@@ -38,7 +37,7 @@ $(document).ready(function () {
             $municipalInput.closest(".mb-3").hide();
             $contactInput.closest(".mb-3").hide();
             $deliveryFeeContainer.hide(); // Hide delivery fee
-            $delivererSelect.closest(".mb-3").hide();
+            $deliveryFeeValue.hide();
         } else if ($transactionTypeSelect.val() === "1") { // Walk-in selected
             $firstNameInput.closest(".mb-3").show();
             $lastNameInput.closest(".mb-3").show();
@@ -47,7 +46,7 @@ $(document).ready(function () {
             $municipalInput.closest(".mb-3").show();
             $contactInput.closest(".mb-3").show();
             $deliveryFeeContainer.show(); // Show delivery fee
-            $delivererSelect.closest(".mb-3").show();
+            $deliveryFeeValue.show();
         }
         updateOriginalTotal(); // Recalculate total
         calculateDiscount(); // Recalculate discount
@@ -168,7 +167,7 @@ $(document).ready(function () {
     // Event listener for discount input
     $('#discount-input').on('input', function () {
         updateOriginalTotal();
-        calculateDiscount(); 
+        calculateDiscount(); // Recalculate total after applying discount
     });
 
     // Event listener for cash received input
@@ -176,8 +175,8 @@ $(document).ready(function () {
 
     // Initial update for original total and change
     updateOriginalTotal();
-    calculateDiscount(); 
-    calculateChange(); 
+    calculateDiscount(); // Ensure discount calculation on load
+    calculateChange(); // Ensure change calculation on load
 
     // Define a function to generate printable receipt content
     function generatePrintableContent() {
@@ -191,7 +190,7 @@ $(document).ready(function () {
         var customerName = $("#fName-input").val() + " " + $("#lName-input").val();
         var address = $("#street-input").val() + ", " + $("#brgy option:selected").text() + ", " + $("#municipality").val();
         var contact = $("#contact-input").val();
-        var delivererName = $("#deliverer option:selected").text(); // Get selected deliverer name
+        var delivererName = "Deliverer Name"; // Adjust as needed
         var purchasedDate = new Date().toLocaleDateString(); // Get the current date
 
         $("#cart-body-modal tr").each(function () {
@@ -264,7 +263,7 @@ $(document).ready(function () {
             '<div class="total">' +
             "<p>Subtotal: ₱" + originalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             ($transactionTypeSelect.val() === "1" ? "<p>Delivery Fee: ₱" + deliveryFee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" : "") +
-            "<p>Discount: ₱" + discount.toFixed(2).replace(/\B(?=(\d{3})+(?!d))/g, ",") + "</p>" +
+            "<p>Discount: ₱" + discount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             "<p>Total: ₱" + finalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             "<p>Cash: ₱" + cashReceived.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             "<p>Change: " + change + "</p>" +
@@ -290,7 +289,6 @@ $(document).ready(function () {
 
             printWindow.onafterprint = function () {
                 printWindow.close();
-                submitPosTransaction();
             };
         }
 
@@ -302,40 +300,4 @@ $(document).ready(function () {
             logo.onload = printReceiptWithLogo;
         }
     });
-
-    function submitPosTransaction() {
-        $.ajax({
-            url: '/pos-checkout', 
-            method: 'POST',
-            data: {
-                user_id: $("#user_id").val(), 
-                delivery_fee_value: parseFloat($("#delivery-fee-value").data('fee')).toFixed(2), 
-                fname: $("#fName-input").val(),
-                lname: $("#lName-input").val(),
-                contact: $("#contact-input").val(),
-                subtotal: parseFloat($("#cart-total-modal").text().replace('₱', '').replace(/,/g, '')).toFixed(2), 
-                total: parseFloat($("#cart-total-modal").text().replace('₱', '').replace(/,/g, '')).toFixed(2), 
-                discount: parseFloat($("#discount-input").val()).toFixed(2), 
-                cash: parseFloat($("#cashRec-input").val()).toFixed(2), 
-                changes: parseFloat($("#change-display").text().replace('₱', '').replace(/,/g, '')).toFixed(2), 
-                deliverer_name: $("#deliverer option:selected").text(), 
-                payment_type: $("#payment_type").val(), 
-                address_id: $("#brgy").val(), 
-                pos_ref: generateRef()
-            },
-            dataType: 'json',
-            success: function (response) {
-                console.log('POS transaction submitted successfully:', response);
-                // Handle success response (if any)
-            },
-            error: function (xhr, status, error) {
-                console.error('Error submitting POS transaction:', status, error);
-                // Handle error condition
-            }
-        });
-    }
-    
 });
-
-
-
