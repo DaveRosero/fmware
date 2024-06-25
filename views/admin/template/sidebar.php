@@ -33,6 +33,14 @@
                 <span class="hide-menu">Manage Business</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/activity-logs" aria-expanded="false">
+                <span>
+                <i class="fas fa-book fs-4"></i>
+                </span>
+                <span class="hide-menu">Activity Logs</span>
+              </a>
+            </li>
             <li class="nav-small-cap">
               <span class="hide-menu">Transactions</span>
             </li>

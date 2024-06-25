@@ -56,6 +56,7 @@ require_once __DIR__.'/router.php';
 
     // Admin Dashboard
     get('/dashboard', 'views/admin/dashboard.php');
+    get('/activity-logs','views/admin/logs.php');
 
 //*****************************************************************//
 
