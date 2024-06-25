@@ -13,7 +13,7 @@
                         if ($active != 1) {
                             continue;
                         }
-                        echo '<option value="'.$id.'">'.$name.'</option>';
+                        echo '<option value="'.$id.'">'.ucwords($name).'</option>';
                     }
                     $stmt->close();
                 } else {
@@ -35,7 +35,7 @@
                         if ($active != 1) {
                             continue;
                         }
-                        echo '<option value="'.$id.'">'.$name.'</option>';
+                        echo '<option value="'.$id.'">'.strtoupper($name).'</option>';
                     }
                     $stmt->close();
                 } else {
@@ -57,7 +57,7 @@
                         if ($active != 1) {
                             continue;
                         }
-                        echo '<option value="'.$id.'">'.$name.'</option>';
+                        echo '<option value="'.$id.'">'.ucfirst($name).'</option>';
                     }
                     $stmt->close();
                 } else {
@@ -79,7 +79,7 @@
                         if ($active != 1) {
                             continue;
                         }
-                        echo '<option value="'.$id.'">'.$name.'</option>';
+                        echo '<option value="'.$id.'">'.ucwords($name).'</option>';
                     }
                     $stmt->close();
                 } else {
@@ -1046,9 +1046,30 @@
             $query = 'SELECT product.image,
                             product.code,
                             product.name,
-                            supplier.name
+                            supplier.name,
+                            product.description,
+                            product.expiration_date,
+                            category.name,
+                            brand.name,
+                            product.unit_value,
+                            unit.name,
+                            variant.name,
+                            price_list.base_price,
+                            price_list.unit_price,
+                            stock.qty,
+                            stock.critical_level,
+                            product.barcode,
+                            product.pickup,
+                            product.delivery,
+                            product.id
                     FROM product
                     INNER JOIN supplier ON supplier.id = product.supplier_id
+                    INNER JOIN category ON category.id = product.category_id
+                    INNER JOIN brand ON brand.id = product.brand_id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN price_list ON price_list.product_id = product.id
+                    INNER JOIN stock ON stock.product_id = product.id
                     WHERE product.id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
@@ -1062,15 +1083,43 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($image, $code, $name, $supplier);
+            $stmt->bind_result($image, $code, $name, $supplier, $description, $expiration_date, $category,
+                                $brand, $unit_value, $unit, $variant, $base_price, $selling_price, $stock,
+                                $critical_level, $barcode, $pickup, $delivery, $product_id);
             $stmt->fetch();
             $stmt->close();
+
+            if ($pickup == 1) {
+                $pickup_format = '<i class="fa-solid fa-square-check text-success fs-6"></i>';
+            } else {
+                $pickup_format = '<i class="fa-solid fa-square-xmark text-danger fs-6"></i>';
+            }
+
+            if ($delivery == 1) {
+                $delivery_format = '<i class="fa-solid fa-square-check text-success fs-6"></i>';
+            } else {
+                $delivery_format = '<i class="fa-solid fa-square-xmark text-danger fs-6"></i>';
+            }
 
             $json = array(
                 'image' => $image,
                 'name' => $name,
                 'code' => $code,
-                'supplier' => $supplier
+                'supplier' => $supplier,
+                'description' => $description,
+                'expiration_date' => $expiration_date,
+                'category' => $category,
+                'brand' => strtoupper($brand),
+                'unit' => $unit_value . ' ' . strtoupper($unit),
+                'variant' => ucwords($variant),
+                'base_price' => '₱'.number_format($base_price, 2),
+                'selling_price' => '₱'.number_format($selling_price, 2),
+                'stock' => $stock,
+                'critical_level' => $critical_level,
+                'barcode' => $barcode,
+                'pickup' => $pickup_format,
+                'delivery' => $delivery_format,
+                'id' => $product_id
             );
 
             return $json;
