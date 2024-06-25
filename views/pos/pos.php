@@ -1,10 +1,26 @@
 <?php
 require_once 'model/database/database.php';
 require_once 'model/user/addressClass.php';
+require_once 'model/user/user.php';
 
 $mysqli = database();
 
 $posaddress = new Address();
+
+session_start(); // Start session if not already started
+
+$user = new User();
+
+// Check if session email is set
+if (isset($_SESSION['email'])) {
+    $user_info = $user->getUser($_SESSION['email']);
+
+    // Check if 'name' key exists in $user_info before using it
+    $user_name = isset($user_info['fname']) ? $user_info['fname'] : 'Unknown User';
+} else {
+    // Handle case where session email is not set
+    $user_name = 'Unknown User';
+}
 
 // Check if search parameter is set
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -48,7 +64,7 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
         </ul>
         <div class="dropdown">
           <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Username
+            Hi, <?php echo htmlspecialchars($user_name); ?>
           </button>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/login">Logout</a></li>

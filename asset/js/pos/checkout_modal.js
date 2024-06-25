@@ -12,18 +12,8 @@ $(document).ready(function () {
     var $contactInput = $("#contact-input");
     var $deliveryFeeContainer = $("#delivery-fee");
     var $deliveryFeeValue = $("#delivery-fee-value");
-
-    // Function to generate a unique sales receipt number
-    function generateRef() {
-        const bytes = new Uint8Array(10);
-        window.crypto.getRandomValues(bytes);
-        let hex = '';
-        bytes.forEach(byte => {
-            hex += byte.toString(16).padStart(2, '0');
-        });
-        const prefix = 'POS_';
-        return prefix + hex.toUpperCase();
-    }
+    var $delivererSelect = $("#deliverer");
+    
 
     // Function to show/hide fields based on dropdown selection
     function toggleFields() {
@@ -38,6 +28,7 @@ $(document).ready(function () {
             $contactInput.closest(".mb-3").hide();
             $deliveryFeeContainer.hide(); // Hide delivery fee
             $deliveryFeeValue.hide();
+            $delivererSelect.closest(".mb-3").hide();
         } else if ($transactionTypeSelect.val() === "1") { // Walk-in selected
             $firstNameInput.closest(".mb-3").show();
             $lastNameInput.closest(".mb-3").show();
@@ -47,6 +38,7 @@ $(document).ready(function () {
             $contactInput.closest(".mb-3").show();
             $deliveryFeeContainer.show(); // Show delivery fee
             $deliveryFeeValue.show();
+            $delivererSelect.closest(".mb-3").show();
         }
         updateOriginalTotal(); // Recalculate total
         calculateDiscount(); // Recalculate discount
@@ -190,7 +182,7 @@ $(document).ready(function () {
         var customerName = $("#fName-input").val() + " " + $("#lName-input").val();
         var address = $("#street-input").val() + ", " + $("#brgy option:selected").text() + ", " + $("#municipality").val();
         var contact = $("#contact-input").val();
-        var delivererName = "Deliverer Name"; // Adjust as needed
+        var delivererName = $("#deliverer option:selected").text(); // Adjust as needed
         var purchasedDate = new Date().toLocaleDateString(); // Get the current date
 
         $("#cart-body-modal tr").each(function () {
@@ -263,7 +255,7 @@ $(document).ready(function () {
             '<div class="total">' +
             "<p>Subtotal: ₱" + originalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             ($transactionTypeSelect.val() === "1" ? "<p>Delivery Fee: ₱" + deliveryFee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" : "") +
-            "<p>Discount: ₱" + discount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
+            "<p>Discount: ₱" + discount.toFixed(2).replace(/\B(?=(\d{3})+(?!d))/g, ",") + "</p>" +
             "<p>Total: ₱" + finalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             "<p>Cash: ₱" + cashReceived.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</p>" +
             "<p>Change: " + change + "</p>" +
@@ -271,12 +263,53 @@ $(document).ready(function () {
             "</div>";
         return printableContent;
     }
+    
+    // Function to generate a unique sales receipt number
+    function generateRef() {
+        const bytes = new Uint8Array(10);
+        window.crypto.getRandomValues(bytes);
+        let hex = '';
+        bytes.forEach(byte => {
+            hex += byte.toString(16).padStart(2, '0');
+        });
+        const prefix = 'POS_';
+        return prefix + hex.toUpperCase();
+    }
 
     // Printing Functionality
     $(".print").on("click", function () {
+        var pos_ref = generateRef();
+        submitForm(pos_ref); // Submit the form before printing
+    });
+
+    function submitForm(pos_ref) {
+        var formData = $("#transaction-form").serialize();
+        formData += '&pos_ref=' + pos_ref;
+
+        if ($transactionTypeSelect.val() === "1") {
+            var deliveryFee = parseFloat($("#delivery-fee-value").data('fee')) || 0;
+            formData += '&delivery_fee_value=' + deliveryFee;
+        }
+
+        $.ajax({
+            url: '/pos-checkout',
+            method: 'POST',
+            data: formData,
+            success: function (response) {
+                alert('Transaction successful.');
+                console.log(response);
+                // Proceed with printing the receipt
+                printReceipt();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error in form submission:', status, error);
+            }
+        });
+    }
+
+    function printReceipt() {
         function printReceiptWithLogo() {
             var printableContent = generatePrintableContent();
-
             var printWindow = window.open("", "_blank");
             printWindow.document.write(
                 "<html><head><title>Receipt</title></head><body>" +
@@ -284,14 +317,11 @@ $(document).ready(function () {
                 "</body></html>"
             );
             printWindow.document.close();
-
             printWindow.print();
-
             printWindow.onafterprint = function () {
                 printWindow.close();
             };
         }
-
         if (logo.complete) {
             // If logo is already loaded, print receipt immediately
             printReceiptWithLogo();
@@ -299,5 +329,5 @@ $(document).ready(function () {
             // If logo is not yet loaded, wait for it to load before printing receipt
             logo.onload = printReceiptWithLogo;
         }
-    });
+    }
 });
