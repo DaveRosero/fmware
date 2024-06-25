@@ -1,8 +1,8 @@
-<div class="modal fade" id="transactionSearch-Modal" aria-hidden="true" aria-labelledby="transactionSearch-ModalLabel" tabindex="-1">
+<div class="modal fade" id="history-searchModal" aria-hidden="true" aria-labelledby="transactionhistorySearch-ModalLabel" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="transactionSearch-ModalLabel">Transaction Search</h1>
+                <h1 class="modal-title fs-5" id="transactionhistorySearch-ModalLabel">Transaction Search</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -19,7 +19,7 @@
                             <th scope="col">Transaction Date</th>
                             <th scope="col">Total Price</th>
                             <th scope="col">Transaction Type</th>
-                            <th scope="col">Validity</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -29,7 +29,7 @@
                             <td>09/11/2001</td>
                             <td>$100.00</td>
                             <td>ONLINE ORDER</td>
-                            <td><span class="badge text-bg-primary">Valid</span></td>
+                            <td><span class="badge text-bg-primary">Active</span></td>
                             <!--transaction status-->
                             
                             <!-- <span class="badge text-bg-primary">Valid</span>
@@ -38,7 +38,7 @@
                            
                             <!--Toggle Transaction View Modal-->
                             <td>
-                                <button class="btn btn-primary" data-bs-target="#transactionView" data-bs-toggle="modal">View</button>
+                                <button class="btn btn-primary" data-bs-target="#historyView" data-bs-toggle="modal">View</button>
                             </td>
                         </tr>
                         <tr>
@@ -46,7 +46,7 @@
                             <td>09/11/2001</td>
                             <td>$100.00</td>
                             <td>POS</td>
-                            <td><span class="badge text-bg-primary">Valid</span></td>
+                            <td><span class="badge text-bg-secondary">Void</span></td>
                             <!--transaction status-->
                             
                             <!-- <span class="badge text-bg-primary">Valid</span>
@@ -55,7 +55,7 @@
                            
                             <!--Toggle Transaction View Modal-->
                             <td>
-                                <button class="btn btn-primary" data-bs-target="#transactionView" data-bs-toggle="modal">View</button>
+                                <button class="btn btn-primary" data-bs-target="#historyView" data-bs-toggle="modal" >View</button>
                             </td>
                         </tr>
                     </tbody>

@@ -41,6 +41,10 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
             <!--Pick Up Modal (for pick up transaction search modal)-->
             <a class="nav-link" data-bs-target="#pickup-searchModal" data-bs-toggle="modal">Pick-Up</a>
           </li>
+          <li class="nav-item">
+            <!--Pick Up Modal (for pick up transaction history search modal)-->
+            <a class="nav-link" data-bs-target="#history-searchModal" data-bs-toggle="modal">History</a>
+          </li>
         </ul>
         <div class="dropdown">
           <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -123,6 +127,10 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
     <?php include_once 'modal/pickup-viewModal.php' ?>
     <!--Pickup Confirmation Modal-->
     <?php include_once 'modal/pickup-confirmationModal.php' ?>
+    <!--Pickup Confirmation Modal-->
+    <?php include_once 'modal/history-searchModal.php' ?>
+    <!--Pickup Confirmation Modal-->
+    <?php include_once 'modal/history-viewModal.php' ?>
 
 
 
