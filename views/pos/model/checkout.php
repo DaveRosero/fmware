@@ -4,7 +4,7 @@ require_once 'model/database/database.php';
 $mysqli = database();
 
 // Check if POST variables are set
-$post_keys = ['user_id', 'pos_ref', 'delivery_fee_value', 'fname', 'lname', 'contact', 'subtotal', 'total', 'discount', 'cash', 'changes', 'deliverer_name', 'payment_type', 'address'];
+$post_keys = ['user_id', 'pos_ref', 'delivery-fee-value', 'fname', 'lname', 'contact', 'subtotal', 'total', 'discount', 'cash', 'changes', 'deliverer', 'payment_type', 'address'];
 foreach ($post_keys as $key) {
     if (!isset($_POST[$key])) {
         die("Error: Missing POST variable $key");
@@ -13,7 +13,7 @@ foreach ($post_keys as $key) {
 
 $user_id = $_POST['user_id'];
 $pos_ref = $_POST['pos_ref'];
-$delivery_fee = floatval($_POST['delivery_fee_value']);
+$delivery_fee = floatval($_POST['delivery-fee-value']);
 $fname = $_POST['fname'];
 $lname = $_POST['lname'];
 $contact = $_POST['contact'];
@@ -21,16 +21,16 @@ $subtotal = floatval($_POST['subtotal']);
 $total = floatval($_POST['total']);
 $discount = floatval($_POST['discount']);
 $cash = floatval($_POST['cash']);
-$change = floatval($_POST['change']);
-$deliverername = $_POST['deliverer'];
+$change = floatval($_POST['changes']);
+$deliverer_name = $_POST['deliverer_name'];
 $transaction_type_id = 1;
 $payment_type_id = intval($_POST['payment_type']);
 $address = $_POST['address'];
 $status = ($payment_type_id == 2) ? 'paid' : 'unpaid';
-if (isset($_POST['delivery_fee_value'])) {
-    $delivery_fee_value = floatval($_POST['delivery_fee_value']); // Ensure it's converted to float if needed
+if (isset($_POST['delivery-fee-value'])) {
+    $delivery_fee_value = floatval($_POST['delivery-fee-value']); 
 } else {
-    $delivery_fee_value = null; // Handle case when delivery_fee_value is missing or not set
+    $delivery_fee_value = null; 
 }
 
 $query = 'INSERT INTO pos
@@ -41,7 +41,7 @@ $query = 'INSERT INTO pos
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
     $stmt->bind_param('sssddddddissiisi', $pos_ref, $fname, $lname, $subtotal, $total, $discount, $cash, $change, $delivery_fee,
-                      $contact, $address, $deliverername, $transaction_type_id, $payment_type_id, $status, $user_id);
+                      $contact, $address, $deliverer_name, $transaction_type_id, $payment_type_id, $status, $user_id);
 
     if ($stmt->execute()) {
         $stmt->close();
