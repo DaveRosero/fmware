@@ -38,13 +38,14 @@
                             </form>
                             <div class="d-flex justify-content-end">
                                 <h5 class="text-secondary my-auto" id="delivery-fee">Delivery Fee: </h5>
-                                <input type="hidden" name="delivery_fee_value" id="delivery-fee-value" value="">
                                 <h1 class="text-danger" name = "delivery-fee-value" id="delivery-fee-value">₱0.00</h1>
+                                <input type="hidden" name="delivery-fee-value" id="delivery-fee-value-hidden" value="">
                             </div>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
                                     <h5 class="text-secondary my-auto">Total Price:</h5>
                                     <h1 class="text-danger" name = "total" id="cart-total-modal">₱0.00</h1>
+                                    <input type="hidden" name="subtotal" id="cart-total-modal" value="subtotal">
                                 </div>
                                 <form id="discount-form" class="mb-2">
                                     <label for="cashRec-input" class="form-label">Cash Received</label>
@@ -52,7 +53,7 @@
                                 </form>
                                 <div class="d-flex justify-content-end">
                                     <h5 class="text-secondary my-auto">Change:</h5>
-                                    <h1 class="text-success" name = "change" id="change-display">₱0.00</h1>
+                                    <h1 class="text-success" name = "changes" id="change-display">₱0.00</h1>
                                 </div>
                             </div>
                         </div>
@@ -101,9 +102,10 @@
                                 <div>
                                     <div class="mb-3">
                                         <label for="deliverer-input" class="form-label">Deliverer</label>
-                                        <select class="form-select" type="text" name="deliverer" id="deliverer" required>
+                                        <select class="form-select" type="text" name="deliverer_name" id="deliverer" required>
                                             <option value="0">Deliverer1</option>
                                             <option value="1">Deliverer2</option>
+                                            <input type="hidden" name="deliverer_name" id="deliverer-name-hidden" value="">
                                         </select>
                                     </div>
                                 </div>

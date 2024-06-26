@@ -283,29 +283,46 @@ $(document).ready(function () {
     });
 
     function submitForm(pos_ref) {
-        var formData = $("#transaction-form").serialize();
-        formData += '&pos_ref=' + pos_ref;
+    var formData = $("#transaction-form").serializeArray();
+    formData.push({ name: 'pos_ref', value: pos_ref });
 
-        if ($transactionTypeSelect.val() === "1") {
-            var deliveryFee = parseFloat($("#delivery-fee-value").data('fee')) || 0;
-            formData += '&delivery_fee_value=' + deliveryFee;
-        }
 
-        $.ajax({
-            url: '/pos-checkout',
-            method: 'POST',
-            data: formData,
-            success: function (response) {
-                alert('Transaction successful.');
-                console.log(response);
-                // Proceed with printing the receipt
-                printReceipt();
-            },
-            error: function (xhr, status, error) {
-                console.error('Error in form submission:', status, error);
-            }
-        });
+    if ($transactionTypeSelect.val() === "0") {
+        var deliveryFee = parseFloat($("#delivery-fee-value-hidden").data('fee')) || 0;
+        var subtotal = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
+        var total = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
+        var discount = parseFloat($('#discount-input').val()) || 0;
+        var cash = parseFloat($('#cashRec-input').val()) || 0;
+        var changes = parseFloat($("#cashRec-input").val()) || 0;
+        var deliverer = $("#deliverer").val() || "";  // Assuming deliverer is a select element
+        var paymentType = $("#payment-type").val(); // Add the payment type input as needed
+        var address = $("#street-input").val() + ", " + $("#brgy option:selected").text() + ", " + $("#municipality").val();
+
+        formData.push({ name: 'delivery-fee-value', value: deliveryFee });
+        formData.push({ name: 'subtotal', value: subtotal });
+        formData.push({ name: 'total', value: total });
+        formData.push({ name: 'discount', value: discount });
+        formData.push({ name: 'cash', value: cash });
+        formData.push({ name: 'changes', value: changes });
+        formData.push({ name: 'deliverer_name', value: deliverer });
+        formData.push({ name: 'payment_type', value: paymentType });
+        formData.push({ name: 'address', value: address });
     }
+
+    $.ajax({
+        url: '/pos-checkout',
+        method: 'POST',
+        data: $.param(formData),
+        success: function (response) {
+            alert('Transaction successful.');
+            console.log(response);
+            printReceipt();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error in form submission:', status, error);
+        }
+    });
+}
 
     function printReceipt() {
         function printReceiptWithLogo() {
