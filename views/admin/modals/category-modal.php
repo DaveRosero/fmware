@@ -8,10 +8,10 @@
         </div>
         <form id="new-category" method="POST">
             <div class="modal-body">
-                <div class="mb-3">
+                <p class="text-danger" id="category_feedback"></p>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="category_name" placeholder="" required>
                     <label for="" class="form-label">Category Name<span class="text-danger">*</span></label>
-                    <p class="text-danger" id="category_feedback"></p>
-                    <input type="text" class="form-control" name="category_name" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -34,13 +34,13 @@
             </div>
             <form id="edit-category" method="POST">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="" class="form-label">New Category Name<span class="text-danger">*</span></label>
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="category_name" name="category_name" required>
-                        <input type="hidden" name="category_id" id="category_id">
+                        <label for="" class="form-label">New Category Name<span class="text-danger">*</span></label>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="category_id" id="category_id">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
