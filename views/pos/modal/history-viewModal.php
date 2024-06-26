@@ -8,7 +8,7 @@
             <div class="modal-body" style="max-height: 75vh; overflow:hidden;">
                 <div class="row">
                     <div class="col-7">
-                        <div class="col" style="height: calc(75vh - 200px);overflow-y: auto;overflow-x: hidden;">
+                        <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
                             <table class="table align-middle">
                                 <thead class="table table-secondary">
                                     <tr>
@@ -29,6 +29,7 @@
                                         <td>3</td>
                                         <td>$297.00</td>
                                     </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -40,14 +41,13 @@
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">
-                            <select class="form-select   w-50" aria-label="Default select example">
+                            <select class="form-select   w-50" aria-label="Default select example" disabled>
                                 <option value="1">G-Cash</option>
                                 <option value="2">Cash</option>
-
                             </select>
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="cashRec-input" />
+                                <input type="number" class="form-control" id="cashRec-input" placeholder="297.00" disabled/>
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
@@ -60,14 +60,9 @@
                             <form action="" class="transactionType-form">
                                 <div class="d-flex justify-content-end gap-2">
                                     <select class="form-select   w-50" aria-label="Default select example" disabled>
-                                        <option value="1">Claimable</option>
-                                        <option value="2">Claimed</option>
-                                        <option value="3">Unclaimed</option>
-                                    </select>
-                                    <select class="form-select   w-50" aria-label="Default select example" disabled>
                                         <option value="1">Un-Paid</option>
                                         <option value="2">Paid Online</option>
-                                        <option value="2">Paid Cash</option>
+                                        <option value="3" selected>Paid Cash</option>
                                     </select>
                                 </div>
                                 <!--Show the details  of customer this can be blank-->
