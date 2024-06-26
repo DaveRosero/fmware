@@ -1,5 +1,6 @@
 <?php
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Staff extends Admin {
         public function getStaffList () {
@@ -164,6 +165,8 @@
         }
 
         public function regStaff () {
+            $logs = new Logs();
+
             $fname = ucfirst($_POST['fname']);
             $lname = ucfirst($_POST['lname']);
             $email = $_POST['email'];
@@ -205,6 +208,11 @@
                     $stmt->close();
                     $staff = $this->getStaff($email);
                     $this->addStaffGroup($staff['id'], $group);
+                    
+                    $description_log = 'Added staff '.ucfirst($staff['fname']).' '.ucfirst($staff['lname']);
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($description_log, $_SESSION['user_id'], $date_log);
+
                     return '/staff';
                 } else {
                     die("Error in executing statement: " . $stmt->error);

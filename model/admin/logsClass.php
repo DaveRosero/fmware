@@ -27,11 +27,26 @@
                             </tr>';
             }
             $stmt->close();
+            echo $content;
             return;
         }
 
-        public function newStaff () {
+        public function newLog ($description, $id, $date) {
+            $query = 'INSERT INTO logs (description, user_id, date) VALUES (?,?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('sis', $description, $id, $date);
 
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->close();
+            return;
         }
     }
 ?>
