@@ -1,5 +1,6 @@
 <?php
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Category extends Admin {
         public function isCategoryExist ($category) {
@@ -27,7 +28,9 @@
         }
 
         public function newCategory () {
-            $category = $_POST['category_name'];
+            $logs = new Logs();
+
+            $category = ucwords($_POST['category_name']);
             if ($this->isCategoryExist($category)) {
                 $json = array('category_feedback' => 'Category already exist.');
                 echo json_encode($json);
@@ -42,6 +45,11 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+
+                    $action_log = 'Added new category '.$category;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     $json = array('redirect' => '/category');
                     echo json_encode($json);
                 } else {
@@ -54,14 +62,23 @@
         }
 
         public function editCategory () {
+            $logs = new Logs();
+            
             $id = $_POST['category_id'];
-            $category = $_POST['category_name'];
+            $category = ucwords($_POST['category_name']);
+            $old_category = $this->getCategoryName($id);
+
             $query = "UPDATE category SET name = ? WHERE id = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('si', $category, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $action_log = 'Update '.$old_category.' to '.$category;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     $json = array('redirect' => '/category');
                     echo json_encode($json);
                 } else {
@@ -101,7 +118,7 @@
                         $author = $fname.' '.$initial.'.';
                         echo '<tr>
                                 <td>'.$status.'</td>
-                                <td>'.$name.'</td>
+                                <td>'.ucwords($name).'</td>
                                 <td>'.date('F j, Y', strtotime($date)).'</td>
                                 <td>
                                     <button 
@@ -126,19 +143,30 @@
         }
 
         public function disableCategory () {
+            $logs = new Logs();
+
             $id = $_POST['id'];
             $status = $_POST['status'];
+            $category = $this->getCategoryName($id);
+
             if ($status == 1) {
                 $active = 0;
+                $action_log = 'Disable category '.$category;
             } else {
                 $active = 1;
+                $action_log = 'Enable category '.$category;
             }
+
             $query = 'UPDATE category SET active = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $active, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     $json['redirect'] = '/category';
                     echo json_encode($json);
                 } else {
@@ -148,6 +176,27 @@
             } else {
                 die("Error in preparing statement: " . $this->conn->error);
             }
+        }
+
+        public function getCategoryName ($id) {
+            $query = 'SELECT name FROM category WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($category);
+            $stmt->fetch();
+            $stmt->close();
+            
+            return $category;
         }
     }
 ?>

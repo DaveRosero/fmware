@@ -1,5 +1,6 @@
 <?php
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Staff extends Admin {
         public function getStaffList () {
@@ -66,6 +67,37 @@
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 $stmt->bind_param('s', $email);
+                if ($stmt->execute()) {
+                    $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    return [
+                        'id' => $id,
+                        'fname' => $fname,
+                        'lname' => $lname,
+                        'email' => $newEmail,
+                        'password' => $password,
+                        'phone' => $phone
+                    ];
+                } else {
+                    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+                    $stmt->close();
+                    return null;
+                }
+            } else {
+                echo "Error preparing statement: " . $this->conn->error;
+                return null;
+            }
+        }
+
+        public function getStaffbyId ($id) {
+            $query = 'SELECT id, firstname, lastname, email, password, phone
+                    FROM user
+                    WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            if ($stmt) {
+                $stmt->bind_param('i', $id);
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone);
                     $stmt->fetch();
@@ -164,6 +196,8 @@
         }
 
         public function regStaff () {
+            $logs = new Logs();
+
             $fname = ucfirst($_POST['fname']);
             $lname = ucfirst($_POST['lname']);
             $email = $_POST['email'];
@@ -205,6 +239,11 @@
                     $stmt->close();
                     $staff = $this->getStaff($email);
                     $this->addStaffGroup($staff['id'], $group);
+                    
+                    $description_log = 'Added staff '.ucfirst($staff['fname']).' '.ucfirst($staff['lname']);
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($description_log, $_SESSION['user_id'], $date_log);
+
                     return '/staff';
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -216,12 +255,25 @@
         }
 
         public function updateStaff ($active, $id) {
+            $logs = new Logs();
+
             $query = 'UPDATE user SET active = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $active, $id);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    $staff = $this->getStaffbyId($id);
+
+                    if ($active == 1) {
+                        $action_log = 'Enable staff account '.$staff['fname'].' '.$staff['lname'];
+                    } else {
+                        $action_log = 'Disable staff account '.$staff['fname'].' '.$staff['lname'];
+                    }
+
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     return '/staff';
                 } else {
                     die("Error in executing statement: " . $stmt->error);

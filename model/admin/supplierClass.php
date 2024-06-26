@@ -1,9 +1,12 @@
 <?php
     require_once 'session.php';
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Supplier extends Admin {
         public function adddSupplier ($supplier, $email, $contact, $phone, $address) {
+            $logs = new Logs();
+
             $active = 1;
             $date = date('F j, Y');
             $supplier = strtoupper($supplier);
@@ -23,6 +26,11 @@
             }
 
             $stmt->close();
+
+            $action_log = 'Added new supplier '.$supplier;
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
             $json = array('redirect' => '/manage-suppliers');
             echo json_encode($json);
             return;
@@ -119,6 +127,8 @@
         }
 
         public function editSupplier ($supplier, $email, $contact, $phone, $address, $id) {
+            $logs = new Logs();
+
             $query = 'UPDATE supplier SET name = ?, email = ?, contact_person = ?, phone = ?, address = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $supplier = strtoupper($supplier);
@@ -134,6 +144,11 @@
             }
 
             $stmt->close();
+
+            $action_log = 'Update info of supplier '.strtoupper($supplier);
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
             $json = array(
                 'redirect' => '/manage-suppliers'
             );
@@ -142,6 +157,8 @@
         }
 
         public function updateSupplierStatus ($active, $id) {
+            $logs = new Logs();
+            
             $query = 'UPDATE supplier SET active = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $active, $id);
@@ -156,11 +173,50 @@
             }
 
             $stmt->close();
+            $supplier = $this->getSupplierInfo($id);
+
+            if ($active == 1) {
+                $action_log = 'Enable supplier '.strtoupper($supplier['supplier']);
+            } else {
+                $action_log = 'Disable supplier '.strtoupper($supplier['supplier']);
+            }
+
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+            
             $json = array(
                 'redirect' => '/manage-suppliers'
             );
             echo json_encode($json);
             return;
+        }
+
+        public function getSupplierInfo ($id) {
+            $query = 'SELECT id, name, email, contact_person, phone, address FROM supplier WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($id, $supplier, $email, $contact, $phone, $address);
+            $stmt->fetch();
+            $stmt->close();
+
+            return [
+                'id' => $id,
+                'supplier' => $supplier,
+                'email' => $email,
+                'contact' => $contact,
+                'phone' => $phone,
+                'address' => $address
+            ];
         }
     }
 ?>

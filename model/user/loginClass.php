@@ -4,6 +4,7 @@
     require_once 'vendor/PHPMailer/src/PHPMailer.php';
     require_once 'vendor/PHPMailer/src/SMTP.php';
     require_once 'vendor/PHPMailer/src/Exception.php';
+    require_once 'model/admin/logsClass.php';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -142,6 +143,7 @@
 
         public function login () {
             $json = array();
+            $logs = new Logs();
 
             $query = 'SELECT id, email, password, active, code, attempts
                     FROM user
@@ -191,17 +193,22 @@
                                 break;
                             case 'delivery':
                                 $json['redirect'] = '/scan-qr';
+                                $action_log = 'Login to delivery';
                                 break;
                             case 'admin':
                                 $json['redirect'] = '/dashboard';
+                                $action_log = 'Login to dashboard';
                                 break;
                             default:
                                 $json['redirect'] = '/pos';
+                                $action_log = 'Login to point of sale';
                                 break;
                         }
 
+                        $date_log = date('F j, Y g:i A');
+                        $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                         echo json_encode($json);
-                        return;
                         return;
                     } else {
                         $this->minusAttempt($email);
