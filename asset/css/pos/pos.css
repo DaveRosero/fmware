@@ -14,7 +14,7 @@ body {
 }
 
 .item-list {
-  height: calc(100vh - 56px - 48px);
+  height: calc(100vh - 100px );
   overflow-y: auto;
   overflow-x: hidden;
 }

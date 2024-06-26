@@ -13,13 +13,13 @@ $user = new User();
 
 // Check if session email is set
 if (isset($_SESSION['email'])) {
-    $user_info = $user->getUser($_SESSION['email']);
+  $user_info = $user->getUser($_SESSION['email']);
 
-    // Check if 'name' key exists in $user_info before using it
-    $user_name = isset($user_info['fname']) ? $user_info['fname'] : 'Unknown User';
+  // Check if 'name' key exists in $user_info before using it
+  $user_name = isset($user_info['fname']) ? $user_info['fname'] : 'Unknown User';
 } else {
-    // Handle case where session email is not set
-    $user_name = 'Unknown User';
+  // Handle case where session email is not set
+  $user_name = 'Unknown User';
 }
 
 // Check if search parameter is set
@@ -34,10 +34,12 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FMWARE | POS</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/vendor/Bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/vendor/FontAwesome/css/all.min.css">
   <link rel="stylesheet" href="asset/css/pos/pos.css">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" > -->
 </head>
 
 <body style="overflow: hidden;">
@@ -143,20 +145,24 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
     <?php include_once 'modal/pickup-viewModal.php' ?>
     <!--Pickup Confirmation Modal-->
     <?php include_once 'modal/pickup-confirmationModal.php' ?>
-    <!--Pickup Confirmation Modal-->
+    <!--Pickup History Search Modal-->
     <?php include_once 'modal/history-searchModal.php' ?>
-    <!--Pickup Confirmation Modal-->
+    <!--Pickup History View Modal-->
     <?php include_once 'modal/history-viewModal.php' ?>
+    <!--Pickup History View Modal-->
+    <?php include_once 'modal/history-confirmationModal.php' ?>
 
 
 
   </div>
+  <script src="/vendor/Bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/vendor/FontAwesome/js/all.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
   <script src="asset/js/pos/pos.js"></script>
   <script src="asset/js/pos/checkout_modal.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script> -->
 </body>
 
 </html>

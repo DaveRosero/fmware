@@ -8,7 +8,7 @@
             <div class="modal-body" style="max-height: 75vh; overflow:hidden;">
                 <div class="row">
                     <div class="col-7">
-                        <div class="col" style="height: calc(75vh - 200px);overflow-y: auto;overflow-x: hidden;">
+                        <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
                             <table class="table align-middle">
                                 <thead class="table table-secondary">
                                     <tr>
