@@ -190,6 +190,7 @@
                         switch ($group_name) {
                             case 'user':
                                 $json['redirect'] = '/';
+                                $action_log = 'Customer Login';
                                 break;
                             case 'delivery':
                                 $json['redirect'] = '/scan-qr';
