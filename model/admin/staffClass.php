@@ -6,7 +6,7 @@
         public function getStaffList () {
             $query = 'SELECT 
                         user.id, user.firstname, user.lastname, user.email, user.phone, user.active,
-                        user_group.user_id, user_group.group_id, groups.name
+                        user_group.user_id, user_group.group_id, groups.name, user.date
                     FROM user
                     INNER JOIN user_group ON user_group.user_id = user.id
                     INNER JOIN groups ON user_group.group_id = groups.id';
@@ -15,7 +15,7 @@
                 if ($stmt->execute()) {
                     $stmt->bind_result(
                         $id, $fname, $lname, $email, $phone, $active,
-                        $user_id, $group_id, $group_name
+                        $user_id, $group_id, $group_name, $date
                     );
 
                     while ($stmt->fetch()) {
@@ -48,6 +48,7 @@
                                 <td>'.$name.'</td>
                                 <td>'.$email.'</td>
                                 <td>'.$phone.'</td>
+                                <td>'.$date.'</td>
                                 <td>'.ucfirst($group_name).'</td>
                             </tr>';
                     }
@@ -61,14 +62,14 @@
         }
 
         public function getStaff ($email) {
-            $query = 'SELECT id, firstname, lastname, email, password, phone
+            $query = 'SELECT id, firstname, lastname, email, password, phone, date
                     FROM user
                     WHERE email = ?';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 $stmt->bind_param('s', $email);
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone);
+                    $stmt->bind_result($id, $fname, $lname, $newEmail, $password, $phone, $date);
                     $stmt->fetch();
                     $stmt->close();
 
@@ -78,7 +79,8 @@
                         'lname' => $lname,
                         'email' => $newEmail,
                         'password' => $password,
-                        'phone' => $phone
+                        'phone' => $phone,
+                        'date' => $date
                     ];
                 } else {
                     echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -228,12 +230,13 @@
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $date = date('F j, Y');
 
             $query = 'INSERT INTO user
-                        (firstname, lastname, email, password, phone, active)
-                    VALUES (?,?,?,?,?,?)';
+                        (firstname, lastname, email, password, phone, date, active)
+                    VALUES (?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sssssi', $fname, $lname, $email, $hashedPassword, $phone, $active);
+            $stmt->bind_param('ssssssi', $fname, $lname, $email, $hashedPassword, $phone, $date, $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();

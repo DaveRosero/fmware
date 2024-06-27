@@ -21,6 +21,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number</th>
+                    <th>Date Created</th>
                     <th>Position</th>
                 </thead>
                 <tbody>
