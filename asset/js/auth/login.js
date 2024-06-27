@@ -14,6 +14,10 @@ $(document).ready(function(){
                 }
                 
                 $('#login_feedback').text(feedback.login_feedback);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
             }
         });
     });
