@@ -4,7 +4,7 @@ require_once 'model/database/database.php';
 $mysqli = database();
 
 // Check if POST variables are set
-$post_keys = ['user_id', 'pos_ref', 'delivery-fee-value', 'fname', 'lname', 'contact', 'subtotal', 'total', 'discount', 'cash', 'changes', 'deliverer', 'payment_type', 'address'];
+$post_keys = ['user_id', 'pos_ref', 'delivery-fee-value', 'fname', 'lname', 'contact', 'subtotal', 'total', 'discount', 'cash', 'changes', 'deliverer_name', 'payment_type', 'address'];
 foreach ($post_keys as $key) {
     if (!isset($_POST[$key])) {
         die("Error: Missing POST variable $key");
@@ -46,9 +46,9 @@ if ($stmt) {
     if ($stmt->execute()) {
         $stmt->close();
 
-        $query = 'INSERT INTO order_items (order_ref, product_id, qty)
+        $query = 'INSERT INTO pos_items (pos_ref, product_id, qty)
                   SELECT ?, product_id, qty
-                  FROM cart
+                  FROM pos_cart
                   WHERE user_id = ?
                   AND active = 1';
         $stmt = $mysqli->prepare($query);

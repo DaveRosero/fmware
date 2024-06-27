@@ -286,15 +286,15 @@ $(document).ready(function () {
     var formData = $("#transaction-form").serializeArray();
     formData.push({ name: 'pos_ref', value: pos_ref });
 
-
+    
     if ($transactionTypeSelect.val() === "0") {
         var deliveryFee = parseFloat($("#delivery-fee-value-hidden").data('fee')) || 0;
-        var subtotal = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
         var total = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
         var discount = parseFloat($('#discount-input').val()) || 0;
+        var subtotal = parseFloat(total + discount) || 0;
         var cash = parseFloat($('#cashRec-input').val()) || 0;
-        var changes = parseFloat($("#cashRec-input").val()) || 0;
-        var deliverer = $("#deliverer").val() || "";  // Assuming deliverer is a select element
+        var changes = parseFloat(cash - total) || 0;
+        var deliverer = $("#deliverer-name-hidden").val() || "";  // Assuming deliverer is a select element
         var paymentType = $("#payment-type").val(); // Add the payment type input as needed
         var address = $("#street-input").val() + ", " + $("#brgy option:selected").text() + ", " + $("#municipality").val();
 
@@ -308,6 +308,7 @@ $(document).ready(function () {
         formData.push({ name: 'payment_type', value: paymentType });
         formData.push({ name: 'address', value: address });
     }
+
 
     $.ajax({
         url: '/pos-checkout',

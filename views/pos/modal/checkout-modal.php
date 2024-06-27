@@ -60,7 +60,7 @@
                         <div class="col" id="address-form">
                             <form action="" class="transaction-form" id="transaction-form">
                                 <div class="d-flex justify-content-evenly gap-2">
-                                    <select class="form-select w-50" aria-label="Default select example">
+                                    <select class="form-select w-50" name="transaction_type" aria-label="Default select example">
                                         <option value="0">POS</option>
                                         <option value="1">Walk-in</option>
                                     </select>
@@ -105,7 +105,7 @@
                                         <select class="form-select" type="text" name="deliverer_name" id="deliverer" required>
                                             <option value="0">Deliverer1</option>
                                             <option value="1">Deliverer2</option>
-                                            <input type="hidden" name="deliverer_name" id="deliverer-name-hidden" value="">
+                                            <input type="hidden" id="deliverer-name-hidden" name="deliverer_name" value="Deliverer Name">
                                         </select>
                                     </div>
                                 </div>
