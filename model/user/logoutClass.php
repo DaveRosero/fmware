@@ -6,7 +6,25 @@
         public function logout () {
             $logs = new Logs();
 
-            $action_log = 'Logout';
+            switch ($_SESSION['group']) {
+                case 'user':
+                    $json['redirect'] = '/';
+                    $action_log = 'Customer Logout';
+                    break;
+                case 'delivery':
+                    $json['redirect'] = '/scan-qr';
+                    $action_log = 'Delivery Logout';
+                    break;
+                case 'admin':
+                    $json['redirect'] = '/dashboard';
+                    $action_log = 'Dashboard Logout';
+                    break;
+                default:
+                    $json['redirect'] = '/pos';
+                    $action_log = 'Point of Sale Logout';
+                    break;
+            }
+
             $date_log = date('F j, Y g:i A');
             $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
 
