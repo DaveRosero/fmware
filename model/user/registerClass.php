@@ -1,8 +1,10 @@
 <?php
+    include_once 'session.php';
     require_once 'model/user/user.php';
     require_once 'vendor/PHPMailer/src/PHPMailer.php';
     require_once 'vendor/PHPMailer/src/SMTP.php';
     require_once 'vendor/PHPMailer/src/Exception.php';
+    require_once 'model/admin/logsClass.php';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -126,6 +128,8 @@
         }
 
         public function register () {
+            $logs = new Logs();
+
             if ($this->accountExist($_POST['email'])) {
                 $json =  array(
                     'exist' => 'This email is registered to an existing account'
@@ -178,14 +182,15 @@
             $description = $_POST['description'];
             $verify = $this->generateLink();
             $active = 0;
+            $date = date('F j, Y');
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
             $query = 'INSERT INTO user
-                        (firstname, lastname, email, password, phone, code, active)
-                    VALUES (?,?,?,?,?,?,?)';
+                        (firstname, lastname, email, password, phone, date, code, active)
+                    VALUES (?,?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ssssssi', $fname, $lname, $email, $hashedPassword, $phone, $verify['code'], $active);
+            $stmt->bind_param('sssssssi', $fname, $lname, $email, $hashedPassword, $phone, $date, $verify['code'], $active);
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
@@ -199,6 +204,11 @@
                         'verify' => 'Confirmation Email Sent',
                         'redirect' => '/login'
                     );
+
+                    $action_log = 'Register new customer '.$name;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
