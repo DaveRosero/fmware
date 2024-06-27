@@ -22,6 +22,7 @@
                     <tr>
                         <th>Status</th>
                         <th>Category</th>
+                        <th>Number of Products</th>
                         <th>Date Added</th>
                         <th>Status</th>
                     </tr>
