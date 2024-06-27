@@ -97,13 +97,20 @@
                         category.date,
                         category.active,
                         user.firstname,
-                        user.lastname 
+                        user.lastname,
+                        COALESCE(product_counts.product_count, 0) AS product_count
                     FROM category
-                    INNER JOIN user ON category.user_id = user.id';
+                    INNER JOIN user ON category.user_id = user.id
+                    LEFT JOIN (
+                        SELECT category_id, COUNT(*) AS product_count
+                        FROM product
+                        WHERE active = 1
+                        GROUP BY category_id
+                    ) AS product_counts ON category.id = product_counts.category_id';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $date, $active, $fname, $lname);
+                    $stmt->bind_result($id, $name, $date, $active, $fname, $lname, $product_count);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch">
@@ -119,6 +126,7 @@
                         echo '<tr>
                                 <td>'.$status.'</td>
                                 <td>'.ucwords($name).'</td>
+                                <td>'.$product_count.'</td>
                                 <td>'.date('F j, Y', strtotime($date)).'</td>
                                 <td>
                                     <button 
