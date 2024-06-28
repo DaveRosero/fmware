@@ -39,6 +39,7 @@
                                 <th>Description</th>
                                 <th>Amount</th>
                                 <th>Date</th>
+                                <th></th>
                             </thead>
                             <tbody>
                                 <?php $manage->showExpenses(); ?>
