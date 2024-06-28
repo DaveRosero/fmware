@@ -1,6 +1,5 @@
 <?php
     include_once 'session.php';
-    require_once 'session.php';
     require_once 'model/admin/admin.php';
     require_once 'model/admin/logsClass.php';
 
@@ -39,7 +38,7 @@
         }
 
         public function showExpenses () {
-            $query = 'SELECT description, amount, date FROM expenses ORDER BY date ASC';
+            $query = 'SELECT id, description, amount, date FROM expenses ORDER BY date ASC';
             $stmt = $this->conn->prepare($query);
 
             if (!$stmt) {
@@ -51,13 +50,22 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($description, $amount, $date);
+            $stmt->bind_result($id, $description, $amount, $date);
             $content = '';
             while ($stmt->fetch()) {
                 $content .= '<tr>
                                 <td>'.ucfirst($description).'</td>
                                 <td>₱'.number_format($amount, 2).'</td>
                                 <td>'.$date.'</td>
+                                <td>
+                                    <button 
+                                        class="btn btn-sm btn-danger delete" 
+                                        type="button"
+                                        data-expense-id='.$id.'
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
                             </tr>';
             }
             $stmt->close();
@@ -215,6 +223,59 @@
             $stmt->fetch();
             $stmt->close();
             return $df;
+        }
+
+        public function delExpense($id) {
+            $logs = new Logs();
+
+            $expense = $this->getExpenses($id);
+
+            $query = 'DELETE FROM expenses WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+
+            $action_log = 'Deleted expense '.$expense['description'].' amount ₱'.number_format($expense['amount'], 2);
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
+            $json = array(
+                'redirect' => '/manage-business'
+            );
+            echo json_encode($json);
+        }
+
+        public function getExpenses($id) {
+            $query = 'SELECT description, amount FROM expenses WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($description, $amount);
+            $stmt->fetch();
+            $stmt->close();
+            return [
+                'description' => $description,
+                'amount' => $amount
+            ];
         }
     }
 ?>

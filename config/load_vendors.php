@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/vendor/FontAwesome/css/all.min.css">
     <link rel="stylesheet" href="/vendor/Select2/dist/css/select2.min.css">
     <link rel="stylesheet" href="/vendor/Select2-Theme/select2-bootstrap-5-theme.min.css">
+    <link rel="stylesheet" href="/vendor/SweetAlert2/sweetalert2.min.css">
 <!-- CSS CLOSE -->
 
 <!-- SCRIPT OPEN -->
@@ -15,4 +16,5 @@
     <script src="/vendor/FontAwesome/js/all.min.js"></script>
     <script src="/vendor/NotifyJS/notify.js"></script>
     <script src="/vendor/Select2/dist/js/select2.full.min.js"></script>
+    <script src="/vendor/SweetAlert2/sweetalert2.all.min.js"></script>
 <!-- SCRIPT CLOSE -->

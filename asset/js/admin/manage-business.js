@@ -20,6 +20,26 @@ $(document).ready(function(){
         })
     }
 
+    function delExpense (id) {
+        $.ajax({
+            url: '/delete-expenses',
+            method: 'POST',
+            data: {
+                id : id
+            },
+            dataType: 'json',
+            success: function(json) {
+                if (json.redirect) {
+                    window.location.href = json.redirect
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    }
+
     $('#expenses-table').DataTable({
         'ordering': false
     });
@@ -107,5 +127,24 @@ $(document).ready(function(){
             var active = 0;
             updateDeliveryFeeStatus(active, id);
         }
-    })
+    });
+
+    $('.delete').click(function(){
+        var id = $(this).data('expense-id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                delExpense(id);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            }
+        });
+    });
 })
