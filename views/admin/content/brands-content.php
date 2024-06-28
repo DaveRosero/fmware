@@ -22,6 +22,7 @@
                     <tr>
                         <th>Status</th>
                         <th>Brand</th>
+                        <th>Number of Products</th>
                         <th>Date Added</th>
                         <th>Action</th>
                     </tr>

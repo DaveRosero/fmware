@@ -5,7 +5,8 @@
         public function showLogs () {
             $query = 'SELECT logs.description, user.firstname, user.lastname, logs.date
                     FROM logs
-                    INNER JOIN user ON user.id = logs.user_id';
+                    INNER JOIN user ON user.id = logs.user_id
+                    ORDER BY logs.id DESC';
             $stmt = $this->conn->prepare($query);
             
             if (!$stmt) {
