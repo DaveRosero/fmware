@@ -107,6 +107,20 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col">
+                <div class="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="show_password"
+                  />
+                  <label class="form-check-label" for="showPasscheck"
+                    >Show password</label
+                  >
+                </div>
+              </div>
+            </div>
             <div class="form-floating mb-2">
               <input
                 type="number"
@@ -179,18 +193,6 @@
               <label for="home">Description</label>
             </div>
             <div class="row mb-2">
-              <div class="col">
-                <div class="mb-3 form-check">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="show_password"
-                  />
-                  <label class="form-check-label" for="showPasscheck"
-                    >Show password</label
-                  >
-                </div>
-              </div>
               <div class="col-auto text-end">
                 <p class="text-secondary">Already have an account? <a href="/login">Login</a></p>
               </div>
