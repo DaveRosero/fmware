@@ -21,9 +21,7 @@ $(document).ready(function(){
     }
 
     $('#expenses-table').DataTable({
-        order: [
-            [2, 'desc']
-        ]
+        'ordering': false
     });
 
     $('#municipal-table').DataTable({
