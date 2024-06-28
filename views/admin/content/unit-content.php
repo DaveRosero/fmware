@@ -19,6 +19,7 @@
                     <tr>
                         <th>Status</th>
                         <th>Unit</th>
+                        <th>Number of Products</th>
                         <th>Date Added</th>
                         <th>Action</th>
                     </tr>
