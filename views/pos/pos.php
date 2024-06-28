@@ -25,8 +25,15 @@ if (isset($_SESSION['email'])) {
 // Check if search parameter is set
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
+if ($_SESSION['group'] !== 'cashier') {
+  header('Location: /404');
+}
+
 
 ?>
+
+<?php include_once 'fetchpos.php' ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,8 +41,9 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FMWARE | POS</title>
-  <link rel="stylesheet" href="/vendor/Bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/vendor/FontAwesome/css/all.min.css">
+  <?php
+  require_once 'config/load_vendors.php';
+  ?>
   <link rel="stylesheet" href="asset/css/pos/pos.css">
   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css">
@@ -69,7 +77,9 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
             Hi, <?php echo htmlspecialchars($user_name); ?>
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/login">Logout</a></li>
+            <form action="/logout" method="post">
+              <button type="submit" class="dropdown-item">Logout</button>
+            </form>
           </ul>
         </div>
       </div>
@@ -154,14 +164,13 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 
 
+
   </div>
-  <script src="/vendor/Bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/vendor/FontAwesome/js/all.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+
   <script src="asset/js/pos/pos.js"></script>
   <script src="asset/js/pos/checkout_modal.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="asset/js/pos/transearch.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script> -->
 </body>
 
