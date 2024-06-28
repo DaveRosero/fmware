@@ -1,5 +1,7 @@
 <?php
+    include_once 'session.php';
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Brands extends Admin {
         public function isBrandExist ($brand) {
@@ -27,7 +29,9 @@
         }
 
         public function newBrand() {
-            $brand = $_POST['brand_name'];
+            $logs = new Logs();
+
+            $brand = strtoupper($_POST['brand_name']);
             if ($this->isBrandExist($brand)) {
                 $json = array('brand_feedback' => 'Brand already exist.');
                 echo json_encode($json);
@@ -42,6 +46,11 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+
+                    $action_log = 'Added new brand '.$brand;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     $json = array('redirect' => '/brands');
                     echo json_encode($json);
                 } else {
@@ -54,19 +63,22 @@
         }
 
         public function getBrands () {
-            $query = 'SELECT
-                        brand.id, 
+            $query = 'SELECT brand.id, 
                         brand.name, 
                         brand.date,
                         brand.active,
-                        user.firstname,
-                        user.lastname 
+                        COALESCE(product_counts.product_count, 0) AS product_count
                     FROM brand
-                    INNER JOIN user ON brand.user_id = user.id';
+                    LEFT JOIN (
+                        SELECT brand_id, COUNT(*) AS product_count
+                        FROM product
+                        WHERE active = 1
+                        GROUP BY brand_id
+                    ) AS product_counts ON brand.id = product_counts.brand_id';
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $date, $active, $fname, $lname);
+                    $stmt->bind_result($id, $name, $date, $active, $product_count);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch">
@@ -77,11 +89,11 @@
                                             <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-brand-id="'.$id.'" data-brand-status="'.$active.'">
                                         </div>';
                         }
-                        $initial = substr($lname, 0, 1);
-                        $author = $fname.' '.$initial.'.';
+
                         echo '<tr>
                                 <td>'.$status.'</td>
-                                <td>'.$name.'</td>
+                                <td>'.strtoupper($name).'</td>
+                                <td>'.$product_count.'</td>
                                 <td>'.date('F j, Y', strtotime($date)).'</td>
                                 <td>
                                     <button 
@@ -106,12 +118,18 @@
         }
 
         public function disableBrand () {
+            $logs = new Logs();
+
             $id = $_POST['id'];
             $status = $_POST['status'];
+            $brand = $this->getBrandName($id);
+
             if ($status == 1) {
                 $active = 0;
+                $action_log = 'Disable brand '.$brand;
             } else {
                 $active = 1;
+                $action_log = 'Enable brand '.$brand;
             }
             $query = 'UPDATE brand SET active = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
@@ -119,6 +137,10 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     $json['redirect'] = '/brands';
                     echo json_encode($json);
                 } else {
@@ -131,8 +153,11 @@
         }
 
         public function editBrand () {
+            $logs = new Logs();
+
             $id = $_POST['brand_id'];
-            $brand = $_POST['brand_name'];
+            $brand = strtoupper($_POST['brand_name']);
+            $old_brand = $this->getBrandName($id);
             if ($this->isBrandExist($brand)) {
                 $json = array('edit_feedback' => 'Brand already exist.');
                 echo json_encode($json);
@@ -144,6 +169,11 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $action_log = 'Update '.$old_brand.' to '.$brand;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     $json = array('redirect' => '/brands');
                     echo json_encode($json);
                 } else {
@@ -153,6 +183,26 @@
             } else {
                 die("Error in preparing statement: " . $this->conn->error);
             }
+        }
+
+        public function getBrandName ($id) {
+            $query = 'SELECT name FROM brand WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->bind_result($brand);
+            $stmt->fetch();
+            $stmt->close();
+            return $brand;
         }
     }
 ?>
