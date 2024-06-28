@@ -1,9 +1,14 @@
 <?php
+    include_once 'session.php';
     require_once 'session.php';
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Manage extends Admin {
         public function addExpenses ($description, $amount, $user_id) {
+            $logs = new Logs();
+
+            $description = ucfirst($description);
             $query = 'INSERT INTO expenses
                         (description, amount, date, user_id)
                     VALUES (?,?,?,?)';
@@ -21,6 +26,11 @@
             }
 
             $stmt->close();
+            
+            $action_log = 'Added expense '.$description.' amount ₱'.number_format($amount, 2);
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
             $json = array(
                 'redirect' => '/manage-business'
             );
@@ -29,7 +39,7 @@
         }
 
         public function showExpenses () {
-            $query = 'SELECT description, amount, date FROM expenses';
+            $query = 'SELECT description, amount, date FROM expenses ORDER BY date ASC';
             $stmt = $this->conn->prepare($query);
 
             if (!$stmt) {
@@ -136,6 +146,9 @@
         }
 
         public function updateDeliveryFee ($df, $municipality) {
+            $logs = new Logs();
+            
+            $old_df = $this->getOldFee($municipality);
             $query = 'UPDATE delivery_fee SET delivery_fee = ? WHERE municipality = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ds', $df, $municipality);
@@ -150,6 +163,11 @@
             }
 
             $stmt->close();
+            
+            $action_log = 'Update Delivery Fee of '.ucfirst($municipality).' from ₱'.number_format($old_df, 2).' to ₱'.number_format($df, 2);
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+            
             $json = array(
                 'redirect' => '/manage-business'
             );
@@ -177,6 +195,26 @@
             );
             echo json_encode($json);
             return;
+        }
+
+        public function getOldFee ($municipality) {
+            $query = 'SELECT delivery_fee FROM delivery_fee WHERE municipality = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $municipality);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($df);
+            $stmt->fetch();
+            $stmt->close();
+            return $df;
         }
     }
 ?>
