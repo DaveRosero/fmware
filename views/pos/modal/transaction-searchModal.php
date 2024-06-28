@@ -1,18 +1,18 @@
 <div class="modal fade" id="transactionSearch-Modal" aria-hidden="true" aria-labelledby="transactionSearch-ModalLabel" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="transactionSearch-ModalLabel">Transaction Search</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!--Search using Transaction/Invoice # -->
-                <div class="input-group mb-3">
+                <!-- Search using Transaction/Invoice # -->
+                <!-- <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2">
                     <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
-                </div>
-                <!--Show Search Result & transaction Details-->
-                <table class="table align-middle">
+                </div> -->
+                <!-- Show Search Result & transaction Details -->
+                <table class="table align-middle" id="transearch" style="width: 100%;">
                     <thead class="table-secondary">
                         <tr>
                             <th scope="col">Transaction #</th>
@@ -24,40 +24,24 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach ($transactions as $transaction): ?>
                         <tr>
-                            <th scope="row">1234567890</th>
-                            <td>09/11/2001</td>
-                            <td>$100.00</td>
-                            <td>ONLINE ORDER</td>
-                            <td><span class="badge text-bg-primary">Valid</span></td>
-                            <!--transaction status-->
-                            
-                            <!-- <span class="badge text-bg-primary">Valid</span>
-                            <span class="badge text-bg-danger">Not Valid</span>
-                            <span class="badge text-bg-secondary">Replaced/Refunded</span>  -->
-                           
-                            <!--Toggle Transaction View Modal-->
+                            <td><?php echo htmlspecialchars($transaction['pos_ref']); ?></td>
+                            <td><?php echo date('F j, Y h:i A', strtotime($transaction['date'])); ?></td>
+                            <td>₱<?php echo number_format($transaction['total'], 2); ?></td>
+                            <td><?php echo isset($transaction['transaction_type']) ? htmlspecialchars($transaction['transaction_type']) : ''; ?></td>
+                            <td>
+                                <?php if ($transaction['status'] === 'Valid'): ?>
+                                    <span class="badge text-bg-primary"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                <?php else: ?>
+                                    <span class="badge text-bg-danger"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <button class="btn btn-primary" data-bs-target="#transactionView" data-bs-toggle="modal">View</button>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">1234567890</th>
-                            <td>09/11/2001</td>
-                            <td>$100.00</td>
-                            <td>POS</td>
-                            <td><span class="badge text-bg-primary">Valid</span></td>
-                            <!--transaction status-->
-                            
-                            <!-- <span class="badge text-bg-primary">Valid</span>
-                            <span class="badge text-bg-danger">Not Valid</span>
-                            <span class="badge text-bg-secondary">Replaced/Refunded</span>  -->
-                           
-                            <!--Toggle Transaction View Modal-->
-                            <td>
-                                <button class="btn btn-primary" data-bs-target="#transactionView" data-bs-toggle="modal">View</button>
-                            </td>
-                        </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
