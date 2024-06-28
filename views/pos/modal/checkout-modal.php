@@ -61,12 +61,12 @@
                             <form action="" class="transaction-form" id="transaction-form">
                                 <div class="d-flex justify-content-evenly gap-2">
                                     <select class="form-select w-50" name="transaction_type" aria-label="Default select example">
-                                        <option value="0">POS</option>
-                                        <option value="1">Walk-in</option>
+                                        <option value="0" name ="pos">POS</option>
+                                        <option value="1" name ="walk-in">Walk-in</option>
                                     </select>
                                     <select class="form-select w-50" name = "payment_type" aria-label="Default select example">
-                                        <option value="3">Cash</option>
-                                        <option value="2">Gcash</option>
+                                        <option value="3"name ="cash">Cash</option>
+                                        <option value="2"name ="gcash">Gcash</option>
                                     </select>
                                 </div>
                                 <h3>Customer Details</h3>
@@ -112,7 +112,7 @@
                                 <div class="col d-flex justify-content-end">
                                     <p class="text-secondary">Request fulfilled by:</p>
                                     <?php echo htmlspecialchars($user_name); ?>
-                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
+                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_info['id']); ?>">
                                 </div>
                             </form>
                         </div>
