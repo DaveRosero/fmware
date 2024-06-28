@@ -144,12 +144,12 @@ $(document).ready(function () {
             change = 0;
         }
         $('#change-display').text(`₱${change.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
-        toggleCheckoutButton(change);
+        toggleCheckoutButton(cashReceived, finalTotal);
     }
 
     // Function to toggle checkout button based on change amount
-    function toggleCheckoutButton(change) {
-        if (change >= 0) {
+    function toggleCheckoutButton(cashReceived, finalTotal) {
+        if (cashReceived >= finalTotal) {
             $('.print').prop('disabled', false);
         } else {
             $('.print').prop('disabled', true);
@@ -164,6 +164,7 @@ $(document).ready(function () {
 
     // Event listener for cash received input
     $('#cashRec-input').on('input', calculateChange);
+    $('#cart-total-modal').on('DOMSubtreeModified', calculateChange);
 
     // Initial update for original total and change
     updateOriginalTotal();
@@ -263,6 +264,19 @@ $(document).ready(function () {
             "</div>";
         return printableContent;
     }
+
+    $('#checkoutModal').on('hidden.bs.modal', function () {
+        // Clear input values
+        $('#discount-input').val('');
+        $('#cashRec-input').val('');
+        $('#fName-input').val('');
+        $('#lName-input').val('');
+        $('#street-input').val('');
+        $('#contact-input').val('');
+        $('#brgy').val('');
+        $('.print').prop('disabled', true);
+        // Optionally, reset other fields as needed
+    });
     
     // Function to generate a unique sales receipt number
     function generateRef() {
@@ -286,8 +300,7 @@ $(document).ready(function () {
     var formData = $("#transaction-form").serializeArray();
     formData.push({ name: 'pos_ref', value: pos_ref });
 
-    
-    if ($transactionTypeSelect.val() === "0") {
+    function transaction(){
         var deliveryFee = parseFloat($("#delivery-fee-value-hidden").data('fee')) || 0;
         var total = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
         var discount = parseFloat($('#discount-input').val()) || 0;
@@ -309,6 +322,36 @@ $(document).ready(function () {
         formData.push({ name: 'address', value: address });
     }
 
+    function transaction2(){
+        var deliveryFee = parseFloat($("#delivery-fee-value-hidden").data('fee')) || 0;
+        var total = parseFloat($('#cart-total-modal').text().replace('₱', '').replace(/,/g, '')) || 0;
+        var discount = parseFloat($('#discount-input').val()) || 0;
+        var subtotal = parseFloat(total + discount) || 0;
+        var cash = parseFloat($('#cashRec-input').val()) || 0;
+        var changes = parseFloat(cash - total) || 0;
+        var deliverer = $("#deliverer-name-hidden").val() || "";  // Assuming deliverer is a select element
+        var paymentType = $("#payment-type").val(); // Add the payment type input as needed
+        var address = $("#street-input").val() + ", " + $("#brgy option:selected").text() + ", " + $("#municipality").val();
+        var contact = $("#contact-input").val();
+
+        formData.push({ name: 'delivery-fee-value', value: deliveryFee });
+        formData.push({ name: 'subtotal', value: subtotal });
+        formData.push({ name: 'total', value: total });
+        formData.push({ name: 'discount', value: discount });
+        formData.push({ name: 'cash', value: cash });
+        formData.push({ name: 'changes', value: changes });
+        formData.push({ name: 'deliverer_name', value: deliverer });
+        formData.push({ name: 'payment_type', value: paymentType });
+        formData.push({ name: 'address', value: address });
+        formData.push({ name: 'contact', value: contact });
+    }
+
+    if ($transactionTypeSelect.val() === "0") {
+        transaction();
+    } else {
+        transaction2();
+    }
+    
 
     $.ajax({
         url: '/pos-checkout',
@@ -349,3 +392,4 @@ $(document).ready(function () {
         }
     }
 });
+
