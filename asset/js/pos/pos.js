@@ -181,8 +181,8 @@ $(document).ready(function () {
         $("#cart-body-modal").empty();
         $("#cart-total-modal").empty();
         $("#cart-total").empty();
-        $("#cart-total").text("Subtotal: ₱0");
-        $("#cart-total-modal").text("₱0");
+        $("#cart-total").text("Subtotal: ₱0.00");
+        $("#cart-total-modal").text("₱0.00");
         $("#cart-body-modal").html(response.tbody_modal);
       },
     });

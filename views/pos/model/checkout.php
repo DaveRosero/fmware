@@ -23,7 +23,12 @@ $discount = floatval($_POST['discount']);
 $cash = floatval($_POST['cash']);
 $change = floatval($_POST['changes']);
 $deliverer_name = $_POST['deliverer_name'];
-$transaction_type_id = 1;
+if ($_POST['POS'] === 'walk-in'){
+    $transaction_type_id = 2;
+} else{
+    $transaction_type_id = 3;
+}
+
 $payment_type_id = intval($_POST['payment_type']);
 $address = $_POST['address'];
 $status = ($payment_type_id == 2) ? 'paid' : 'unpaid';
@@ -49,8 +54,7 @@ if ($stmt) {
         $query = 'INSERT INTO pos_items (pos_ref, product_id, qty)
                   SELECT ?, product_id, qty
                   FROM pos_cart
-                  WHERE user_id = ?
-                  AND active = 1';
+                  WHERE user_id = ?';
         $stmt = $mysqli->prepare($query);
         if ($stmt) {
             $stmt->bind_param('si', $pos_ref, $user_id);
