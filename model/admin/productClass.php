@@ -1,6 +1,7 @@
 <?php
     include_once 'session.php';
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class Products extends Admin {
         public function getCategory () {
@@ -92,6 +93,9 @@
         }
 
         public function newBrand ($brand) {
+            $logs = new Logs();
+
+            $brand = strtoupper($brand);
             $query = 'INSERT INTO brand
                         (name, user_id, active)
                     VALUES (?,?,?)';
@@ -101,6 +105,11 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $action_log = 'Added new brand '.$brand;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     return true;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -131,6 +140,9 @@
         }
 
         public function newCategory ($category) {
+            $logs = new Logs();
+
+            $category = ucwords($category);
             $query = 'INSERT INTO category
                         (name, user_id, active)
                     VALUES (?,?,?)';
@@ -140,6 +152,10 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+
+                    $action_log = 'Added new category '.$category;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
                     return true;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -170,6 +186,9 @@
         }
 
         public function newUnit ($unit) {
+            $logs = new Logs();
+            
+            $unit = ucwords($unit);
             $query = 'INSERT INTO unit
                         (name, user_id, active)
                     VALUES (?,?,?)';
@@ -179,6 +198,11 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $action_log = 'Added new unit '.$unit;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     return true;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -209,6 +233,9 @@
         }
 
         public function newVariant ($variant) {
+            $logs = new Logs();
+            
+            $variant = ucwords($variant);
             $query = 'INSERT INTO variant
                         (name, user_id, active)
                     VALUES (?,?,?)';
@@ -218,6 +245,11 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->close();
+                    
+                    $action_log = 'Added new variant '.$variant;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
                     return true;
                 } else {
                     die("Error in executing statement: " . $stmt->error);
@@ -294,6 +326,8 @@
             //     return;
             // }
 
+            $logs = new Logs();
+
             if (is_numeric($_POST['brand']) && is_int($_POST['brand'] + 0)) {
                 $brand_id = $_POST['brand'];
             } else {
@@ -365,6 +399,11 @@
                     $last_id = $this->conn->insert_id;
                     $this->insertPrice($last_id, $_POST['base_price'], $_POST['selling_price']);
                     $this->insertStock($last_id, $_POST['initial_stock'], $_POST['critical_level'], $_POST['stockable']);
+                    
+                    $action_log = 'Added new product '.$name;
+                    $date_log = date('F j, Y g:i A');
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                    
                     echo json_encode($json);
                 } else {
                     die("Error in executing statement: " . $stmt->error);
