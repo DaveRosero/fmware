@@ -527,6 +527,10 @@
         }
 
         public function disableProduct ($active, $id) {
+            $logs = new Logs();
+
+            $product = $this->getProductInfo($id);
+            
             $query = 'UPDATE product SET active = ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ii', $active, $id);
@@ -541,6 +545,16 @@
             }
 
             $stmt->close();
+
+            if ($active == 0) {
+                $action_log = 'Disable product '.$product['name'];
+            } else {
+                $action_log = 'Enable product '.$product['name'];
+            }
+
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+            
             $json = array(
                 'redirect' => '/manage-products'
             );
@@ -640,6 +654,9 @@
         }
 
         public function editProduct ($id) {
+            $logs = new Logs();
+            $date_log = date('F j, Y g:i A');
+
             $product = $this->getProductInfo($id);
 
             if ($_FILES['edit_image']['error'] === UPLOAD_ERR_OK && !empty($_FILES['edit_image']['tmp_name'])) {
@@ -655,80 +672,241 @@
                 move_uploaded_file($_FILES['edit_image']['tmp_name'], $path);
                 $image = $uploadFile;
                 $this->editImage($image, $id);
+
+                $action_log = 'Update image of product '.$product['name'];
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
             }
 
             if ($product && $product['name'] !== $_POST['edit_name']) {
                 $name = ucwords($_POST['edit_name']);
                 $this->editProductName($name, $id);
+
+                $action_log = 'Update product name from '.$product['name'].' to '.$name;
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
             }
 
             if ($product && $product['code'] !== $_POST['edit_code']) {
                 $code = strtoupper($_POST['edit_code']);
                 $this->editItemCode($code, $id);
+
+                if (empty($code)) {
+                    $code = 'NULL';
+                }
+
+                if (empty($product['code'])) {
+                    $old_code = 'NULL';
+                } else {
+                    $old_code = $product['code'];
+                }
+
+                $action_log = 'Update code of product '.$_POST['edit_name'].' from '.$old_code.' to '.$code;
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
             }
 
             if ($product && $product['supplier'] !== $_POST['edit_supplier']) {
+                $old_supplier = $this->getSupplier($product['supplier']);
                 $this->editSupllier($_POST['edit_supplier'], $id);
+                $new_supplier = $this->getSupplier($_POST['edit_supplier']);
+
+                if ($old_supplier !== $new_supplier) {
+                    $action_log = 'Changed supplier of product '.$_POST['edit_name'].' from '.$old_supplier.' to '.$new_supplier;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
 
             if ($product && $product['description'] !== $_POST['edit_description']) {
                 $this->editDescription($_POST['edit_description'], $id);
+
+                if (empty($_POST['edit_description'])) {
+                    $new_desc = 'NULL';
+                }
+
+                if (empty($product['description'])) {
+                    $old_desc = 'NULL';
+                } else {
+                    $old_desc = $product['description'];
+                }
+
+                $action_log = 'Update description of product '.$_POST['edit_name'].' from '.$old_desc.' to '.$new_desc;
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
             }
 
             if ($product && $product['expiration'] !== $_POST['edit_expiration_date']) {
                 $this->editExpirationDate($_POST['edit_expiration_date'], $id);
+
+                if (empty($_POST['edit_expiration_date'])) {
+                    $new_exp = 'NULL';
+                } else {
+                    $new_exp = $_POST['edit_expiration_date'];
+                }
+
+                if (empty($product['expiration'])) {
+                    $old_exp = 'NULL';
+                } else {
+                    $old_exp = $product['expiration'];
+                }
+
+                if ($new_exp === 'NULL') {
+                    $action_log = 'Update expiration date of product '.$_POST['edit_name'].' to '.$new_exp;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                } else if($old_exp === 'NULL') {
+                    $action_log = 'Update expiration date of product '.$_POST['edit_name'].' from '.$old_exp.' to '.date('F j, Y', strtotime($new_exp));
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                } else {
+                    $action_log = 'Update expiration date of product '.$_POST['edit_name'].' from '.date('F j, Y', strtotime($old_exp)).' to '.date('F j, Y', strtotime($new_exp));
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
 
             if ($product && $product['brand'] !== $_POST['edit_brand']) {
+                $old_brand = $this->getBrandName($product['brand']);
                 $this->editBrand($_POST['edit_brand'], $id);
+                $new_brand = $this->getBrandName($_POST['edit_brand']);
+
+                if ($old_brand !== $new_brand) {
+                    $action_log = 'Update brand of product '.$_POST['edit_name'].' from '.$old_brand.' to '.$new_brand;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
 
             if ($product && $product['unit_value'] !== $_POST['edit_unit_value']) {
                 $this->editUnitValue($_POST['edit_unit_value'], $id);
+
+                $action_log = 'Update unit value of product'.$_POST['edit_name'].' from '.$product['unit_value'].' to '.$_POST['edit_unit_value'];
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
             }
 
             if ($product && $product['unit'] !== $_POST['edit_unit']) {
+                $old_unit = $this->getUnitName($product['unit']);
                 $this->editUnit($_POST['edit_unit'], $id);
+                $new_unit = $this->getUnitName($_POST['edit_unit']);
+
+                if ($old_unit !== $new_unit) {
+                    $action_log = 'Update unit of product '.$_POST['edit_name'].' from '.$old_unit.' to '.$new_unit;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
 
             if ($product && $product['category'] !== $_POST['edit_category']) {
+                $old_category = $this->getCategoryName($product['category']);
                 $this->editCategory($_POST['edit_category'], $id);
+                $new_category = $this->getCategoryName($_POST['edit_category']);
+
+                if ($old_category !== $new_category) {
+                    $action_log = 'Update category of product '.$_POST['edit_name'].' from '.$old_category.' to '.$new_category;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
 
             if ($product && $product['variant'] !== $_POST['edit_variant']) {
+                $old_variant = $this->getVariantName($product['variant']);
                 $this->editVariant($_POST['edit_variant'], $id);
+                $new_variant = $this->getVariantName($_POST['edit_variant']);
+
+                if ($old_variant !== $new_variant) {
+                    $action_log = 'Update category of product '.$_POST['edit_name'].' from '.$old_variant.' to '.$new_variant;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['base_price'] !== $_POST['edit_base_price']) {
                 $this->editBasePrice($_POST['edit_base_price'], $id);
+                $old_bp = '₱'.number_format($product['base_price'], 2);
+                $new_bp = '₱'.number_format($_POST['edit_base_price'], 2);
+
+                if ($old_bp !== $new_bp) {
+                    $action_log = 'Update base price of product '.$_POST['edit_name'].' from '.$old_bp.' to '.$new_bp;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['selling_price'] !== $_POST['edit_selling_price']) {
                 $this->editSellingPrice($_POST['edit_selling_price'], $id);
+                $old_sp = '₱'.number_format($product['selling_price'], 2);
+                $new_sp = '₱'.number_format($_POST['edit_selling_price'], 2);
+
+                if ($old_sp !== $new_sp) {
+                    $action_log = 'Update selling price of product '.$_POST['edit_name'].' from '.$old_sp.' to '.$new_sp;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['stock'] !== $_POST['edit_stock']) {
                 $this->editStock($_POST['edit_stock'], $id);
+                $old_stock = $product['stock'];
+                $new_stock = $_POST['edit_stock'];
+
+                if ($old_stock != $new_stock) {
+                    $action_log = 'Update stock of product '.$_POST['edit_name'].' from '.$old_stock.' to '.$new_stock;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['critical_level'] !== $_POST['edit_critical_level']) {
                 $this->editCriticalLevel($_POST['edit_critical_level'], $id);
+                $old_cl = $product['critical_level'];
+                $new_cl = $_POST['edit_critical_level'];
+
+                if ($old_cl != $new_cl) {
+                    $action_log = 'Update critical level of product '.$_POST['edit_name'].' from '.$old_cl.' to '.$new_cl;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['stockable'] !== $_POST['edit_stockable']) {
                 $this->editStockable($_POST['edit_stockable'], $id);
+                $old_stockable = $product['stockable'];
+                $new_stockable = $_POST['edit_stockable'];
+
+                if ($old_stockable != $new_stockable) {
+                    if ($new_stockable == 0) {
+                        $action_log = 'Update product '.$_POST['edit_name'].' as NONSTOCKABLE';
+                    } else {
+                        $action_log = 'Update product '.$_POST['edit_name'].' as STOCKABLE';
+                    }
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['barcode'] !== $_POST['edit_barcode']) {
                 $this->editBarcode($_POST['edit_barcode'], $id);
+                $old_barcode = $product['barcode'];
+                $new_barcode = $_POST['edit_barcode'];
+
+                if ($old_barcode !== $new_barcode) {
+                    $action_log = 'Update barcode of product '.$_POST['edit_name'].' from '.$old_barcode.' to '.$new_barcode;
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['pickup'] !== $_POST['edit_pickup']) {
                 $this->editPickup($_POST['edit_pickup'], $id);
+                $old_pickup = $product['pickup'];
+                $new_pickup = $_POST['edit_pickup'];
+
+                if ($old_pickup != $new_pickup) {
+                    if ($new_pickup == 0) {
+                        $action_log = 'Update product '.$_POST['edit_name'].' as FOR NON-PICKUP';
+                    } else {
+                        $action_log = 'Update product '.$_POST['edit_name'].' as FOR PICKUP';
+                    }
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
             
             if ($product && $product['delivery'] !== $_POST['edit_delivery']) {
                 $this->editDelivery($_POST['edit_delivery'], $id);
+                $old_delivery = $product['delivery'];
+                $new_delivery = $_POST['edit_delivery'];
+
+                if ($old_delivery != $new_delivery) {
+                    if ($new_delivery== 0) {
+                        $action_log = 'Update product '.$_POST['edit_name'].' as FOR NON-DELIVERY';
+                    } else {
+                        $action_log = 'Update product '.$_POST['edit_name'].' as FOR DELIVERY';
+                    }
+                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+                }
             }
 
             $json = array(
@@ -1162,6 +1340,106 @@
             );
 
             return $json;
+        }
+
+        public function getSupplier ($id) {
+            $query= 'SELECT name FROM supplier WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($supplier);
+            $stmt->fetch();
+            $stmt->close();
+            return $supplier;
+        }
+
+        public function getBrandName ($id) {
+            $query = 'SELECT name FROM brand WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($brand);
+            $stmt->fetch();
+            $stmt->close();
+            return $brand;
+        }
+
+        public function getUnitName ($id) {
+            $query = 'SELECT name FROM unit WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($unit);
+            $stmt->fetch();
+            $stmt->close();
+            return $unit;
+        }
+
+        public function getCategoryName ($id) {
+            $query = 'SELECT name FROM category WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($category);
+            $stmt->fetch();
+            $stmt->close();
+            return $category;
+        }
+
+        public function getVariantName ($id) {
+            $query = 'SELECT name FROM variant WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($variant);
+            $stmt->fetch();
+            $stmt->close();
+            return $variant;
         }
     }
 ?>
