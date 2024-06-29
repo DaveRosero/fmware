@@ -24,24 +24,55 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($transactions as $transaction): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($transaction['pos_ref']); ?></td>
-                            <td><?php echo date('F j, Y h:i A', strtotime($transaction['date'])); ?></td>
-                            <td>₱<?php echo number_format($transaction['total'], 2); ?></td>
-                            <td><?php echo isset($transaction['transaction_type']) ? htmlspecialchars($transaction['transaction_type']) : ''; ?></td>
-                            <td>
-                                <?php if ($transaction['status'] === 'Valid'): ?>
-                                    <span class="badge text-bg-primary"><?php echo htmlspecialchars($transaction['status']); ?></span>
-                                <?php else: ?>
-                                    <span class="badge text-bg-danger"><?php echo htmlspecialchars($transaction['status']); ?></span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary" data-bs-target="#transactionView" data-bs-toggle="modal">View</button>
-                            </td>
-                        </tr>
+                        <?php foreach ($transactions as $transaction) : ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($transaction['pos_ref']); ?></td>
+                                <td><?php echo date('F j, Y h:i A', strtotime($transaction['date'])); ?></td>
+                                <td>₱<?php echo number_format($transaction['total'], 2); ?></td>
+                                <td><?php echo isset($transaction['transaction_type']) ? htmlspecialchars($transaction['transaction_type']) : ''; ?></td>
+                                <td>
+                                    <?php if ($transaction['status'] === 'Valid') : ?>
+                                        <span class="badge text-bg-primary"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                    <?php else : ?>
+                                        <span class="badge text-bg-danger"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary view-transaction-btn" data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">View</button>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
+
+                        <!-- Script to handle View button click -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const viewButtons = document.querySelectorAll('.view-transaction-btn');
+
+                                viewButtons.forEach(button => {
+                                    button.addEventListener('click', function() {
+                                        const posRef = button.getAttribute('data-bs-posref');
+                                        fetch(`get_transaction.php?pos_ref=${posRef}`)
+                                            .then(response => response.text())
+                                            .then(data => {
+                                                // Inject modal content into the existing transaction-viewModal
+                                                document.querySelector('#transaction-view-modal-content').innerHTML = data;
+                                                // Update modal title with transaction number
+                                                const transactionNumber = document.querySelector('#transactionViewLabel');
+                                                transactionNumber.textContent = `Transaction #${posRef}`;
+                                                // Show the modal
+                                                const transactionViewModal = new bootstrap.Modal(document.getElementById('transactionView'));
+                                                transactionViewModal.show();
+                                            })
+                                            .catch(error => {
+                                                console.error('Error fetching transaction details:', error);
+                                                alert('Error fetching transaction details. Please try again.');
+                                            });
+                                    });
+                                });
+                            });
+                        </script>
+
+
                     </tbody>
                 </table>
             </div>
