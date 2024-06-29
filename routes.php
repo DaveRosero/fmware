@@ -65,6 +65,7 @@ require_once __DIR__.'/router.php';
 
     // Add Expenses Controller
     any('/add-expenses', 'controller/admin/manage-business/add-expenses.php');
+    any('/delete-expenses', 'controller/admin/manage-business/delete-expenses.php');
 
     // Delivery Fee Controller
     any('/get-df', 'controller/admin/manage-business/get-df.php');
