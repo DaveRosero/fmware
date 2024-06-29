@@ -1,5 +1,18 @@
-//Barcode Functionality
 $(document).ready(function () {
+  function updateCartUI(response) {
+    $("#cart-body").html(response.tbody);
+    $("#cart-total").text("Subtotal: ₱" + response.cart_total);
+    $("#cart-total-modal").text("₱" + response.cart_total);
+    $("#cart-body-modal").html(response.tbody_modal);
+
+    // Check if cart is empty and enable/disable checkout button
+    if ($("#cart-body").children().length === 0) {
+      $("#checkout-button").prop("disabled", true);
+    } else {
+      $("#checkout-button").prop("disabled", false);
+    }
+  }
+
   function getPOS() {
     $.ajax({
       url: '/pos-getpos',
@@ -8,13 +21,14 @@ $(document).ready(function () {
       success: function (response) {
         console.log("AJAX call successful");
         console.log("Response:", response);
-        $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("₱" + response.cart_total);
-        $("#cart-body-modal").html(response.tbody_modal);
-
+        updateCartUI(response);
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
       }
-    })
+    });
   }
 
   function addPOS(id, price) {
@@ -28,15 +42,19 @@ $(document).ready(function () {
       dataType: 'text',
       success: function () {
         getPOS();
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
       }
-    })
+    });
   }
 
   getPOS();
 
   $('#barcode-form').on('submit', function (event) {
     event.preventDefault();
-    console.log($(this).serialize());
     var barcodeInput = $('#barcode');
 
     $.ajax({
@@ -48,18 +66,16 @@ $(document).ready(function () {
         console.log(json.id);
         console.log(json.price);
         addPOS(json.id, json.price);
-        getPOS();
-        $('#barcode').val('');
-        barcodeInput.focus();
+        barcodeInput.val('').focus();
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
       }
-    })
-  })
-})
+    });
+  });
 
-
-
-//Document Ready Functionality
-$(document).ready(function () {
   $(document).on("click", ".cart-delete", function () {
     var id = $(this).data("product-id");
     var row = $(this).closest("tr");
@@ -69,16 +85,16 @@ $(document).ready(function () {
     $.ajax({
       url: "/pos-removecart",
       method: "POST",
-      data: {
-        id: id,
-      },
+      data: { id: id },
       dataType: "json",
       success: function (response) {
-        $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("₱" + response.cart_total);
-        $("#cart-body-modal").html(response.tbody_modal);
+        updateCartUI(response);
       },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      }
     });
   });
 
@@ -91,15 +107,17 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        qty: qty,
+        qty: qty
       },
       dataType: "json",
       success: function (response) {
-        $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("₱" + response.cart_total);
-        $("#cart-body-modal").html(response.tbody_modal);
+        updateCartUI(response);
       },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      }
     });
   });
 
@@ -112,15 +130,17 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        qty: qty,
+        qty: qty
       },
       dataType: "json",
       success: function (response) {
-        $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("₱" + response.cart_total);
-        $("#cart-body-modal").html(response.tbody_modal);
+        updateCartUI(response);
       },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      }
     });
   });
 
@@ -132,22 +152,19 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        price: price,
+        price: price
       },
       dataType: "json",
       success: function (response) {
         console.log("AJAX call successful");
         console.log("Response:", response);
-        $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("₱" + response.cart_total);
-        $("#cart-body-modal").html(response.tbody_modal);
+        updateCartUI(response);
       },
       error: function (xhr, status, error) {
-        console.log("AJAX call failed");
-        console.log("Status:", status);
-        console.log("Error:", error);
-      },
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      }
     });
   });
 
@@ -162,29 +179,37 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        discount: value,
+        discount: value
       },
       dataType: "json",
       success: function (response) {
-        $("#cart-body").html(response.tbody);
-        $("#cart-total").text("Subtotal: ₱" + response.cart_total);
-        $("#cart-total-modal").text("₱" + response.cart_total);
-        $("#cart-body-modal").html(response.tbody_modal);
+        updateCartUI(response);
       },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      }
     });
   });
+
   $(".reset-cart").on("click", function () {
     $.ajax({
       url: "/pos-reset",
-      success: function () {
+      success: function (response) {
         $("#cart-body").empty();
         $("#cart-body-modal").empty();
         $("#cart-total-modal").empty();
-        $("#cart-total").empty();
-        $("#cart-total").text("Subtotal: ₱0.00");
-        $("#cart-total-modal").text("₱0.00");
-        $("#cart-body-modal").html(response.tbody_modal);
+        $("#cart-total").text("Subtotal: ₱0");
+        $("#cart-total-modal").text("₱0");
+        console.log("Cart reset successful");
+        $("#checkout-button").prop("disabled", true);
       },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      }
     });
   });
 });
