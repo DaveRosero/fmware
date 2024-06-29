@@ -1,4 +1,4 @@
-<div class="modal fade" id="transactionView" aria-hidden="true" aria-labelledby="transactionViewLabel" tabindex="-1">
+<!-- <div class="modal fade" id="transactionView" aria-hidden="true" aria-labelledby="transactionViewLabel" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -24,7 +24,6 @@
                                 <tbody>
                                     <tr>
                                         <td scope="row">
-                                            <!--Select Items to be Returned or Refunded-->
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                             </div>
@@ -34,7 +33,6 @@
                                         <td>White</td>
                                         <td>$99.00</td>
                                         <td>3</td>
-                                        <!--Select Item  Qty to be Returned or Refunded-->
                                         <td>
                                             <div class="input-group">
                                                 <button class="btn btn-sm btn-outline-secondary " type="button">
@@ -51,7 +49,6 @@
                             </table>
                         </div>
                     </div>
-                    <!--Show the details  and total of the items to be  returned or refunded-->
                     <div class="col-5">
                         <div class="row text-center border-bottom mb-2">
                             <h1 class="text-danger" id="transaction-total">$100.00</h1>
@@ -86,7 +83,6 @@
                                     <label for="other=reasons" class="form-label">If other specify:</label>
                                     <input type="text" class="form-control"  id="other=reasons"  />
                                 </div>
-                                <!--Show the details  of customer this can be blank-->
                                 <h3>Customer Details</h3>
                                 <form>
                                     <label for="fName-input" class="form-label">First Name:</label>
@@ -107,10 +103,26 @@
                     </div>
                 </div>
             </div>
-            <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#replaceConfirmationModal">Replace</button>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#refundConfirmationModal">Refund</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal fade" id="transactionView" aria-hidden="true" aria-labelledby="transactionViewLabel" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="transactionViewLabel">Transaction #<?php echo htmlspecialchars($transaction['pos_ref']); ?></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Display transaction details dynamically -->
+                <div id="transaction-view-modal-content">
+                    <!-- Transaction details will be injected here -->
+                </div>
             </div>
         </div>
     </div>
