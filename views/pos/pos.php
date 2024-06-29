@@ -132,7 +132,7 @@ if ($_SESSION['group'] !== 'cashier') {
             <div class="d-grid gap-2">
               <button class="btn btn-danger reset-cart">Clear</button>
               <!-- Checkout Button -->
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal" id="checkout-button">
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal" id="checkout-button" disabled>
                 Checkout
               </button>
             </div>

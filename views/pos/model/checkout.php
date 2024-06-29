@@ -23,15 +23,21 @@ $discount = floatval($_POST['discount']);
 $cash = floatval($_POST['cash']);
 $change = floatval($_POST['changes']);
 $deliverer_name = $_POST['deliverer_name'];
-if ($_POST['POS'] === 'walk-in'){
-    $transaction_type_id = 2;
-} else{
+if ($_POST['transaction_type']){
     $transaction_type_id = 3;
+} else{
+    $transaction_type_id = 2;
 }
 
+if ($_POST['payment_type']){
+    $payment_type_id = 2;
+    $status = 'paid';
+} else {
+    $payment_type_id = 3;
+    $status = 'paid';
+}
 $payment_type_id = intval($_POST['payment_type']);
 $address = $_POST['address'];
-$status = ($payment_type_id == 2) ? 'paid' : 'unpaid';
 if (isset($_POST['delivery-fee-value'])) {
     $delivery_fee_value = floatval($_POST['delivery-fee-value']); 
 } else {
@@ -45,7 +51,7 @@ $query = 'INSERT INTO pos
 
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
-    $stmt->bind_param('sssddddddissiisi', $pos_ref, $fname, $lname, $subtotal, $total, $discount, $cash, $change, $delivery_fee,
+    $stmt->bind_param('sssddddddsssiisi', $pos_ref, $fname, $lname, $subtotal, $total, $discount, $cash, $change, $delivery_fee,
                       $contact, $address, $deliverer_name, $transaction_type_id, $payment_type_id, $status, $user_id);
 
     if ($stmt->execute()) {
