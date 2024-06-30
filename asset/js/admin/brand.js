@@ -1,4 +1,20 @@
 $(document).ready(function(){
+    function updateBrand (id, status) {
+        $.ajax({
+            url: '/disable-brand',
+            method: 'POST',
+            data: {
+                id : id,
+                status : status
+            },
+            dataType: 'json', 
+            success: function(feedback){
+                if (feedback.redirect) {
+                    window.location.href = feedback.redirect;
+                }
+            }
+        });
+    }
     $('#brand-table').DataTable({
         order: [
             [1, 'asc']
@@ -24,20 +40,43 @@ $(document).ready(function(){
     });
 
     $('.status').on('click', function(){
-        $.ajax({
-            url: '/disable-brand',
-            method: 'POST',
-            data: {
-                id : $(this).data('brand-id'),
-                status : $(this).data('brand-status')
-            },
-            dataType: 'json', 
-            success: function(feedback){
-                if (feedback.redirect) {
-                    window.location.href = feedback.redirect;
+        var id = $(this).data('brand-id');
+        var status = $(this).data('brand-status');
+        var checkbox = $(this);
+
+        if ($(this).is(':checked')) {
+            Swal.fire({
+                title: 'Enabling Brand',
+                text: "Do you want to enable this brand?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, enable it!',
+                cancelButtonText: 'No, cancel!',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateBrand(id, status);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    checkbox.prop('checked', false);
                 }
-            }
-        });
+            });
+        } else {
+            Swal.fire({
+                title: 'Disabling Brand',
+                text: "Do you want to disable this brand?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, disable it!',
+                cancelButtonText: 'No, cancel!',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateBrand(id, status);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    checkbox.prop('checked', true);
+                }
+            });
+        }
     });
 
     $('.edit').on('click', function(){
