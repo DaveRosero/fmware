@@ -162,7 +162,7 @@
                 return;
             }
 
-            if (substr($_POST['phone'], 0, 2) !== '09' && strlen($_POST['phone']) !== 11) {
+            if (substr($_POST['phone'], 0, 2) !== '09' || strlen($_POST['phone']) !== 11) {
                 $json = array(
                     'phone' => 'Mobile number must be 09XXXXXXXXX'
                 );

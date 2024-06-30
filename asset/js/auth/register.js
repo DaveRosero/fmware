@@ -9,32 +9,35 @@ $(document).ready(function(){
             data: $(this).serialize(),
             dataType: 'json',
             success: function(feedback){
-                if(feedback.verify){
-                    $.notify(feedback.verify, 'success');
-                }
-
                 if (feedback.exist){
-                    $.notify(feedback.exist, 'error');
+                    $('#register_feedback').text(feedback.exist);
                 }
 
                 if (feedback.password){
-                    $.notify(feedback.password, 'error');
+                    $('#register_feedback').text(feedback.password);
                 }
 
                 if (feedback.confirm) {
-                    $.notify(feedback.confirm, 'error');
+                    $('#register_feedback').text(feedback.confirm);
                 }
 
                 if (feedback.phone) {
-                    $.notify(feedback.phone, 'error');
+                    $('#register_feedback').text(feedback.phone);
                 }
 
-                if (feedback.redirect){
-                    $('#overlay').show();
-                    setTimeout(function() {
-                        window.location.href = feedback.redirect;
-                        $('#overlay').hide();
-                    }, 3000);
+                if (feedback.redirect) {
+                    Swal.fire({
+                        title: 'You have registered successfully!',
+                        text: "A confirmation has been to your email.",
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'Go to login',
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = feedback.redirect;
+                        }
+                    });
                 }
             },
             complete: function(){
