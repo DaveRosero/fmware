@@ -6,12 +6,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Search using Transaction/Invoice # -->
-                <!-- <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
-                </div> -->
-                <!-- Show Search Result & transaction Details -->
                 <table class="table align-middle" id="transearch" style="width: 100%;">
                     <thead class="table-secondary">
                         <tr>
@@ -42,36 +36,35 @@
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-
                         <!-- Script to handle View button click -->
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const viewButtons = document.querySelectorAll('.view-transaction-btn');
+                            $(document).ready(function() {
+                                $('.view-transaction-btn').click(function() {
+                                    const posRef = $(this).data('bs-posref');
 
-                                viewButtons.forEach(button => {
-                                    button.addEventListener('click', function() {
-                                        const posRef = button.getAttribute('data-bs-posref');
-                                        fetch(`get_transaction.php?pos_ref=${posRef}`)
-                                            .then(response => response.text())
-                                            .then(data => {
-                                                // Inject modal content into the existing transaction-viewModal
-                                                document.querySelector('#transaction-view-modal-content').innerHTML = data;
-                                                // Update modal title with transaction number
-                                                const transactionNumber = document.querySelector('#transactionViewLabel');
-                                                transactionNumber.textContent = `Transaction #${posRef}`;
-                                                // Show the modal
-                                                const transactionViewModal = new bootstrap.Modal(document.getElementById('transactionView'));
-                                                transactionViewModal.show();
-                                            })
-                                            .catch(error => {
-                                                console.error('Error fetching transaction details:', error);
-                                                alert('Error fetching transaction details. Please try again.');
-                                            });
+                                    $.ajax({
+                                        url: '/pos-getTransaction',
+                                        method: 'GET',
+                                        data: {
+                                            pos_ref: posRef
+                                        },
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            console.log(data);
+                                            $('#transactionViewLabel').text('Transaction #' + data.pos_ref);
+                                            $('#transaction-fname').text(data.firstname);
+                                            $('#transaction-lname').text(data.lastname);
+                                            $('#transaction-total').text(data.total);
+                                            $('#transactionView').modal('show');
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) {
+                                            console.log("Error:", textStatus, errorThrown);
+                                            console.log("Response:", jqXHR.responseText);
+                                        }
                                     });
                                 });
                             });
                         </script>
-
 
                     </tbody>
                 </table>

@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+  
   function updateCartUI(response) {
     $("#cart-body").html(response.tbody);
     $("#cart-total").text("Subtotal: ₱" + response.cart_total);
@@ -213,3 +215,5 @@ $(document).ready(function () {
     });
   });
 });
+
+
