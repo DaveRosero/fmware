@@ -337,6 +337,7 @@ $(document).ready(function(){
                 showCancelButton: true,
                 confirmButtonText: 'Yes, enable it!',
                 cancelButtonText: 'No, cancel!',
+                allowOutsideClick: false,
             }).then((result) => {
                 if (result.isConfirmed) {
                     var active = 1;
@@ -353,6 +354,7 @@ $(document).ready(function(){
                 showCancelButton: true,
                 confirmButtonText: 'Yes, disable it!',
                 cancelButtonText: 'No, cancel!',
+                allowOutsideClick: false,
             }).then((result) => {
                 if (result.isConfirmed) {
                     var active = 0;
