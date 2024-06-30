@@ -46,7 +46,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="form-floating col-md-6">
-                                <select class="form-select" id="brand" name="brand">
+                                <select class="form-select" id="brand" name="brand" required>
                                     <option></option>
                                     <?php $products->getBrands(); ?>
                                 </select>
@@ -57,7 +57,7 @@
                                         <input type="text" class="form-control" name="unit_value" placeholder="Enter unit value" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class="form-select" id="unit" name="unit" placeholder="">
+                                        <select class="form-select" id="unit" name="unit" placeholder="" required>
                                             <option></option>
                                             <?php $products->getUnits(); ?>
                                         </select>
@@ -67,13 +67,13 @@
                         </div>
                         <div class="row mb-4">
                             <div class="form-floating col-md-6">
-                                <select class="form-select" id="category" name="category">
+                                <select class="form-select" id="category" name="category" required>
                                     <option></option>
                                     <?php $products->getCategory(); ?>
                                 </select>
                             </div>
                             <div class="form-floating col-md-6">
-                                <select class="form-select" id="variant" name="variant">
+                                <select class="form-select" id="variant" name="variant" required>
                                     <option></option>
                                     <?php $products->getVariants(); ?>
                                 </select>
@@ -211,7 +211,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="form-floating col-md-6">
-                                <select class="form-select" id="edit_brand" name="edit_brand">
+                                <select class="form-select" id="edit_brand" name="edit_brand" required>
                                     <option></option>
                                     <?php $products->getBrands(); ?>
                                 </select>
@@ -222,7 +222,7 @@
                                         <input type="text" class="form-control" name="edit_unit_value" id="edit_unit_value" placeholder="Enter unit value" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class="form-select" id="edit_unit" name="edit_unit" placeholder="">
+                                        <select class="form-select" id="edit_unit" name="edit_unit" placeholder="" required>
                                             <option></option>
                                             <?php $products->getUnits(); ?>
                                         </select>
@@ -232,13 +232,13 @@
                         </div>
                         <div class="row mb-4">
                             <div class="form-floating col-md-6">
-                                <select class="form-select" id="edit_category" name="edit_category">
+                                <select class="form-select" id="edit_category" name="edit_category" required>
                                     <option></option>
                                     <?php $products->getCategory(); ?>
                                 </select>
                             </div>
                             <div class="form-floating col-md-6">
-                                <select class="form-select" id="edit_variant" name="edit_variant">
+                                <select class="form-select" id="edit_variant" name="edit_variant" required>
                                     <option></option>
                                     <?php $products->getVariants(); ?>
                                 </select>
