@@ -326,14 +326,43 @@ $(document).ready(function(){
     });
 
     $('.status').change(function(){
+        var id = $(this).data('product-id');
+        var checkbox = $(this);
+        
         if ($(this).is(':checked')) {
-            var id = $(this).data('product-id');
-            var active = 1;
-            updateProductStatus(active, id);
+            Swal.fire({
+                title: 'Enabling Product',
+                text: "Do you want to enable this product?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, enable it!',
+                cancelButtonText: 'No, cancel!',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var active = 1;
+                    updateProductStatus(active, id);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    checkbox.prop('checked', false);
+                }
+            });
         } else {
-            var id = $(this).data('product-id');
-            var active = 0;
-            updateProductStatus(active, id);
+            Swal.fire({
+                title: 'Disabling Product',
+                text: "Do you want to disable this product?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, disable it!',
+                cancelButtonText: 'No, cancel!',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var active = 0;
+                    updateProductStatus(active, id);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    checkbox.prop('checked', true);
+                }
+            });
         }
     });
 
