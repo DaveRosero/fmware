@@ -36,6 +36,9 @@
               <h1>Register</h1>
             </div>
             <div class="row">
+              <p class="text-danger" id="register_feedback"></p>
+            </div>
+            <div class="row">
               <div class="col">
                 <div class="form-floating mb-2">
                   <input
@@ -214,7 +217,6 @@
     </div>
   </div>
 
-    <script src="/vendor/NotifyJS/js/notify.js"></script>
     <script src="/asset/js/auth/register.js"></script>
   </body>
 </html>
