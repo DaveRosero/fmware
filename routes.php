@@ -174,6 +174,7 @@ require_once __DIR__.'/router.php';
     any('/pos-getpos', 'views/pos/getPos.php');
     any('/pos-updateqty', 'views/pos/update-qty.php');
     any('/pos-checkout', 'views/pos/model/checkout.php');
+    any('/pos-getTransaction', 'views/pos/get_transaction.php');
 
 
 //*****************************************************************//
