@@ -104,11 +104,11 @@
               </a>
             </li> -->
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/restocks" aria-expanded="false">
+              <a class="sidebar-link" href="/purchase-orders" aria-expanded="false">
                 <span>
                 <i class="fas fa-dolly fs-4"></i>
                 </span>
-                <span class="hide-menu">Restocks</span>
+                <span class="hide-menu">Purchase Orders</span>
               </a>
             </li>
             <li class="sidebar-item">
