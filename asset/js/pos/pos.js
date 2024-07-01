@@ -1,6 +1,4 @@
 $(document).ready(function () {
-
-  
   function updateCartUI(response) {
     $("#cart-body").html(response.tbody);
     $("#cart-total").text("Subtotal: ₱" + response.cart_total);
@@ -17,9 +15,9 @@ $(document).ready(function () {
 
   function getPOS() {
     $.ajax({
-      url: '/pos-getpos',
-      method: 'POST',
-      dataType: 'json',
+      url: "/pos-getpos",
+      method: "POST",
+      dataType: "json",
       success: function (response) {
         console.log("AJAX call successful");
         console.log("Response:", response);
@@ -29,19 +27,19 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   }
 
   function addPOS(id, price) {
     $.ajax({
-      url: '/pos-addpos',
-      method: 'POST',
+      url: "/pos-addpos",
+      method: "POST",
       data: {
         product_id: id,
-        price: price
+        price: price,
       },
-      dataType: 'text',
+      dataType: "text",
       success: function () {
         getPOS();
       },
@@ -49,32 +47,32 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   }
 
   getPOS();
 
-  $('#barcode-form').on('submit', function (event) {
+  $("#barcode-form").on("submit", function (event) {
     event.preventDefault();
-    var barcodeInput = $('#barcode');
+    var barcodeInput = $("#barcode");
 
     $.ajax({
-      url: '/pos-barcode',
-      method: 'POST',
+      url: "/pos-barcode",
+      method: "POST",
       data: $(this).serialize(),
-      dataType: 'json',
+      dataType: "json",
       success: function (json) {
         console.log(json.id);
         console.log(json.price);
         addPOS(json.id, json.price);
-        barcodeInput.val('').focus();
+        barcodeInput.val("").focus();
       },
       error: function (xhr, status, error) {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 
@@ -96,7 +94,7 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 
@@ -109,7 +107,7 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        qty: qty
+        qty: qty,
       },
       dataType: "json",
       success: function (response) {
@@ -119,7 +117,7 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 
@@ -132,7 +130,7 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        qty: qty
+        qty: qty,
       },
       dataType: "json",
       success: function (response) {
@@ -142,7 +140,7 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 
@@ -154,7 +152,7 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        price: price
+        price: price,
       },
       dataType: "json",
       success: function (response) {
@@ -166,7 +164,7 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 
@@ -181,7 +179,7 @@ $(document).ready(function () {
       method: "POST",
       data: {
         id: id,
-        discount: value
+        discount: value,
       },
       dataType: "json",
       success: function (response) {
@@ -191,7 +189,7 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 
@@ -211,9 +209,7 @@ $(document).ready(function () {
         console.error("AJAX call failed");
         console.error("Status:", status);
         console.error("Error:", error);
-      }
+      },
     });
   });
 });
-
-

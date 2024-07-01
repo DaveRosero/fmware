@@ -54,13 +54,21 @@
                                             $('#transactionViewLabel').text('Transaction #' + data.pos_ref);
                                             $('#transaction-fname').text(data.firstname);
                                             $('#transaction-lname').text(data.lastname);
+                                            $('#transaction-date').text(data.date);
+                                            $('#transaction-subtotal').text(data.subtotal);
                                             $('#transaction-total').text(data.total);
+                                            $('#transaction-discount').text(data.discount);
+                                            $('#transaction-cash').text(data.cash);
+                                            $('#transaction-changes').text(data.changes);
+                                            $('#transaction-delivery-fee').text(data.delivery_fee);
+                                            $('#transaction-deliverer').text(data.deliverer_name);
+                                            $('#transaction-contact').text(data.contact_no);
+                                            $('#transaction-transaction-type').text(data.transaction_type);
+                                            $('#transaction-payment-type').text(data.payment_type);
+                                            $('#transaction-status').text(data.status);
                                             $('#transactionView').modal('show');
                                         },
-                                        error: function(jqXHR, textStatus, errorThrown) {
-                                            console.log("Error:", textStatus, errorThrown);
-                                            console.log("Response:", jqXHR.responseText);
-                                        }
+
                                     });
                                 });
                             });
