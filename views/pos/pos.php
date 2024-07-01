@@ -32,7 +32,7 @@ if ($_SESSION['group'] !== 'cashier') {
 
 ?>
 
-<?php include_once 'fetchpos.php' ?>
+<?php include_once 'model/fetchpos.php' ?>
 
 <!DOCTYPE html>
 <html lang="en">
