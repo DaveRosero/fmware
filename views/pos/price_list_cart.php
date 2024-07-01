@@ -1,9 +1,12 @@
 <?php
 require_once 'model/database/database.php';
+include_once 'session.php';
+
 
 $mysqli = database();
 
 $id = $_POST['id'];
+$user_id = $_SESSION['user_id'];
 $price = $_POST['price'];
 $qty = 1;
     
@@ -17,10 +20,10 @@ $stmt->close();
     
 if ($count == 0) {
     $query = 'INSERT INTO pos_cart
-            (product_id, qty, price)
-         VALUES (?,?,?)';
+            (user_id, product_id, qty, price)
+         VALUES (?,?,?,?)';
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param('iii', $id, $qty, $price);
+    $stmt->bind_param('iiii', $user_id, $id, $qty, $price);
     $stmt->execute();
     $stmt->close();
 }

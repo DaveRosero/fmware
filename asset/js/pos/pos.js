@@ -160,38 +160,13 @@ $(document).ready(function () {
         console.log("Response:", response);
         updateCartUI(response);
       },
-      error: function (xhr, status, error) {
-        console.error("AJAX call failed");
-        console.error("Status:", status);
-        console.error("Error:", error);
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log("Error:", textStatus, errorThrown);
+        console.log("Response:", jqXHR.responseText);
       },
     });
   });
 
-  $(document).on("input", ".apply-discount", function () {
-    var row = $(this).closest("td");
-    var discount = row.find(".discount");
-    var value = discount.val();
-    var id = $(this).data("product-id");
-
-    $.ajax({
-      url: "/pos-ctdiscount",
-      method: "POST",
-      data: {
-        id: id,
-        discount: value,
-      },
-      dataType: "json",
-      success: function (response) {
-        updateCartUI(response);
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX call failed");
-        console.error("Status:", status);
-        console.error("Error:", error);
-      },
-    });
-  });
 
   $(".reset-cart").on("click", function () {
     $.ajax({

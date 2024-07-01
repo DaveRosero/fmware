@@ -265,20 +265,27 @@ $(document).ready(function () {
         return printableContent;
     }
 
-    $('#checkoutModal').on('hidden.bs.modal', function () {
-        // Clear input values
+    function resetForm() {
         $('#discount-input').val('');
         $('#cashRec-input').val('');
-        $('#fName-input').val('');
-        $('#lName-input').val('');
-        $('#street-input').val('');
-        $('#contact-input').val('');
-        $('#change-display').val('');
-        $('#cart-total-modal').val('');
-        $('#brgy').val('');
-        $('.print').prop('disabled', true);
-        // Optionally, reset other fields as needed
-    });
+        $firstNameInput.val('');
+        $lastNameInput.val('');
+        $streetInput.val('');
+        $brgyInput.val(null).trigger('change');
+        $municipalInput.val('');
+        $contactInput.val('');
+        $delivererSelect.val('0').trigger('change');
+        $deliveryFeeValue.text('₱0.00').data('fee', 0);
+        $('#cart-total-modal').text('₱0.00');
+        $('#change-display').text('₱0.00');
+        updateOriginalTotal(); // Ensure totals are recalculated
+        calculateDiscount(); // Ensure discount is recalculated
+        calculateChange(); // Ensure change is recalculated
+    }
+
+    // Event listeners for close buttons to reset form
+    $('#close-button').on('click', resetForm);
+    $('#footer-close-button').on('click', resetForm);
     
     // Function to generate a unique sales receipt number
     function generateRef() {
@@ -296,9 +303,16 @@ $(document).ready(function () {
     $(".print").on("click", function () {
         var pos_ref = generateRef();
         Swal.fire({
-            title: "Transaction Complete",
-            icon: "success"
-        })
+            title: 'Transaction successfully!',
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonText: 'Ok',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/pos";
+            }
+        });
         submitForm(pos_ref); // Submit the form before printing
 
     });

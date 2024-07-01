@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Checkout</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-button"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -34,7 +34,7 @@
                         <div class="col border-bottom mb-2">
                             <form id="discount-form" class="mb-2">
                                 <label for="discount-input" class="form-label">Discount</label>
-                                <input type="number" name = "discount" class="form-control apply-discount" id="discount-input" />
+                                <input type="number" name = "discount" class="form-control" id="discount-input" />
                             </form>
                             <div class="d-flex justify-content-end">
                                 <h5 class="text-secondary my-auto" id="delivery-fee">Delivery Fee: </h5>
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <div class="modal-footer" id="modal-checkout">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="footer-close-button">
                     Close
                 </button>
                 <button class="btn btn-success print" disabled>Checkout</button>
