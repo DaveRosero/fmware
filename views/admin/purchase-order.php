@@ -1,26 +1,23 @@
 <?php
   include_once 'session.php';
-  require_once 'model/admin/admin.php';
-  require_once 'model/admin/stocksClass.php';
+  require_once 'model/admin/poClass.php';
 
   $admin = new Admin();
+  $po = new PO();
   $admin->isAdmin();
-
-  $stocks = new Stocks();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Restock Records | FMWare</title>
+    <title>Purchase Orders | FMWare</title>
     <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php 
-      include_once 'vendor/Bootstrap/css/bundle.php';
-      include_once 'vendor/DataTables/css/bundle.php'; 
-      include_once 'vendor/Select2/css/bundle.php';
+      include_once 'config/load_vendors.php';
     ?>
     <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
+    <link rel="stylesheet" href="/asset/css/admin/style.css">
 </head>
 <body>
   <!--  Body Wrapper -->
@@ -34,7 +31,7 @@
       <?php include 'views/admin/template/header.php'; ?>
     
       <!-- Content Start -->
-         <?php include 'views/admin/content/restock-content.php'; ?>
+         <?php include 'views/admin/content/purchase-order-content.php'; ?>
       <!-- Content End -->  
       
       
@@ -45,20 +42,12 @@
 
   <!-- Modal Start -->
   <?php
-      // include_once 'views/admin/modals/stocks-modal.php';
+      include_once 'views/admin/modals/purchase-order-modal.php';
     ?>
   <!-- Modal End-->
 
-  <?php
-    include_once 'vendor/jQuery/bundle.php';
-    include_once 'vendor/FontAwesome/kit.php';    
-    include_once 'vendor/DataTables/js/bundle.php';
-    include_once 'vendor/Select2/js/bundle.php';
-    include_once 'vendor/Bootstrap/js/bundle.php'; 
-  ?>
-  <script src="/asset/js/admin/dashboard.js"></script>
   <script src="/asset/js/admin/mini-sidebar.js"></script>
   <script src="/asset/js/admin/sidebarmenu.js"></script>
-  <script src="/asset/js/admin/stocks.js"></script>
+  <script src="/asset/js/admin/purchase-order.js"></script>
 </body>
 </html>

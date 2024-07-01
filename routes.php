@@ -85,8 +85,9 @@ require_once __DIR__.'/router.php';
     // Inventory Views
     get('/manage-products', 'views/admin/products.php');
     // get('/stocks', 'views/admin/stocks.php');
-    // get('/restocks', 'views/admin/restock.php');
     // get('/price-list', 'views/admin/price-list.php');
+    get('/purchase-orders', 'views/admin/purchase-order.php');
+    get('/create-po/$supplier', 'views/admin/create-po.php');
 
     // Product Controller
     any('/new-product', 'controller/admin/product/new-product.php');
@@ -96,11 +97,14 @@ require_once __DIR__.'/router.php';
     any('/view-product', 'controller/admin/product/view-product.php');
 
     // Stocks Controller
-    any('/add-stock', 'controller/admin/stocks/add-stock.php');
-    any('/restock', 'controller/admin/stocks/restock.php');
+    // any('/add-stock', 'controller/admin/stocks/add-stock.php');
+    // any('/restock', 'controller/admin/stocks/restock.php');
 
     // Price List Controller
-    any('/new-price', 'controller/admin/price/new-price.php');
+    // any('/new-price', 'controller/admin/price/new-price.php');
+
+    // Purchase Order Controller
+    any('/redirect-po', 'controller/admin/purchase-order/redirect.php');
 
 //*****************************************************************//
 
