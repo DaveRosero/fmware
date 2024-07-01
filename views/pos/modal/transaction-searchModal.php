@@ -65,6 +65,7 @@
                                             $('#transaction-contact').text(data.contact_no);
                                             $('#transaction-transaction-type').text(data.transaction_type);
                                             $('#transaction-payment-type').text(data.payment_type);
+                                            $('#transaction-user-name').text(data.username);
                                             $('#transaction-status').text(data.status);
                                             $('#transactionView').modal('show');
                                         },

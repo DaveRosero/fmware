@@ -84,7 +84,7 @@
                         </div>
                         <div class="col d-flex justify-content-end">
                             <p class="text-secondary">Request fulfilled by:</p>
-                            <p class="ms-2">Username</p>
+                            <p class="ms-2" id="transaction-user-name"></p>
                         </div>
                     </div>
                 </div>
