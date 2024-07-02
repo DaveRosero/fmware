@@ -68,7 +68,7 @@ if ($stmt) {
             if ($stmt->execute()) {
                 $stmt->close();
 
-                // Select items from order_items table
+                
                 $query = 'SELECT product_id, qty FROM pos_items WHERE pos_ref = ?';
                 $stmt = $mysqli->prepare($query);
                 if ($stmt) {
@@ -84,7 +84,7 @@ if ($stmt) {
                         }
                         $stmt->close();
 
-                        // Update stock in stock table
+                        // Update stock 
                         foreach ($products as $product) {
                             $query = 'UPDATE stock SET qty = qty - ? WHERE product_id = ?';
                             $stmt = $mysqli->prepare($query);

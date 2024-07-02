@@ -24,40 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1234567890</th>
-                            <td>09/11/2001</td>
-                            <td>$100.00</td>
-                            <td>ONLINE ORDER</td>
-                            <td><span class="badge text-bg-primary">Active</span></td>
-                            <!--transaction status-->
-                            
-                            <!-- <span class="badge text-bg-primary">Valid</span>
-                            <span class="badge text-bg-danger">Not Valid</span>
-                            <span class="badge text-bg-secondary">Replaced/Refunded</span>  -->
-                           
-                            <!--Toggle Transaction View Modal-->
-                            <td>
-                                <button class="btn btn-primary" data-bs-target="#historyView" data-bs-toggle="modal">View</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1234567890</th>
-                            <td>09/11/2001</td>
-                            <td>$100.00</td>
-                            <td>POS</td>
-                            <td><span class="badge text-bg-secondary">Void</span></td>
-                            <!--transaction status-->
-                            
-                            <!-- <span class="badge text-bg-primary">Valid</span>
-                            <span class="badge text-bg-danger">Not Valid</span>
-                            <span class="badge text-bg-secondary">Replaced/Refunded</span>  -->
-                           
-                            <!--Toggle Transaction View Modal-->
-                            <td>
-                                <button class="btn btn-primary" data-bs-target="#historyView" data-bs-toggle="modal" >View</button>
-                            </td>
-                        </tr>
+                        <?php include_once 'views/pos/model/history.php' ?>
                     </tbody>
                 </table>
             </div>
