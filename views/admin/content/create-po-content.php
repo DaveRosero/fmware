@@ -24,8 +24,65 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-2">
+
+            <div class="row mt-2 mb-2">
                 <hr>
+            </div>
+
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                        <th></th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td class="fw-semibold fs-3">BALL VALVE 1/2</td>
+                            <td class="fw-semibold fs-3">2</td>
+                            <td class="fw-semibold fs-3">pack</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="fw-semibold fs-3">UNION PATENTE 1/2</td>
+                            <td class="fw-semibold fs-3">2</td>
+                            <td class="fw-semibold fs-3">pack</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="fw-semibold fs-3">TEE 1/2</td>
+                            <td class="fw-semibold fs-3">3</td>
+                            <td class="fw-semibold fs-3">pack</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="fw-semibold fs-3">PVC PIPE #2 (ORANGE)</td>
+                            <td class="fw-semibold fs-3">50</td>
+                            <td class="fw-semibold fs-3">piece</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="fw-semibold fs-3">PVC PIPE #3 (ORANGE)</td>
+                            <td class="fw-semibold fs-3">40</td>
+                            <td class="fw-semibold fs-3">piece</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="fw-semibold fs-3">PPR PIPE 1/2</td>
+                            <td class="fw-semibold fs-3">2</td>
+                            <td class="fw-semibold fs-3">roll</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" for="">REMARKS:</label>
+                    <textarea id="description" name="description" class="form-control"></textarea>
+                </div>
             </div>
         </div>
     </div>
