@@ -29,15 +29,18 @@
                 <hr>
             </div>
 
-            <div class="row d-flex justify-content-end">
-                <div class="col-md-4 d-flex justify-content-end mb-2">
-                    <select class="form-select" id="product" name="product">
-                        <option></option>
-                        <?php $po->getSupplierProducts($supplier_info['id']); ?>
-                    </select>
-                    <button class="btn btn-success" id="add_po_item">Add</button>
+            <form id="po_item" method="POST">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-md-4 d-flex justify-content-end mb-2">
+                        <select class="form-select" id="product" name="product">
+                            <option></option>
+                            <?php $po->getSupplierProducts($supplier_info['id']); ?>
+                        </select>
+                        <input type="hidden" name="po_ref" value="<?php echo $po_info['po_ref']; ?>">
+                        <button class="btn btn-success" type="submit">Add</button>
+                    </div>
                 </div>
-            </div>
+            </form>
 
             <div class="row">
                 <table class="table table-bordered">

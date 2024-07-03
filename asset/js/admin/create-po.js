@@ -7,4 +7,22 @@ $(document).ready(function(){
             return markup;
         }
     });
+
+    $('#po_item').submit(function(event){
+        event.preventDefault();
+
+        $.ajax({
+            url: '/add-po-item',
+            method: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(json) {
+                console.log(json);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    });
 });

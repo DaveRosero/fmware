@@ -208,5 +208,30 @@
             echo $content;
             return;
         }
+
+        public function addPOItem ($po_ref, $product_id) {
+            $query = 'INSERT INTO purchase_order_items
+                        (po_ref, product_id, qty)
+                    VALUES (?,?,?)';
+            $stmt = $this->conn->prepare($query);
+            $qty = 1;
+            $stmt->bind_param('sii', $po_ref, $product_id, $qty);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'success' => 'success'
+            );
+            echo json_encode($json);
+            return;
+        }
     }
 ?>
