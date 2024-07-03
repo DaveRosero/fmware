@@ -64,6 +64,10 @@
                 </div>
             </div>
         </div>
+        <div class="card-footer bg-white text-end">
+            <button class="btn btn-primary btn-lg">Save</button>
+            <button class="btn btn-muted btn-lg">Cancel</button>
+        </div>
     </div>
 </div>
 

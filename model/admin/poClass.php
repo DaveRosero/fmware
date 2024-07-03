@@ -153,7 +153,7 @@
         }
 
         public function getPOInfo ($po_ref) {
-            $query = 'SELECT p.id, p.po_ref, s.name, p.total, p.user_id, p.date
+            $query = 'SELECT p.id, p.po_ref, s.name, p.total, p.user_id, p.date, p.status
                     FROM purchase_order p
                     INNER JOIN supplier s ON s.id = p.supplier_id
                     WHERE p.po_ref = ?';
@@ -169,9 +169,15 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $po_ref, $supplier, $total, $user_id, $date);
+            $stmt->bind_result($id, $po_ref, $supplier, $total, $user_id, $date, $status);
             $stmt->fetch();
             $stmt->close();
+
+            if ($status == 1) {
+                header('Location: /404');
+                return;
+            }
+
             return [
                 'id' => $id,
                 'po_ref' => $po_ref,
