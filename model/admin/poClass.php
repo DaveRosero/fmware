@@ -85,6 +85,11 @@
             $stmt->fetch();
             $stmt->close();
 
+            $po_ref = $this->poRef();
+            $total = null;
+            $date = date('F j, Y');
+            $this->createPO($po_ref, $id, $_SESSION['user_id'], $total, $date);
+
             $json = array(
                 'redirect' => '/create-po/'.$supplier
             );
@@ -117,6 +122,33 @@
                 'phone' => $phone,
                 'address' => $address
             ];
+        }
+
+        public function createPO ($po_ref, $supplier_id, $user_id, $total, $date) {
+            $query = 'INSERT INTO purchase_order
+                        (po_ref, supplier_id, user_id, total, date)
+                    VALUES (?,?,?,?,?)';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('siids', $po_ref, $supplier_id, $user_id, $total, $date);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function poRef () {
+            $bytes = random_bytes(10);
+            $hex = bin2hex($bytes);
+            $prefix = 'FMPO_';
+            return $prefix.strtoupper($hex);
         }
     }
 ?>

@@ -29,50 +29,26 @@
                 <hr>
             </div>
 
+            <div class="text-end mb-2">
+                <button class="btn btn-success">+ Add Product</button>
+            </div>
+
             <div class="row">
                 <table class="table table-bordered">
                     <thead class="table-secondary">
-                        <th></th>
+                        <th>#</th>
                         <th>Product</th>
                         <th>Quantity</th>
+                        <th>Price</th>
                         <th>Unit</th>
                     </thead>
                     <tbody>
                         <tr>
                             <td></td>
-                            <td class="fw-semibold fs-3">BALL VALVE 1/2</td>
-                            <td class="fw-semibold fs-3">2</td>
-                            <td class="fw-semibold fs-3">pack</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="fw-semibold fs-3">UNION PATENTE 1/2</td>
-                            <td class="fw-semibold fs-3">2</td>
-                            <td class="fw-semibold fs-3">pack</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="fw-semibold fs-3">TEE 1/2</td>
-                            <td class="fw-semibold fs-3">3</td>
-                            <td class="fw-semibold fs-3">pack</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="fw-semibold fs-3">PVC PIPE #2 (ORANGE)</td>
-                            <td class="fw-semibold fs-3">50</td>
-                            <td class="fw-semibold fs-3">piece</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="fw-semibold fs-3">PVC PIPE #3 (ORANGE)</td>
-                            <td class="fw-semibold fs-3">40</td>
-                            <td class="fw-semibold fs-3">piece</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="fw-semibold fs-3">PPR PIPE 1/2</td>
-                            <td class="fw-semibold fs-3">2</td>
-                            <td class="fw-semibold fs-3">roll</td>
+                            <td>BALL VALVE 1/2</td>
+                            <td class="w-25"><input class="form-control" type="number"></td>
+                            <td class="w-25"><input class="form-control" type="number"></td>
+                            <td>pack</td>
                         </tr>
                     </tbody>
                 </table>
