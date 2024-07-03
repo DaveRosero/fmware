@@ -36,7 +36,7 @@
                             <option></option>
                             <?php $po->getSupplierProducts($supplier_info['id']); ?>
                         </select>
-                        <input type="hidden" name="po_ref" value="<?php echo $po_info['po_ref']; ?>">
+                        <input type="hidden" name="po_ref" id="po_ref" value="<?php echo $po_info['po_ref']; ?>">
                         <button class="btn btn-success" type="submit">Add</button>
                     </div>
                 </div>
@@ -51,14 +51,7 @@
                         <th>Price</th>
                         <th>Unit</th>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td>BALL VALVE 1/2</td>
-                            <td class="w-25"><input class="form-control" type="number"></td>
-                            <td class="w-25"><input class="form-control" type="number"></td>
-                            <td>pack</td>
-                        </tr>
+                    <tbody id="po_item_content">
                     </tbody>
                 </table>
             </div>
