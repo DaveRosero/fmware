@@ -29,8 +29,14 @@
                 <hr>
             </div>
 
-            <div class="text-end mb-2">
-                <button class="btn btn-success">+ Add Product</button>
+            <div class="row d-flex justify-content-end">
+                <div class="col-md-4 d-flex justify-content-end mb-2">
+                    <select class="form-select" id="product" name="product">
+                        <option></option>
+                        <?php $po->getSupplierProducts($supplier_info['id']); ?>
+                    </select>
+                    <button class="btn btn-success" id="add_po_item">Add</button>
+                </div>
             </div>
 
             <div class="row">

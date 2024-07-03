@@ -180,5 +180,33 @@
                 'date' => $date
             ];
         }
+        
+        public function getSupplierProducts ($id) {
+            $query = 'SELECT product.id, product.name, unit.name, product.unit_value, variant.name
+                    FROM product
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    WHERE product.supplier_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($product_id, $name, $unit, $unit_value, $variant);
+            $content = '';
+            while ($stmt->fetch()) {
+                $content .= '<option value="'.$product_id.'">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</option>';
+            }
+            $stmt->close();
+            echo $content;
+            return;
+        }
     }
 ?>
