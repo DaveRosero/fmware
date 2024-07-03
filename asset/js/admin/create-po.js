@@ -18,6 +18,13 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(json) {
                 console.log(json);
+                if (json.failed) {
+                    Swal.fire({
+                        title: "Oops!",
+                        text: "The product is already added.",
+                        icon: "error"
+                    });
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);

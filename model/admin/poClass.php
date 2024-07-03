@@ -210,6 +210,14 @@
         }
 
         public function addPOItem ($po_ref, $product_id) {
+            if ($this->isAdded($po_ref, $product_id)) {
+                $json = array(
+                    'failed' => 'failed'
+                );
+                echo json_encode($json);
+                return;
+            }
+            
             $query = 'INSERT INTO purchase_order_items
                         (po_ref, product_id, qty)
                     VALUES (?,?,?)';
@@ -232,6 +240,31 @@
             );
             echo json_encode($json);
             return;
+        }
+
+        public function isAdded ($po_ref, $product_id) {
+            $query = 'SELECT COUNT(*) FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($count);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($count > 0) {
+                return true;
+            } else { 
+                return false;
+            }
         }
     }
 ?>
