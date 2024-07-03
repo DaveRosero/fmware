@@ -19,8 +19,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="text-end">
-                        <h6 class="mb-0"><?php echo date('F j, Y'); ?></h6>
-                        <p class="fst-italic">P.O. # {auto generated}</p>
+                        <h6 class="mb-0"><?php echo $po_info['date']; ?></h6>
+                        <p class="fst-italic"><?php echo $po_info['po_ref']; ?></p>
                     </div>
                 </div>
             </div>

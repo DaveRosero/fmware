@@ -30,7 +30,7 @@
                                     <a
                                         class="btn btn-sm btn-secondary view me-1" 
                                         type="button"
-                                        href="/purchase-orders/'.$po_ref.'"
+                                        href="/create-po/'.$supplier.'/'.$po_ref.'"
                                     >
                                         <i class="fa-solid fa-eye fs-1"></i>
                                     </a>
@@ -91,7 +91,7 @@
             $this->createPO($po_ref, $id, $_SESSION['user_id'], $total, $date);
 
             $json = array(
-                'redirect' => '/create-po/'.$supplier
+                'redirect' => '/create-po/'.$supplier.'/'.$po_ref
             );
 
             echo json_encode($json);
@@ -149,6 +149,36 @@
             $hex = bin2hex($bytes);
             $prefix = 'FMPO_';
             return $prefix.strtoupper($hex);
+        }
+
+        public function getPOInfo ($po_ref) {
+            $query = 'SELECT p.id, p.po_ref, s.name, p.total, p.user_id, p.date
+                    FROM purchase_order p
+                    INNER JOIN supplier s ON s.id = p.supplier_id
+                    WHERE p.po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($id, $po_ref, $supplier, $total, $user_id, $date);
+            $stmt->fetch();
+            $stmt->close();
+            return [
+                'id' => $id,
+                'po_ref' => $po_ref,
+                'supplier' => $supplier,
+                'total' => $total,
+                'user_id' => $user_id,
+                'date' => $date
+            ];
         }
     }
 ?>
