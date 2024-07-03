@@ -293,7 +293,7 @@
                 $content .= '<tr>
                                 <td>
                                     <button
-                                        class="btn btn-sm btn-danger me-1" 
+                                        class="btn btn-sm btn-danger del me-1" 
                                         type="button"
                                         data-product-id="'.$product_id.'"
                                         data-po-ref="'.$po_ref.'"
@@ -310,6 +310,28 @@
 
             $json = array(
                 'content' => $content
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function delPOItem ($po_ref, $product_id) {
+            $query = 'DELETE FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'success' => 'success'
             );
             echo json_encode($json);
             return;

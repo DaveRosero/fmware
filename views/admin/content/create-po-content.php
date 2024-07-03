@@ -32,7 +32,7 @@
             <form id="po_item" method="POST">
                 <div class="row d-flex justify-content-end">
                     <div class="col-md-4 d-flex justify-content-end mb-2">
-                        <select class="form-select" id="product" name="product">
+                        <select class="form-select" id="product" name="product" required>
                             <option></option>
                             <?php $po->getSupplierProducts($supplier_info['id']); ?>
                         </select>
@@ -52,6 +52,7 @@
                         <th>Unit</th>
                     </thead>
                     <tbody id="po_item_content">
+                        <!-- PO Content Here -->
                     </tbody>
                 </table>
             </div>
