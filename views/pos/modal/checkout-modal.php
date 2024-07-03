@@ -34,8 +34,8 @@
                             <h1 class="text-danger" name="total" id="cart-total-modal">₱0.00</h1>
                             <h5 class="text-secondary my-auto">Total Price</h5>
                             <input type="hidden" name="subtotal" id="cart-total-modal" value="subtotal">
-                        </div>
-                        <!-- Discount and Total Section in Modal Body -->
+                        </div> 
+                        <!---Discount and change input --->
                         <div class="col border-bottom mb-2">
                             <form id="discount-form" class="mb-2">
                                 <label for="discount-input" class="form-label">Discount</label>

@@ -33,6 +33,6 @@ while ($stmt->fetch()){
                             View
                         </button>
                     </td>
-            </tr>';
+            </tr>'; 
 }
 $stmt->close();

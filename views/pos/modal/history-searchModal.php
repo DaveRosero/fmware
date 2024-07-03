@@ -24,6 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!---fetching information from the database -->
                         <?php include_once 'views/pos/model/history.php' ?>
                     </tbody>
                 </table>

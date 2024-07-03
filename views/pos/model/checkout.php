@@ -57,7 +57,6 @@ if ($stmt) {
     if ($stmt->execute()) {
         $stmt->close();
 
-        // Insert items into pos_items table
         $query = 'INSERT INTO pos_items (pos_ref, product_id, qty)
                   SELECT ?, product_id, qty
                   FROM pos_cart
