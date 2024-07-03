@@ -88,7 +88,8 @@
             $po_ref = $this->poRef();
             $total = null;
             $date = date('F j, Y');
-            $this->createPO($po_ref, $id, $_SESSION['user_id'], $total, $date);
+            $status = 0;
+            $this->createPO($po_ref, $id, $_SESSION['user_id'], $total, $date, $status);
 
             $json = array(
                 'redirect' => '/create-po/'.$supplier.'/'.$po_ref
@@ -124,12 +125,12 @@
             ];
         }
 
-        public function createPO ($po_ref, $supplier_id, $user_id, $total, $date) {
+        public function createPO ($po_ref, $supplier_id, $user_id, $total, $date, $status) {
             $query = 'INSERT INTO purchase_order
-                        (po_ref, supplier_id, user_id, total, date)
-                    VALUES (?,?,?,?,?)';
+                        (po_ref, supplier_id, user_id, total, date, status)
+                    VALUES (?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('siids', $po_ref, $supplier_id, $user_id, $total, $date);
+            $stmt->bind_param('siidsi', $po_ref, $supplier_id, $user_id, $total, $date, $status);
 
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
@@ -265,6 +266,53 @@
             } else { 
                 return false;
             }
+        }
+
+        public function getPOItem ($po_ref) {
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty
+                    FROM purchase_order_items poi
+                    INNER JOIN product ON product.id = poi.product_id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    WHERE poi.po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty);
+            $content = '';
+            while ($stmt->fetch()) {
+                $content .= '<tr>
+                                <td>
+                                    <button
+                                        class="btn btn-sm btn-danger me-1" 
+                                        type="button"
+                                        data-product-id="'.$product_id.'"
+                                        data-po-ref="'.$po_ref.'"
+                                    >
+                                        <i class="fa-solid fa-xmark fa-solid fa-lg"></i>
+                                    </button></td>
+                                <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
+                                <td class="w-25"><input class="form-control" type="number" name="qty" value="'.$qty.'"></td>
+                                <td class="w-25"><input class="form-control" type="number" name="price"></td>
+                                <td class="w-25"><input class="form-control" type="text" name="unit"></td>
+                            </tr>';
+            }
+            $stmt->close();
+
+            $json = array(
+                'content' => $content
+            );
+            echo json_encode($json);
+            return;
         }
     }
 ?>
