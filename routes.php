@@ -105,6 +105,7 @@ require_once __DIR__.'/router.php';
 
     // Purchase Order Controller
     any('/redirect-po', 'controller/admin/purchase-order/redirect.php');
+    any('/add-po-item', 'controller/admin/purchase-order/add-po-item.php');
 
 //*****************************************************************//
 
