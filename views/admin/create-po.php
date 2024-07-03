@@ -7,6 +7,7 @@
   $admin->isAdmin();
   
   $supplier_info = $po->getSupplierInfo(urldecode($supplier));
+  $po_info = $po->getPOInfo($po_ref);
 ?>
 <!DOCTYPE html>
 <html lang="en">
