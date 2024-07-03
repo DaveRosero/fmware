@@ -21,15 +21,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Boysen Paint (W)</td>
-                                        <td>1 Liter</td>
-                                        <td>White</td>
-                                        <td>$99.00</td>
-                                        <td>3</td>
-                                        <td>$297.00</td>
-                                    </tr>
-
+                                <?php include_once 'views/pos/model/history_fetchprod.php' ?>
                                 </tbody>
                             </table>
                         </div>
