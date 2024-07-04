@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="historyViewLabel">Transaction #1234567890</h1>
+                <h1 class="modal-title fs-5" id="historyViewLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="max-height: 75vh; overflow:hidden;">
@@ -20,8 +20,7 @@
                                         <th scope="col">Subtotal</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                <?php include_once 'views/pos/model/history_fetchprod.php' ?>
+                                <tbody id="productDetails">
                                 </tbody>
                             </table>
                         </div>
@@ -33,13 +32,14 @@
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">
-                            <select class="form-select   w-50" aria-label="Default select example" disabled>
+                            <select class="form-select   w-50" aria-label="Default select example" id="paymentMethod"
+                                disabled>
                                 <option value="1">G-Cash</option>
                                 <option value="2">Cash</option>
                             </select>
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="cashRec-input" placeholder="297.00" disabled/>
+                                <input type="number" class="form-control" id="viewcashRec-input" disabled />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="col mb-2">
-                            <form action="" class="transactionType-form">
+                            <form action="" class="transactionType-form" id="transactionType">
                                 <div class="d-flex justify-content-end gap-2">
                                     <select class="form-select   w-50" aria-label="Default select example" disabled>
                                         <option value="1">Un-Paid</option>
@@ -61,11 +61,14 @@
                                 <h3>Customer Details</h3>
                                 <form>
                                     <label for="fName-input" class="form-label">First Name:</label>
-                                    <input type="text" class="form-control" placeholder="Jhon" id="fName-input" disabled />
+                                    <input type="text" class="form-control" placeholder="Jhon" id="viewfName-input"
+                                        disabled />
                                     <label for="lName-input" class="form-label">Last Name:</label>
-                                    <input type="text" class="form-control" placeholder="Doe" id="lName-input" disabled />
+                                    <input type="text" class="form-control" placeholder="Doe" id="viewlName-input"
+                                        disabled />
                                     <label for="contact-input" class="form-label">Contact:</label>
-                                    <input type="text" class="form-control" placeholder="1231-1231-1231" id="contact-input" disabled />
+                                    <input type="text" class="form-control" placeholder="1231-1231-1231"
+                                        id="viewcontact-input" disabled />
                                 </form>
                             </form>
                         </div>
@@ -78,7 +81,8 @@
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#history-confirmVoidModal">Void</button>
+                <button class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#history-confirmVoidModal">Void</button>
             </div>
         </div>
     </div>
