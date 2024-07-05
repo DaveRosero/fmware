@@ -1,4 +1,5 @@
-<div class="modal fade" id="transactionSearch-Modal" aria-hidden="true" aria-labelledby="transactionSearch-ModalLabel" tabindex="-1">
+<div class="modal fade" id="transactionSearch-Modal" aria-hidden="true" aria-labelledby="transactionSearch-ModalLabel"
+    tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,28 +19,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($transactions as $transaction) : ?>
+                        <?php foreach ($transactions as $transaction): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($transaction['pos_ref']); ?></td>
                                 <td><?php echo date('F j, Y h:i A', strtotime($transaction['date'])); ?></td>
                                 <td>₱<?php echo number_format($transaction['total'], 2); ?></td>
-                                <td><?php echo isset($transaction['transaction_type']) ? htmlspecialchars($transaction['transaction_type']) : ''; ?></td>
+                                <td><?php echo isset($transaction['transaction_type']) ? htmlspecialchars($transaction['transaction_type']) : ''; ?>
+                                </td>
                                 <td>
-                                    <?php if ($transaction['status'] === 'Valid') : ?>
-                                        <span class="badge text-bg-primary"><?php echo htmlspecialchars($transaction['status']); ?></span>
-                                    <?php else : ?>
-                                        <span class="badge text-bg-danger"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                    <?php if ($transaction['status'] === 'Valid'): ?>
+                                        <span
+                                            class="badge text-bg-primary"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                    <?php else: ?>
+                                        <span
+                                            class="badge text-bg-danger"><?php echo htmlspecialchars($transaction['status']); ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary view-transaction-btn" data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">View</button>
+                                    <button class="btn btn-primary view-transaction-btn"
+                                        data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">View</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                         <!-- Script to handle View button click -->
                         <script>
-                            $(document).ready(function() {
-                                $('.view-transaction-btn').click(function() {
+                            $(document).ready(function () {
+                                $('.view-transaction-btn').click(function () {
                                     const posRef = $(this).data('bs-posref');
 
                                     $.ajax({
@@ -49,7 +54,7 @@
                                             pos_ref: posRef
                                         },
                                         dataType: 'json',
-                                        success: function(data) {
+                                        success: function (data) {
                                             console.log(data);
                                             $('#transactionViewLabel').text('Transaction #' + data.pos_ref);
                                             $('#transaction-fname').text(data.firstname);

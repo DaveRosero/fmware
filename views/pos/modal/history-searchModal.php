@@ -27,7 +27,23 @@
                     </thead>
                     <tbody>
                         <!---fetching information from the database -->
-                        <?php $history->fetchdetail() ?>
+                        <?php foreach ($historys as $history): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($history['pos_ref']); ?></td>
+                                <td><?php echo date('F j, Y h:i A', strtotime($history['date'])); ?></td>
+                                <td>₱<?php echo number_format($history['total'], 2); ?></td>
+                                <td><?php echo isset($history['name']) ? htmlspecialchars($history['name']) : ''; ?>
+                                </td>
+                                <td>
+                                    <span
+                                        class="badge text-bg-primary"><?php echo htmlspecialchars($history['status']); ?></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary view-history-btn"
+                                        data-bs-posref="<?php echo htmlspecialchars($history['pos_ref']); ?>">View</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

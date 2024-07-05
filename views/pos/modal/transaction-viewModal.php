@@ -138,7 +138,8 @@
                                     <tr>
                                         <td scope="row">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    id="flexCheckDefault">
                                             </div>
                                         </td>
                                         <td>Boysen Paint (W)</td>
@@ -152,7 +153,8 @@
                                                 <button class="btn btn-sm btn-outline-secondary " type="button">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
-                                                <input type="number" class="form-control text-center " placeholder="0" style="max-width: 50px;">
+                                                <input type="number" class="form-control text-center " placeholder="0"
+                                                    style="max-width: 50px;">
                                                 <button class="btn btn-sm btn-outline-secondary " type="button">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
@@ -207,8 +209,10 @@
                                         </div>
                                     </div>
                                     <label for="address-input" class="form-label">Address:</label>
-                                    <input type="text" class="form-control" placeholder="#123 Somewhere Street, Nowhere City" id="address-input" disabled />
-                                    <div class="col d-flex gap-2"> <label for="contact-input" class="form-label">Contact:</label>
+                                    <input type="text" class="form-control"
+                                        placeholder="#123 Somewhere Street, Nowhere City" id="address-input" disabled />
+                                    <div class="col d-flex gap-2"> <label for="contact-input"
+                                            class="form-label">Contact:</label>
                                         <p id="transaction-contact"></p>
                                     </div>
 
@@ -223,8 +227,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#replaceConfirmationModal">Replace</button>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#refundConfirmationModal">Refund</button>
+                <button class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#replaceConfirmationModal">Replace</button>
+                <button class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#refundConfirmationModal">Refund</button>
             </div>
         </div>
     </div>
