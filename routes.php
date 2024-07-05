@@ -82,33 +82,33 @@ any('/update-staff', 'controller/admin/staff/update-status.php');
 
 //*****************************************************************//
 
-    // Inventory Views
-    get('/manage-products', 'views/admin/products.php');
-    // get('/stocks', 'views/admin/stocks.php');
-    // get('/price-list', 'views/admin/price-list.php');
-    get('/purchase-orders', 'views/admin/purchase-order.php');
-    get('/create-po/$supplier/$po_ref', 'views/admin/create-po.php');
+// Inventory Views
+get('/manage-products', 'views/admin/products.php');
+// get('/stocks', 'views/admin/stocks.php');
+// get('/price-list', 'views/admin/price-list.php');
+get('/purchase-orders', 'views/admin/purchase-order.php');
+get('/create-po/$supplier/$po_ref', 'views/admin/create-po.php');
 
-    // Product Controller
-    any('/new-product', 'controller/admin/product/new-product.php');
-    any('/edit-product', 'controller/admin/product/edit-product.php');
-    any('/disable-product', 'controller/admin/product/disable-product.php');
-    any('/get-product', 'controller/admin/product/get-product.php');
-    any('/view-product', 'controller/admin/product/view-product.php');
+// Product Controller
+any('/new-product', 'controller/admin/product/new-product.php');
+any('/edit-product', 'controller/admin/product/edit-product.php');
+any('/disable-product', 'controller/admin/product/disable-product.php');
+any('/get-product', 'controller/admin/product/get-product.php');
+any('/view-product', 'controller/admin/product/view-product.php');
 
-    // Stocks Controller
-    // any('/add-stock', 'controller/admin/stocks/add-stock.php');
-    // any('/restock', 'controller/admin/stocks/restock.php');
+// Stocks Controller
+// any('/add-stock', 'controller/admin/stocks/add-stock.php');
+// any('/restock', 'controller/admin/stocks/restock.php');
 
-    // Price List Controller
-    // any('/new-price', 'controller/admin/price/new-price.php');
+// Price List Controller
+// any('/new-price', 'controller/admin/price/new-price.php');
 
-    // Purchase Order Controller
-    any('/redirect-po', 'controller/admin/purchase-order/redirect.php');
-    any('/add-po-item', 'controller/admin/purchase-order/add-po-item.php');
-    any('/get-po-item', 'controller/admin/purchase-order/get-po-item.php');
-    any('/del-po-item', 'controller/admin/purchase-order/del-po-item.php');
-    any('/qty-po-item', 'controller/admin/purchase-order/qty-po-item.php');
+// Purchase Order Controller
+any('/redirect-po', 'controller/admin/purchase-order/redirect.php');
+any('/add-po-item', 'controller/admin/purchase-order/add-po-item.php');
+any('/get-po-item', 'controller/admin/purchase-order/get-po-item.php');
+any('/del-po-item', 'controller/admin/purchase-order/del-po-item.php');
+any('/qty-po-item', 'controller/admin/purchase-order/qty-po-item.php');
 
 //*****************************************************************//
 
@@ -184,6 +184,7 @@ any('/pos-updateqty', 'views/pos/update-qty.php');
 any('/pos-checkout', 'views/pos/model/checkout.php');
 any('/pos-getTransaction', 'views/pos/model/get_transaction.php');
 any('/pos-history', 'views/pos/model/history_fetchprod.php');
+any('/pos-historyprod', 'views/pos/model/history_product.php');
 any('/pos-getTransactionTable', 'views/pos/model/get_transaction-table.php');
 
 

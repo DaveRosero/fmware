@@ -1,49 +1,46 @@
 $(document).ready(function () {
-  $(".view-button").on("click", function () {
-    var pos_ref = $(this).data("product-id");
+  $(".view-history-btn").click(function () {
+    const posRef = $(this).data("bs-posref");
 
     $.ajax({
-      url: "/pos-history",
+      url: "/pos-getTransaction",
       method: "GET",
-      data: { pos_ref: pos_ref },
-      dataType: "json",
-      success: function (json) {
-        $("#historyViewLabel").text("Transaction #" + json.pos_ref);
-
-        var html = "";
-        $.each(json.products, function (index, product) {
-          html += "<tr>";
-          html += '<td class="align-middle">' + product.name + "</td>";
-          html +=
-            '<td class="align-middle">' +
-            product.unit_value +
-            " " +
-            product.unitname.toUpperCase() +
-            "</td>";
-          html += '<td class="align-middle">' + product.variant + "</td>";
-          html += '<td class="align-middle">' + product.qty + "</td>";
-          html += "</tr>";
-        });
-        $("#productDetails").html(html);
-        $("#transaction-total").text("$" + json.total);
-        $("#paymentMethod").val(json.payment_method).prop("disabled", true);
-        $("#viewcashRec-input").val(json.cash_received).prop("disabled", true);
-        $("#transactionType").val(json.transaction_type).prop("disabled", true);
-        $("#viewfName-input")
-          .val(json.customer.first_name)
-          .prop("disabled", true);
-        $("#viewlName-input")
-          .val(json.customer.last_name)
-          .prop("disabled", true);
-        $("#viewcontact-input")
-          .val(json.customer.contact)
-          .prop("disabled", true);
-        $("#fulfilledBy").text(json.fulfilled_by);
-
-        $("#historyView").modal("show");
+      data: {
+        pos_ref: posRef,
       },
-      error: function () {
-        console.error("Failed to fetch product details");
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+        $("#historyViewLabel").text("Transaction #" + data.pos_ref);
+        $("#viewfName-input").val(data.firstname);
+        $("#viewlName-input").val(data.lastname);
+        $("#transaction-date").text(data.date);
+        $("#transaction-subtotal").text(data.subtotal);
+        $("#htransaction-total").text("₱" + data.total);
+        $("#transaction-discount").text(data.discount);
+        $("#viewcashRec-input").val(data.cash);
+        $("#history-change").text(data.changes);
+        $("#transaction-delivery-fee").text(data.delivery_fee);
+        $("#transaction-deliverer").text(data.deliverer_name);
+        $("#transaction-contact").text(data.contact_no);
+        $("#transaction-transaction-type").text(data.transaction_type);
+        $("#paymentMethod").val(data.payment_type);
+        $("#history-username").text(data.username);
+        $("#transaction-status").text(data.status);
+        $("#historyView").modal("show");
+
+        $.ajax({
+          url: "/pos-historyprod",
+          method: "GET",
+          data: {
+            pos_ref: posRef,
+          },
+          dataType: "html",
+          success: function (data) {
+            console.log(data);
+            $("#productDetails").html(data);
+          },
+        });
       },
     });
   });

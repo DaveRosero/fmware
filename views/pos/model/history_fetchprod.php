@@ -3,30 +3,51 @@ require_once 'model/database/database.php';
 
 $mysqli = database();
 
-$query = 'SELECT pos_items.qty,
-product.name,
-product.unit_value,
-unit.name,
-variant.name 
-FROM pos_items
-INNER JOIN product ON pos_items.product_id = product.id
-INNER JOIN unit ON unit.id = product.unit_id
-INNER JOIN variant ON variant.id = product.variant_id
-WHERE pos_ref = ?';
-
-$stmt = $mysqli->prepare($query);
-$stmt->bind_param('s', $pos_ref);
-$stmt->execute();
-$stmt->bind_result($qty, $name, $unit_value, $unitname, $variant);
-
-while ($stmt->fetch()) {
-    echo '<tr>
-<td class="align-middle">' . $name . '</td>
-<td class="align-middle">' . $unit_value . ' ' . strtoupper($unitname) . '</td>
-<td class="align-middle">' . $variant . '</td>
-<td class="align-middle">' . $qty . '</td>
-</tr>';
+if (!isset($_GET['pos_ref'])) {
+    die('Transaction ID not specified');
 }
-$stmt->close();
 
-?>
+$mysqli = database();
+
+$pos_ref = $mysqli->real_escape_string($_GET['pos_ref']);
+
+$query = "SELECT 
+    pos.pos_ref, 
+    pos.firstname, 
+    pos.lastname, 
+    pos.date, 
+    pos.subtotal, 
+    pos.total, 
+    pos.discount, 
+    pos.cash, 
+    pos.changes, 
+    pos.delivery_fee, 
+    pos.deliverer_name, 
+    pos.contact_no , 
+    transaction_type.name, 
+    payment_type.name,
+    user.firstname,
+    pos.status
+    FROM pos
+    LEFT JOIN payment_type ON pos.payment_type_id = payment.id
+    LEFT JOIN transaction_type ON pos.transaction_type_id = transaction_type.id
+    LEFT JOIN user ON pos.user_id = user.id
+    WHERE pos.pos_ref = '$pos_ref'";
+
+$result = $mysqli->query($query);
+
+if (!$result) {
+    die('Error fetching transaction details: ' . $mysqli->error);
+}
+
+
+$history = $result->fetch_assoc();
+
+if (!$history) {
+    die('Transaction not found');
+}
+
+
+echo json_encode($history);
+
+$mysqli->close();
