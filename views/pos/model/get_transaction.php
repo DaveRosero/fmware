@@ -48,5 +48,6 @@ if (!$transaction) {
 
 
 echo json_encode($transaction);
+
 // Close the connection
 $mysqli->close();
