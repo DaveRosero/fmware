@@ -307,9 +307,10 @@
                                         <i class="fa-solid fa-xmark fa-solid fa-lg"></i>
                                     </button></td>
                                 <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
-                                <td class="w-25"><input class="form-control" type="number" name="qty" value="'.$qty.'"></td>
-                                <td class="w-25"><input class="form-control" type="number" name="price"></td>
-                                <td class="w-25"><input class="form-control" type="text" name="unit"></td>
+                                <td><input class="form-control poi-qty" type="number" name="qty" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td><input class="form-control poi-price" type="number" name="price" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td><input class="form-control poi-unit" type="text" name="unit" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td id="poi-total">₱0.00</td>
                             </tr>';
             }
             $stmt->close();
@@ -341,6 +342,23 @@
             );
             echo json_encode($json);
             return;
+        }
+
+        public function updateQty ($po_ref, $product_id, $qty) {
+            $query = 'UPDATE purchase_order_items SET qty = ? WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('isi', $qty, $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
         }
     }
 ?>
