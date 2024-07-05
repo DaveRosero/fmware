@@ -4,7 +4,16 @@ require_once 'model/database/database.php';
 $mysqli = database();
 
 
-$query = 'SELECT pos.pos_ref,
+class History
+{
+    protected $mysqli;
+    public function __construct()
+    {
+        $this->mysqli = database();
+    }
+    public function fetchdetail()
+    {
+        $query = 'SELECT pos.pos_ref,
                  pos.date,
                  pos.total,
                  transaction_type.name,
@@ -12,11 +21,11 @@ $query = 'SELECT pos.pos_ref,
             FROM pos
             LEFT JOIN transaction_type ON pos.transaction_type_id = transaction_type.id';
 
-$stmt = $mysqli->prepare($query);
-$stmt->execute();
-$stmt->bind_result($pos_ref, $date, $total, $name, $status);
-while ($stmt->fetch()){
-    echo '<tr>
+        $stmt = $this->mysqli->prepare($query);
+        $stmt->execute();
+        $stmt->bind_result($pos_ref, $date, $total, $name, $status);
+        while ($stmt->fetch()) {
+            echo '<tr>
                  <td class="align-middle">' . $pos_ref . '</td>
                  <td class="align-middle">' . date("Y/m/d h:i:sa", strtotime($date)) . '</td>
                  <td class="align-middle">₱' . number_format($total) . '</td>
@@ -25,7 +34,7 @@ while ($stmt->fetch()){
                   <span class= "badge text-bg-primary">' . $status . '</span>
                  </td>
                  <td class="align-middle">
-                        <button class="btn btn-primary"
+                        <button class="btn btn-primary view-button"
                             data-product-id="' . $pos_ref . '"
                             data-bs-target="#historyView" 
                             data-bs-toggle="modal"
@@ -33,6 +42,9 @@ while ($stmt->fetch()){
                             View
                         </button>
                     </td>
-            </tr>'; 
+            </tr>';
+        }
+        $stmt->close();
+    }
 }
-$stmt->close();
+?>
