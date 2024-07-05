@@ -185,7 +185,7 @@ any('/pos-checkout', 'views/pos/model/checkout.php');
 any('/pos-getTransaction', 'views/pos/model/get_transaction.php');
 any('/pos-history', 'views/pos/model/history_fetchprod.php');
 any('/pos-historyprod', 'views/pos/model/history_product.php');
-
+any('/pos-getTransactionTable', 'views/pos/model/get_transaction-table.php');
 
 
 //*****************************************************************//

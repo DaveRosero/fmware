@@ -73,13 +73,24 @@
                                             $('#transaction-user-name').text(data.username);
                                             $('#transaction-status').text(data.status);
                                             $('#transactionView').modal('show');
-                                        },
 
+                                            $.ajax({
+                                                url: '/pos-getTransactionTable',
+                                                method: 'GET',
+                                                data: {
+                                                    pos_ref: posRef
+                                                },
+                                                dataType: 'html',
+                                                success: function(data) {
+                                                    console.log(data);
+                                                    $('#transaction-itemtable').html(data)
+                                                },
+                                            })
+                                        },
                                     });
                                 });
                             });
                         </script>
-
                     </tbody>
                 </table>
             </div>

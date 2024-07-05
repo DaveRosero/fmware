@@ -134,33 +134,8 @@
                                         <th scope="col">Quantity Selected</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                    id="flexCheckDefault">
-                                            </div>
-                                        </td>
-                                        <td>Boysen Paint (W)</td>
-                                        <td>1 Liter</td>
-                                        <td>White</td>
-                                        <td>$99.00</td>
-                                        <td>3</td>
-                                        <td>
+                                <tbody id="transaction-itemtable">
 
-                                            <div class="input-group">
-                                                <button class="btn btn-sm btn-outline-secondary " type="button">
-                                                    <i class="fas fa-minus"></i>
-                                                </button>
-                                                <input type="number" class="form-control text-center " placeholder="0"
-                                                    style="max-width: 50px;">
-                                                <button class="btn btn-sm btn-outline-secondary " type="button">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
