@@ -108,6 +108,7 @@ require_once __DIR__.'/router.php';
     any('/add-po-item', 'controller/admin/purchase-order/add-po-item.php');
     any('/get-po-item', 'controller/admin/purchase-order/get-po-item.php');
     any('/del-po-item', 'controller/admin/purchase-order/del-po-item.php');
+    any('/qty-po-item', 'controller/admin/purchase-order/qty-po-item.php');
 
 //*****************************************************************//
 

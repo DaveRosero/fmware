@@ -40,6 +40,26 @@ $(document).ready(function(){
         })
     }
 
+    function updateQty (po_ref, id, qty) {
+        $.ajax({
+            url: '/qty-po-item',
+            method: 'POST',
+            data: {
+                po_ref : po_ref,
+                id : id,
+                qty : qty
+            },
+            dataType: 'json',
+            success: function(json) {
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        })
+    }
+
     getPOItem();
 
     $('#product').select2({
@@ -99,4 +119,12 @@ $(document).ready(function(){
             }
         });
     });
+
+    $(document).on('input', '.poi-qty', function(){
+        var id = $(this).data('product-id');
+        var po_ref = $(this).data('po-ref');
+        var qty = $(this).val();
+
+        updateQty(po_ref, id, qty);
+    })
 });

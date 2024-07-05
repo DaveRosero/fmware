@@ -29,5 +29,5 @@ $(document).ready(function(){
                 console.log("Response:", jqXHR.responseText);
             }
         });
-    })
+    });
 });

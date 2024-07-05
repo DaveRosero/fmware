@@ -50,6 +50,7 @@
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Unit</th>
+                        <th>Total</th>
                     </thead>
                     <tbody id="po_item_content">
                         <!-- PO Content Here -->
@@ -61,6 +62,9 @@
                 <div class="col-md-6">
                     <label class="form-label fw-semibold" for="">REMARKS:</label>
                     <textarea id="description" name="description" class="form-control"></textarea>
+                </div>
+                <div class="col-md-6 text-end mt-4">
+                    <h5><span class="border border-dark rounded p-3">TOTAL: ₱0.00</span></h5>
                 </div>
             </div>
         </div>
