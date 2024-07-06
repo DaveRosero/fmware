@@ -61,11 +61,19 @@
                                     <label for="viewfName-input" class="form-label">First Name:</label>
                                     <input type="text" class="form-control" id="viewfName-input" disabled />
                                     <label for="viewlName-input" class="form-label">Last Name:</label>
-                                    <input type="text" class="form-control" placeholder="Doe" id="viewlName-input"
-                                        disabled />
-                                    <label for="contact-input" class="form-label">Contact:</label>
-                                    <input type="text" class="form-control" placeholder="1231-1231-1231"
-                                        id="viewcontact-input" disabled />
+                                    <input type="text" class="form-control" id="viewlName-input" disabled />
+                                    <label for="viewstreet-input" class="form-label" id="street-label">Street:</label>
+                                    <input type="text" class="form-control" id="viewstreet-input" disabled />
+                                    <label for="viewbrgy-input" class="form-label" id="brgy-label">Baranggay:</label>
+                                    <input type="text" class="form-control" id="viewbrgy-input" disabled />
+                                    <label for="viewmunicipality-input" class="form-label"
+                                        id="municipality-label">Municipality:</label>
+                                    <input type="text" class="form-control" id="viewmunicipality-input" disabled />
+                                    <label for="contact-input" class="form-label" id="contact-label">Contact:</label>
+                                    <input type="text" class="form-control" id="viewcontact-input" disabled />
+                                    <label for="viewdeliverer-input" class="form-label"
+                                        id="deliverer-label">Deliverer:</label>
+                                    <input type="text" class="form-control" id="viewdeliverer-input" disabled />
                                 </form>
                             </form>
                         </div>

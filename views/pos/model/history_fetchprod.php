@@ -1,7 +1,5 @@
 <?php
-require_once 'model/database/database.php';
-
-$mysqli = database();
+require_once 'model/database/database.php'; // Adjust this to your database connection file
 
 if (!isset($_GET['pos_ref'])) {
     die('Transaction ID not specified');
@@ -9,30 +7,32 @@ if (!isset($_GET['pos_ref'])) {
 
 $mysqli = database();
 
-$pos_ref = $mysqli->real_escape_string($_GET['pos_ref']);
+// Retrieve the transaction details based on pos_ref
+$pos_ref = $mysqli->real_escape_string($_GET['pos_ref']); // Sanitize input
 
 $query = "SELECT 
-    pos.pos_ref, 
-    pos.firstname, 
-    pos.lastname, 
-    pos.date, 
-    pos.subtotal, 
-    pos.total, 
-    pos.discount, 
-    pos.cash, 
-    pos.changes, 
-    pos.delivery_fee, 
-    pos.deliverer_name, 
-    pos.contact_no , 
-    transaction_type.name, 
-    payment_type.name,
-    user.firstname,
-    pos.status
-    FROM pos
-    LEFT JOIN payment_type ON pos.payment_type_id = payment.id
-    LEFT JOIN transaction_type ON pos.transaction_type_id = transaction_type.id
-    LEFT JOIN user ON pos.user_id = user.id
-    WHERE pos.pos_ref = '$pos_ref'";
+    p.pos_ref, 
+    p.firstname, 
+    p.lastname, 
+    p.date, 
+    p.subtotal, 
+    p.total, 
+    p.discount, 
+    p.cash, 
+    p.changes, 
+    p.delivery_fee, 
+    p.deliverer_name, 
+    p.contact_no , 
+    p.address,
+    tt.name AS transaction_type, 
+    pt.name AS payment_type,
+    user.firstname AS username,
+    p.status
+    FROM pos p
+    LEFT JOIN payment_type pt ON p.payment_type_id = pt.id
+    LEFT JOIN transaction_type tt ON p.transaction_type_id = tt.id
+    LEFT JOIN user user ON p.user_id = user.id
+    WHERE p.pos_ref = '$pos_ref'";
 
 $result = $mysqli->query($query);
 
@@ -40,7 +40,7 @@ if (!$result) {
     die('Error fetching transaction details: ' . $mysqli->error);
 }
 
-
+// Fetch the transaction details
 $history = $result->fetch_assoc();
 
 if (!$history) {
@@ -50,4 +50,5 @@ if (!$history) {
 
 echo json_encode($history);
 
+// Close the connection
 $mysqli->close();
