@@ -1,10 +1,12 @@
 <!-- Modals -->
-<div class="modal fade" id="checkoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="checkoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Checkout</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-button"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    id="close-button"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -34,7 +36,7 @@
                             <h1 class="text-danger" name="total" id="cart-total-modal">₱0.00</h1>
                             <h5 class="text-secondary my-auto">Total Price</h5>
                             <input type="hidden" name="subtotal" id="cart-total-modal" value="subtotal">
-                        </div> 
+                        </div>
                         <!---Discount and change input --->
                         <div class="col border-bottom mb-2">
                             <form id="discount-form" class="mb-2">
@@ -60,11 +62,13 @@
                         <div class="col" id="address-form">
                             <form action="" class="transaction-form" id="transaction-form">
                                 <div class="d-flex justify-content-evenly gap-2">
-                                    <select class="form-select w-50" name="transaction_type" aria-label="Default select example">
-                                        <option value="0" name="pos">POS</option>
-                                        <option value="1" name="walk-in">Walk-in</option>
+                                    <select class="form-select w-50" name="transaction_type"
+                                        aria-label="Default select example">
+                                        <option value="0" name="pos">Walk-in</option>
+                                        <option value="1" name="walk-in">Delivery</option>
                                     </select>
-                                    <select class="form-select w-50" name="payment_type" aria-label="Default select example">
+                                    <select class="form-select w-50" name="payment_type"
+                                        aria-label="Default select example">
                                         <option value="3" name="cash">Cash</option>
                                         <option value="2" name="gcash">Gcash</option>
                                     </select>
@@ -73,15 +77,18 @@
                                 <div>
                                     <div class="mb-3">
                                         <label for="fName-input" class="form-label">First Name:</label>
-                                        <input type="text" class="form-control" name="fname" id="fName-input" required />
+                                        <input type="text" class="form-control" name="fname" id="fName-input"
+                                            required />
                                     </div>
                                     <div class="mb-3">
                                         <label for="lName-input" class="form-label">Last Name:</label>
-                                        <input type="text" class="form-control" name="lname" id="lName-input" required />
+                                        <input type="text" class="form-control" name="lname" id="lName-input"
+                                            required />
                                     </div>
                                     <div class="mb-3">
                                         <label for="address-input" class="form-label">Street:</label>
-                                        <input type="text" class="form-control" name="address" id="street-input" required />
+                                        <input type="text" class="form-control" name="address" id="street-input"
+                                            required />
                                     </div>
                                     <div class="mb-3">
                                         <label for="address-input" class="form-label">Baranggay:</label>
@@ -92,27 +99,32 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="address-input" class="form-label">Municipality:</label>
-                                        <input type="text" class="form-control" name="address" id="municipality" readonly />
+                                        <input type="text" class="form-control" name="address" id="municipality"
+                                            readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="contact-input" class="form-label">Contact:</label>
-                                        <input type="text" class="form-control" name="contact" id="contact-input" required />
+                                        <input type="text" class="form-control" name="contact" id="contact-input"
+                                            required />
                                     </div>
                                 </div>
                                 <div>
                                     <div class="mb-3">
                                         <label for="deliverer-input" class="form-label">Deliverer</label>
-                                        <select class="form-select" type="text" name="deliverer_name" id="deliverer" required>
+                                        <select class="form-select" type="text" name="deliverer_name" id="deliverer"
+                                            required>
                                             <option value="0">Deliverer1</option>
                                             <option value="1">Deliverer2</option>
-                                            <input type="hidden" id="deliverer-name-hidden" name="deliverer_name" value="Deliverer Name">
+                                            <input type="hidden" id="deliverer-name-hidden" name="deliverer_name"
+                                                value="Deliverer Name">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col d-flex justify-content-end">
                                     <p class="text-secondary">Request fulfilled by:</p>
                                     <?php echo htmlspecialchars($user_name); ?>
-                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_info['id']); ?>">
+                                    <input type="hidden" name="user_id"
+                                        value="<?php echo htmlspecialchars($user_info['id']); ?>">
                                 </div>
                             </form>
                         </div>
