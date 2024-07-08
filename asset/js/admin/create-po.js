@@ -11,6 +11,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(json) {
                 $('#po_item_content').html(json.content);
+                $('#grand_total').text('TOTAL: ₱' + json.grand_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -51,8 +52,8 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
-                console.log(json);
                 $element.closest('tr').find('td:eq(5)').text('₱' + json.total);
+                $('#grand_total').text('TOTAL: ₱' + json.grand_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -61,7 +62,7 @@ $(document).ready(function(){
         })
     }
     
-    function updatePrice (po_ref, id, price) {
+    function updatePrice (po_ref, id, price, $element) {
         $.ajax({
             url: '/price-po-item',
             method: 'POST',
@@ -72,7 +73,8 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
-                
+                $element.closest('tr').find('td:eq(5)').text('₱' + json.total);
+                $('#grand_total').text('TOTAL: ₱' + json.grand_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -174,6 +176,6 @@ $(document).ready(function(){
             return;
         }
 
-        updatePrice(po_ref, id, price);
+        updatePrice(po_ref, id, price, $(this));
     });
 });

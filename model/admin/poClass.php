@@ -320,9 +320,11 @@
                             </tr>';
             }
             $stmt->close();
-
+            
+            $grand_total = $this->getPOTotal($po_ref);
             $json = array(
-                'content' => $content
+                'content' => $content,
+                'grand_total' => $grand_total
             );
             echo json_encode($json);
             return;
@@ -366,10 +368,13 @@
 
             $stmt->close();
             $total = $this->getItemTotal($po_ref, $product_id);
+            $grand_total = $this->getPOTotal($po_ref);
             $json = array(
-                'total' => $total
+                'total' => $total,
+                'grand_total' => $grand_total
             );
             echo json_encode($json);
+            return;
         }
 
         public function updatePrice ($po_ref, $product_id, $price) {
@@ -387,6 +392,14 @@
             }
 
             $stmt->close();
+            $total = $this->getItemTotal($po_ref, $product_id);
+            $grand_total = $this->getPOTotal($po_ref);
+            $json = array(
+                'total' => $total,
+                'grand_total' => $grand_total
+            );
+            echo json_encode($json);
+            return;
         }
 
         public function getItemTotal ($po_ref, $product_id) {
@@ -409,6 +422,29 @@
 
             $total = $qty * $price;
             return number_format($total, 2);
+        }
+
+        public function getPOTotal ($po_ref) {
+            $query = 'SELECT price, qty FROM purchase_order_items WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->bind_result($qty, $price);
+            $grand_total = 0;
+            while ($stmt->fetch()) {
+                $grand_total += $qty * $price;
+            }
+            $stmt->close();
+            return number_format($grand_total, 2);
         }
     }
 ?>
