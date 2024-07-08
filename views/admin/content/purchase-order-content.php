@@ -18,6 +18,7 @@
                         <th>Supplier</th>
                         <th>Total Amount</th>
                         <th>Date Created</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
