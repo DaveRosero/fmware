@@ -37,7 +37,9 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-primary view-transaction-btn"
-                                        data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">View</button>
+                                            data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">
+                                            View
+                                    </button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -72,6 +74,7 @@
                                             $('#transaction-payment-type').text(data.payment_type);
                                             $('#transaction-user-name').text(data.username);
                                             $('#transaction-status').text(data.status);
+                                            $('#transactionSearch-Modal').modal('hide');
                                             $('#transactionView').modal('show');
 
                                             $.ajax({
@@ -82,7 +85,7 @@
                                                 },
                                                 dataType: 'html',
                                                 success: function(data) {
-                                                    console.log(data);
+                                                  
                                                     $('#transaction-itemtable').html(data)
                                                 },
                                             })
