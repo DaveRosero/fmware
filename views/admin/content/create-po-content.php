@@ -64,7 +64,7 @@
                     <textarea id="description" name="description" class="form-control"></textarea>
                 </div>
                 <div class="col-md-6 text-end mt-4">
-                    <h5><span class="border border-dark rounded p-3">TOTAL: ₱0.00</span></h5>
+                    <h5><span class="border border-dark rounded p-3" id="grand_total">TOTAL: ₱0.00</span></h5>
                 </div>
             </div>
         </div>
