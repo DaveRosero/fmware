@@ -40,7 +40,7 @@ $(document).ready(function(){
         })
     }
 
-    function updateQty (po_ref, id, qty) {
+    function updateQty (po_ref, id, qty, $element) {
         $.ajax({
             url: '/qty-po-item',
             method: 'POST',
@@ -51,13 +51,34 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
-                
+                console.log(json);
+                $element.closest('tr').find('td:eq(5)').text('₱' + json.total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
+    }
+    
+    function updatePrice (po_ref, id, price) {
+        $.ajax({
+            url: '/price-po-item',
+            method: 'POST',
+            data: {
+                po_ref : po_ref,
+                id : id,
+                price : price
+            },
+            dataType: 'json',
+            success: function(json) {
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
     }
 
     getPOItem();
@@ -120,11 +141,39 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('input', '.poi-qty', function(){
+    $(document).on('change', '.poi-qty', function(){
         var id = $(this).data('product-id');
         var po_ref = $(this).data('po-ref');
         var qty = $(this).val();
 
-        updateQty(po_ref, id, qty);
-    })
+        if (qty < 0) {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter one(1) or more in Quantity.",
+                icon: "warning"
+            });
+            $(this).val(1);
+            return;
+        }
+
+        updateQty(po_ref, id, qty, $(this));
+    });
+
+    $(document).on('change', '.poi-price', function(){
+        var id = $(this).data('product-id');
+        var po_ref = $(this).data('po-ref');
+        var price = $(this).val();
+
+        if (price < 0) {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a positive number on Price.",
+                icon: "warning"
+            });
+            $(this).val(0);
+            return;
+        }
+
+        updatePrice(po_ref, id, price);
+    });
 });

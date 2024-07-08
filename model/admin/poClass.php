@@ -275,7 +275,7 @@
         }
 
         public function getPOItem ($po_ref) {
-            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price
                     FROM purchase_order_items poi
                     INNER JOIN product ON product.id = poi.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
@@ -293,9 +293,10 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty);
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price);
             $content = '';
             while ($stmt->fetch()) {
+                $total = $qty * $price;
                 $content .= '<tr>
                                 <td>
                                     <button
@@ -307,10 +308,15 @@
                                         <i class="fa-solid fa-xmark fa-solid fa-lg"></i>
                                     </button></td>
                                 <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
-                                <td><input class="form-control poi-qty" type="number" name="qty" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
-                                <td><input class="form-control poi-price" type="number" name="price" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td><input class="form-control poi-qty" type="number" name="qty" min="1" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">₱</span>
+                                        <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
+                                    </div>
+                                </td>
                                 <td><input class="form-control poi-unit" type="text" name="unit" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
-                                <td id="poi-total">₱0.00</td>
+                                <td id="poi-total">₱'.number_format($total, 2).'</td>
                             </tr>';
             }
             $stmt->close();
@@ -359,6 +365,50 @@
             }
 
             $stmt->close();
+            $total = $this->getItemTotal($po_ref, $product_id);
+            $json = array(
+                'total' => $total
+            );
+            echo json_encode($json);
+        }
+
+        public function updatePrice ($po_ref, $product_id, $price) {
+            $query = 'UPDATE purchase_order_items SET price = ? WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('dsi', $price, $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+        }
+
+        public function getItemTotal ($po_ref, $product_id) {
+            $query = 'SELECT qty, price FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($qty, $price);
+            $stmt->fetch();
+            $stmt->close();
+
+            $total = $qty * $price;
+            return number_format($total, 2);
         }
     }
 ?>
