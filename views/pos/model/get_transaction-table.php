@@ -49,14 +49,20 @@ while ($row = $result->fetch_assoc()) {
 
     $content .= '<tr>
     <td>
-        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+        <input class="form-check-input ms-4" type="checkbox" value="" aria-label="Checkbox for following text input">
     </td>
     <td>'. $row['product_name'] .'</td>
     <td>'. $row['unit_name'] .'</td>
     <td>'. $row['variant_name'] .'</td>
     <td>'. $row['product_price'] .'</td>
-    <td>'. $row['product_qty'] .'</td>
-    <td></td>
+    <td class="text-center">'. $row['product_qty'] .'</td>
+    <td>
+        <div class="input-group">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon1"><i class="fa-solid fa-minus"></i></button>
+            <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon1"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </td>
     </tr>';
 }
 echo $content;
