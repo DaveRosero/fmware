@@ -4,7 +4,7 @@
 
     class PO extends Admin {
         public function showPO () {
-            $query = 'SELECT p.po_ref, s.name, p.total, p.date
+            $query = 'SELECT p.po_ref, s.name, p.total, p.date, p.status
                     FROM purchase_order p
                     INNER JOIN supplier s ON s.id = p.supplier_id';
             $stmt = $this->conn->prepare($query);
@@ -18,14 +18,29 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($po_ref, $supplier, $total, $date);
+            $stmt->bind_result($po_ref, $supplier, $total, $date, $status);
             $content = '';
             while ($stmt->fetch()) {
+                switch ($status) {
+                    case 0:
+                        $po_status = '<span class="badge bg-primary text-wrap">DRAFT</span>';
+                        break;
+                    case 1:
+                        $po_status = '<span class="badge bg-warning text-wrap">PENDING</span>';
+                        break;
+                    case 2:
+                        $po_status = '<span class="badge bg-success text-wrap">COMPLETED</span>';
+                        break;
+                    default:
+                        $po_status = 'Invalid PO Status';
+                        break;
+                }
                 $content .= '<tr>
                                 <td>'.$po_ref.'</td>
                                 <td>'.$supplier.'</td>
                                 <td>₱'.number_format($total, 2).'</td>
                                 <td>'.$date.'</td>
+                                <td>'.$po_status.'</td>
                                 <td>
                                     <a
                                         class="btn btn-sm btn-secondary view me-1" 
@@ -444,7 +459,27 @@
                 $grand_total += $qty * $price;
             }
             $stmt->close();
+
+            $this->updatePOTotal($grand_total, $po_ref);
             return number_format($grand_total, 2);
+        }
+
+        public function updatePOTotal ($total, $po_ref) {
+            $query = 'UPDATE purchase_order SET total = ? WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ds', $total, $po_ref);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
         }
     }
 ?>
