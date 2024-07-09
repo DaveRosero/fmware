@@ -1,11 +1,12 @@
-<div class="modal fade" id="historyView" aria-hidden="true" tabindex="-1">
+<div class="modal fade" id="historyView" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true"
+    tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="historyViewLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="max-height: 75vh; overflow:hidden;">
+            <div class="modal-body" style="max-height: 75vh; overflow-y:auto;">
                 <div class="row">
                     <div class="col-7">
                         <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
@@ -32,12 +33,9 @@
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">
-                            <select class="form-select   w-50" aria-label="Default select example" id="paymentMethod"
-                                disabled>
-                                <option value="1">G-Cash</option>
-                                <option value="2">Cash</option>
-                            </select>
                             <form id="discount-form" class="mb-2">
+                                <label for="discountRec-input" class="form-label">Discount</label>
+                                <input type="number" class="form-control" id="viewdiscountRec-input" disabled />
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
                                 <input type="number" class="form-control" id="viewcashRec-input" disabled />
                             </form>
@@ -47,12 +45,16 @@
                                     <h1 class="text-success" id="history-change">₱0.00</h1>
                                 </div>
                             </div>
+                            <input type="hidden" name="delivery-fee-value" id="delivery-fee-value-hidden" value="">
                         </div>
                         <div class="col mb-2">
-                            <form action="" class="transactionType-form" id="transactionType">
+                            <form action="" class="transactionType-form" id="transactionType-form">
                                 <div class="d-flex justify-content-end gap-2">
                                     <select class="form-select   w-50" aria-label="Default select example" disabled>
                                         <option id="history-transaction-type" selected></option>
+                                    </select>
+                                    <select class="form-select   w-50" aria-label="Default select example"
+                                        id="paymentMethod" disabled>
                                     </select>
                                 </div>
                                 <!--Show the details  of customer this can be blank-->
@@ -74,19 +76,23 @@
                                     <label for="viewdeliverer-input" class="form-label"
                                         id="deliverer-label">Deliverer:</label>
                                     <input type="text" class="form-control" id="viewdeliverer-input" disabled />
+                                    <input type="hidden" id="deliverer-name-hidden" name="deliverer_name"
+                                        value="Deliverer Name">
                                 </form>
                             </form>
                         </div>
                         <div class="col d-flex justify-content-end">
                             <p class="text-secondary">Request fulfilled by:</p>
                             <p class="ms-2" id="history-username"></p>
+                            <input type="hidden" name="user_id"
+                                value="<?php echo htmlspecialchars($user_info['id']); ?>">
                         </div>
                     </div>
                 </div>
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-toggle="modal"
+                <button class="btn btn-primary void" data-bs-toggle="modal"
                     data-bs-target="#history-confirmVoidModal">Void</button>
             </div>
         </div>

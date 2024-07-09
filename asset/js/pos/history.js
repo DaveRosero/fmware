@@ -12,14 +12,22 @@ $(document).ready(function () {
       success: function (data) {
         console.log(data);
 
+        // Number formatter for currency
+        var formatter = new Intl.NumberFormat("en-PH", {
+          style: "currency",
+          currency: "PHP",
+        });
+
         // Update general transaction details
         $("#historyViewLabel").text("Transaction #" + data.pos_ref);
         $("#transaction-date").text(data.date);
-        $("#transaction-subtotal").text(data.subtotal);
-        $("#htransaction-total").text("₱" + data.total);
-        $("#transaction-discount").text(data.discount);
-        $("#viewcashRec-input").val(data.cash);
-        $("#history-change").text(data.changes);
+        $("#transaction-subtotal").text(
+          formatter.format(Number(data.subtotal))
+        );
+        $("#htransaction-total").text(formatter.format(Number(data.total)));
+        $("#viewdiscountRec-input").val(data.discount);
+        $("#viewcashRec-input").val(Number(data.cash).toFixed(2));
+        $("#history-change").text(formatter.format(Number(data.changes)));
         $("#transaction-status").text(data.status);
         $("#history-username").text(data.username);
 
@@ -109,6 +117,54 @@ $(document).ready(function () {
         // Show the modal after updating all details
         $("#historyView").modal("show");
       },
+    });
+  });
+
+  $(".void").on("click", function () {
+    // Show a confirmation dialog
+    Swal.fire({
+      title: "Are you sure you want to void this transaction?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, void it",
+      cancelButtonText: "Cancel",
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Get the pos_ref from somewhere (possibly a data attribute or hidden input in your modal)
+        var posRef = $("#historyViewLabel").text().replace("Transaction #", "");
+
+        // Make an AJAX request to void the transaction
+        $.ajax({
+          url: "/pos-transvoid",
+          method: "POST",
+          data: { pos_ref: posRef },
+          success: function (response) {
+            console.log("Transaction voided successfully:", response);
+            // Optionally, you can redirect or show a success message here
+            Swal.fire({
+              title: "Transaction Voided!",
+              text: "The transaction has been successfully voided.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              // Redirect or perform any other action
+              window.location.href = "/pos";
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error("Error voiding transaction:", status, error);
+            // Show an error message or handle the error appropriately
+            Swal.fire({
+              title: "Error",
+              text: "An error occurred while voiding the transaction. Please try again.",
+              icon: "error",
+              showConfirmButton: true,
+            });
+          },
+        });
+      }
     });
   });
 });

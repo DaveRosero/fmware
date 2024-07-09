@@ -188,6 +188,7 @@ any('/pos-history', 'views/pos/model/history_fetchprod.php');
 any('/pos-historyprod', 'views/pos/model/history_product.php');
 any('/pos-getTransactionTable', 'views/pos/model/get_transaction-table.php');
 any('/pos-process_refund', 'views/pos/model/process_refund.php');
+any('/pos-transvoid', 'views/pos/model/historyvoid.php');
 
 
 //*****************************************************************//
