@@ -83,6 +83,26 @@ $(document).ready(function(){
         });
     }
 
+    function updateUnit (po_ref, id, unit) {
+        $.ajax({
+            url: '/unit-po-item',
+            method: 'POST',
+            data: {
+                po_ref : po_ref,
+                id : id,
+                unit : unit
+            },
+            dataType: 'json',
+            success: function(json) {
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    }
+
     getPOItem();
 
     $('#product').select2({
@@ -177,5 +197,13 @@ $(document).ready(function(){
         }
 
         updatePrice(po_ref, id, price, $(this));
+    });
+
+    $(document).on('change', '.poi-unit', function(){
+        var id = $(this).data('product-id');
+        var po_ref = $(this).data('po-ref');
+        var unit = $(this).val();
+
+        updateUnit(po_ref, id, unit);
     });
 });
