@@ -66,9 +66,7 @@ $(document).ready(function () {
         }
         $("#history-transaction-type").val(data.transaction_type);
 
-        // Show or hide customer details based on transaction type
         if (data.transaction_type === "Walk-in") {
-          // Show only first name and last name, hide other details
           $("#customer-details").show();
           $("#viewfName-input").val(data.firstname);
           $("#viewlName-input").val(data.lastname);
@@ -78,12 +76,10 @@ $(document).ready(function () {
           $("#viewcontact-input, #contact-label").val("").hide();
           $("#viewdeliverer-input, #deliverer-label").val("").hide();
         } else if (data.transaction_type === "Delivery") {
-          // Show all customer details
           $("#customer-details").show();
           $("#viewfName-input").val(data.firstname);
           $("#viewlName-input").val(data.lastname);
 
-          // Split address into street, baranggay, municipality
           let addressParts = data.address.split(", ");
           let street = addressParts[0];
           let baranggay = addressParts[1];
@@ -100,28 +96,23 @@ $(document).ready(function () {
             .show();
         }
 
-        // Make AJAX call to fetch product details
         $.ajax({
           url: "/pos-historyprod",
           method: "GET",
           data: {
             pos_ref: posRef,
           },
-          dataType: "html",
           success: function (data) {
-            console.log(data);
             $("#productDetails").html(data);
           },
         });
 
-        // Show the modal after updating all details
         $("#historyView").modal("show");
       },
     });
   });
 
   $(".void").on("click", function () {
-    // Show a confirmation dialog
     Swal.fire({
       title: "Are you sure you want to void this transaction?",
       icon: "warning",
@@ -147,7 +138,6 @@ $(document).ready(function () {
               text: "The transaction has been successfully voided.",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500,
             }).then(() => {
               // Redirect or perform any other action
               window.location.href = "/pos";
