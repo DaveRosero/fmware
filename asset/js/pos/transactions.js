@@ -89,9 +89,9 @@ $(document).ready(function () {
           success: function (data) {
             $("#transactionItems").html(data);
 
-            updateRefundTotal(); // Initial update on page load
+            updateRefundTotal(); 
 
-            // Update refund total on checkbox or input change
+
             $(".selectedItem, .refund-quantity").on('change keyup', function () {
               updateRefundTotal();
             });
