@@ -38,9 +38,8 @@ $content = '';
 
 while ($row = $result->fetch_assoc()) {
     $subtotal = $row['product_price'] * $row['product_qty'];
-    $item_id = $row['item_id'];
     $content .= '<tr>
-    <td><input class="form-check-input" type="checkbox" value="'. $item_id .'" id="selectItem-'. $item_id .'"></td>
+    <td><input class="form-check-input selectedItem" type="checkbox" data-price="' . $subtotal . '"></td>
     <td cclass="text-center">' . $row['product_name'] . '</td>
     <td class="text-center">' . $row['product_uvalue'] . ' ' . $row['unit_name'] . '</td>
     <td class="text-center">' . $row['variant_name'] . '</td>

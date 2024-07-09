@@ -44,10 +44,6 @@
                                     <h5 class="text-secondary my-auto">Change:</h5>
                                     <h1 class="text-success" id="rtransaction-change"></h1>
                                 </div>
-                                <div class="row text-center border-bottom mb-2">
-                                    <h1 class="text-danger" id="refundedvalue"></h1>
-                                    <p class="text-secondary">Refunded Price</p>
-                                </div>
                             </div>
                             <input type="hidden" name="delivery-fee-value" id="delivery-fee-value-hidden" value="">
                         </div>
@@ -60,7 +56,11 @@
                                     <select class="form-select   w-50" aria-label="Default select example" id="rpaymentMethod" disabled>
                                     </select>
                                 </div>
-                                <!--Show the details  of customer this can be blank-->
+                                <h3>Refund Details</h3>
+                                <form id="discount-form" class="mb-2">
+                                    <label for="refund-TotalValue" class="form-label">Refund Total Value:</label>
+                                    <p id="refund-TotalValue"></p>
+                                </form>
                                 <h3>Customer Details</h3>
                                 <form>
                                     <label for="viewfName-input" class="form-label">First Name:</label>
@@ -91,7 +91,7 @@
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer">
-                <button class="btn btn-primary void" data-bs-toggle="modal" data-bs-target="#history-confirmVoidModal">Void</button>
+                <button class="btn btn-primary">Refund</button>
             </div>
         </div>
     </div>
