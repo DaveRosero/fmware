@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body" style="max-height: 75vh; overflow-y:auto;">
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-8">
                         <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
                             <table class="table align-middle">
                                 <thead class="table table-secondary">
@@ -19,6 +19,7 @@
                                         <th scope="col">Price</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Subtotal</th>
+                                        <th scope="col">Selected QTY</th>
                                     </tr>
                                 </thead>
                                 <tbody id="transactionItems">
@@ -27,7 +28,7 @@
                         </div>
                     </div>
                     <!--Show the details  and total of the items to be  returned or refunded-->
-                    <div class="col-5">
+                    <div class="col-4">
                         <div class="row text-center border-bottom mb-2">
                             <h1 class="text-danger" id="rtransaction-total"></h1>
                             <p class="text-secondary">Total Price</p>
@@ -57,7 +58,7 @@
                                     </select>
                                 </div>
                                 <h3>Refund Details</h3>
-                                <div class="d-flex justify-content-end">
+                                <div class="text-end">
                                     <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
                                     <h1 class="text-success" id="refund-TotalValue"></h1>
                                 </div>

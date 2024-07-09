@@ -39,13 +39,18 @@ $content = '';
 while ($row = $result->fetch_assoc()) {
     $subtotal = $row['product_price'] * $row['product_qty'];
     $content .= '<tr>
-    <td><input class="form-check-input selectedItem" type="checkbox" data-price="' . $subtotal . '"></td>
+    <td>
+        <input class="form-check-input selectedItem" type="checkbox" data-price="' . $subtotal . '">
+    </td>
     <td cclass="text-center">' . $row['product_name'] . '</td>
     <td class="text-center">' . $row['product_uvalue'] . ' ' . $row['unit_name'] . '</td>
     <td class="text-center">' . $row['variant_name'] . '</td>
     <td class="text-center">₱' . number_format($row['product_price'], 2) . '</td>
     <td class="text-center">' . $row['product_qty'] . '</td>
     <td class="text-center">₱' . number_format($subtotal, 2) . '</td>
+    <td class="text-center">
+        <input class="form-control refund-quantity" type="number" min="0" max="' . $row['product_qty'] . '" value="0" disabled>
+    </td>
     </tr>';
 }
 echo $content;
