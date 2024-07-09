@@ -61,7 +61,7 @@
             <div class="row mt-4">
                 <div class="col-md-6">
                     <label class="form-label fw-semibold" for="">REMARKS:</label>
-                    <textarea id="description" name="description" class="form-control"></textarea>
+                    <textarea id="remarks" name="remarks" class="form-control"></textarea>
                 </div>
                 <div class="col-md-6 text-end mt-4">
                     <h5><span class="border border-dark rounded p-3" id="grand_total">TOTAL: ₱0.00</span></h5>
