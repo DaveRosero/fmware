@@ -101,6 +101,12 @@ $(document).ready(function () {
               let isChecked = $(this).is(':checked');
             
               // Set input value to 1 if checked, otherwise 0
+              // Set input value to 1 if checked, otherwise 0
+              // Set input value to 1 if checked, otherwise 0
+              // Set input value to 1 if checked, otherwise 0
+              // Set input value to 1 if checked, otherwise 0
+              // Set input value to 1 if checked, otherwise 0
+              // Set input value to 1 if checked, otherwise 0
               inputField.val(isChecked ? 1 : 0);
             
               // Enable/disable input based on checkbox state
