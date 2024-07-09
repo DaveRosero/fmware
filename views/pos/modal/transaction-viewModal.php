@@ -57,10 +57,10 @@
                                     </select>
                                 </div>
                                 <h3>Refund Details</h3>
-                                <form id="discount-form" class="mb-2">
-                                    <label for="refund-TotalValue" class="form-label">Refund Total Value:</label>
-                                    <p id="refund-TotalValue"></p>
-                                </form>
+                                <div class="d-flex justify-content-end">
+                                    <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
+                                    <h1 class="text-success" id="refund-TotalValue"></h1>
+                                </div>
                                 <h3>Customer Details</h3>
                                 <form>
                                     <label for="viewfName-input" class="form-label">First Name:</label>

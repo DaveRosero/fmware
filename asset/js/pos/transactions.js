@@ -78,6 +78,7 @@ $(document).ready(function () {
                   $("#viewdeliverer-input, #deliverer-label").val(data.deliverer_name).show();
               }
 
+              $("#refund-TotalValue").text("₱0.00");
               $.ajax({
                   url: "/pos-transactionItems",
                   method: "GET",
@@ -88,6 +89,7 @@ $(document).ready(function () {
                   success: function (data) {
                       $("#transactionItems").html(data);
 
+                      
                       $(".selectedItem").change(function () {
                           let totalRefundValue = 0;
                           $(".selectedItem:checked").each(function () {
