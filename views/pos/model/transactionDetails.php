@@ -23,6 +23,7 @@ $query = "SELECT
     p.delivery_fee, 
     p.deliverer_name, 
     p.contact_no , 
+    p.address,
     tt.name AS transaction_type, 
     pt.name AS payment_type,
     user.firstname AS username,

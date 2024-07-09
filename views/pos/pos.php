@@ -34,7 +34,7 @@ if ($_SESSION['group'] !== 'cashier') {
 
 ?>
 <?php include_once 'model/history.php' ?>
-<?php include_once 'model/fetchpos.php' ?>
+<?php include_once 'model/transactions.php' ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,18 +55,15 @@ if ($_SESSION['group'] !== 'cashier') {
 <body style="overflow: hidden;">
   <nav class="navbar navbar-expand-lg border-bottom">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png"
-          alt="logo-img" style="width: 30px;" />FMWare|POS</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png" alt="logo-img" style="width: 30px;" />FMWare|POS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <!--Open Return & Refunds Modal (transaction search modal)-->
-            <a class="nav-link" data-bs-target="#transactionSearch-Modal" data-bs-toggle="modal">Replacements &
-              Refunds</a>
+            <a class="nav-link" data-bs-target="#transaction-searchModal" data-bs-toggle="modal">Refund & Replace</a>
           </li>
           <li class="nav-item">
             <!--Pick Up Modal (for pick up transaction search modal)-->
@@ -137,8 +134,7 @@ if ($_SESSION['group'] !== 'cashier') {
             <div class="d-grid gap-2">
               <button class="btn btn-danger reset-cart">Clear</button>
               <!-- Checkout Button -->
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal"
-                id="checkout-button" disabled>
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal" id="checkout-button" disabled>
                 Checkout
               </button>
             </div>
@@ -147,14 +143,6 @@ if ($_SESSION['group'] !== 'cashier') {
         </div>
       </div>
     </div>
-    <!--Transaction Search Modal-->
-    <?php include_once 'modal/transaction-searchModal.php' ?>
-    <!--Transaction View Modal-->
-    <?php include_once 'modal/transaction-viewModal.php' ?>
-    <!--Confirm Return Modal-->
-    <?php include_once 'modal/replace-confirmationModal.php' ?>
-    <!--Confirm Return Modal-->
-    <?php include_once 'modal/refund-confirmationModal.php' ?>
     <!--Pickup Search Modal-->
     <?php include_once 'modal/pickup-searchModal.php' ?>
     <!--Pickup View Modal-->
@@ -168,15 +156,16 @@ if ($_SESSION['group'] !== 'cashier') {
     <!--Pickup History View Modal-->
     <?php include_once 'modal/history-confirmationModal.php' ?>
 
-
-
-
+    <!--REFUNDS RETURNS MODALS-->
+    <?php include_once 'modal/transaction-searchModal.php' ?>
+    <?php include_once 'modal/transaction-viewModal.php' ?>
   </div>
 
   <script src="asset/js/pos/pos.js"></script>
   <script src="asset/js/pos/checkout_modal.js"></script>
   <script src="asset/js/pos/transearch.js"></script>
   <script src="asset/js/pos/history.js"></script>
+  <script src="asset/js/pos/transactions.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script> -->
 </body>
