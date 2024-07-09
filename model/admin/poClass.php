@@ -168,7 +168,7 @@
         }
 
         public function getPOInfo ($po_ref) {
-            $query = 'SELECT p.id, p.po_ref, s.name, p.total, p.user_id, p.date, p.status
+            $query = 'SELECT p.id, p.po_ref, s.name, p.total, p.user_id, p.date, p.status, p.remarks
                     FROM purchase_order p
                     INNER JOIN supplier s ON s.id = p.supplier_id
                     WHERE p.po_ref = ?';
@@ -184,7 +184,7 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $po_ref, $supplier, $total, $user_id, $date, $status);
+            $stmt->bind_result($id, $po_ref, $supplier, $total, $user_id, $date, $status, $remarks);
             $stmt->fetch();
             $stmt->close();
 
@@ -199,7 +199,9 @@
                 'supplier' => $supplier,
                 'total' => $total,
                 'user_id' => $user_id,
-                'date' => $date
+                'date' => $date,
+                'status' => $status,
+                'remarks' => $remarks
             ];
         }
         
@@ -486,6 +488,24 @@
             $query = 'UPDATE purchase_order_items SET unit = ? WHERE po_ref = ? AND product_id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ssi', $unit, $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function updateRemarks ($po_ref, $remarks) {
+            $query = 'UPDATE purchase_order SET remarks = ? WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $remarks, $po_ref);
 
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);

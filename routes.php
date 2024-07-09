@@ -111,6 +111,7 @@ any('/del-po-item', 'controller/admin/purchase-order/del-po-item.php');
 any('/qty-po-item', 'controller/admin/purchase-order/qty-po-item.php');
 any('/price-po-item', 'controller/admin/purchase-order/price-po-item.php');
 any('/unit-po-item', 'controller/admin/purchase-order/unit-po-item.php');
+any('/po-remarks', 'controller/admin/purchase-order/po-remarks.php');
 
 //*****************************************************************//
 

@@ -83,6 +83,25 @@ $(document).ready(function(){
         });
     }
 
+    function updateRemarks (po_ref, remarks) {
+        $.ajax({
+            url: '/po-remarks',
+            method: 'POST',
+            data: {
+                po_ref : po_ref,
+                remarks : remarks
+            },
+            dataType: 'json',
+            success: function(json) {
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    }
+
     function updateUnit (po_ref, id, unit) {
         $.ajax({
             url: '/unit-po-item',
@@ -205,5 +224,12 @@ $(document).ready(function(){
         var unit = $(this).val();
 
         updateUnit(po_ref, id, unit);
+    });
+
+    $(document).on('change', '#remarks', function(){
+        var po_ref = $(this).data('po-ref');
+        var remarks = $(this).val();
+
+        updateRemarks (po_ref, remarks);
     });
 });
