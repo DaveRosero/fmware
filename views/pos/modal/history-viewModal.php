@@ -35,9 +35,9 @@
                         <div class="col border-bottom mb-2">
                             <form id="discount-form" class="mb-2">
                                 <label for="discountRec-input" class="form-label">Discount</label>
-                                <input type="number" class="form-control" id="viewdiscountRec-input" disabled />
+                                <input type="number" class="form-control" id="viewdiscountRec-input" readonly />
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="viewcashRec-input" disabled />
+                                <input type="number" class="form-control" id="viewcashRec-input" readonly />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
@@ -61,21 +61,21 @@
                                 <h3>Customer Details</h3>
                                 <form>
                                     <label for="viewfName-input" class="form-label">First Name:</label>
-                                    <input type="text" class="form-control" id="viewfName-input" disabled />
+                                    <input type="text" class="form-control" id="viewfName-input" readonly />
                                     <label for="viewlName-input" class="form-label">Last Name:</label>
-                                    <input type="text" class="form-control" id="viewlName-input" disabled />
+                                    <input type="text" class="form-control" id="viewlName-input" readonly />
                                     <label for="viewstreet-input" class="form-label" id="street-label">Street:</label>
-                                    <input type="text" class="form-control" id="viewstreet-input" disabled />
+                                    <input type="text" class="form-control" id="viewstreet-input" readonly />
                                     <label for="viewbrgy-input" class="form-label" id="brgy-label">Baranggay:</label>
-                                    <input type="text" class="form-control" id="viewbrgy-input" disabled />
+                                    <input type="text" class="form-control" id="viewbrgy-input" readonly />
                                     <label for="viewmunicipality-input" class="form-label"
                                         id="municipality-label">Municipality:</label>
-                                    <input type="text" class="form-control" id="viewmunicipality-input" disabled />
+                                    <input type="text" class="form-control" id="viewmunicipality-input" readonly />
                                     <label for="contact-input" class="form-label" id="contact-label">Contact:</label>
-                                    <input type="text" class="form-control" id="viewcontact-input" disabled />
+                                    <input type="text" class="form-control" id="viewcontact-input" readonly />
                                     <label for="viewdeliverer-input" class="form-label"
                                         id="deliverer-label">Deliverer:</label>
-                                    <input type="text" class="form-control" id="viewdeliverer-input" disabled />
+                                    <input type="text" class="form-control" id="viewdeliverer-input" readonly />
                                     <input type="hidden" id="deliverer-name-hidden" name="deliverer_name"
                                         value="Deliverer Name">
                                 </form>
@@ -83,9 +83,7 @@
                         </div>
                         <div class="col d-flex justify-content-end">
                             <p class="text-secondary">Request fulfilled by:</p>
-                            <p class="ms-2" id="history-username"></p>
-                            <input type="hidden" name="user_id"
-                                value="<?php echo htmlspecialchars($user_info['id']); ?>">
+                            <p class="ms-2" name="user_id" id="history-username"></p>
                         </div>
                     </div>
                 </div>
