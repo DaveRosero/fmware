@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
   $(".view-transaction-btn").click(function () {
     const posRef = $(this).data("bs-posref");
 
@@ -89,7 +90,7 @@ $(document).ready(function () {
           success: function (data) {
             $("#transactionItems").html(data);
 
-            updateRefundTotal(); 
+            updateRefundTotal();
 
 
             $(".selectedItem, .refund-quantity").on('change keyup', function () {
@@ -99,22 +100,16 @@ $(document).ready(function () {
             $(".selectedItem").change(function () {
               let inputField = $(this).closest("tr").find(".refund-quantity");
               let isChecked = $(this).is(':checked');
-            
-              // Set input value to 1 if checked, otherwise 0
-              // Set input value to 1 if checked, otherwise 0
-              // Set input value to 1 if checked, otherwise 0
-              // Set input value to 1 if checked, otherwise 0
-              // Set input value to 1 if checked, otherwise 0
-              // Set input value to 1 if checked, otherwise 0
+
               // Set input value to 1 if checked, otherwise 0
               inputField.val(isChecked ? 1 : 0);
-            
+
               // Enable/disable input based on checkbox state
               inputField.prop("disabled", !isChecked);
-            
+
               updateRefundTotal();
             });
-            
+
 
             $(".refund-quantity").change(function () {
               updateRefundTotal();
