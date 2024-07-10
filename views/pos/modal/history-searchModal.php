@@ -35,8 +35,13 @@
                                 <td><?php echo isset($history['name']) ? htmlspecialchars($history['name']) : ''; ?>
                                 </td>
                                 <td>
+                                    <?php
+                                    $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary' : ($history['status'] == 'void' ? 'text-bg-secondary' : '');
+                                    ?>
                                     <span
-                                        class="badge text-bg-primary"><?php echo htmlspecialchars($history['status']); ?></span>
+                                        class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($history['status']); ?></span>
+                                    <!-- <span
+                                        class="badge text-bg-primary"><?php echo htmlspecialchars($history['status']); ?></span> -->
                                 </td>
                                 <td>
                                     <button class="btn btn-primary view-history-btn"

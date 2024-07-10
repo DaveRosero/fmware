@@ -160,13 +160,12 @@ $(document).ready(function () {
         console.log("Response:", response);
         updateCartUI(response);
       },
-      error: function(jqXHR, textStatus, errorThrown) {
+      error: function (jqXHR, textStatus, errorThrown) {
         console.log("Error:", textStatus, errorThrown);
         console.log("Response:", jqXHR.responseText);
       },
     });
   });
-
 
   $(".reset-cart").on("click", function () {
     $.ajax({
@@ -175,8 +174,8 @@ $(document).ready(function () {
         $("#cart-body").empty();
         $("#cart-body-modal").empty();
         $("#cart-total-modal").empty();
-        $("#cart-total").text("Subtotal: ₱0");
-        $("#cart-total-modal").text("₱0");
+        $("#cart-total").text("Subtotal: ₱0.00");
+        $("#cart-total-modal").text("₱0.00");
         console.log("Cart reset successful");
         $("#checkout-button").prop("disabled", true);
       },
