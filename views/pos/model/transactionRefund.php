@@ -3,7 +3,8 @@ require_once 'model/database/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
-
+    $refund_items = [];
+    
     $pos_ref = $mysqli->real_escape_string($_POST['pos_ref']);
     $total_refund_value = $mysqli->real_escape_string($_POST['total_refund_value']);
     $refund_items = $_POST['refund_items']; // This should be an array of items
