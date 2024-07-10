@@ -2,19 +2,15 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="transaction-searchModalLabel"></h1>
+                <h1 class="modal-title fs-5" id="transaction-searchModalLabel">TRANSACTIONS</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
             </div>
             <div class="modal-body">
-                <!--Search using Transaction/Invoice # -->
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
-                        aria-describedby="button-addon2">
-                    <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
-                </div>
+    
+          
                 <!--Show Search Result & transaction Details-->
-                <table class="table align-middle">
-                    <thead class="table-secondary">
+                <table class="w-100" id="transaction-table">
+                    <thead>
                         <tr>
                             <th scope="col">Transaction #</th>
                             <th scope="col">Transaction Date</th>
