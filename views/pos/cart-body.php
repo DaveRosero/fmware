@@ -18,7 +18,7 @@ $stmt = $mysqli->prepare($query);
 $stmt->execute();
 $stmt->bind_result($id, $qty, $price, $name, $unit_value, $unit, $variant);
 $tbody = '';
-$tbody_modal ='';
+$tbody_modal = '';
 $cart_total = array();
 while ($stmt->fetch()) {
     $total_price = $price * $qty;
@@ -37,9 +37,10 @@ while ($stmt->fetch()) {
                             <i class="fas fa-minus"></i>
                             </button>
                             <input 
-                                type="text" 
+                                type="number" 
                                 class="form-control text-center w-20 qty-input" 
                                 value="' . $qty . '" 
+                                id="quantity-input"
                                 style="max-width: 50px;"
                             >
                             <button 
@@ -61,12 +62,12 @@ while ($stmt->fetch()) {
                         </button>
                     </td>
                 </tr>';
-    $tbody_modal.= '<tr>
+    $tbody_modal .= '<tr>
                     <td class="align-middle">' . $name . '</td>
-                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
+                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
                     <td class="align-middle">' . $variant . '</td>
                     <td class="align-middle">₱' . $price . '</td>
-                    <td class="align-middle text-center">'. $qty . '</td>
+                    <td class="align-middle text-center">' . $qty . '</td>
                     <td class="align-middle">₱' . $total_price . '</td>
                 </tr>';
 

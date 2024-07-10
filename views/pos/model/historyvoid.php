@@ -13,7 +13,7 @@ foreach ($post_keys as $key) {
 
 $pos_ref = $_POST['pos_ref'];
 
-$query = "UPDATE pos SET status = 'Void' WHERE pos_ref=?";
+$query = "UPDATE pos SET status = 'void' WHERE pos_ref=?";
 
 $stmt = $mysqli->prepare($query);
 if ($stmt) {

@@ -31,6 +31,22 @@ $(document).ready(function () {
         $("#transaction-status").text(data.status);
         $("#history-username").text(data.username);
 
+        // Set status badge class based on status
+        var statusBadge = $("#transaction-status");
+        statusBadge.removeClass("text-bg-primary text-bg-secondary"); // Remove existing classes
+        if (data.status === "paid") {
+          statusBadge.addClass("text-bg-primary");
+        } else if (data.status === "void") {
+          statusBadge.addClass("text-bg-secondary");
+        }
+
+        // Enable or disable the "Void" button based on status
+        if (data.status === "void") {
+          $(".void").prop("disabled", true);
+        } else if (data.status === "paid") {
+          $(".void").prop("disabled", false);
+        }
+
         // Clear and set payment method
         $("#paymentMethod").empty();
         $("#paymentMethod").append(new Option("G-Cash", "G-Cash"));
@@ -137,6 +153,7 @@ $(document).ready(function () {
               title: "Transaction Voided!",
               text: "The transaction has been successfully voided.",
               icon: "success",
+              timer: 1500,
               showConfirmButton: false,
             }).then(() => {
               // Redirect or perform any other action
