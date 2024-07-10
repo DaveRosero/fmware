@@ -27,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Close the connection
+    // Close the connection
+    // Close the connection
+    // Close the connection
     $mysqli->close();
 } else {
     echo "Invalid request method.";
