@@ -122,6 +122,35 @@ $(document).ready(function(){
         });
     }
 
+    function savePO (po_ref) {
+        $.ajax({
+            url: '/save-po',
+            method: 'POST',
+            data: {
+                po_ref : po_ref
+            },
+            dataType: 'json',
+            success: function(json) {
+                if (json.redirect) {
+                    Swal.fire({
+                        title: 'Purchase Order Saved!',
+                        icon: 'success',
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = json.redirect;
+                        }
+                    });
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    }
+
     getPOItem();
 
     $('#product').select2({
@@ -231,5 +260,23 @@ $(document).ready(function(){
         var remarks = $(this).val();
 
         updateRemarks (po_ref, remarks);
+    });
+
+    $('#save').click(function(){
+        var po_ref = $(this).data('po-ref');
+
+        Swal.fire({
+            title: 'Saving Purchase Order',
+            text: "This action is irreversible, do you want to continue?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, save it!',
+            cancelButtonText: 'No, cancel!',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                savePO(po_ref);
+            }
+        });
     });
 });

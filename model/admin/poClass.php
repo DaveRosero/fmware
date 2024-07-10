@@ -24,9 +24,23 @@
                 switch ($status) {
                     case 0:
                         $po_status = '<span class="badge bg-primary text-wrap">DRAFT</span>';
+                        $button = '<a
+                                        class="btn btn-sm btn-secondary view me-1" 
+                                        type="button"
+                                        href="/create-po/'.$supplier.'/'.$po_ref.'"
+                                    >
+                                        <i class="fa-solid fa-eye fs-1"></i>
+                                    </a>';
                         break;
                     case 1:
                         $po_status = '<span class="badge bg-warning text-wrap">PENDING</span>';
+                        $button = '<a
+                                        class="btn btn-sm btn-success view me-1" 
+                                        type="button"
+                                        href="/view-po/'.$supplier.'/'.$po_ref.'"
+                                    >
+                                        <i class="fa-solid fa-right-to-bracket fs-1"></i>
+                                    </a>';
                         break;
                     case 2:
                         $po_status = '<span class="badge bg-success text-wrap">COMPLETED</span>';
@@ -41,15 +55,7 @@
                                 <td>₱'.number_format($total, 2).'</td>
                                 <td>'.$date.'</td>
                                 <td>'.$po_status.'</td>
-                                <td>
-                                    <a
-                                        class="btn btn-sm btn-secondary view me-1" 
-                                        type="button"
-                                        href="/create-po/'.$supplier.'/'.$po_ref.'"
-                                    >
-                                        <i class="fa-solid fa-eye fs-1"></i>
-                                    </a>
-                                </td>
+                                <td>'.$button.'</td>
                             </tr>';
             }
             $stmt->close();
@@ -206,10 +212,11 @@
         }
         
         public function getSupplierProducts ($id) {
-            $query = 'SELECT product.id, product.name, unit.name, product.unit_value, variant.name
+            $query = 'SELECT product.id, product.name, unit.name, product.unit_value, variant.name, stock.qty, stock.critical_level, stock.stockable
                     FROM product
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN stock ON stock.product_id = product.id
                     WHERE product.supplier_id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
@@ -223,10 +230,17 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($product_id, $name, $unit, $unit_value, $variant);
+            $stmt->bind_result($product_id, $name, $unit, $unit_value, $variant, $stock, $critical_level, $stockable);
             $content = '';
             while ($stmt->fetch()) {
-                $content .= '<option value="'.$product_id.'">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</option>';
+                if ($stockable == 0) {
+                    $content .= '<option value="'.$product_id.'">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</option>';
+                    continue;
+                }
+
+                if ($stock <= $critical_level + 5) {
+                    $content .= '<option value="'.$product_id.'">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</option>';
+                }
             }
             $stmt->close();
             echo $content;
@@ -517,6 +531,28 @@
             }
 
             $stmt->close();
+            return;
+        }
+        
+        public function savePO ($po_ref) {
+            $query = 'UPDATE purchase_order SET status = 1 WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'redirect' => '/purchase-orders'
+            );
+            echo json_encode($json);
             return;
         }
     }

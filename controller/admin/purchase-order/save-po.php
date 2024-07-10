@@ -4,7 +4,7 @@
     $po = new PO();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $po->updateRemarks($_POST['po_ref'], trim($_POST['remarks']));
+        $po->savePO($_POST['po_ref']);
     } else {
         header('Location: /404');
         exit();

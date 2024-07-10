@@ -61,9 +61,7 @@
             <div class="row mt-4">
                 <div class="col-md-6">
                     <label class="form-label fw-semibold" for="">REMARKS:</label>
-                    <textarea id="remarks" name="remarks" class="form-control" data-po-ref="<?php echo $po_info['po_ref']; ?>">
-                    <?php echo $po_info['remarks']; ?>
-                    </textarea>
+                    <textarea id="remarks" name="remarks" class="form-control" data-po-ref="<?php echo $po_info['po_ref']; ?>"><?php echo $po_info['remarks']; ?></textarea>
                 </div>
                 <div class="col-md-6 text-end mt-4">
                     <h5><span class="border border-dark rounded p-3" id="grand_total">TOTAL: ₱0.00</span></h5>
@@ -71,8 +69,8 @@
             </div>
         </div>
         <div class="card-footer bg-white text-end">
-            <button class="btn btn-primary btn-lg">Save</button>
-            <button class="btn btn-muted btn-lg">Cancel</button>
+            <button class="btn btn-primary" id="save" data-po-ref="<?php echo $po_info['po_ref']; ?>">Save</button>
+            <a href="/purchase-orders" class="btn btn-muted">Cancel</a>
         </div>
     </div>
 </div>
