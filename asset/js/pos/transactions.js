@@ -151,4 +151,35 @@ $(document).ready(function () {
       }
     });
   });
+
+  $("#refund-button").click(function () {
+    const posRef = $("#transactionViewLabel").text().split("#")[1];
+    const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
+    const refundItems = [];
+
+    $(".selectedItem:checked").each(function () {
+      const product_id = $(this).data("product-id");
+      const qty = $(this).closest("tr").find(".refundQtyInput input").val();
+      refundItems.push({ product_id, qty });
+    });
+
+    $.ajax({
+      url: "pos-processRefund",
+      method: "POST",
+      data: {
+        pos_ref: posRef,
+        total_refund_value: totalRefundValue,
+        refund_items: refundItems
+      },
+      success: function (response) {
+        console.log("Refund response: ", response);
+        alert("Refund processed successfully.");
+        $("#transaction-viewModal").modal("hide");
+      },
+      error: function (xhr, status, error) {
+        console.error("Error processing refund: ", status, error);
+        alert("Failed to process refund. Please try again.");
+      }
+    });
+  });
 });

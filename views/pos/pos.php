@@ -160,7 +160,6 @@ if ($_SESSION['group'] !== 'cashier') {
 
   <script src="asset/js/pos/pos.js"></script>
   <script src="asset/js/pos/checkout_modal.js"></script>
-  <script src="asset/js/pos/transearch.js"></script>
   <script src="asset/js/pos/history.js"></script>
   <script src="asset/js/pos/transactions.js"></script>
   <script src="asset/js/pos/jsTable.js"></script>
