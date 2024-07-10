@@ -113,7 +113,16 @@ $(document).ready(function () {
               } else {
                 $("#refund-TotalValue").text(formatter.format(totalRefundValue));
               }
+              toggleRefundButton();
             }
+            function toggleRefundButton() {
+              if ($(".selectedItem:checked").length > 0) {
+                  $("#refund-button").prop("disabled", false);
+              } else {
+                  $("#refund-button").prop("disabled", true);
+              }
+          }
+          toggleRefundButton();
           },
           error: function (xhr, status, error) {
             console.error("Error fetching transaction items: ", status, error);
