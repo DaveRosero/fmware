@@ -21,6 +21,7 @@
                     <div class="text-end">
                         <h6 class="mb-0"><?php echo $po_info['date']; ?></h6>
                         <p class="fst-italic"><?php echo $po_info['po_ref']; ?></p>
+                        <input type="hidden" name="po_ref" id="po_ref" value="<?php echo $po_info['po_ref']; ?>">
                     </div>
                 </div>
             </div>
@@ -28,19 +29,6 @@
             <div class="row mt-2 mb-2">
                 <hr>
             </div>
-
-            <form id="po_item" method="POST">
-                <div class="row d-flex justify-content-end">
-                    <div class="col-md-4 d-flex justify-content-end mb-2">
-                        <select class="form-select" id="product" name="product" required>
-                            <option></option>
-                            <?php $po->getSupplierProducts($supplier_info['id']); ?>
-                        </select>
-                        <input type="hidden" name="po_ref" id="po_ref" value="<?php echo $po_info['po_ref']; ?>">
-                        <button class="btn btn-success" type="submit">Add</button>
-                    </div>
-                </div>
-            </form>
 
             <div class="row">
                 <table class="table table-bordered">
@@ -51,6 +39,8 @@
                         <th>Unit</th>
                         <th>Price</th>
                         <th>Total</th>
+                        <th>Received</th>
+                        <th>Amount</th>
                     </thead>
                     <tbody id="po_item_content">
                         <!-- PO Content Here -->
