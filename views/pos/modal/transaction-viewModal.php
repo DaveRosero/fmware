@@ -1,5 +1,5 @@
 <div class="modal fade" id="transaction-viewModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="transactionViewLabel"></h1>
@@ -20,6 +20,7 @@
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Subtotal</th>
                                         <th scope="col">Selected QTY</th>
+                                        <th scope="col">Item Condition</th>
                                     </tr>
                                 </thead>
                                 <tbody id="transactionItems">

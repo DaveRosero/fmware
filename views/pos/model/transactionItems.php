@@ -15,7 +15,8 @@ $query = "SELECT  product.name AS product_name,
                   unit.name AS unit_name,
                   variant.name AS variant_name,
                   price_list.unit_price AS product_price,
-                  pos_items.qty AS product_qty
+                  pos_items.qty AS product_qty,
+                  product.id AS product_id
 
           FROM pos_items 
           INNER JOIN product on product.id = pos_items.product_id
@@ -40,7 +41,7 @@ while ($row = $result->fetch_assoc()) {
     $subtotal = $row['product_price'] * $row['product_qty'];
     $content .= '<tr>
     <td>
-        <input class="form-check-input selectedItem" type="checkbox" data-price="' . $subtotal . '">
+        <input class="form-check-input selectedItem" type="checkbox" data-price="' . $subtotal . '" data-product-id="' . $row['product_id'] . '" data-product-qty="' . $row['product_qty'] . '">
     </td>
     <td cclass="text-center">' . $row['product_name'] . '</td>
     <td class="text-center">' . $row['product_uvalue'] . ' ' . $row['unit_name'] . '</td>
@@ -50,6 +51,13 @@ while ($row = $result->fetch_assoc()) {
     <td class="text-center">₱' . number_format($subtotal, 2) . '</td>
     <td class="text-center">
         <input class="form-control refund-quantity" type="number" min="0" max="' . $row['product_qty'] . '" value="0" disabled>
+    </td>
+    <td>
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            <option value="1">Good</option>
+            <option value="2">Broken</option>
+        </select>
     </td>
     </tr>';
 }

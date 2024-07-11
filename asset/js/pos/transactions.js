@@ -142,11 +142,11 @@ $(document).ready(function () {
     const refundItems = [];
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
-      const qty = $(this).closest("tr").find(".refundQtyInput input").val();
+      const qty = $(this).data("product-qty");
       refundItems.push({ product_id, qty });
     });
     $.ajax({
-      url: "pos-processRefund",
+      url: "/pos-processRefund",
       method: "POST",
       data: {
         pos_ref: posRef,
