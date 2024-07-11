@@ -43,7 +43,7 @@ while ($row = $result->fetch_assoc()) {
     <td>
         <input class="form-check-input selectedItem" type="checkbox" data-price="' . $subtotal . '" data-product-id="' . $row['product_id'] . '" data-product-qty="' . $row['product_qty'] . '">
     </td>
-    <td cclass="text-center">' . $row['product_name'] . '</td>
+    <td class="text-center">' . $row['product_name'] . '</td>
     <td class="text-center">' . $row['product_uvalue'] . ' ' . $row['unit_name'] . '</td>
     <td class="text-center">' . $row['variant_name'] . '</td>
     <td class="text-center">₱' . number_format($row['product_price'], 2) . '</td>
@@ -53,11 +53,11 @@ while ($row = $result->fetch_assoc()) {
         <input class="form-control refund-quantity" type="number" min="0" max="' . $row['product_qty'] . '" value="0" disabled>
     </td>
     <td>
-        <select class="form-select item-condition" aria-label="Default select example" disabled>
-            <option value="">Select item condition</option>
-            <option value="1">Good</option>
-            <option value="2">Broken</option>
-        </select>
+      <select class="form-select item-condition" aria-label="Default select example" disabled>
+        <option value="">Select item condition</option>
+        <option value="1">Good</option>
+        <option value="2">Broken</option>
+    </select>
     </td>
     </tr>';
 }

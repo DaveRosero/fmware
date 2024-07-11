@@ -148,7 +148,13 @@ $(document).ready(function () {
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
       const qty = $(this).data("product-qty");
-      refundItems.push({ product_id, qty });
+      const condition = $(this).closest("tr").find(".item-condition").val();
+      refundItems.push({ product_id, qty, condition });
+      console.log("Refund Item: ", {
+        product_id: product_id,
+        qty: qty,
+        condition: condition
+      });
     });
     $.ajax({
       url: "/pos-processRefund",
