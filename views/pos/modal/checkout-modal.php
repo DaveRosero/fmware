@@ -135,7 +135,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="footer-close-button">
                     Close
                 </button>
-                <button class="btn btn-success print" onclick="handleCheckout()" disabled>Checkout</button>
+                <button class="btn btn-success print" disabled>Checkout</button>
             </div>
         </div>
     </div>
