@@ -383,9 +383,10 @@ $(document).ready(function () {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        submitForm(pos_ref); // Submit the form before printing
+        window.location.href = "/pos";
       }
     });
+    submitForm(pos_ref); // Submit the form before printing
   });
 
   function submitForm(pos_ref) {
@@ -475,18 +476,31 @@ $(document).ready(function () {
   function printReceipt() {
     function printReceiptWithLogo() {
       var printableContent = generatePrintableContent();
-      var printWindow = window.open("", "_blank");
-      printWindow.document.write(
+
+      // Create a hidden iframe
+      var iframe = document.createElement("iframe");
+      iframe.style.position = "absolute";
+      iframe.style.width = "0px";
+      iframe.style.height = "0px";
+      iframe.style.border = "none";
+      document.body.appendChild(iframe);
+
+      var doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(
         "<html><head><title>Receipt</title></head><body>" +
           printableContent +
           "</body></html>"
       );
-      printWindow.document.close();
-      printWindow.print();
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
+      doc.close();
+
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+
+      // Remove the iframe after printing
+      iframe.parentNode.removeChild(iframe);
     }
+
     if (logo.complete) {
       // If logo is already loaded, print receipt immediately
       printReceiptWithLogo();

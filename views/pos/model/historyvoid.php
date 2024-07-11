@@ -1,7 +1,12 @@
 <?php
-require_once 'model/database/database.php';
+session_start();
 
+require_once 'model/database/database.php';
+require_once 'model/admin/logsClass.php';
+
+$user_id = $_SESSION['user_id'];
 $mysqli = database();
+$logs = new Logs();
 
 // Check if POST variables are set
 $post_keys = ['pos_ref'];
@@ -21,6 +26,10 @@ if ($stmt) {
 
     if ($stmt->execute()) {
         $stmt->close();
+
+        $action_log = 'Transaction ' . $pos_ref . ' has been Voided ';
+        $date_log = date('F j, Y g:i A');
+        $logs->newLog($action_log, $user_id, $date_log);
 
         $query = 'SELECT product_id, qty FROM pos_items WHERE pos_ref = ?';
         $stmt = $mysqli->prepare($query);
