@@ -9,7 +9,7 @@
   $supplier_info = $po->getSupplierInfo(urldecode($supplier));
   $po_info = $po->getPOInfo($po_ref);
 
-  if ($po_info['status'] !== 0) {
+  if ($po_info['status'] !== 1) {
     header('Location: /404');
   }
 ?>
@@ -18,7 +18,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Create P.O. | FMWare</title>
+    <title>Receive P.O. | FMWare</title>
     <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php 
       include_once 'config/load_vendors.php';
@@ -38,7 +38,7 @@
       <?php include 'views/admin/template/header.php';?>
     
       <!-- Content Start -->
-         <?php include 'views/admin/content/create-po-content.php';?>
+         <?php include 'views/admin/content/receive-po-content.php';?>
       <!-- Content End -->  
       
       
@@ -55,6 +55,6 @@
 
   <script src="/asset/js/admin/mini-sidebar.js"></script>
   <script src="/asset/js/admin/sidebarmenu.js"></script>
-  <script src="/asset/js/admin/create-po.js"></script>
+  <script src="/asset/js/admin/receive-po.js"></script>
 </body>
 </html>

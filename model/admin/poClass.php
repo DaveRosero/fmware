@@ -29,7 +29,7 @@
                                         type="button"
                                         href="/create-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-eye fs-1"></i>
+                                        <i class="fa-solid fa-pen-to-square fs-1"></i>
                                     </a>';
                         break;
                     case 1:
@@ -37,7 +37,7 @@
                         $button = '<a
                                         class="btn btn-sm btn-success view me-1" 
                                         type="button"
-                                        href="/view-po/'.$supplier.'/'.$po_ref.'"
+                                        href="/receive-po/'.$supplier.'/'.$po_ref.'"
                                     >
                                         <i class="fa-solid fa-right-to-bracket fs-1"></i>
                                     </a>';
@@ -194,11 +194,6 @@
             $stmt->fetch();
             $stmt->close();
 
-            if ($status == 1) {
-                header('Location: /404');
-                return;
-            }
-
             return [
                 'id' => $id,
                 'po_ref' => $po_ref,
@@ -340,13 +335,13 @@
                                     </button></td>
                                 <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
                                 <td><input class="form-control poi-qty" type="number" name="qty" min="1" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td><input class="form-control poi-unit" type="text" name="unit" value="'.$po_unit.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
                                 <td>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">₱</span>
                                         <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
                                     </div>
                                 </td>
-                                <td><input class="form-control poi-unit" type="text" name="unit" value="'.$po_unit.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
                                 <td id="poi-total">₱'.number_format($total, 2).'</td>
                             </tr>';
             }
@@ -554,6 +549,32 @@
             );
             echo json_encode($json);
             return;
+        }
+
+        public function getPendingPOItems ($po_ref) {
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit
+                    FROM purchase_order_items poi
+                    INNER JOIN product ON product.id = poi.product_id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    WHERE poi.po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit);
+            $content = '';
+            while ($stmt->fetch()) {
+                $content .= '<td>'.$name.'</td>';
+            }
         }
     }
 ?>

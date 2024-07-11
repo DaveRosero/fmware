@@ -88,6 +88,7 @@ get('/manage-products', 'views/admin/products.php');
 // get('/price-list', 'views/admin/price-list.php');
 get('/purchase-orders', 'views/admin/purchase-order.php');
 get('/create-po/$supplier/$po_ref', 'views/admin/create-po.php');
+get('/receive-po/$supplier/$po_ref', 'views/admin/receive-po.php');
 
 // Product Controller
 any('/new-product', 'controller/admin/product/new-product.php');
