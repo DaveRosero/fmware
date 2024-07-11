@@ -5,10 +5,10 @@
                 <h1 class="modal-title fs-5" id="transactionViewLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="max-height: 75vh; overflow-y:auto;">
+            <div class="modal-body" >
                 <div class="row">
                     <div class="col-8">
-                        <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
+                        <div class="col" style="height: calc(95vh - 100px);overflow-y: auto;overflow-x: hidden;">
                             <table class="table align-middle">
                                 <thead class="table table-secondary">
                                     <tr>
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
-            <div class="modal-footer">
+            <div class="modal-footer" >
                 <button id="refund-button" class="btn btn-primary" disabled>Process Refund</button>
             </div>
         </div>

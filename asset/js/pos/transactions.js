@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  //Transaction View btn FUNCTIONS
   $(".view-transaction-btn").click(function () {
     const posRef = $(this).data("bs-posref");
     $.ajax({
@@ -10,12 +11,10 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         console.log("Transaction Data: ", data);
-        // Number formatter for currency
         var formatter = new Intl.NumberFormat("en-PH", {
           style: "currency",
           currency: "PHP",
         });
-        // Update general transaction details
         $("#transactionViewLabel").text("Transaction #" + data.pos_ref);
         $("#transaction-date").text(data.date);
         $("#transaction-subtotal").text(formatter.format(Number(data.subtotal)));
@@ -25,7 +24,6 @@ $(document).ready(function () {
         $("#rtransaction-change").text(formatter.format(Number(data.changes)));
         $("#transaction-status").text(data.status);
         $("#rtrans-username").text(data.username);
-        // Clear and set payment method
         $("#rpaymentMethod").empty();
         $("#rpaymentMethod").append(new Option("G-Cash", "G-Cash"));
         $("#rpaymentMethod").append(new Option("Cash", "Cash"));
@@ -36,7 +34,6 @@ $(document).ready(function () {
           }));
         }
         $("#rpaymentMethod").val(data.payment_type);
-        // Clear and set transaction type
         $("#rtransaction-type").empty();
         if ($("#rtransaction-type option[value='" + data.transaction_type + "']").length === 0) {
           $("#rtransaction-type").append($("<option>", {
@@ -45,7 +42,6 @@ $(document).ready(function () {
           }));
         }
         $("#rtransaction-type").val(data.transaction_type);
-        // Show or hide customer details based on transaction type
         if (data.transaction_type === "Walk-in") {
           $("#customer-details").show();
           $("#rfName-input").val(data.firstname);
@@ -69,6 +65,8 @@ $(document).ready(function () {
           $("#viewcontact-input, #contact-label").val(data.contact_no).show();
           $("#viewdeliverer-input, #deliverer-label").val(data.deliverer_name).show();
         }
+
+        //Geting Transaction Items
         $("#refund-TotalValue").text("₱0.00");
         $.ajax({
           url: "/pos-transactionItems",
@@ -84,12 +82,19 @@ $(document).ready(function () {
               updateRefundTotal();
             });
             $(".selectedItem").change(function () {
-              let inputField = $(this).closest("tr").find(".refund-quantity");
               let isChecked = $(this).is(':checked');
-              // Set input value to 1 if checked, otherwise 0
+              let inputField = $(this).closest("tr").find(".refund-quantity");
+              let selectCondition = $(this).closest("tr").find(".item-condition");
+
               inputField.val(isChecked ? 1 : 0);
-              // Enable/disable input based on checkbox state
               inputField.prop("disabled", !isChecked);
+
+              if (isChecked) {
+                selectCondition.prop("disabled", false);
+              } else {
+                selectCondition.val(''); // Reset select to default value when unchecked
+                selectCondition.prop("disabled", true);
+              }
               updateRefundTotal();
             });
             $(".refund-quantity").change(function () {
@@ -117,12 +122,12 @@ $(document).ready(function () {
             }
             function toggleRefundButton() {
               if ($(".selectedItem:checked").length > 0) {
-                  $("#refund-button").prop("disabled", false);
+                $("#refund-button").prop("disabled", false);
               } else {
-                  $("#refund-button").prop("disabled", true);
+                $("#refund-button").prop("disabled", true);
               }
-          }
-          toggleRefundButton();
+            }
+            toggleRefundButton();
           },
           error: function (xhr, status, error) {
             console.error("Error fetching transaction items: ", status, error);
