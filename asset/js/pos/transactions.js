@@ -90,6 +90,7 @@ $(document).ready(function () {
               inputField.prop("disabled", !isChecked);
 
               if (isChecked) {
+                selectCondition.val('1');
                 selectCondition.prop("disabled", false);
               } else {
                 selectCondition.val(''); // Reset select to default value when unchecked
@@ -105,13 +106,13 @@ $(document).ready(function () {
               $(".selectedItem:checked").each(function () {
                 let price = parseFloat($(this).closest("tr").find(".text-center:nth-child(5)").text().replace('₱', '').replace(',', '')); // Fetching the product price
                 let availableQuantity = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text()); // Fetching available quantity
-                let quantity = parseInt($(this).closest("tr").find(".refund-quantity").val()); // Fetching the refund quantity
+                let refundquantity = parseInt($(this).closest("tr").find(".refund-quantity").val()); // Fetching the refund quantity
                 // Validate quantity against available quantity
-                if (quantity > availableQuantity) {
+                if (refundquantity > availableQuantity) {
                   $(this).closest("tr").find(".refund-quantity").val(availableQuantity);
-                  quantity = availableQuantity; // Update quantity to available quantity
+                  refundquantity = availableQuantity; // Update quantity to available quantity
                 }
-                totalRefundValue += price * quantity; // Calculating total refund value
+                totalRefundValue += price * refundquantity; // Calculating total refund value
               });
               if (isNaN(totalRefundValue)) {
                 $("#refund-TotalValue").text("₱0.00");
