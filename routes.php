@@ -195,6 +195,7 @@ any('/pos-transvoid', 'views/pos/model/historyvoid.php');
 any('/pos-transactions', 'views/pos/model/transactionDetails.php');
 any('/pos-transactionItems', 'views/pos/model/transactionItems.php');
 any('/pos-processRefund', 'views/pos/model/transactionRefund.php');
+any('/pos-change', 'views/pos/qtychange.php');
 
 
 

@@ -53,7 +53,7 @@ while ($stmt->fetch()) {
                             </button>
                         </div>
                     </td>
-                    <td class="align-middle">₱' . $total_price . '</td>
+                    <td class="align-middle cart-price">₱' . $total_price . '</td>
                     <td class="align-middle">
                         <button class="btn btn-danger cart-delete"
                             data-product-id="' . $id . '"
