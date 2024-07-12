@@ -18,16 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert refund items
         foreach ($refund_items as $item) {
             $product_id = $mysqli->real_escape_string($item['product_id']);
-            $qty = $mysqli->real_escape_string($item['qty']);
+            $refund_qty = $mysqli->real_escape_string($item['refund_qty']);
             $condition = $mysqli->real_escape_string($item['condition']);
 
 
-            $item_query = "INSERT INTO refund_items (refund_id, product_id, qty) VALUES ('$refund_id', '$product_id', '$qty')";
-            $mysqli->query($item_query);
+            $item_query = "INSERT INTO refund_items (refund_id, product_id, refund_qty) VALUES ('$refund_id', '$product_id', '$refund_qty')";
+            if ($mysqli->query($item_query) === FALSE) {
+                echo "Error inserting refund item: " . $mysqli->error;
+                exit;
+            }
+
+            // Update pos_items table to subtract refund_qty from qty
+            $update_pos_query = "UPDATE pos_items SET qty = qty - $refund_qty WHERE pos_ref = '$pos_ref' AND product_id = $product_id";
+            $mysqli->query($update_pos_query);
 
             if ($condition === '1') {
-                $stock_query = "UPDATE stock SET qty = qty + $qty WHERE product_id = $product_id";
-                $mysqli->query($stock_query);
+                $update_stock_query  = "UPDATE stock SET qty = qty + $refund_qty WHERE product_id = $product_id";
+                $mysqli->query($update_stock_query );
             }
         }
 

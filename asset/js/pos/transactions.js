@@ -148,12 +148,12 @@ $(document).ready(function () {
     const refundItems = [];
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
-      const qty = $(this).data("product-qty");
+      const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
       const condition = $(this).closest("tr").find(".item-condition").val();
-      refundItems.push({ product_id, qty, condition });
+      refundItems.push({ product_id, refund_qty, condition });
       console.log("Refund Item: ", {
         product_id: product_id,
-        qty: qty,
+        refund_qty: refund_qty,
         condition: condition
       });
     });
