@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-6 text-end mt-4">
                     <h5><span id="grand_total">TOTAL: ₱0.00</span></h5>
-                    <h5><span id="grand_total">RECEIVED TOTAL: ₱0.00</span></h5>
+                    <h5><span id="received_total">RECEIVED TOTAL: ₱0.00</span></h5>
                 </div>
             </div>
         </div>

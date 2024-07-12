@@ -420,9 +420,13 @@
             $stmt->close();
             $total = $this->getItemTotal($po_ref, $product_id);
             $grand_total = $this->getPOTotal($po_ref);
+            $amount = $this->getPOAmount($po_ref, $product_id);
+            $received_total = $this->getPOReceivedTotal($po_ref);
             $json = array(
                 'total' => $total,
-                'grand_total' => $grand_total
+                'grand_total' => $grand_total,
+                'amount' => $amount,
+                'received_total'=> $received_total
             );
             echo json_encode($json);
             return;
@@ -575,7 +579,7 @@
             $count = 1;
             while ($stmt->fetch()) {
                 $total = $qty * $price;
-                $amount = $qty * $received;
+                $amount = $received * $price;
                 $content .= '<tr>
                                 <td>'.$count.'</td>
                                 <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
@@ -588,7 +592,7 @@
                                     </div>
                                 </td>
                                 <td id="poi-total">₱'.number_format($total, 2).'</td>
-                                <td><input class="form-control" type="number" name="received" value="'.$received.'"></td>
+                                <td><input class="form-control poi-received" type="number" name="received" value="'.$received.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
                                 <td>₱'.number_format($amount, 2).'</td>
                             </tr>';
                 $count += 1;
@@ -596,12 +600,120 @@
 
             $stmt->close();
             $grand_total = $this->getPOTotal($po_ref);
+            $received_total = $this->getPOReceivedTotal($po_ref);
             $json = array(
                 'content' => $content,
-                'grand_total' => $grand_total
+                'grand_total' => $grand_total,
+                'received_total' => $received_total
             );
             echo json_encode($json);
             return;
+        }
+
+        public function updateReceived ($po_ref, $product_id, $received) {
+            if (!$this->checkReceived($po_ref, $product_id, $received)) {
+                $json = array(
+                    'invalid_received' => 'invalid_received'
+                );
+                echo json_encode($json);
+                return;
+            }
+
+            $query = 'UPDATE purchase_order_items SET received = ? WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('isi', $received, $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->close();
+            $grand_total = $this->getPOTotal($po_ref);
+            $amount = $this->getPOAmount($po_ref, $product_id);
+            $received_total = $this->getPOReceivedTotal($po_ref);
+            $json = array(
+                'grand_total' => $grand_total,
+                'amount' => $amount,
+                'received_total' => $received_total
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function getPOAmount ($po_ref, $product_id) {
+            $query = 'SELECT received, price FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($received, $price);
+            $stmt->fetch();
+            $stmt->close();
+
+            $amount = $received * $price;
+            return number_format($amount, 2);
+        }
+
+        public function checkReceived ($po_ref, $product_id, $received) {
+            $query = 'SELECT qty FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($qty);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($received > $qty) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public function getPOReceivedTotal ($po_ref) {
+            $query = 'SELECT price, received FROM purchase_order_items WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($price, $received);
+            $received_total = 0;
+            while ($stmt->fetch()) {
+                $received_total += $price * $received;
+            }
+
+            $stmt->close();
+            return number_format($received_total, 2);
         }
     }
 ?>
