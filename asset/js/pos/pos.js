@@ -51,6 +51,26 @@ $(document).ready(function () {
     });
   }
 
+  function updateQty(id, qty) {
+    $.ajax({
+      url: "/pos-change",
+      method: "POST",
+      data: {
+        id: id,
+        qty: qty,
+      },
+      dataType: "json",
+      success: function (response) {
+        updateCartUI(response);
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX call failed");
+        console.error("Status:", status);
+        console.error("Error:", error);
+      },
+    });
+  }
+
   getPOS();
 
   $("#barcode-form").on("submit", function (event) {
@@ -142,6 +162,13 @@ $(document).ready(function () {
         console.error("Error:", error);
       },
     });
+  });
+
+  $(document).on("change", ".qty-input", function () {
+    var id = $(this).closest("tr").find(".cart-delete").data("product-id");
+    var qty = $(this).val();
+
+    updateQty(id, qty);
   });
 
   $(document).on("click", ".cart-button", function () {

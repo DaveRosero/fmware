@@ -23,23 +23,25 @@ $stmt = $mysqli->prepare($query);
 $stmt->bind_param('ss', $search, $search); // Bind search parameter twice for both placeholders
 $stmt->execute();
 $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $variant);
+
+$output = '';
 while ($stmt->fetch()) {
   $disabled = ($qty == 0) ? 'disabled' : '';
-  echo '
+  $output .= '
     <div class="col item-card">
         <div class="card">
             <div>
             <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '">    
-            <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ '. number_format($unit_price) .' </h5>
+            <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($unit_price) . ' </h5>
             </div>                           
             <div class="card-body">
-                <h5 class="card-title">' . $name . ' ('. $variant .')</h5>
+                <h5 class="card-title">' . $name . ' (' . $variant . ')</h5>
                 <div class="item-info">
                   <div class="d-flex justify-content-between">
-                    <p> '. $unit_value .' '. strtoupper($unit) .'</p>
+                    <p> ' . $unit_value . ' ' . strtoupper($unit) . '</p>
                     <div class="d-flex">
                       <p>Stock:</p>
-                      <p> '. $qty .' </p>
+                      <p> ' . $qty . ' </p>
                     </div>
                   </div>
                 </div>
@@ -58,5 +60,5 @@ while ($stmt->fetch()) {
 }
 $stmt->close();
 
-
-
+echo $output;
+?>
