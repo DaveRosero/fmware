@@ -552,7 +552,7 @@
         }
 
         public function getPendingPOItems ($po_ref) {
-            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received
                     FROM purchase_order_items poi
                     INNER JOIN product ON product.id = poi.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
@@ -570,11 +570,38 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit);
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received);
             $content = '';
+            $count = 1;
             while ($stmt->fetch()) {
-                $content .= '<td>'.$name.'</td>';
+                $total = $qty * $price;
+                $amount = $qty * $received;
+                $content .= '<tr>
+                                <td>'.$count.'</td>
+                                <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
+                                <td>'.$qty.'</td>
+                                <td>'.$po_unit.'</td>
+                                <td>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">₱</span>
+                                        <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
+                                    </div>
+                                </td>
+                                <td id="poi-total">₱'.number_format($total, 2).'</td>
+                                <td><input class="form-control" type="number" name="received" value="'.$received.'"></td>
+                                <td>₱'.number_format($amount, 2).'</td>
+                            </tr>';
+                $count += 1;
             }
+
+            $stmt->close();
+            $grand_total = $this->getPOTotal($po_ref);
+            $json = array(
+                'content' => $content,
+                'grand_total' => $grand_total
+            );
+            echo json_encode($json);
+            return;
         }
     }
 ?>

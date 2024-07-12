@@ -51,10 +51,11 @@
             <div class="row mt-4">
                 <div class="col-md-6">
                     <label class="form-label fw-semibold" for="">REMARKS:</label>
-                    <textarea id="remarks" name="remarks" class="form-control" data-po-ref="<?php echo $po_info['po_ref']; ?>"><?php echo $po_info['remarks']; ?></textarea>
+                    <p class="ms-2 px-4 fs-4"><?php echo $po_info['remarks']; ?></p>
                 </div>
                 <div class="col-md-6 text-end mt-4">
                     <h5><span id="grand_total">TOTAL: ₱0.00</span></h5>
+                    <h5><span id="grand_total">RECEIVED TOTAL: ₱0.00</span></h5>
                 </div>
             </div>
         </div>
