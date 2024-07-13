@@ -101,6 +101,10 @@ $(document).ready(function () {
             $(".refund-quantity").change(function () {
               updateRefundTotal();
             });
+            function toggleRefundButton() {
+              const anyItemsSelected = $(".selectedItem:checked").length > 0;
+              $("#refund-button").prop("disabled", !anyItemsSelected);
+            }
             function updateRefundTotal() {
               let totalRefundValue = 0;
               $(".selectedItem:checked").each(function () {
@@ -121,20 +125,13 @@ $(document).ready(function () {
               }
               toggleRefundButton();
             }
-            function toggleRefundButton() {
-              if ($(".selectedItem:checked").length > 0) {
-                $("#refund-button").prop("disabled", false);
-              } else {
-                $("#refund-button").prop("disabled", true);
-              }
-            }
             toggleRefundButton();
           },
           error: function (xhr, status, error) {
             console.error("Error fetching transaction items: ", status, error);
           }
         });
-
+        
         $("#transaction-viewModal").modal("show");
       },
       error: function (xhr, status, error) {
