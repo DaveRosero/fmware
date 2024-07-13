@@ -4,7 +4,7 @@ require_once 'model/database/database.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
     $refund_items = [];
-    
+
     $pos_ref = $mysqli->real_escape_string($_POST['pos_ref']);
     $total_refund_value = $mysqli->real_escape_string($_POST['total_refund_value']);
     $refund_items = $_POST['refund_items']; // This should be an array of items
@@ -80,11 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    $update_status_query = "UPDATE pos SET status = 'refunded' WHERE pos_ref = '$pos_ref'";
+    if ($mysqli->query($update_status_query) === FALSE) {
+        echo "Error updating transaction status: " . $mysqli->error;
+        exit;
+    }
     echo "Refund processed successfully.";
-
     // Close the connection
     $mysqli->close();
 } else {
     echo "Invalid request method.";
 }
-?>

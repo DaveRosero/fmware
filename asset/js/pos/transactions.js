@@ -101,6 +101,10 @@ $(document).ready(function () {
             $(".refund-quantity").change(function () {
               updateRefundTotal();
             });
+            function toggleRefundButton() {
+              const anyItemsSelected = $(".selectedItem:checked").length > 0;
+              $("#refund-button").prop("disabled", !anyItemsSelected);
+            }
             function updateRefundTotal() {
               let totalRefundValue = 0;
               $(".selectedItem:checked").each(function () {
@@ -121,20 +125,13 @@ $(document).ready(function () {
               }
               toggleRefundButton();
             }
-            function toggleRefundButton() {
-              if ($(".selectedItem:checked").length > 0) {
-                $("#refund-button").prop("disabled", false);
-              } else {
-                $("#refund-button").prop("disabled", true);
-              }
-            }
             toggleRefundButton();
           },
           error: function (xhr, status, error) {
             console.error("Error fetching transaction items: ", status, error);
           }
         });
-
+        
         $("#transaction-viewModal").modal("show");
       },
       error: function (xhr, status, error) {
@@ -146,11 +143,21 @@ $(document).ready(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
     const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
     const refundItems = [];
+    let goodItemsCount = 0;
+    let badItemsCount = 0;
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
       const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
       const condition = $(this).closest("tr").find(".item-condition").val();
       refundItems.push({ product_id, refund_qty, condition });
+
+
+      if (condition === "1") {
+        goodItemsCount += parseInt(refund_qty);
+      } else if (condition === "2") {
+        badItemsCount += parseInt(refund_qty);
+      }
+
       console.log("Refund Item: ", {
         product_id: product_id,
         refund_qty: refund_qty,
@@ -167,12 +174,21 @@ $(document).ready(function () {
       },
       success: function (response) {
         console.log("Refund response: ", response);
-        alert("Refund processed successfully.");
+        Swal.fire({
+          icon: 'success',
+          title: 'Refund Processed',
+          html: `Refund processed successfully.<br>Good items refunded: ${goodItemsCount}<br>Bad items refunded: ${badItemsCount}`,
+        });
+        $("#transaction-status").text("Refunded");
         $("#transaction-viewModal").modal("hide");
       },
       error: function (xhr, status, error) {
         console.error("Error processing refund: ", status, error);
-        alert("Failed to process refund. Please try again.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Refund Failed',
+          text: 'Failed to process refund. Please try again.',
+        });
       }
     });
   });

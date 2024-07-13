@@ -3,11 +3,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="transaction-searchModalLabel">TRANSACTIONS</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-    
-          
+
+
                 <!--Show Search Result & transaction Details-->
                 <table class="w-100" id="transaction-table">
                     <thead>
@@ -21,8 +21,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                              <!---fetching information from the database -->
-                              <?php foreach ($transactions as $transaction): ?>
+                        <!---fetching information from the database -->
+                        <?php foreach ($transactions as $transaction) : ?>
+                            <?php if ($transaction['status'] !== 'void') : ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($transaction['pos_ref']); ?></td>
                                 <td><?php echo date('F j, Y h:i A', strtotime($transaction['date'])); ?></td>
@@ -30,14 +31,30 @@
                                 <td><?php echo isset($transaction['name']) ? htmlspecialchars($transaction['name']) : ''; ?>
                                 </td>
                                 <td>
-                                    <span
-                                        class="badge text-bg-primary"><?php echo htmlspecialchars($transaction['status']); ?></span>
+                                    <?php
+                                    $status = htmlspecialchars($transaction['status']);
+                                    $badgeClass = 'badge text-bg-primary';
+
+                                    switch ($status) {
+                                        case 'paid':
+                                            $badgeClass = 'badge bg-primary text-white';
+                                            break;
+                                        case 'void':
+                                        case 'refunded':
+                                        case 'replaced':
+                                            $badgeClass = 'badge bg-secondary text-white';
+                                            break;
+                                            // Add more cases as needed for other status types
+                                    }
+                                    ?>
+
+                                    <span class="<?php echo $badgeClass; ?>"><?php echo $status; ?></span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary view-transaction-btn"
-                                        data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">View</button>
+                                    <button class="btn btn-primary view-transaction-btn" data-bs-posref="<?php echo htmlspecialchars($transaction['pos_ref']); ?>">View</button>
                                 </td>
                             </tr>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
