@@ -67,7 +67,7 @@
                                         <option value="0" name="pos">Walk-in</option>
                                         <option value="1" name="walk-in">Delivery</option>
                                     </select>
-                                    <select class="form-select w-50" name="payment_type"
+                                    <select class="form-select w-50" name="payment_type" id="payment_type"
                                         aria-label="Default select example">
                                         <option value="3" name="cash">Cash</option>
                                         <option value="2" name="gcash">Gcash</option>

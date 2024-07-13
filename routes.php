@@ -197,6 +197,8 @@ any('/pos-transactions', 'views/pos/model/transactionDetails.php');
 any('/pos-transactionItems', 'views/pos/model/transactionItems.php');
 any('/pos-processRefund', 'views/pos/model/transactionRefund.php');
 any('/pos-change', 'views/pos/qtychange.php');
+any('/pos-search', 'views/pos/search.php');
+any('/pos-fetchall', 'views/pos/fetchallprod.php');
 
 
 
