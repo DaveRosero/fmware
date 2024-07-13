@@ -35,7 +35,14 @@
                     case 1:
                         $po_status = '<span class="badge bg-warning text-wrap">PENDING</span>';
                         $button = '<a
-                                        class="btn btn-sm btn-success view me-1" 
+                                        class="btn btn-sm btn-secondary" 
+                                        type="button"
+                                        href="/view-po/'.$supplier.'/'.$po_ref.'"
+                                    >
+                                        <i class="fa-solid fa-eye fs-1"></i>
+                                    </a>
+                                    <a
+                                        class="btn btn-sm btn-success" 
                                         type="button"
                                         href="/receive-po/'.$supplier.'/'.$po_ref.'"
                                     >
