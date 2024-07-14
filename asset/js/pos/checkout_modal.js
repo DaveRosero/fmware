@@ -55,6 +55,14 @@ $(document).ready(function () {
     toggleFields();
   });
 
+  $("#payment_type").select2({
+    dropdownParent: $("#transaction-form"),
+    width: "50%",
+    placeholder: "Select Payment",
+    theme: "bootstrap-5",
+    minimumResultsForSearch: -1,
+  });
+
   // Initialize Select2 for barangay selection
   $("#brgy").select2({
     dropdownParent: $("#address-form"),

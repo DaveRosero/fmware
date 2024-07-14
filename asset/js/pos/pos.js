@@ -73,20 +73,41 @@ $(document).ready(function () {
 
   getPOS();
 
-  $("#barcode-form").on("submit", function (event) {
-    event.preventDefault();
-    var barcodeInput = $("#barcode");
+  function handleSearch() {
+    var searchValue = $("#barcode").val().trim(); // Trim whitespace
 
+    if (searchValue === "") {
+      // If search value is empty, fetch all products
+      fetchAllProducts();
+    } else {
+      // Perform AJAX call to fetch products based on searchValue
+      $.ajax({
+        url: "/pos-search",
+        method: "POST",
+        data: { search: searchValue },
+        dataType: "html",
+        success: function (response) {
+          // Update the product list with the search results
+          $(".item-list").html(response);
+        },
+        error: function (xhr, status, error) {
+          console.error("AJAX call failed");
+          console.error("Status:", status);
+          console.error("Error:", error);
+        },
+      });
+    }
+  }
+
+  function fetchAllProducts() {
+    // Perform AJAX call to fetch all products
     $.ajax({
-      url: "/pos-barcode",
+      url: "/pos-fetchall",
       method: "POST",
-      data: $(this).serialize(),
-      dataType: "json",
-      success: function (json) {
-        console.log(json.id);
-        console.log(json.price);
-        addPOS(json.id, json.price);
-        barcodeInput.val("").focus();
+      dataType: "html",
+      success: function (response) {
+        // Update the product list with all products
+        $(".item-list").html(response);
       },
       error: function (xhr, status, error) {
         console.error("AJAX call failed");
@@ -94,6 +115,54 @@ $(document).ready(function () {
         console.error("Error:", error);
       },
     });
+  }
+
+  $("#barcode").on("input", function () {
+    handleSearch();
+  });
+  fetchAllProducts();
+
+  $("#barcode").on("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent default form submission
+      $.ajax({
+        url: "/pos-barcode",
+        method: "POST",
+        data: $("#barcode-form").serialize(),
+        dataType: "json",
+        success: function (response) {
+          // Handle AJAX success
+        },
+        error: function (xhr, status, error) {
+          // Handle AJAX error
+        },
+      });
+    }
+  });
+
+  $("#barcode-form").on("submit", function (event) {
+    event.preventDefault();
+    var barcodeInput = $("#barcode").val().trim();
+
+    if (barcodeInput !== "") {
+      $.ajax({
+        url: "/pos-barcode",
+        method: "POST",
+        data: $(this).serialize(),
+        dataType: "json",
+        success: function (json) {
+          console.log(json.id);
+          console.log(json.price);
+          addPOS(json.id, json.price);
+          barcodeInput.val("").focus();
+        },
+        error: function (xhr, status, error) {
+          console.error("AJAX call failed");
+          console.error("Status:", status);
+          console.error("Error:", error);
+        },
+      });
+    }
   });
 
   $(document).on("click", ".cart-delete", function () {
