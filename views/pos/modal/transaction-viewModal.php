@@ -94,6 +94,7 @@
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer" >
                 <button id="refund-button" class="btn btn-primary" disabled>Process Refund</button>
+                <button id="replace-button" class="btn btn-primary" disabled>Process Replacement</button>
             </div>
         </div>
     </div>
