@@ -105,6 +105,10 @@ $(document).ready(function () {
               const anyItemsSelected = $(".selectedItem:checked").length > 0;
               $("#refund-button").prop("disabled", !anyItemsSelected);
             }
+            function toggleReplaceButton() {
+              const anyItemsSelected = $(".selectedItem:checked").length > 0;
+              $("#replace-button").prop("disabled", !anyItemsSelected);
+            }
             function updateRefundTotal() {
               let totalRefundValue = 0;
               $(".selectedItem:checked").each(function () {
@@ -124,8 +128,10 @@ $(document).ready(function () {
                 $("#refund-TotalValue").text(formatter.format(totalRefundValue));
               }
               toggleRefundButton();
+              toggleReplaceButton();
             }
             toggleRefundButton();
+            toggleReplaceButton();
           },
           error: function (xhr, status, error) {
             console.error("Error fetching transaction items: ", status, error);
@@ -139,6 +145,8 @@ $(document).ready(function () {
       }
     });
   });
+
+  //REFUND PROCESSING
   $("#refund-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
     const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
@@ -188,6 +196,62 @@ $(document).ready(function () {
           icon: 'error',
           title: 'Refund Failed',
           text: 'Failed to process refund. Please try again.',
+        });
+      }
+    });
+  });
+
+  
+  //REPLACEMENT PROCESSING
+  $("#replace-button").click(function () {
+    const posRef = $("#transactionViewLabel").text().split("#")[1];
+    const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
+    const replacedItems = [];
+    let goodItemsCount = 0;
+    let badItemsCount = 0;
+    $(".selectedItem:checked").each(function () {
+      const product_id = $(this).data("product-id");
+      const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
+      const condition = $(this).closest("tr").find(".item-condition").val();
+      replacedItems.push({ product_id, refund_qty, condition });
+
+
+      if (condition === "1") {
+        goodItemsCount += parseInt(refund_qty);
+      } else if (condition === "2") {
+        badItemsCount += parseInt(refund_qty);
+      }
+
+      console.log("Replacement Item: ", {
+        product_id: product_id,
+        refund_qty: refund_qty,
+        condition: condition
+      });
+    });
+    $.ajax({
+      url: "/pos-processReplace",
+      method: "POST",
+      data: {
+        pos_ref: posRef,
+        total_refund_value: totalRefundValue,
+        replaced_items: replacedItems
+      },
+      success: function (response) {
+        console.log("Replace response: ", response);
+        Swal.fire({
+          icon: 'success',
+          title: 'Replacement Processed',
+          html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
+        });
+        $("#transaction-status").text("Replaced");
+        $("#transaction-viewModal").modal("hide");
+      },
+      error: function (xhr, status, error) {
+        console.error("Error processing replacement: ", status, error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Replacement Failed',
+          text: 'Failed to process Replacement. Please try again.',
         });
       }
     });
