@@ -1,6 +1,7 @@
 <?php
     include_once 'session.php';
     require_once 'model/admin/admin.php';
+    require_once 'model/admin/logsClass.php';
 
     class PO extends Admin {
         public function showPO () {
@@ -103,6 +104,8 @@
         }
 
         public function redirect ($id) {
+            $logs = new Logs();
+            
             $query = 'SELECT name FROM supplier WHERE id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
@@ -125,6 +128,10 @@
             $date = date('F j, Y');
             $status = 0;
             $this->createPO($po_ref, $id, $_SESSION['user_id'], $total, $date, $status);
+            
+            $action_log = 'New Purchase Order #'.$po_ref;
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
 
             $json = array(
                 'redirect' => '/create-po/'.$supplier.'/'.$po_ref
@@ -320,11 +327,12 @@
         }
 
         public function getPOItem ($po_ref) {
-            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, stock.qty, stock.critical_level
                     FROM purchase_order_items poi
                     INNER JOIN product ON product.id = poi.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN stock ON stock.product_id = poi.product_id
                     WHERE poi.po_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $po_ref);
@@ -338,7 +346,7 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit);
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $stock, $critical_level);
             $content = '';
             while ($stmt->fetch()) {
                 $total = $qty * $price;
@@ -353,7 +361,11 @@
                                         <i class="fa-solid fa-xmark fa-solid fa-lg"></i>
                                     </button></td>
                                 <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
-                                <td><input class="form-control poi-qty" type="number" name="qty" min="1" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td>
+                                    <input class="form-control poi-qty" type="number" name="qty" min="1" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
+                                    <p class="fs-2 fst-italic text-muted text-center mb-0 mt-0">Recommended Min. Qty: '.(($critical_level - $stock) + 5).'</p>
+                                    <p class="fs-2 fst-italic text-muted text-center" mb-0 mt-0">Stock: '.$stock.' Crtical Level: '.$critical_level.'</p>
+                                </td>
                                 <td><input class="form-control poi-unit" type="text" name="unit" value="'.$po_unit.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
                                 <td>
                                     <div class="input-group mb-3">
@@ -928,6 +940,8 @@
         }
 
         public function completePO ($po_ref) {
+            $logs = new Logs();
+            
             $query = 'UPDATE purchase_order SET status = 2 WHERE po_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $po_ref);
@@ -945,6 +959,16 @@
             $json = array(
                 'redirect' => '/purchase-orders'
             );
+
+            $products = $this->getReceivedArray($po_ref);
+            foreach ($products as $product) {
+                $this->addStock($product['qty'], $product['id']);
+            }
+            
+            $action_log = 'Verified Purchase Order #'.$po_ref;
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
             echo json_encode($json);
             return;
         }
@@ -999,6 +1023,51 @@
                         </tr>';
             echo $content;
             return;
+        }
+
+        public function addStock ($qty, $id) {
+
+            $query = 'UPDATE stock SET qty = qty + ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $qty, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
+        }
+
+        public function getReceivedArray ($po_ref) {
+            $query = 'SELECT product_id, received FROM purchase_order_items WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($product_id, $received);
+            $products = array();
+            while ($stmt->fetch()) {
+                $products [] = array(
+                    'qty' => $received,
+                    'id' => $product_id
+                );
+            }
+            $stmt->close();
+            return $products;
         }
     }
 ?>

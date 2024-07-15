@@ -136,6 +136,10 @@ $(document).ready(function(){
             
         })
     }
+    
+    function hasDecimal(num) {
+        return num % 1 !== 0;
+    }
 
     getPendingPOItems();
 
@@ -161,6 +165,26 @@ $(document).ready(function(){
         var id = $(this).data('product-id');
         var po_ref = $(this).data('po-ref');
         var received = $(this).val();
+
+        if (received < 0) {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a positive number on Received.",
+                icon: "warning"
+            });
+            $(this).val(0);
+            return;
+        }
+
+        if (hasDecimal(received)) {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a whole number on Received.",
+                icon: "warning"
+            });
+            $(this).val(0);
+            return;
+        }
 
         updateReceived(po_ref, id, received, $(this));
     });
