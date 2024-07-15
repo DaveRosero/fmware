@@ -52,8 +52,10 @@ if ($_SESSION['group'] !== 'cashier') {
 <body style="overflow: hidden;">
   <nav class="navbar navbar-expand-lg border-bottom">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png" alt="logo-img" style="width: 30px;" />FMWare|POS</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png"
+          alt="logo-img" style="width: 30px;" />FMWare|POS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -96,7 +98,7 @@ if ($_SESSION['group'] !== 'cashier') {
             </form>
             <br>
             <tbody>
-              <div class="row row-cols-4 g-2 item-list">
+              <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 item-list">
                 <?php include_once 'products.php' ?>
               </div>
             </tbody>
@@ -131,7 +133,8 @@ if ($_SESSION['group'] !== 'cashier') {
             <div class="d-grid gap-2">
               <button class="btn btn-danger reset-cart">Clear</button>
               <!-- Checkout Button -->
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal" id="checkout-button" disabled>
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                id="checkout-button" disabled>
                 Checkout
               </button>
             </div>

@@ -33,9 +33,8 @@
                     </div>
                     <div class="col-5">
                         <div class="row text-center">
-                            <h1 class="text-danger" name="total" id="cart-total-modal">₱0.00</h1>
+                            <h1 class="text-danger" name="origtotal" id="cart-subtotal-modal">₱0.00</h1>
                             <h5 class="text-secondary my-auto">Total Price</h5>
-                            <input type="hidden" name="subtotal" id="cart-total-modal" value="subtotal">
                         </div>
                         <!---Discount and change input --->
                         <div class="col border-bottom mb-2">
@@ -47,6 +46,11 @@
                                 <h5 class="text-secondary my-auto" id="delivery-fee">Delivery Fee: </h5>
                                 <h1 class="text-danger" name="delivery-fee-value" id="delivery-fee-value">₱0.00</h1>
                                 <input type="hidden" name="delivery-fee-value" id="delivery-fee-value-hidden" value="">
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <h5 class="text-secondary my-auto">Grand Total:</h5>
+                                <h1 class="text-danger" name="total" id="cart-total-modal">₱0.00</h1>
+                                <input type="hidden" name="subtotal" id="cart-total-modal" value="subtotal">
                             </div>
                             <div class="mb-2">
                                 <form id="discount-form" class="mb-2">
@@ -93,7 +97,7 @@
                                     <div class="mb-3">
                                         <label for="address-input" class="form-label">Baranggay:</label>
                                         <select class="form-select" type="text" name="address" id="brgy" required>
-                                            <option></option>
+                                            <option value="0">Select Your Baranggay</option>
                                             <?php $posaddress->getBrgys(); ?>
                                         </select>
                                     </div>

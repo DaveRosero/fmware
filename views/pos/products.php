@@ -25,6 +25,7 @@ $stmt->execute();
 $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit, $variant);
 
 $output = '';
+
 while ($stmt->fetch()) {
   $disabled = ($qty == 0) ? 'disabled' : '';
   $output .= '
