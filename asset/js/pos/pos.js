@@ -3,6 +3,7 @@ $(document).ready(function () {
     $("#cart-body").html(response.tbody);
     $("#cart-total").text("Subtotal: ₱" + response.cart_total);
     $("#cart-total-modal").text("₱" + response.cart_total);
+    $("#cart-subtotal-modal").text("₱" + response.cart_total);
     $("#cart-body-modal").html(response.tbody_modal);
 
     // Check if cart is empty and enable/disable checkout button
@@ -270,8 +271,10 @@ $(document).ready(function () {
         $("#cart-body").empty();
         $("#cart-body-modal").empty();
         $("#cart-total-modal").empty();
+        $("#cart-subtotal-modal").empty();
         $("#cart-total").text("Subtotal: ₱0.00");
         $("#cart-total-modal").text("₱0.00");
+        $("#cart-subtotal-modal").text("₱0.00");
         console.log("Cart reset successful");
         $("#checkout-button").prop("disabled", true);
       },

@@ -4,6 +4,8 @@ $(document).ready(function () {
   logo.src = logosrc;
 
   var $transactionTypeSelect = $(".transaction-form select");
+  var $paymentTypeSelect = $(".transaction-form select[name='payment_type']");
+  var $brgySelect = $(".brgy select[name='address']");
   var $firstNameInput = $("#fName-input");
   var $lastNameInput = $("#lName-input");
   var $streetInput = $("#street-input");
@@ -48,26 +50,13 @@ $(document).ready(function () {
 
   // Initial setup: Set dropdown to default value and toggle fields
   $transactionTypeSelect.val("0"); // Set default selection to "POS"
+  $paymentTypeSelect.val("3"); // Set default selection to "Cash"
+  $brgySelect.val("0"); // Set default selection to "Select your Baranggay"
   toggleFields();
 
   // Event listener for dropdown change
   $transactionTypeSelect.on("change", function () {
     toggleFields();
-  });
-
-  $("#payment_type").select2({
-    dropdownParent: $("#transaction-form"),
-    width: "50%",
-    placeholder: "Select Payment",
-    theme: "bootstrap-5",
-    minimumResultsForSearch: -1,
-  });
-
-  // Initialize Select2 for barangay selection
-  $("#brgy").select2({
-    dropdownParent: $("#address-form"),
-    width: "100%",
-    placeholder: "Select your Barangay",
   });
 
   // Handle change in barangay selection
@@ -333,6 +322,7 @@ $(document).ready(function () {
         // Reset total displays
         $("#cart-total").text("Subtotal: ₱0.00");
         $("#cart-total-modal").text("₱0.00");
+        $("#cart-subtotal-modal").text("₱0.00");
 
         // Log success and disable checkout button
         console.log("Cart reset successful");
@@ -362,6 +352,8 @@ $(document).ready(function () {
     updateOriginalTotal(); // Ensure totals are recalculated
     calculateDiscount(); // Ensure discount is recalculated
     calculateChange(); // Ensure change is recalculated
+    // Refresh the page
+    location.reload();
   }
 
   // Event listeners for close buttons to reset form
@@ -383,8 +375,19 @@ $(document).ready(function () {
   // Printing Functionality
   $(".print").on("click", function () {
     var pos_ref = generateRef();
+
+    submitForm(pos_ref); // Submit the form before printing
+    // Call handlePrintAndAlert after form submission
+    handlePrintAndAlert();
+    // Function to handle printing and Swal alert in sequence
+  });
+
+  function handlePrintAndAlert() {
+    printReceipt(); // Start printing
+
+    // Swal alert shown after printing completes
     Swal.fire({
-      title: "Transaction successfully!",
+      title: "Transaction successful!",
       icon: "success",
       showCancelButton: false,
       confirmButtonText: "Ok",
@@ -394,8 +397,7 @@ $(document).ready(function () {
         window.location.href = "/pos";
       }
     });
-    submitForm(pos_ref); // Submit the form before printing
-  });
+  }
 
   function submitForm(pos_ref) {
     var formData = $("#transaction-form").serializeArray();
