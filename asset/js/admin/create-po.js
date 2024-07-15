@@ -74,7 +74,8 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(json) {
                 $element.closest('tr').find('td:eq(5)').text('₱' + json.total);
-                $('#grand_total').text('TOTAL: ₱' + json.grand_total);
+                $('#grand_total').text('TOTAL: ₱' + json.order_total);
+                console.log(json);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
