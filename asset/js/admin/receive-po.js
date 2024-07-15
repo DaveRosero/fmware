@@ -12,8 +12,8 @@ $(document).ready(function(){
             success: function(json) {
                 console.log(json);
                 $('#po_item_content').html(json.content);
-                $('#grand_total').text('TOTAL: ₱' + json.grand_total);
-                $('#received_total').text('RECEIVED TOTAL: ₱' + json.received_total);
+                $('#received_total').text('₱' + json.received_total);
+                $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -35,8 +35,9 @@ $(document).ready(function(){
             success: function(json) {
                 $element.closest('tr').find('td:eq(5)').text('₱' + json.total);
                 $element.closest('tr').find('td:eq(7)').text('₱' + json.amount);
-                $('#grand_total').text('TOTAL: ₱' + json.grand_total);
-                $('#received_total').text('RECEIVED TOTAL: ₱' + json.received_total);
+                $('#received_total').text('₱' + json.received_total);
+                $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
+                $('#order_total').text('₱' + json.order_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -67,13 +68,52 @@ $(document).ready(function(){
                 }
 
                 $element.closest('tr').find('td:eq(7)').text('₱' + json.amount);
-                $('#received_total').text('RECEIVED TOTAL: ₱' + json.received_total);
+                $('#received_total').text('₱' + json.received_total);
+                $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
+    }
+
+    function updateShipping (po_ref, shipping) {
+        $.ajax({
+            url: '/update-po-shipping',
+            method: 'POST',
+            data: {
+                po_ref : po_ref,
+                shipping : shipping
+            },
+            dataType: 'json',
+            success: function(json) {
+                $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        })
+    }
+
+    function updateOthers(po_ref, others) {
+        $.ajax({
+            url: '/update-po-others',
+            method: 'POST',
+            data: {
+                po_ref : po_ref,
+                others : others
+            },
+            dataType: 'json',
+            success: function(json) {
+                $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        })
     }
 
     getPendingPOItems();
@@ -102,5 +142,39 @@ $(document).ready(function(){
         var received = $(this).val();
 
         updateReceived(po_ref, id, received, $(this));
+    });
+
+    $(document).on('change', '#shipping', function(){
+        var po_ref = $('#po_ref').val();
+        var shipping = $(this).val();
+
+        if (shipping < 0) {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a positive number on Shipping.",
+                icon: "warning"
+            });
+            $(this).val(0);
+            return;
+        }
+
+        updateShipping (po_ref, shipping);
+    });
+
+    $(document).on('change', '#others', function(){
+        var po_ref = $('#po_ref').val();
+        var others = $(this).val();
+
+        if (others < 0) {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a positive number on Others.",
+                icon: "warning"
+            });
+            $(this).val(0);
+            return;
+        }
+
+        updateOthers (po_ref, others);
     });
 });

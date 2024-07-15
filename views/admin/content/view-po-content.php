@@ -47,6 +47,7 @@
                         </thead>
                         <tbody id="po_item_content">
                             <!-- PO Content Here -->
+                             <?php $po->viewPO($po_info['po_ref']); ?>
                         </tbody>
                     </table>
                 </div>
@@ -57,7 +58,7 @@
                         <p class="fs-3 px-4"><?php echo $po_info['remarks']; ?></p>
                     </div>
                     <div class="col-md-6 text-end mt-4">
-                        <h5><span id="grand_total">TOTAL: ₱0.00</span></h5>
+                        <h5><span id="grand_total">TOTAL: <?php $po->viewPOTotal($po_info['po_ref']); ?></span></h5>
                     </div>
                 </div>
             </div>

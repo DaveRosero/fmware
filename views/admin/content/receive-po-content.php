@@ -53,9 +53,22 @@
                     <label class="form-label fw-semibold" for="">REMARKS:</label>
                     <p class="ms-2 px-4 fs-4"><?php echo $po_info['remarks']; ?></p>
                 </div>
-                <div class="col-md-6 text-end mt-4">
-                    <h5><span id="grand_total">TOTAL: ₱0.00</span></h5>
-                    <h5><span id="received_total">RECEIVED TOTAL: ₱0.00</span></h5>
+                <div class="col-md-6 text-end">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <h5 class="mb-0 me-2">SHIPPING:</h5>
+                        <div class="input-group w-25">
+                            <span class="input-group-text">₱</span>
+                            <input class="form-control" type="number" name="shipping" id="shipping" step="any" min="0" value="<?php echo $po_info['shipping']; ?>">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <h5 class="mb-0 me-2">OTHERS:</h5>
+                        <div class="input-group w-25">
+                            <span class="input-group-text">₱</span>
+                            <input class="form-control" type="number" name="others" id="others" step="any" min="0" value="<?php echo $po_info['others']; ?>">
+                        </div>
+                    </div>
+                    <h5><span id="grand_total">GRAND TOTAL: ₱0.00</span></h5>
                 </div>
             </div>
         </div>
