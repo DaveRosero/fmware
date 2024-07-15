@@ -119,6 +119,7 @@ any('/receive-po-item', 'controller/admin/purchase-order/receive-po-item.php');
 any('/update-receive-item', 'controller/admin/purchase-order/update-receive-item.php');
 any('/update-po-shipping', 'controller/admin/purchase-order/update-po-shipping.php');
 any('/update-po-others', 'controller/admin/purchase-order/update-po-others.php');
+any('/complete-po', 'controller/admin/purchase-order/complete-po.php');
 
 //*****************************************************************//
 

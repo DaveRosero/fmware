@@ -25,6 +25,13 @@
     ?>
     <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
     <link rel="stylesheet" href="/asset/css/admin/style.css">
+    <style>
+        @media print {
+            th, td {
+                font-size: .6rem; /* Equivalent to Bootstrap's fs-1 */
+            }
+        }
+    </style>
 </head>
 <body>
   <!--  Body Wrapper -->
