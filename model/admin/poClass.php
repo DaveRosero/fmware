@@ -51,6 +51,13 @@
                         break;
                     case 2:
                         $po_status = '<span class="badge bg-success text-wrap">COMPLETED</span>';
+                        $button = '<a
+                                        class="btn btn-sm btn-secondary" 
+                                        type="button"
+                                        href="/view-po/'.$supplier.'/'.$po_ref.'"
+                                    >
+                                        <i class="fa-solid fa-eye fs-1"></i>
+                                    </a>';
                         break;
                     default:
                         $po_status = 'Invalid PO Status';
@@ -201,6 +208,8 @@
             $stmt->fetch();
             $stmt->close();
 
+            $received_total = $this->getPOReceivedTotal($po_ref);
+
             return [
                 'id' => $id,
                 'po_ref' => $po_ref,
@@ -211,7 +220,8 @@
                 'status' => $status,
                 'remarks' => $remarks,
                 'shipping' => $shipping,
-                'others' => $others
+                'others' => $others,
+                'received_total' => $received_total
             ];
         }
         
@@ -914,6 +924,80 @@
                 'grand_total' => number_format($grand_total, 2)
             );
             echo json_encode($json);
+            return;
+        }
+
+        public function completePO ($po_ref) {
+            $query = 'UPDATE purchase_order SET status = 2 WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'redirect' => '/purchase-orders'
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function viewCompletePO ($po_ref) {
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others
+                    FROM purchase_order_items poi
+                    INNER JOIN product ON product.id = poi.product_id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN purchase_order po ON po.po_ref = poi.po_ref
+                    WHERE poi.po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others);
+            $content = '';
+            $count = 1;
+            while ($stmt->fetch()) {
+                $total = $qty * $price;
+                $amount = $received * $price;
+                $content .= '<tr>
+                                <td class="text-center">'.$count.'</td>
+                                <td class="text-start">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
+                                <td class="text-center">'.$qty.'</td>
+                                <td class="text-center">'.$po_unit.'</td>
+                                <td class="text-center">₱'.number_format($price, 2).'</td>
+                                <td class="text-center" id="poi-total">₱'.number_format($total, 2).'</td>
+                                <td class="text-center">'.$received.'</td>
+                                <td class="text-center">₱'.number_format($amount, 2).'</td>
+                            </tr>';
+                $count += 1;
+            }
+
+            $stmt->close();
+            $order_total = $this->getPOTotal($po_ref);
+            $received_total = $this->getPOReceivedTotal($po_ref);
+            $content .= '<tr>
+                            <td class="text-end fw-semibold" colspan="5">Order Total: </td>
+                            <td class="text-center" id="order_total">₱'.$order_total.'</td>
+                            <td class="text-end fw-semibold">Received Total: </td>
+                            <td class="text-center" id="received_total">₱'.$received_total.'</td>
+                        </tr>';
+            echo $content;
             return;
         }
     }

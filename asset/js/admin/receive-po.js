@@ -116,6 +116,27 @@ $(document).ready(function(){
         })
     }
 
+    function completePO (po_ref) {
+        $.ajax({
+            url: '/complete-po',
+            method: 'POST',
+            data: {
+                po_ref : po_ref
+            },
+            dataType: 'json',
+            success: function(json) {
+                if (json.redirect) {
+                    window.location.href = json.redirect;
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+            
+        })
+    }
+
     getPendingPOItems();
 
     $(document).on('change', '.poi-price', function(){
@@ -176,5 +197,11 @@ $(document).ready(function(){
         }
 
         updateOthers (po_ref, others);
+    });
+
+    $('#save').click(function(){
+        var po_ref = $(this).data('po-ref');
+
+        completePO(po_ref);
     });
 });

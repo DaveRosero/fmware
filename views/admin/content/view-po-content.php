@@ -36,18 +36,35 @@
                 </div>
 
                 <div class="row">
-                    <table class="table table-bordered">
-                        <thead class="table-secondary">
+                    <table class="table table-borderless">
+                        <thead>
+                        <?php if ($po_info['status'] !==2 ): ?>
                             <th>#</th>
                             <th>Product</th>
                             <th>Quantity</th>
                             <th>Unit</th>
                             <th>Price</th>
                             <th>Total</th>
+                        <?php else: ?>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Received</th>
+                            <th>Amount</th>
+                        <?php endif; ?>
                         </thead>
                         <tbody id="po_item_content">
                             <!-- PO Content Here -->
-                             <?php $po->viewPO($po_info['po_ref']); ?>
+                             <?php
+                                if ($po_info['status'] !== 2) {
+                                    $po->viewPO($po_info['po_ref']); 
+                                } else {
+                                    $po->viewCompletePO($po_info['po_ref']); 
+                                }
+                             ?>
                         </tbody>
                     </table>
                 </div>
@@ -57,11 +74,22 @@
                         <label class="form-label fw-semibold" for="">REMARKS:</label>
                         <p class="fs-3 px-4"><?php echo $po_info['remarks']; ?></p>
                     </div>
-                    <div class="col-md-6 text-end mt-4">
-                        <h5><span id="grand_total">TOTAL: <?php $po->viewPOTotal($po_info['po_ref']); ?></span></h5>
-                    </div>
+                    <?php if ($po_info['status'] !== 2): ?>
+                        <div class="col-md-6 text-end mt-4">
+                            <h5><span id="grand_total">TOTAL: <?php $po->viewPOTotal($po_info['po_ref']); ?></span></h5>
+                        </div>
+                    <?php else: ?>
+                        <div class="col-md-6 text-end">
+                            <h5>SHIPPING: ₱<?php echo number_format($po_info['shipping'], 2); ?></h5>
+                            <h5>OTHERS: ₱<?php echo number_format($po_info['others'], 2); ?></h5>
+                            <h5>GRAND TOTAL: ₱<?php echo number_format($po_info['shipping'] + $po_info['others'] + str_replace(',', '', $po_info['received_total']), 2); ?></h5>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
+        </div>
+        <div class="card-footer bg-white text-end">
+            <a href="/purchase-orders" class="btn btn-muted">Back</a>
         </div>
     </div>
 </div>

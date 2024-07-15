@@ -31,8 +31,8 @@
             </div>
 
             <div class="row">
-                <table class="table table-bordered">
-                    <thead class="table-secondary">
+                <table class="table table-borderless">
+                    <thead>
                         <th>#</th>
                         <th>Product</th>
                         <th>Quantity</th>
