@@ -31,6 +31,10 @@
                 font-size: .6rem; /* Equivalent to Bootstrap's fs-1 */
             }
         }
+        .wrapper {
+            padding: 20px; /* Adjust the padding to create margins */
+            background: white; /* Background color to show the margin area */
+        }
     </style>
 </head>
 <body>

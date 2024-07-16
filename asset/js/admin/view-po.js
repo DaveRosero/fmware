@@ -59,6 +59,19 @@ $(document).ready(function() {
     });
 
     $('#imageButton').click(function(){
+        var po_ref = $(this).data('po-ref');
+        $('#printContent').addClass('wrapper');
 
+        html2canvas($('#printContent')[0]).then(function(canvas) {
+            // Create a link element
+            let link = document.createElement('a');
+            link.download = po_ref + '.png';
+            // Convert the canvas to a data URL
+            link.href = canvas.toDataURL();
+            // Trigger the download by simulating a click
+            link.click();
+            
+            $('#printContent').removeClass('wrapper');
+        });
     });
 });
