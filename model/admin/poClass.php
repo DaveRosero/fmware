@@ -1075,12 +1075,24 @@
         }
 
         public function deletePO ($po_ref) {
+            $logs = new Logs();
+            
             $po_info = $this->getPOInfo($po_ref);
+            if ($po_info['status'] == 0) {
+                $status = 'DRAFT';
+            } else if ($po_info['status'] == 1) {
+                $status = 'PENDING';
+            } else if ($po_info['status'] == 2) {
+                $status = 'COMPLETED';
+            }
+
             if ($po_info['status'] !== 2) {
                 $this->deletePOItems($po_ref);
                 $query = 'DELETE FROM purchase_order WHERE po_ref = ?';
+                $action_log = 'Deleted Purhcase Order #'.$po_ref.' ('.$status.')';
             } else {
                 $query = 'UPDATE purchase_order SET status = 3 WHERE po_ref = ?';
+                $action_log = 'Archived Purhcase Order #'.$po_ref.' ('.$status.')';
             }
             
             $stmt = $this->conn->prepare($query);
@@ -1096,6 +1108,10 @@
             }
 
             $stmt->close();
+
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
             $json = array(
                 'redirect' => '/purchase-orders'
             );
