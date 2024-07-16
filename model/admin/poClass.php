@@ -22,6 +22,10 @@
             $stmt->bind_result($po_ref, $supplier, $total, $date, $status);
             $content = '';
             while ($stmt->fetch()) {
+                if ($status == 3) {
+                    continue;
+                }
+
                 switch ($status) {
                     case 0:
                         $po_status = '<span class="badge bg-primary text-wrap">DRAFT</span>';
@@ -1068,6 +1072,69 @@
             }
             $stmt->close();
             return $products;
+        }
+
+        public function deletePO ($po_ref) {
+            $logs = new Logs();
+            
+            $po_info = $this->getPOInfo($po_ref);
+            if ($po_info['status'] == 0) {
+                $status = 'DRAFT';
+            } else if ($po_info['status'] == 1) {
+                $status = 'PENDING';
+            } else if ($po_info['status'] == 2) {
+                $status = 'COMPLETED';
+            }
+
+            if ($po_info['status'] !== 2) {
+                $this->deletePOItems($po_ref);
+                $query = 'DELETE FROM purchase_order WHERE po_ref = ?';
+                $action_log = 'Deleted Purhcase Order #'.$po_ref.' ('.$status.')';
+            } else {
+                $query = 'UPDATE purchase_order SET status = 3 WHERE po_ref = ?';
+                $action_log = 'Archived Purhcase Order #'.$po_ref.' ('.$status.')';
+            }
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
+            $json = array(
+                'redirect' => '/purchase-orders'
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function deletePOItems ($po_ref) {
+            $query = 'DELETE FROM purchase_order_items WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
         }
     }
 ?>
