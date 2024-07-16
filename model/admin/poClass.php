@@ -1069,5 +1069,33 @@
             $stmt->close();
             return $products;
         }
+
+        public function deletePO ($po_ref) {
+            $po_info = $this->getPOInfo($po_ref);
+            if ($po_info['status'] == 0) {
+                $query = 'DELETE FROM purchase_order WHERE po_ref = ?';
+            } else {
+                $query = 'UPDATE purchase_order SET status = 3 WHERE po_ref = ?';
+            }
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'redirect' => '/purchase-orders'
+            );
+            echo json_encode($json);
+            return;
+        }
     }
 ?>
