@@ -89,6 +89,7 @@
             </div>
         </div>
         <div class="card-footer bg-white text-end">
+            <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>">Delete</button>
             <a href="/purchase-orders" class="btn btn-muted">Back</a>
         </div>
     </div>
