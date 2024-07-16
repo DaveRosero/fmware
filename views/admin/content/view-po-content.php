@@ -3,6 +3,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col text-end">
+                    <button class="btn btn-secondary" id="imageButton"><i class="fa-solid fa-image"></i></button>
                     <button class="btn btn-primary" id="printButton"><i class="fa-solid fa-print"></i></button>
                 </div>
             </div>
