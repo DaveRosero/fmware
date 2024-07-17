@@ -192,21 +192,19 @@ $(document).ready(function () {
     var discount = parseFloat($("#discount-input").val()) || 0;
     var cashReceived = parseFloat($("#cashRec-input").val()) || 0;
     var change = $("#change-display").text();
+    var transactionType = $transactionTypeSelect.val();
     var deliveryFee =
-      $transactionTypeSelect.val() === "1"
+      transactionType === "1"
         ? parseFloat($("#delivery-fee-value").data("fee")) || 0
         : 0;
     var salesReceiptNumber = generateRef();
-    var customerName = $("#fName-input").val() + " " + $("#lName-input").val();
-    var address =
-      $("#street-input").val() +
-      ", " +
-      $("#brgy option:selected").text() +
-      ", " +
-      $("#municipality").val();
+    var customerName = `${$("#fName-input").val()} ${$("#lName-input").val()}`;
+    var address = `${$("#street-input").val()}, ${$(
+      "#brgy option:selected"
+    ).text()}, ${$("#municipality").val()}`;
     var contact = $("#contact-input").val();
-    var delivererName = $("#deliverer option:selected").text(); // Adjust as needed
-    var purchasedDate = new Date().toLocaleDateString(); // Get the current date
+    var delivererName = $("#deliverer option:selected").text();
+    var purchasedDate = new Date().toLocaleDateString();
 
     $("#cart-body-modal tr").each(function () {
       var name = $(this).find("td:eq(0)").text();
@@ -220,94 +218,121 @@ $(document).ready(function () {
 
       originalTotal += total;
 
-      content +=
-        '<tr><td class="center">' +
-        name +
-        '</td><td class="center">' +
-        variant +
-        '</td><td class="center">' +
-        unit +
-        '</td><td class="center">' +
-        "₱" +
-        price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-        '</td><td class="center">' +
-        qty +
-        '</td><td class="center">' +
-        "₱" +
-        total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-        "</td></tr>";
+      content += `
+        <tr>
+          <td class="center">${name}</td>
+          <td class="center">${variant}</td>
+          <td class="center">${unit}</td>
+          <td class="center">₱${price
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+          <td class="center">${qty}</td>
+          <td class="center">₱${total
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+        </tr>`;
     });
 
     var finalTotal = originalTotal + deliveryFee - discount;
 
-    var printableContent =
-      "<style>" +
-      "table { width: 100%; border-collapse: collapse; }" +
-      "th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }" +
-      "th { background-color: #f2f2f2; }" +
-      ".receipt { margin: 20px auto; max-width: 400px; page-break-after: always; }" +
-      ".total { font-weight: bold; text-align: right; margin-top: 10px; }" +
-      ".header { text-align: center; margin-bottom: 20px; }" +
-      ".logo { width: 100px; height: 100px; margin-bottom: 10px; }" +
-      ".center { text-align: center; }" +
-      ".signature { margin-top: 30px; }" +
-      ".signature p { text-align: center; margin-top: 50px; }" +
-      "</style>" +
-      '<div class="receipt">' +
-      '<div class="header">' +
-      '<img src="' +
-      logosrc +
-      '" alt="Company Logo" class="logo">' +
-      "<h1>F.M. ODULIOS ENTERPRISES AND GEN. MERCHANDISE</h1>" +
-      "<p>Mc Arthur HI-way, Poblacion II, Marilao, Bulacan</p>" +
-      "</div>" +
-      "<p>Sales Receipt Number: " +
-      salesReceiptNumber +
-      "</p>" +
-      "<p>Customer Name: " +
-      customerName +
-      "</p>" +
-      ($transactionTypeSelect.val() === "1"
-        ? "<p>Address: " + address + "</p>"
-        : "") +
-      ($transactionTypeSelect.val() === "1"
-        ? "<p>Contact: " + contact + "</p>"
-        : "") +
-      ($transactionTypeSelect.val() === "1"
-        ? "<p>Deliverer: " + delivererName + "</p>"
-        : "") +
-      "<p>Date of Purchase: " +
-      purchasedDate +
-      "</p>" +
-      "<table>" +
-      "<thead><tr><th>Item</th><th>Variant</th><th>Unit</th><th>Price</th><th>Quantity</th><th>Total</th></tr></thead>" +
-      "<tbody>" +
-      content +
-      "</tbody>" +
-      "</table>" +
-      '<div class="total">' +
-      "<p>Subtotal: ₱" +
-      originalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-      "</p>" +
-      ($transactionTypeSelect.val() === "1"
-        ? "<p>Delivery Fee: ₱" +
-          deliveryFee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-          "</p>"
-        : "") +
-      "<p>Discount: ₱" +
-      discount.toFixed(2).replace(/\B(?=(\d{3})+(?!d))/g, ",") +
-      "</p>" +
-      "<p>Total: ₱" +
-      finalTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-      "</p>" +
-      "<p>Cash: ₱" +
-      cashReceived.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-      "</p>" +
-      "<p>Change: " +
-      change +
-      "</p>" +
-      "</div>" +
-      "</div>";
+    var printableContent = `
+      <style>
+        @page {
+          size: 80mm 70mm;
+          margin: 0;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        .receipt {
+          width: 80mm;
+          max-width: 80mm;
+          margin: 0 auto;
+          font-family: Arial, sans-serif;
+          font-size: 10px;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 10px;
+        }
+        .logo {
+          width: 50px;
+          height: 50px;
+          margin-bottom: 5px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 4px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+        .total {
+          font-weight: bold;
+          text-align: right;
+          margin-top: 5px;
+        }
+        .center {
+          text-align: center;
+        }
+        .signature {
+          margin-top: 15px;
+        }
+        .signature p {
+          text-align: center;
+          margin-top: 25px;
+        }
+      </style>
+      <div class="receipt">
+        <div class="header">
+          <img src="${logosrc}" alt="Company Logo" class="logo">
+          <h2>F.M. ODULIOS ENTERPRISES AND GEN. MERCHANDISE</h2>
+          <p>Mc Arthur HI-way, Poblacion II, Marilao, Bulacan</p>
+        </div>
+        <p>Sales Receipt Number: ${salesReceiptNumber}</p>
+        <p>Customer Name: ${customerName}</p>
+        ${transactionType === "1" ? `<p>Address: ${address}</p>` : ""}
+        ${transactionType === "1" ? `<p>Contact: ${contact}</p>` : ""}
+        ${transactionType === "1" ? `<p>Deliverer: ${delivererName}</p>` : ""}
+        <p>Date of Purchase: ${purchasedDate}</p>
+        <table>
+          <thead>
+            <tr><th>Item</th><th>Variant</th><th>Unit</th><th>Price</th><th>Quantity</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            ${content}
+          </tbody>
+        </table>
+        <div class="total">
+          <p>Subtotal: ₱${originalTotal
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+          ${
+            transactionType === "1"
+              ? `<p>Delivery Fee: ₱${deliveryFee
+                  .toFixed(2)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>`
+              : ""
+          }
+          <p>Discount: ₱${discount
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+          <p>Total: ₱${finalTotal
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+          <p>Cash: ₱${cashReceived
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+          <p>Change: ${change}</p>
+        </div>
+      </div>`;
+
     return printableContent;
   }
 
@@ -394,7 +419,9 @@ $(document).ready(function () {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/pos";
+        setTimeout(() => {
+          window.location.href = "/pos";
+        }, 500);
       }
     });
   }
