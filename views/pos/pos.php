@@ -28,7 +28,6 @@ if ($_SESSION['group'] !== 'cashier') {
 
 ?>
 <?php include_once 'model/history.php' ?>
-<?php include_once 'model/transactions.php' ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +55,7 @@ if ($_SESSION['group'] !== 'cashier') {
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <!--Open Return & Refunds Modal (transaction search modal)-->
-            <a class="nav-link" data-bs-target="#transaction-searchModal" data-bs-toggle="modal">Refund & Replace</a>
+            <a class="nav-link" data-bs-target="#transaction-searchModal" data-bs-toggle="modal" id="transaction-searchBtn">Refund & Replace</a>
           </li>
           <li class="nav-item">
             <!--Pick Up Modal (for pick up transaction search modal)-->
