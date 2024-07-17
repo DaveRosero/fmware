@@ -29,7 +29,7 @@ $(document).ready(function () {
                     var posRef = $(this).data('bs-posref');
                     // Implement view transaction details functionality here
                     $.ajax({
-                      url: "/pos-transactions",
+                      url: "/pos-transactionDetails",
                       method: "GET",
                       data: {
                         pos_ref: posRef,
