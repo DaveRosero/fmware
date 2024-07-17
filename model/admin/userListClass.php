@@ -1,11 +1,12 @@
 <?php
+    include_once 'session.php';
     require_once 'model/admin/admin.php';
 
-    class User extends Admin {
+    class UserList extends Admin {
         public function getUserList () {
             $query = 'SELECT 
-                        user.id, user.firstname, user.lastname, user.email, user.phone, user.sex,
-                        user_group.user_id, user_group.group_id, groups.name
+                        user.id, user.firstname, user.lastname, user.email, user.phone,
+                        user_group.user_id, user_group.group_id, groups.name, user.date, user.active
                     FROM user
                     INNER JOIN user_group ON user_group.user_id = user.id
                     INNER JOIN groups ON user_group.group_id = groups.id';
@@ -13,30 +14,42 @@
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result(
-                        $id, $fname, $lname, $email, $phone, $sex,
-                        $user_id, $group_id, $group_name
+                        $id, $fname, $lname, $email, $phone,
+                        $user_id, $group_id, $group_name, $date, $active
                     );
 
                     while ($stmt->fetch()) {
                         if ($group_name !== 'user') {
                             continue;
                         }
-                        $name = $fname . ' ' . $lname;
-                        if ($sex == 0){
-                            $sex_value = 'Male';
+
+                        if ($active == 1) {
+                            $switch_btn = '<div class="form-check form-switch">
+                                        <input class="form-check-input status" 
+                                            type="checkbox" 
+                                            id="toggleSwitch"
+                                            data-user-id='.$user_id.'
+                                            checked
+                                        >
+                                    </div>';
                         } else {
-                            $sex_value = 'Female';
+                            $switch_btn = '<div class="form-check form-switch">
+                                        <input class="form-check-input status" 
+                                            type="checkbox" 
+                                            id="toggleSwitch"
+                                            data-user-id='.$user_id.'
+                                        >
+                                    </div>';
                         }
+
+                        $name = $fname . ' ' . $lname;
                         echo '<tr>
+                                <td>'.$switch_btn.'</td>
                                 <td>'.$name.'</td>
                                 <td>'.$email.'</td>
                                 <td>'.$phone.'</td>
-                                <td>'.$sex_value.'</td>
-                                <td>'.$group_name.'</td>
-                                <td>
-                                    <a class="text-success mx-2" href="#"><i class="fa-solid fa-pen-to-square"></i><a/>
-                                    <a class="text-danger" href="#"><i class="fa-solid fa-trash"></i></a>
-                                </td>
+                                <td>'.$date.'</td>
+                                <td></td>
                             </tr>';
                     }
                 } else {

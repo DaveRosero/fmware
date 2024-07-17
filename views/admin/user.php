@@ -1,10 +1,9 @@
 <?php
   include_once 'session.php';
-  require_once 'model/admin/admin.php';
   require_once 'model/admin/userListClass.php';
 
   $admin = new Admin();
-  $user_list = new UserList();
+  $user = new UserList();
 
   $admin->isAdmin();
 ?>
@@ -16,12 +15,12 @@
     <title>Manage Users | FMWare</title>
     <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php 
-      include_once 'vendor/Bootstrap/css/bundle.php';
-      include_once 'vendor/DataTables/css/bundle.php'; 
+      include_once 'config/load_vendors.php';
     ?>
     <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
+    <link rel="stylesheet" href="/asset/css/admin/style.css">
 </head>
-<body>
+<body class="bg-light">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -40,14 +39,9 @@
     </div>
   </div>
 
-  <?php
-    include_once 'vendor/jQuery/bundle.php';
-    include_once 'vendor/FontAwesome/kit.php';    
-    include_once 'vendor/DataTables/js/bundle.php';
-    include_once 'vendor/Bootstrap/js/bundle.php'; 
-  ?>
   <script src="/asset/js/admin/dashboard.js"></script>
   <script src="/asset/js/admin/mini-sidebar.js"></script>
   <script src="/asset/js/admin/sidebarmenu.js"></script>
+  <script src="/asset/js/admin/user.js"></script>
 </body>
 </html>
