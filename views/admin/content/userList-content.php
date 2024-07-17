@@ -4,19 +4,19 @@
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">User List</h5>
             <div class="table-container">
-                <table class="table">
+                <table class="table table-borderless" id="user-table">
                     <thead>
                         <tr>
+                            <th>Status</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Sex</th>
-                            <th>Group</th>
-                            <th>Action</th>
+                            <th>Date Created</th>
+                            <th>Last Login</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $user_list->getUserList(); ?>
+                        <?php $user->getUserList(); ?>
                     </tbody>
                 </table>
             </div>
