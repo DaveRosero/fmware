@@ -29,35 +29,28 @@ $output = '';
 while ($stmt->fetch()) {
   $disabled = ($qty == 0) ? 'disabled' : '';
   $output .= '
-    <div class="col item-card">
-        <div class="card">
-            <div>
-            <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '">    
-            <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($unit_price) . ' </h5>
-            </div>                           
-            <div class="card-body">
-                <h5 class="card-title">' . $name . ' (' . $variant . ')</h5>
-                <div class="item-info">
-                  <div class="d-flex justify-content-between">
-                    <p> ' . $unit_value . ' ' . strtoupper($unit) . '</p>
-                    <div class="d-flex">
-                      <p>Stock:</p>
-                      <p> ' . $qty . ' </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="d-grid">
-                <button class="btn btn-primary cart-button" 
+    <div class="item-card">
+      <div class="card">
+        <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '">
+        <div class="card-body">
+          <p class="card-title h6">' . $name . '(' . $variant . ')</p>
+          <p class="card-text">Unit: ' . $unit_value . ' ' . strtoupper($unit) . '</p>
+          <p class="card-text">Stock: ' . $qty . '</p>
+          <div class="d-grid">
+            <button class="btn btn-primary cart-button" 
                     data-product-id="' . $id . '"
                     data-product-price="' . $unit_price . '"
                     ' . $disabled . '
-                >
-                    <i class="fas fa-cart-plus"></i> Add to Cart
-                </button>
-                </div>
-            </div>
+            >
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
         </div>
-  </div>';
+        <div class="card-footer">
+          <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($unit_price) . ' </h5>
+        </div>
+      </div>
+    </div>';
 }
 $stmt->close();
 
