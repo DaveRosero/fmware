@@ -1,16 +1,10 @@
 <?php
-require_once 'model/database/database.php';
 require_once 'model/user/addressClass.php';
 require_once 'model/user/user.php';
 
-$mysqli = database();
-
-
-
-$posaddress = new Address();
-
 session_start(); // Start session if not already started
 
+$posaddress = new Address();
 $user = new User();
 
 // Check if session email is set

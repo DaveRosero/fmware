@@ -128,7 +128,11 @@ $(document).ready(function () {
     });
   });
 
-  $(".void").on("click", function () {
+  $("#history-search").DataTable();
+
+  $(".void").on("click", function (event) {
+    event.preventDefault(); // Prevent default action if needed
+
     Swal.fire({
       title: "Are you sure you want to void this transaction?",
       icon: "warning",
@@ -138,17 +142,15 @@ $(document).ready(function () {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        // Get the pos_ref from somewhere (possibly a data attribute or hidden input in your modal)
+        // User confirmed, proceed with voiding the transaction
         var posRef = $("#historyViewLabel").text().replace("Transaction #", "");
 
-        // Make an AJAX request to void the transaction
         $.ajax({
           url: "/pos-transvoid",
           method: "POST",
           data: { pos_ref: posRef },
           success: function (response) {
-            console.log("Transaction voided successfully:", response);
-            // Optionally, you can redirect or show a success message here
+            // Transaction voided successfully
             Swal.fire({
               title: "Transaction Voided!",
               text: "The transaction has been successfully voided.",
@@ -160,17 +162,13 @@ $(document).ready(function () {
               window.location.href = "/pos";
             });
           },
-          error: function (xhr, status, error) {
-            console.error("Error voiding transaction:", status, error);
-            // Show an error message or handle the error appropriately
-            Swal.fire({
-              title: "Error",
-              text: "An error occurred while voiding the transaction. Please try again.",
-              icon: "error",
-              showConfirmButton: true,
-            });
-          },
         });
+      } else if (result.isDenied) {
+        // User clicked Cancel, log this event
+        console.log("User clicked Cancel");
+      } else {
+        // Handle other scenarios if needed
+        console.log("Other result:", result);
       }
     });
   });
