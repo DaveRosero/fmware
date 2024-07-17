@@ -197,6 +197,7 @@ any('/pos-checkout', 'views/pos/model/checkout.php');
 any('/pos-history', 'views/pos/model/history_fetchprod.php');
 any('/pos-historyprod', 'views/pos/model/history_product.php');
 any('/pos-transvoid', 'views/pos/model/historyvoid.php');
+any('/pos-fetchTransactions','views/pos/model/transactions.php');
 any('/pos-transactions', 'views/pos/model/transactionDetails.php');
 any('/pos-transactionItems', 'views/pos/model/transactionItems.php');
 any('/pos-processRefund', 'views/pos/model/transactionRefund.php');
