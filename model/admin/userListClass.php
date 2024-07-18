@@ -6,7 +6,10 @@
         public function getUserList () {
             $query = 'SELECT 
                         user.id, user.firstname, user.lastname, user.email, user.phone,
-                        user_group.user_id, user_group.group_id, groups.name, user.date, user.active
+                        user_group.user_id, user_group.group_id, groups.name, user.date, user.active,
+                        (SELECT MAX(logs.date)
+                        FROM logs
+                        WHERE logs.user_id = user.id) AS last_login
                     FROM user
                     INNER JOIN user_group ON user_group.user_id = user.id
                     INNER JOIN groups ON user_group.group_id = groups.id';
@@ -15,7 +18,7 @@
                 if ($stmt->execute()) {
                     $stmt->bind_result(
                         $id, $fname, $lname, $email, $phone,
-                        $user_id, $group_id, $group_name, $date, $active
+                        $user_id, $group_id, $group_name, $date, $active, $last_login
                     );
 
                     while ($stmt->fetch()) {
@@ -49,7 +52,7 @@
                                 <td>'.$email.'</td>
                                 <td>'.$phone.'</td>
                                 <td>'.$date.'</td>
-                                <td></td>
+                                <td>'.$last_login.'</td>
                             </tr>';
                     }
                 } else {
@@ -59,6 +62,30 @@
             } else {
                 die("Error in preparing statement: " . $this->conn->error);
             }
+        }
+
+        public function updateUserStatus ($user_id, $status) {
+            $query = 'UPDATE user SET active = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $status, $user_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+
+            $json = array(
+                'redirect' => '/users',
+                'status' => $status
+            );
+            echo json_encode($json);
+            return;
         }
     }
 ?>

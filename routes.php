@@ -80,6 +80,9 @@ get('/staff', 'views/admin/staff.php');
 any('/add-staff', 'controller/admin/staff/add-staff.php');
 any('/update-staff', 'controller/admin/staff/update-status.php');
 
+// Manage User Controller
+any('/update-user-status', 'controller/admin/user/update-user-status.php');
+
 //*****************************************************************//
 
 // Inventory Views
