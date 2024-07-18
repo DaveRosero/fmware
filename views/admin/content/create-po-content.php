@@ -37,7 +37,8 @@
                             <?php $po->getSupplierProducts($supplier_info['id']); ?>
                         </select>
                         <input type="hidden" name="po_ref" id="po_ref" value="<?php echo $po_info['po_ref']; ?>">
-                        <button class="btn btn-success" type="submit">Add</button>
+                        <button class="btn btn-success ms-2" type="submit">Add</button>
+                        <a class="btn btn-primary ms-2" href="/manage-products">New</a>
                     </div>
                 </div>
             </form>
