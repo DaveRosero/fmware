@@ -19,7 +19,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <span class="badge bg-primary text-black fw-semibold mx-2 py-6">
+                <span class="badge bg-success text-black fw-semibold mx-2 py-6">
                   <i class="fas fa-shipping-fast"></i>
                   Deliveries Today: 6
                 </span>
@@ -28,7 +28,7 @@
             <div class="row">
               <div class="col">
                 <a href="/purchase-order">
-                  <span class="badge bg-secondary text-black fw-semibold mx-2 py-6">
+                  <span class="badge bg-primary text-black fw-semibold mx-2 py-6">
                     <i class="fas fa-undo"></i>
                     Returns Today: 6
                   </span>
@@ -48,6 +48,16 @@
             <div class="row">
               <div class="col">
                 <a href="/purchase-order">
+                  <span class="badge bg-warning text-black fw-semibold mx-2 py-6">
+                    <i class="fas fa-file"></i>
+                    Pending PO: <?php $admin->getPendingPO(); ?>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <a href="/purchase-order">
                   <span class="badge bg-danger text-black fw-semibold mx-2 py-6">
                     <i class="fas fa-exclamation-triangle"></i>
                     Low on Stocks: 6
@@ -57,9 +67,15 @@
             </div>
           </div>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-            <form action="/logout" method="POST">
-              <button type="submit" class="btn btn-danger mx-3 mt-2 d-block">Logout</button>
-            </form>
+            <div class="dropdown">
+              <a class="nav-icon position-relative text-decoration-none fw-semibold dropdown-toggle text-white" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Hi, Admin
+              </a>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  <form action="/logout" method="post">
+                      <button type="submit" class="dropdown-item">Logout</button>
+                  </form>
+              </div>
           </div>
         </nav>
       </header>

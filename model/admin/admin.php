@@ -207,5 +207,25 @@
                 die("Error in preparing statement: " . $this->conn->error);
             }
         }
+
+        public function getPendingPO () {
+            $query = 'SELECT COUNT(*) FROM purchase_order WHERE status = 1';
+            $stmt = $this->conn->prepare($query);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($count);
+            $stmt->fetch();
+            $stmt->close();
+            echo $count;
+            return;
+        }
     }
 ?>
