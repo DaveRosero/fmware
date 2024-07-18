@@ -5,7 +5,7 @@
                 <h1 class="modal-title fs-5" id="transactionViewLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" >
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-8">
                         <div class="col" style="height: calc(95vh - 100px);overflow-y: auto;overflow-x: hidden;">
@@ -59,9 +59,20 @@
                                     </select>
                                 </div>
                                 <h3>Refund Details</h3>
-                                <div class="text-end">
-                                    <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
-                                    <h1 class="text-success" id="refund-TotalValue"></h1>
+                                <div class="d-flex justify-content-between text-end">
+                                    <div>
+                                        <h5 class="text-secondary my-auto">Returned/Refunded Reason:</h5>
+                                        <select class="form-select select-reason" aria-label="Default select example" id="return-refund-reason">
+                                            <option value="">Select Reason</option>
+                                            <option value="wrong items">Wrong Items</option>
+                                            <option value="duplicated items">Duplicated Items</option>
+                                            <option value="expired items">Expired items</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
+                                        <h1 class="text-success" id="refund-TotalValue"></h1>
+                                    </div>
                                 </div>
                                 <h3>Customer Details</h3>
                                 <form>
@@ -92,7 +103,7 @@
                 </div>
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
-            <div class="modal-footer" >
+            <div class="modal-footer">
                 <button id="refund-button" class="btn btn-primary" disabled>Process Refund</button>
                 <button id="replace-button" class="btn btn-primary" disabled>Process Replacement</button>
             </div>
