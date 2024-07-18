@@ -50,10 +50,10 @@ function searchProducts($searchTerm)
         $output .= '
             <div class="col item-card">
                 <div class="card">
-                    <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '">    
+                    <img src="asset/images/products/' . $image . '" class="img-fluid" alt="' . $name . '">    
                     <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($unit_price) . ' </h5>
                     <div class="card-body">
-                        <h5 class="card-title">' . $name . ' (' . $variant_name . ')</h5>
+                        <h5 class="card-title  text-wrap">' . $name . ' (' . $variant_name . ')</h5>
                         <div class="item-info">
                             <div class="d-flex justify-content-between">
                                 <p> ' . $unit_value . ' ' . strtoupper($unit_name) . '</p>
