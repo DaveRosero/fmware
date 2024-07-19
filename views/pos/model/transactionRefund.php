@@ -7,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $pos_ref = $mysqli->real_escape_string($_POST['pos_ref']);
     $total_refund_value = $mysqli->real_escape_string($_POST['total_refund_value']);
-    $refund_items = $_POST['refund_items']; // This should be an array of items
+    $refund_items = $_POST['refund_items']; // This should be an array of items 
+    $refund_reason = $mysqli->real_escape_string($_POST['refund_reason']); // Capture refund reason from POST data
 
     // Check if refund record already exists
     $check_refund_query = "SELECT id FROM refunds WHERE pos_ref = '$pos_ref'";
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Insert new refund record
-        $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value) VALUES ('$pos_ref', '$total_refund_value')";
+        $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason) VALUES ('$pos_ref', '$total_refund_value', '$refund_reason')";
         if ($mysqli->query($refund_query) === TRUE) {
             $refund_id = $mysqli->insert_id; // Get the ID of the inserted refund record
         } else {
@@ -85,6 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error updating transaction status: " . $mysqli->error;
         exit;
     }
+
+
     echo "Refund processed successfully.";
     // Close the connection
     $mysqli->close();

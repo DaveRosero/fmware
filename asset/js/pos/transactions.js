@@ -111,10 +111,8 @@ $(document).ready(function () {
                               let isChecked = $(this).is(':checked');
                               let inputField = $(this).closest("tr").find(".refund-quantity");
                               let selectCondition = $(this).closest("tr").find(".item-condition");
-                
                               inputField.val(isChecked ? 1 : 0);
                               inputField.prop("disabled", !isChecked);
-                
                               if (isChecked) {
                                 selectCondition.val('1');
                                 selectCondition.prop("disabled", false);
@@ -205,6 +203,7 @@ $(document).ready(function () {
   $("#refund-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
     const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
+    const refundReason = $("#return-refund-reason").val();
     const refundItems = [];
     let goodItemsCount = 0;
     let badItemsCount = 0;
@@ -233,7 +232,8 @@ $(document).ready(function () {
       data: {
         pos_ref: posRef,
         total_refund_value: totalRefundValue,
-        refund_items: refundItems
+        refund_items: refundItems,
+        refund_reason: refundReason
       },
       success: function (response) {
         console.log("Refund response: ", response);
@@ -262,6 +262,7 @@ $(document).ready(function () {
   $("#replace-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
     const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
+    const replacementReason = $("#return-refund-reason").val();
     const replacedItems = [];
     let goodItemsCount = 0;
     let badItemsCount = 0;
@@ -290,7 +291,8 @@ $(document).ready(function () {
       data: {
         pos_ref: posRef,
         total_refund_value: totalRefundValue,
-        replaced_items: replacedItems
+        replaced_items: replacedItems,
+        replacement_reason: replacementReason
       },
       success: function (response) {
         console.log("Replace response: ", response);

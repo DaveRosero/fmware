@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pos_ref = $mysqli->real_escape_string($_POST['pos_ref']);
     $total_replace_value = $mysqli->real_escape_string($_POST['total_refund_value']); // Corrected variable name
     $replaced_items = $_POST['replaced_items']; // This should be an array of items
+    $replacement_reason = $mysqli->real_escape_string($_POST['replacement_reason']); // Capture refund reason from POST data
 
     // Check if replacement record already exists
     $check_replace_query = "SELECT id FROM replacements WHERE pos_ref = '$pos_ref'";
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Insert new replacement record
-        $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value) VALUES ('$pos_ref', '$total_replace_value')";
+        $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value, reason) VALUES ('$pos_ref', '$total_replace_value', '$replacement_reason')";
         if ($mysqli->query($replace_query) === TRUE) {
             $replace_id = $mysqli->insert_id; // Get the ID of the inserted replacement record
         } else {
