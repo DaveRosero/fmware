@@ -34,6 +34,7 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
+              transactionStatus = data.status;
               console.log("Transaction Data: ", data);
               var formatter = new Intl.NumberFormat("en-PH", {
                 style: "currency",
@@ -122,14 +123,42 @@ $(document).ready(function () {
                   $(".refund-quantity").change(function () {
                     updateRefundTotal();
                   });
-                  function toggleRefundButton() {
-                    const anyItemsSelected = $(".selectedItem:checked").length > 0;
-                    $("#refund-button").prop("disabled", !anyItemsSelected);
-                  }
 
-                  function toggleReplaceButton() {
+                  // function toggleRefundButton() {
+                  //   const anyItemsSelected = $(".selectedItem:checked").length > 0;
+                  //   $("#refund-button").prop("disabled", !anyItemsSelected || transactionStatus === 'replaced');
+                  // }
+                  // function toggleReplaceButton() {
+                  //   const anyItemsSelected = $(".selectedItem:checked").length > 0;
+                  //   $("#replace-button").prop("disabled", !anyItemsSelected || transactionStatus === 'refunded');
+                  // }
+
+                  function toggleButtons() {
                     const anyItemsSelected = $(".selectedItem:checked").length > 0;
-                    $("#replace-button").prop("disabled", !anyItemsSelected);
+                    // Initially disable both buttons
+                    $("#refund-button").prop("disabled", true);
+                    $("#replace-button").prop("disabled", true);
+
+                    if (anyItemsSelected) {
+                      switch (transactionStatus) {
+                        case 'paid':
+                          $("#refund-button").prop("disabled", false);
+                          $("#replace-button").prop("disabled", false);
+                          break;
+                        case 'refunded':
+                          $("#refund-button").prop("disabled", false);
+                          $("#replace-button").prop("disabled", true);
+                          break;
+                        case 'replaced':
+                          $("#refund-button").prop("disabled", true);
+                          $("#replace-button").prop("disabled", false);
+                          break;
+                          default:
+                            // Handle other statuses if needed
+                            break;
+                      }
+
+                    }
                   }
 
                   function toggleRefundReplaceReason() {
@@ -154,13 +183,15 @@ $(document).ready(function () {
                     } else {
                       $("#refund-TotalValue").text(formatter.format(totalRefundValue));
                     }
-                    toggleRefundButton();
-                    toggleReplaceButton();
+                    // toggleRefundButton();
+                    // toggleReplaceButton();
+                    toggleButtons()
                     toggleRefundReplaceReason();
 
                   }
-                  toggleRefundButton();
-                  toggleReplaceButton();
+                  // toggleRefundButton();
+                  // toggleReplaceButton();
+                  toggleButtons()
                   toggleRefundReplaceReason();
 
                 },
@@ -206,6 +237,7 @@ $(document).ready(function () {
     return badgeClass;
   }
 
+  let transactionStatus = '';
   //REFUND PROCESSING
   $("#refund-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
