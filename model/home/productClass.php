@@ -94,7 +94,6 @@
                             name,
                             code,
                             supplier_id,
-                            supplier_code,
                             barcode,
                             image,
                             description,
@@ -113,7 +112,7 @@
             $stmt->bind_param('i', $product_id);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $code, $supplier_id, $supplier_code, $barcode, $image, 
+                    $stmt->bind_result($id, $name, $code, $supplier_id, $barcode, $image, 
                                         $description, $brand_id, $category_id, $unit_id, $unit_value, 
                                         $variant_id, $expiration_date, $user_id, $date, $active);
                     $stmt->fetch();
@@ -123,7 +122,6 @@
                         'name' => $name,
                         'code' => $code,
                         'supplier_id' => $supplier_id,
-                        'supplier_code' => $supplier_code,
                         'barcode' => $barcode,
                         'image' => $image,
                         'description' => $description,

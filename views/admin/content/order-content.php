@@ -10,7 +10,7 @@
                     <button class="btn btn-secondary print"><i class="fa-solid fa-print"></i></button>
                 </div>
             </div>
-            <table id="order-table">
+            <table class="table table-borderless" id="order-table">
                 <thead>
                     <tr>
                         <th>Order Ref</th>
