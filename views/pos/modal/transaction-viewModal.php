@@ -62,7 +62,7 @@
                                 <div class="d-flex justify-content-between text-end">
                                     <div>
                                         <h5 class="text-secondary my-auto">Returned/Refunded Reason:</h5>
-                                        <select class="form-select select-reason" aria-label="Default select example" id="return-refund-reason">
+                                        <select class="form-select select-reason" aria-label="Default select example" id="replace-refund-reason" disabled>
                                             <option value="">Select Reason</option>
                                             <option value="wrong items">Wrong Items</option>
                                             <option value="duplicated items">Duplicated Items</option>
