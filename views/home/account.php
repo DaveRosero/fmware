@@ -10,8 +10,10 @@
     $cart = new Cart();
     $transaction = new Transaction();
 
-    $home->redirectUser();
-    $user_info = $user->getUser($_SESSION['email']);
+    if (isset($_SESSION['group']) && isset($_SESSION['user_id']) && $_SESSION['group'] !== 'user') {
+        $home->redirectUser($_SESSION['group']);
+    }
+    $user_info = $user->getUser($_SESSION['email'] ?? null);
 ?>
 <!DOCTYPE html>
 <html lang="en">

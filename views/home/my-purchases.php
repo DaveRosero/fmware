@@ -12,8 +12,10 @@
     $transaction = new Transaction();
     $order = new Order();
 
-    $home->redirectUser();
-    $user_info = $user->getUser($_SESSION['email']);
+    if (isset($_SESSION['group']) && isset($_SESSION['user_id']) && $_SESSION['group'] !== 'user') {
+        $home->redirectUser($_SESSION['group']);
+    }
+    $user_info = $user->getUser($_SESSION['email'] ?? null);
     $statusType = array('to-pay', 'pending', 'to-receive', 'delivered', 'completed', 'cancelled');
     if (!in_array($status, $statusType)) {
         header('Location: /404');

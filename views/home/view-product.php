@@ -10,7 +10,9 @@
     $product = new Product();
     $cart = new Cart();
 
-    $home->redirectUser();
+    if (isset($_SESSION['group']) && isset($_SESSION['user_id']) && $_SESSION['group'] !== 'user') {
+        $home->redirectUser($_SESSION['group']);
+    }
     $user_info = $user->getUser($_SESSION['email'] ?? null);
     $product_info = $product->getProductInfo($product_id);
 ?>
@@ -22,8 +24,7 @@
         <title>View Product | FMWare</title>
         <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
         <?php
-            include_once 'vendor/Select2/css/bundle.php'; 
-            include_once 'vendor/Bootstrap/css/bundle.php'; 
+            require_once 'config/load_vendors.php';
         ?>
         <link rel="stylesheet" href="/asset/css/index.css">
     </head>
@@ -36,12 +37,6 @@
 
         <?php include_once 'views/home/template/footer.php'; ?>
         
-        <?php
-            include_once 'vendor/jQuery/bundle.php';
-            include_once 'vendor/FontAwesome/kit.php';
-            include_once 'vendor/Select2/js/bundle.php';
-            include_once 'vendor/Bootstrap/js/bundle.php'; 
-        ?>
         <script src="/vendor/NotifyJS/js/notify.js"></script>
         <script src="/asset/js/home/view-product.js"></script>
     </body>
