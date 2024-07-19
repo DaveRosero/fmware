@@ -1,8 +1,9 @@
 <?php
+include_once 'session.php';
 require_once 'model/user/addressClass.php';
 require_once 'model/user/user.php';
 
-session_start(); // Start session if not already started
+// session_start(); // Start session if not already started
 
 $posaddress = new Address();
 $user = new User();
@@ -160,8 +161,6 @@ if ($_SESSION['group'] !== 'cashier') {
   <script src="asset/js/pos/history.js"></script>
   <script src="asset/js/pos/transactions.js"></script>
   <script src="asset/js/pos/jsTable.js"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script> -->
 </body>
 
 </html>
