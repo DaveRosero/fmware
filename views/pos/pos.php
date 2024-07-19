@@ -84,15 +84,15 @@ if ($_SESSION['group'] !== 'cashier') {
     <div class="row">
       <div class="col right-section border-end">
         <div class="col-body mt-2">
-          <div class="table-container">
-
+          <div class="table-container"
+            style="max-height: 93vh; height: 100%; width:auto; overflow-x:hidden; overflow-y:auto;">
             <form class="d-flex" role="search" id="barcode-form">
               <input class="form-control me-2" type="text" name="barcode" id="barcode" placeholder="Search">
               <button class="btn btn-outline-success cart-button" type="submit">Search</button>
             </form>
             <br>
             <tbody>
-              <div class="row row-cols-1 row-cols-lg-5 g-2 item-list">
+              <div class="row row-cols-1 row-cols-md-4 row-cols-lg-4 g-2 item-list h-100">
                 <?php include_once 'products.php' ?>
               </div>
             </tbody>

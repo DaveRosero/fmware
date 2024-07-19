@@ -36,10 +36,10 @@ function fetchAllProducts()
             $output .= '
                 <div class="col item-card">
                     <div class="card">
-                        <img src="asset/images/products/' . $row['image'] . '" class="card-img-top" alt="' . htmlspecialchars($row['name']) . '">    
+                        <img src="asset/images/products/' . $row['image'] . '" class="img-fluid" alt="' . htmlspecialchars($row['name']) . '">    
                         <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($row['unit_price']) . ' </h5>
                         <div class="card-body">
-                            <p class="card-title h6">' . htmlspecialchars($row['name']) . ' (' . htmlspecialchars($row['variant_name']) . ')</p>
+                            <h5 class="card-title  text-wrap">' . htmlspecialchars($row['name']) . ' (' . htmlspecialchars($row['variant_name']) . ')</h5>
                             <div class="item-info">
                                 <div class="d-flex justify-content-between">
                                     <p> ' . htmlspecialchars($row['unit_value']) . ' ' . strtoupper($row['unit_name']) . '</p>
