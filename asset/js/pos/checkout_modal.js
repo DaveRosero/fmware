@@ -19,7 +19,7 @@ $(document).ready(function () {
   // Function to show/hide fields based on dropdown selection
   function toggleFields() {
     if ($transactionTypeSelect.val() === "0") {
-      // POS selected
+      // Walk-in selected
       $firstNameInput.val("POS");
       $firstNameInput.closest(".mb-3").show();
       $lastNameInput.val("Customer");
@@ -32,7 +32,7 @@ $(document).ready(function () {
       $deliveryFeeValue.hide();
       $delivererSelect.closest(".mb-3").hide();
     } else if ($transactionTypeSelect.val() === "1") {
-      // Walk-in selected
+      // delivery selected
       $firstNameInput.closest(".mb-3").show();
       $lastNameInput.closest(".mb-3").show();
       $streetInput.closest(".mb-3").show();
@@ -158,17 +158,41 @@ $(document).ready(function () {
     $("#change-display").text(
       `₱${change.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
     );
-    toggleCheckoutButton(cashReceived, finalTotal);
+    validateCheckoutButton();
   }
 
-  // Function to toggle checkout button based on change amount
-  function toggleCheckoutButton(cashReceived, finalTotal) {
-    if (cashReceived >= finalTotal) {
-      $(".print").prop("disabled", false);
-    } else {
-      $(".print").prop("disabled", true);
+  // Function to validate all required fields
+  function validateCheckoutButton() {
+    let isValid = true;
+
+    if ($transactionTypeSelect.val() === "1") {
+      // Check required fields for Walk-in
+      isValid =
+        $firstNameInput.val().trim() !== "" &&
+        $lastNameInput.val().trim() !== "" &&
+        $streetInput.val().trim() !== "" &&
+        $brgyInput.val() !== "" &&
+        $contactInput.val().trim() !== "";
     }
+
+    // Check if the cash received is greater than or equal to the total amount
+    isValid =
+      isValid &&
+      parseFloat($("#cashRec-input").val()) >=
+        parseFloat(
+          $("#cart-total-modal").text().replace("₱", "").replace(/,/g, "")
+        );
+
+    $(".print").prop("disabled", !isValid);
   }
+
+  // Event listeners for input changes to validate checkout button
+  $firstNameInput.on("input", validateCheckoutButton);
+  $lastNameInput.on("input", validateCheckoutButton);
+  $streetInput.on("input", validateCheckoutButton);
+  $brgyInput.on("change", validateCheckoutButton);
+  $contactInput.on("input", validateCheckoutButton);
+  $("#cashRec-input").on("input", validateCheckoutButton);
 
   // Event listener for discount input
   $("#discount-input").on("input", function () {
