@@ -263,7 +263,7 @@
                     continue;
                 }
 
-                if ($stock <= $critical_level + 5) {
+                if ($stock < $critical_level + 5) {
                     $content .= '<option value="'.$product_id.'">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</option>';
                 }
             }

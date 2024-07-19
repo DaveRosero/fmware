@@ -55,7 +55,8 @@ if ($_SESSION['group'] !== 'cashier') {
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <!--Open Return & Refunds Modal (transaction search modal)-->
-            <a class="nav-link" data-bs-target="#transaction-searchModal" data-bs-toggle="modal" id="transaction-searchBtn">Refund & Replace</a>
+            <a class="nav-link" data-bs-target="#transaction-searchModal" data-bs-toggle="modal"
+              id="transaction-searchBtn">Refund & Replace</a>
           </li>
           <li class="nav-item">
             <!--Pick Up Modal (for pick up transaction search modal)-->
@@ -91,7 +92,7 @@ if ($_SESSION['group'] !== 'cashier') {
             </form>
             <br>
             <tbody>
-              <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 item-list">
+              <div class="row row-cols-1 row-cols-lg-5 g-2 item-list">
                 <?php include_once 'products.php' ?>
               </div>
             </tbody>

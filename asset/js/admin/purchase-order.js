@@ -1,5 +1,9 @@
 $(document).ready(function(){
-    $('#purchase-order-table').DataTable();
+    $('#purchase-order-table').DataTable({
+        order: [
+            ['4', 'desc']
+        ]
+    });
 
     $('#supplier').select2({
         dropdownParent: $('#createPO'),
