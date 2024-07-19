@@ -31,9 +31,9 @@ while ($stmt->fetch()) {
   $output .= '
     <div class="item-card">
       <div class="card">
-        <img src="asset/images/products/' . $image . '" class="card-img-top" alt="' . $name . '">
+        <img src="asset/images/products/' . $image . '" class="img-fluid" alt="' . $name . '">
         <div class="card-body">
-          <p class="card-title h6">' . $name . '(' . $variant . ')</p>
+          <h5 class="card-title  text-wrap">' . $name . '(' . $variant . ')</h5>
           <p class="card-text">Unit: ' . $unit_value . ' ' . strtoupper($unit) . '</p>
           <p class="card-text">Stock: ' . $qty . '</p>
           <div class="d-grid">
