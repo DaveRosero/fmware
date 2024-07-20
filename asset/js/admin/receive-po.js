@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     function updatePrice (po_ref, id, price, $element) {
         $.ajax({
-            url: '/price-po-item',
+            url: '/actual-price-po',
             method: 'POST',
             data: {
                 po_ref : po_ref,
@@ -33,11 +33,9 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
-                $element.closest('tr').find('td:eq(5)').text('₱' + json.total);
-                $element.closest('tr').find('td:eq(7)').text('₱' + json.amount);
+                $element.closest('tr').find('td:eq(8)').text('₱' + json.amount);
                 $('#received_total').text('₱' + json.received_total);
                 $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
-                $('#order_total').text('₱' + json.order_total);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
@@ -67,7 +65,7 @@ $(document).ready(function(){
                     return;
                 }
 
-                $element.closest('tr').find('td:eq(7)').text('₱' + json.amount);
+                $element.closest('tr').find('td:eq(8)').text('₱' + json.amount);
                 $('#received_total').text('₱' + json.received_total);
                 $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
@@ -126,7 +124,17 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(json) {
                 if (json.redirect) {
-                    window.location.href = json.redirect;
+                    Swal.fire({
+                        title: 'Purchase Order Received!',
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = json.redirect;
+                        }
+                    });
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -148,10 +156,10 @@ $(document).ready(function(){
         var po_ref = $(this).data('po-ref');
         var price = $(this).val();
 
-        if (price < 0) {
+        if (price <= 0) {
             Swal.fire({
                 title: "Oops!",
-                text: "Please enter a positive number on Price.",
+                text: "Please enter a number greater than zero (0) in Price.",
                 icon: "warning"
             });
             $(this).val(0);
@@ -225,7 +233,43 @@ $(document).ready(function(){
 
     $('#save').click(function(){
         var po_ref = $(this).data('po-ref');
+        var filled = true;
 
-        completePO(po_ref);
+        $('.poi-price').each(function(){
+            if ($(this).val().trim() === "" || $(this).val().trim() === "0") {
+                filled = false;
+            }
+        });
+
+        $('.poi-received').each(function(){
+            if ($(this).val().trim() === "" || $(this).val().trim() === "0") {
+                filled = false;
+            }
+        });
+
+        if (!filled) {
+            Swal.fire({
+                title: 'Please fill in all fields correctly.',
+                text: 'Ensure that Price and Received field/s has value/s greater than zero (0).',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Receiving Purchase Order',
+            text: "Do you want to receive and finalize this Purchase Order?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, receive it!',
+            cancelButtonText: 'No, cancel!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                completePO(po_ref);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            }
+        });
     });
 });

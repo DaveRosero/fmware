@@ -5,7 +5,7 @@
 
     class PO extends Admin {
         public function showPO () {
-            $query = 'SELECT p.po_ref, s.name, p.total, p.date, p.status
+            $query = 'SELECT p.po_ref, s.name, p.total, p.date, p.status, p.date_received
                     FROM purchase_order p
                     INNER JOIN supplier s ON s.id = p.supplier_id';
             $stmt = $this->conn->prepare($query);
@@ -19,7 +19,7 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($po_ref, $supplier, $total, $date, $status);
+            $stmt->bind_result($po_ref, $supplier, $total, $date, $status, $received);
             $content = '';
             while ($stmt->fetch()) {
                 if ($status == 3) {
@@ -71,8 +71,8 @@
                 $content .= '<tr>
                                 <td>'.$po_ref.'</td>
                                 <td>'.$supplier.'</td>
-                                <td>₱'.number_format($total, 2).'</td>
                                 <td>'.$date.'</td>
+                                <td>'.$received.'</td>
                                 <td>'.$po_status.'</td>
                                 <td>'.$button.'</td>
                             </tr>';
@@ -454,17 +454,9 @@
 
             $stmt->close();
             $total = $this->getItemTotal($po_ref, $product_id);
-            $amount = $this->getPOAmount($po_ref, $product_id);
-            $received_total = $this->getPOReceivedTotal($po_ref);
-            $shipping = $this->getShipping($po_ref);
-            $others = $this->getOthers($po_ref);
-            $grand_total = str_replace(',', '', $received_total) + $shipping + $others;
             $order_total = $this->getPOTotal($po_ref);
             $json = array(
                 'total' => $total,
-                'grand_total' => number_format($grand_total, 2),
-                'amount' => $amount,
-                'received_total' => $received_total,
                 'order_total' => $order_total
             );
             echo json_encode($json);
@@ -595,7 +587,7 @@
         }
 
         public function getPendingPOItems ($po_ref) {
-            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others, poi.actual_price
                     FROM purchase_order_items poi
                     INNER JOIN product ON product.id = poi.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
@@ -614,24 +606,25 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others);
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others, $actual_price);
             $content = '';
             $count = 1;
             while ($stmt->fetch()) {
                 $total = $qty * $price;
-                $amount = $received * $price;
+                $amount = $received * $actual_price;
                 $content .= '<tr>
                                 <td>'.$count.'</td>
                                 <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
                                 <td>'.$qty.'</td>
                                 <td>'.$po_unit.'</td>
+                                <td>₱'.number_format($price, 2).'</td>
+                                <td id="poi-total">₱'.number_format($total, 2).'</td>
                                 <td>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">₱</span>
-                                        <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
+                                        <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$actual_price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
                                     </div>
                                 </td>
-                                <td id="poi-total">₱'.number_format($total, 2).'</td>
                                 <td><input class="form-control poi-received" type="number" name="received" value="'.$received.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
                                 <td>₱'.number_format($amount, 2).'</td>
                             </tr>';
@@ -645,7 +638,7 @@
             $content .= '<tr>
                             <td class="text-end fw-semibold" colspan="5">Order Total: </td>
                             <td id="order_total">₱'.$order_total.'</td>
-                            <td class="text-end fw-semibold">Received Total: </td>
+                            <td class="text-end fw-semibold" colspan="2">Received Total: </td>
                             <td id="received_total">₱'.$received_total.'</td>
                         </tr>';
             $json = array(
@@ -696,7 +689,7 @@
         }
 
         public function getPOAmount ($po_ref, $product_id) {
-            $query = 'SELECT received, price FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $query = 'SELECT received, actual_price FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('si', $po_ref, $product_id);
 
@@ -743,7 +736,7 @@
         }
 
         public function getPOReceivedTotal ($po_ref) {
-            $query = 'SELECT price, received FROM purchase_order_items WHERE po_ref = ?';
+            $query = 'SELECT actual_price, received FROM purchase_order_items WHERE po_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $po_ref);
 
@@ -945,10 +938,11 @@
 
         public function completePO ($po_ref) {
             $logs = new Logs();
+            $current_date = date('F j, Y');
             
-            $query = 'UPDATE purchase_order SET status = 2 WHERE po_ref = ?';
+            $query = 'UPDATE purchase_order SET status = 2, date_received = ? WHERE po_ref = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('s', $po_ref);
+            $stmt->bind_param('ss', $current_date, $po_ref);
 
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
@@ -978,7 +972,7 @@
         }
 
         public function viewCompletePO ($po_ref) {
-            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others, poi.actual_price
                     FROM purchase_order_items poi
                     INNER JOIN product ON product.id = poi.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
@@ -997,12 +991,12 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others);
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others, $actual_price);
             $content = '';
             $count = 1;
             while ($stmt->fetch()) {
                 $total = $qty * $price;
-                $amount = $received * $price;
+                $amount = $received * $actual_price;
                 $content .= '<tr>
                                 <td class="text-center">'.$count.'</td>
                                 <td class="text-start">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
@@ -1010,6 +1004,7 @@
                                 <td class="text-center">'.$po_unit.'</td>
                                 <td class="text-center">₱'.number_format($price, 2).'</td>
                                 <td class="text-center" id="poi-total">₱'.number_format($total, 2).'</td>
+                                <td>₱'.number_format($actual_price, 2).'</td>
                                 <td class="text-center">'.$received.'</td>
                                 <td class="text-center">₱'.number_format($amount, 2).'</td>
                             </tr>';
@@ -1022,7 +1017,7 @@
             $content .= '<tr>
                             <td class="text-end fw-semibold" colspan="5">Order Total: </td>
                             <td class="text-center" id="order_total">₱'.$order_total.'</td>
-                            <td class="text-end fw-semibold">Received Total: </td>
+                            <td class="text-end fw-semibold" colspan="2">Received Total: </td>
                             <td class="text-center" id="received_total">₱'.$received_total.'</td>
                         </tr>';
             echo $content;
@@ -1135,6 +1130,86 @@
 
             $stmt->close();
             return;
+        }
+
+        public function updateActualPrice ($po_ref, $product_id, $price) {
+            $query = 'UPDATE purchase_order_items SET actual_price = ? WHERE product_id = ? AND po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('dis', $price, $product_id, $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $total = $this->getActualTotal($po_ref, $product_id);
+            $amount = $this->getPOAmount($po_ref, $product_id);
+            $received_total = $this->getPOReceivedTotal($po_ref);
+            $shipping = $this->getShipping($po_ref);
+            $others = $this->getOthers($po_ref);
+            $grand_total = str_replace(',', '', $received_total) + $shipping + $others;
+            $order_total = $this->getActualPOTotal($po_ref);
+            $json = array(
+                'total' => $total,
+                'grand_total' => number_format($grand_total, 2),
+                'amount' => $amount,
+                'received_total' => $received_total,
+                'order_total' => $order_total
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function getActualTotal ($po_ref, $product_id) {
+            $query = 'SELECT qty, actual_price FROM purchase_order_items WHERE po_ref = ? AND product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si', $po_ref, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($qty, $price);
+            $stmt->fetch();
+            $stmt->close();
+
+            $total = $qty * $price;
+            return number_format($total, 2);
+        }
+
+        public function getActualPOTotal ($po_ref) {
+            $query = 'SELECT actual_price, qty FROM purchase_order_items WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->bind_result($qty, $price);
+            $grand_total = 0;
+            while ($stmt->fetch()) {
+                $grand_total += $qty * $price;
+            }
+            $stmt->close();
+
+            $this->updatePOTotal($grand_total, $po_ref);
+            return number_format($grand_total, 2);
         }
     }
 ?>

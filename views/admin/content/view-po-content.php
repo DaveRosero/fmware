@@ -53,6 +53,7 @@
                             <th>Unit</th>
                             <th>Price</th>
                             <th>Total</th>
+                            <th>Actual Price</th>
                             <th>Received</th>
                             <th>Amount</th>
                         <?php endif; ?>
