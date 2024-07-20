@@ -247,10 +247,10 @@ $(document).ready(function(){
         var po_ref = $(this).data('po-ref');
         var qty = $(this).val();
 
-        if (qty < 0) {
+        if (qty <= 0) {
             Swal.fire({
                 title: "Oops!",
-                text: "Please enter one(1) or more in Quantity.",
+                text: "Please enter one (1) or more in Quantity.",
                 icon: "warning"
             });
             $(this).val(1);
@@ -295,6 +295,22 @@ $(document).ready(function(){
 
     $('#save').click(function(){
         var po_ref = $(this).data('po-ref');
+        var filled = true;
+
+        $('.poi-unit').each(function(){
+            if ($(this).val().trim() === "") {
+              filled = false;
+            }
+        });
+
+        if (!filled) {
+            Swal.fire({
+                title: 'Please fill in all Unit.',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            });
+            return;
+        }
 
         Swal.fire({
             title: 'Saving Purchase Order',

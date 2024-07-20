@@ -16,8 +16,8 @@
                     <tr>
                         <th>P.O. #</th>
                         <th>Supplier</th>
-                        <th>Total Amount</th>
                         <th>Date Created</th>
+                        <th>Date Received</th>
                         <th>Status</th>
                         <th style="width: 100px;">Action</th>
                     </tr>
