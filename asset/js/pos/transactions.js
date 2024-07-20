@@ -146,16 +146,19 @@ $(document).ready(function () {
                           $("#replace-button").prop("disabled", false);
                           break;
                         case 'refunded':
+                        case 'fully refunded':
+                        case 'partially refunded':
                           $("#refund-button").prop("disabled", false);
                           $("#replace-button").prop("disabled", true);
                           break;
                         case 'replaced':
+                        case 'fully replaced':
+                        case 'partially replaced':
                           $("#refund-button").prop("disabled", true);
                           $("#replace-button").prop("disabled", false);
                           break;
-                          default:
-                            // Handle other statuses if needed
-                            break;
+                        default:
+                          break;
                       }
 
                     }
@@ -228,11 +231,22 @@ $(document).ready(function () {
         badgeClass = 'badge bg-primary text-white';
         break;
       case 'void':
-      case 'refunded':
-      case 'replaced':
         badgeClass = 'badge bg-secondary text-white';
         break;
-      // Add more cases as needed for other status types
+      case 'refunded':
+      case 'fully refunded':
+        badgeClass = 'badge bg-success text-white';
+        break;
+      case 'replaced':
+      case 'fully replaced':
+        badgeClass = 'badge bg-info text-white';
+        break;
+      case 'partially refunded':
+        badgeClass = 'badge bg-warning text-white';
+        break;
+      case 'partially replaced':
+        badgeClass = 'badge bg-warning text-white';
+        break;
     }
     return badgeClass;
   }
@@ -246,6 +260,8 @@ $(document).ready(function () {
     const refundItems = [];
     let goodItemsCount = 0;
     let badItemsCount = 0;
+    let itemsRemaining = false;
+    let newStatus = 'fully refunded';
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
       const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
@@ -258,12 +274,19 @@ $(document).ready(function () {
       } else if (condition === "2") {
         badItemsCount += parseInt(refund_qty);
       }
-
+      const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text()) - parseInt(refund_qty);
+      if (remainingQty > 0) {
+        itemsRemaining = true;
+      }
       console.log("Refund Item: ", {
         product_id: product_id,
         refund_qty: refund_qty,
         condition: condition
       });
+
+      if (itemsRemaining) {
+        newStatus = 'partially refunded';
+      }
     });
     $.ajax({
       url: "/pos-processRefund",
@@ -272,7 +295,8 @@ $(document).ready(function () {
         pos_ref: posRef,
         total_refund_value: totalRefundValue,
         refund_items: refundItems,
-        refund_reason: refundReason
+        refund_reason: refundReason,
+        status: newStatus
       },
       success: function (response) {
         console.log("Refund response: ", response);
@@ -281,7 +305,7 @@ $(document).ready(function () {
           title: 'Refund Processed',
           html: `Refund processed successfully.<br>Good items refunded: ${goodItemsCount}<br>Bad items refunded: ${badItemsCount}`,
         });
-        $("#transaction-status").text("Refunded");
+        $("#transaction-status").text(newStatus);
         $("#transaction-viewModal").modal("hide");
         fetchTransactions()
       },
@@ -305,6 +329,9 @@ $(document).ready(function () {
     const replacedItems = [];
     let goodItemsCount = 0;
     let badItemsCount = 0;
+    let itemsRemaining = false;
+    let newStatus = 'fully replaced';
+
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
       const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
@@ -318,11 +345,20 @@ $(document).ready(function () {
         badItemsCount += parseInt(refund_qty);
       }
 
+      const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text()) - parseInt(refund_qty);
+      if (remainingQty > 0) {
+        itemsRemaining = true;
+      }
       console.log("Replacement Item: ", {
         product_id: product_id,
         refund_qty: refund_qty,
         condition: condition
       });
+
+      if (itemsRemaining) {
+        newStatus = 'partially replaced';
+      }
+
     });
     $.ajax({
       url: "/pos-processReplace",
@@ -331,7 +367,8 @@ $(document).ready(function () {
         pos_ref: posRef,
         total_refund_value: totalRefundValue,
         replaced_items: replacedItems,
-        replacement_reason: replacementReason
+        replacement_reason: replacementReason,
+        status: newStatus
       },
       success: function (response) {
         console.log("Replace response: ", response);
@@ -340,7 +377,7 @@ $(document).ready(function () {
           title: 'Replacement Processed',
           html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
         });
-        $("#transaction-status").text("Replaced");
+        $("#transaction-status").text(newStatus); // Use newStatus variable
         $("#transaction-viewModal").modal("hide");
         fetchTransactions()
       },

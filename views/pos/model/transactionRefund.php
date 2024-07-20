@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total_refund_value = $mysqli->real_escape_string($_POST['total_refund_value']);
     $refund_items = $_POST['refund_items']; // This should be an array of items 
     $refund_reason = $mysqli->real_escape_string($_POST['refund_reason']); // Capture refund reason from POST data
+    $newStatus = $mysqli->real_escape_string($_POST['status']); // Changed from 'newStatus' to 'status'
 
     // Check if refund record already exists
     $check_refund_query = "SELECT id FROM refunds WHERE pos_ref = '$pos_ref'";
@@ -81,12 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $update_status_query = "UPDATE pos SET status = 'refunded' WHERE pos_ref = '$pos_ref'";
+    $update_status_query = "UPDATE pos SET status = '$newStatus' WHERE pos_ref = '$pos_ref'";
     if ($mysqli->query($update_status_query) === FALSE) {
         echo "Error updating transaction status: " . $mysqli->error;
         exit;
     }
-
 
     echo "Refund processed successfully.";
     // Close the connection
@@ -94,3 +94,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Invalid request method.";
 }
+?>

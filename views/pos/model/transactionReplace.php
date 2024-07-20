@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total_replace_value = $mysqli->real_escape_string($_POST['total_refund_value']); // Corrected variable name
     $replaced_items = $_POST['replaced_items']; // This should be an array of items
     $replacement_reason = $mysqli->real_escape_string($_POST['replacement_reason']); // Capture refund reason from POST data
+    $newStatus = $mysqli->real_escape_string($_POST['status']); // Changed from 'newStatus' to 'status'
 
     // Check if replacement record already exists
     $check_replace_query = "SELECT id FROM replacements WHERE pos_ref = '$pos_ref'";
@@ -74,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update transaction status to 'replaced'
-    $update_status_query = "UPDATE pos SET status = 'replaced' WHERE pos_ref = '$pos_ref'";
+    $update_status_query = "UPDATE pos SET status = '$newStatus' WHERE pos_ref = '$pos_ref'";
     if ($mysqli->query($update_status_query) === FALSE) {
         echo "Error updating transaction status: " . $mysqli->error;
         exit;
