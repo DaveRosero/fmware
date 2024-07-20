@@ -128,7 +128,9 @@ $(document).ready(function () {
     });
   });
 
-  $("#history-search").DataTable();
+  $("#history-search").DataTable({
+    order: [[1, "desc"]],
+  });
 
   $(".void").on("click", function (event) {
     event.preventDefault(); // Prevent default action if needed

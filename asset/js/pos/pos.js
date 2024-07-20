@@ -126,18 +126,33 @@ $(document).ready(function () {
   $("#barcode").on("keydown", function (event) {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent default form submission
+
+      var barcodeInput = $("#barcode").val().trim();
+
+      // Remove prefix (e.g., 'FM') if it exists
+      var prefix = "FM";
+      if (barcodeInput.startsWith(prefix)) {
+        barcodeInput = barcodeInput.slice(prefix.length); // Remove prefix
+      }
+
+      console.log("Processed Barcode:", barcodeInput); // Debugging line
+
       $.ajax({
         url: "/pos-barcode",
         method: "POST",
         data: $("#barcode-form").serialize(),
         dataType: "json",
         success: function (response) {
-          // Handle AJAX success
+          addPOS(response.id, response.price);
+          $("#barcode").val("").focus();
         },
         error: function (xhr, status, error) {
-          // Handle AJAX error
+          console.error("AJAX call failed");
+          console.error("Status:", status);
+          console.error("Error:", error);
         },
       });
+      return false;
     }
   });
 
@@ -152,10 +167,8 @@ $(document).ready(function () {
         data: $(this).serialize(),
         dataType: "json",
         success: function (json) {
-          console.log(json.id);
-          console.log(json.price);
           addPOS(json.id, json.price);
-          barcodeInput.val("").focus();
+          $("#barcode").val("").focus();
         },
         error: function (xhr, status, error) {
           console.error("AJAX call failed");

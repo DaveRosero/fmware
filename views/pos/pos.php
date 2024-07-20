@@ -3,7 +3,6 @@ include_once 'session.php';
 require_once 'model/user/addressClass.php';
 require_once 'model/user/user.php';
 
-// session_start(); // Start session if not already started
 
 $posaddress = new Address();
 $user = new User();
@@ -89,7 +88,6 @@ if ($_SESSION['group'] !== 'cashier') {
             style="max-height: 93vh; height: 100%; width:auto; overflow-x:hidden; overflow-y:auto;">
             <form class="d-flex" role="search" id="barcode-form">
               <input class="form-control me-2" type="text" name="barcode" id="barcode" placeholder="Search">
-              <button class="btn btn-outline-success cart-button" type="submit">Search</button>
             </form>
             <br>
             <tbody>

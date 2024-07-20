@@ -427,28 +427,7 @@ $(document).ready(function () {
 
     submitForm(pos_ref); // Submit the form before printing
     // Call handlePrintAndAlert after form submission
-    handlePrintAndAlert();
-    // Function to handle printing and Swal alert in sequence
   });
-
-  function handlePrintAndAlert() {
-    printReceipt(); // Start printing
-
-    // Swal alert shown after printing completes
-    Swal.fire({
-      title: "Transaction successful!",
-      icon: "success",
-      showCancelButton: false,
-      confirmButtonText: "Ok",
-      allowOutsideClick: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setTimeout(() => {
-          window.location.href = "/pos";
-        }, 500);
-      }
-    });
-  }
 
   function submitForm(pos_ref) {
     var formData = $("#transaction-form").serializeArray();
@@ -526,11 +505,26 @@ $(document).ready(function () {
       success: function (response) {
         resetCart();
         resetForm();
-        printReceipt();
+        handlePrintAndAlert();
       },
       error: function (xhr, status, error) {
         console.error("Error in form submission:", status, error);
       },
+    });
+  }
+
+  function handlePrintAndAlert() {
+    // Show SweetAlert first
+    Swal.fire({
+      title: "Transaction successful!",
+      icon: "success",
+      showCancelButton: false,
+      confirmButtonText: "Print Receipt",
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        printReceipt();
+      }
     });
   }
 
