@@ -1,8 +1,13 @@
 <?php
+session_start();
 require_once 'model/database/database.php';
+require_once 'model/admin/logsClass.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
+    $logs = new Logs(); // Create a new instance of Logs
+
     $refund_items = [];
 
     $pos_ref = $mysqli->real_escape_string($_POST['pos_ref']);
@@ -10,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $refund_items = $_POST['refund_items']; // This should be an array of items 
     $refund_reason = $mysqli->real_escape_string($_POST['refund_reason']); // Capture refund reason from POST data
     $newStatus = $mysqli->real_escape_string($_POST['status']); // Changed from 'newStatus' to 'status'
+    $user_id = $_SESSION['user_id']; // Capture the user ID from the session
 
     // Check if refund record already exists
     $check_refund_query = "SELECT id FROM refunds WHERE pos_ref = '$pos_ref'";
@@ -25,11 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error updating refund: " . $mysqli->error;
             exit;
         }
+        $action_log = 'Updated refund for Transaction ' . $pos_ref . ', Amount: ₱' . $total_refund_value;
     } else {
         // Insert new refund record
         $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason) VALUES ('$pos_ref', '$total_refund_value', '$refund_reason')";
         if ($mysqli->query($refund_query) === TRUE) {
             $refund_id = $mysqli->insert_id; // Get the ID of the inserted refund record
+            $action_log = 'Created new refund for Transaction ' . $pos_ref . ', Amount: ₱' . $total_refund_value;
         } else {
             echo "Error inserting refund: " . $mysqli->error;
             exit;
@@ -87,11 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error updating transaction status: " . $mysqli->error;
         exit;
     }
-
+    $logs->newLog($action_log, $user_id, date('F j, Y g:i A')); // Log the refund action
     echo "Refund processed successfully.";
     // Close the connection
     $mysqli->close();
 } else {
     echo "Invalid request method.";
 }
-?>
