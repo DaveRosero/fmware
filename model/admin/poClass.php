@@ -1139,7 +1139,9 @@
                     'not_base_price' => 'not_base_price',
                     'base_price' => '₱'.number_format($product['base_price'], 2),
                     'selling_price' => '₱'.number_format($product['selling_price'], 2),
-                    'new_base_price' => '₱'.number_format($price, 2)
+                    'new_base_price' => '₱'.number_format($price, 2),
+                    'product_id' => $product_id,
+                    'int_new_bp' => $price
                 );
                 echo json_encode($json);
                 return;
@@ -1271,6 +1273,24 @@
                 'base_price' => $base_price,
                 'selling_price' => $selling_price
             ];
+        }
+
+        public function updateSRP ($product_id, $base_price, $selling_price) {
+            $query = 'UPDATE price_list SET base_price = ?, unit_price = ? WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ddi', $base_price, $selling_price, $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            return;
         }
     }
 ?>

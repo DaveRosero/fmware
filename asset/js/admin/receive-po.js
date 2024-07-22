@@ -54,15 +54,14 @@ $(document).ready(function(){
                         willClose: () => {
                             // This function will be called when the SweetAlert is closed
                             if (Swal.getCancelButton().classList.contains('swal2-cancel')) {
-                                getPendingPOItems();
+                                location.reload();
                             }
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
                             const newSrp = result.value;
-                            // Process the new SRP here, for example send it to the server
-                            console.log("New SRP:", newSrp);
-                            // Add your code to handle the new SRP, e.g., an AJAX request to update the price
+
+                            updateSRP(json.product_id, json.int_new_bp, newSrp);
                         }
                     });
                     return;
@@ -182,6 +181,26 @@ $(document).ready(function(){
     
     function hasDecimal(num) {
         return num % 1 !== 0;
+    }
+
+    function updateSRP (product_id, base_price, selling_price) {
+        $.ajax({
+            url: '/update-srp-po',
+            method: 'POST',
+            data: {
+                product_id : product_id,
+                base_price : base_price,
+                selling_price : selling_price
+            },
+            dataType: 'json',
+            success: function(json) {
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
     }
 
     getPendingPOItems();
