@@ -22,6 +22,7 @@ $(document).ready(function () {
             $('#transaction-table-body').append(row);
           }
         });
+        $('#transaction-table').DataTable();
         // Bind click event to view button (if not already bound)
         $('.view-transaction-btn').off('click').on('click', function () {
           var posRef = $(this).data('bs-posref');
@@ -251,6 +252,8 @@ $(document).ready(function () {
     return badgeClass;
   }
 
+  fetchTransactions()
+
   let transactionStatus = '';
   //REFUND PROCESSING
   $("#refund-button").click(function () {
@@ -391,4 +394,5 @@ $(document).ready(function () {
       }
     });
   });
+  
 });
