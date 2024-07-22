@@ -60,19 +60,17 @@
                                 </div>
                                 <h3>Refund Details</h3>
                                 <div class="d-flex justify-content-between text-end">
-                                    <div>
-                                        <h5 class="text-secondary my-auto">Returned/Refunded Reason:</h5>
-                                        <select class="form-select select-reason" aria-label="Default select example" id="replace-refund-reason" disabled>
-                                            <option value="">Select Reason</option>
-                                            <option value="wrong items">Wrong Items</option>
-                                            <option value="duplicated items">Duplicated Items</option>
-                                            <option value="expired items">Expired items</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
-                                        <h1 class="text-success" id="refund-TotalValue"></h1>
-                                    </div>
+                                    <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
+                                    <h1 class="text-success" id="refund-TotalValue"></h1>
+                                </div>
+                                <div>
+                                    <h5 class="text-secondary me-auto">Returned/Refunded Reason:</h5>
+                                    <select class="form-select select-reason" aria-label="Default select example" id="replace-refund-reason" disabled>
+                                        <option value="">Select Reason</option>
+                                        <option value="wrong items">Wrong Items</option>
+                                        <option value="duplicated items">Duplicated Items</option>
+                                        <option value="expired items">Expired items</option>
+                                    </select>
                                 </div>
                                 <h3>Customer Details</h3>
                                 <form>
