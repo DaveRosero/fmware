@@ -6,24 +6,34 @@ $(document).ready(function () {
       method: 'GET', // or 'POST' as per your backend implementation
       dataType: 'json', // Assuming JSON response from server
       success: function (response) {
-        // Clear existing table rows
-        $('#transaction-table-body').empty();
-        // Iterate through transactions and append rows
-        response.forEach(function (transaction) {
-          if (transaction.status !== 'void') {
-            var row = '<tr>' +
-              '<td>' + transaction.pos_ref + '</td>' +
-              '<td>' + transaction.date + '</td>' +
-              '<td>₱' + parseFloat(transaction.total).toFixed(2) + '</td>' +
-              '<td>' + (transaction.name ? transaction.name : '') + '</td>' +
-              '<td><span class="' + getStatusBadgeClass(transaction.status) + '">' + transaction.status + '</span></td>' +
-              '<td><button class="btn btn-primary view-transaction-btn" data-bs-posref="' + transaction.pos_ref + '">View</button></td>' +
-              '</tr>';
-            $('#transaction-table-body').append(row);
-          }
-        })
-        // Bind click event to view button (if not already bound)
-        $('.view-transaction-btn').off('click').on('click', function () {
+          // Function to format date to month name and 12-hour time
+      function formatDateTime(dateTime) {
+        const date = new Date(dateTime);
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+        return date.toLocaleString('en-US', options);
+      }
+        // Initialize DataTable
+      $('#transaction-table').DataTable({
+        data: response.filter(transaction => transaction.status !== 'void').map(transaction => [
+          transaction.pos_ref,
+          formatDateTime(transaction.date),
+          '₱' + parseFloat(transaction.total).toFixed(2),
+          transaction.name || '',
+          '<span class="' + getStatusBadgeClass(transaction.status) + '">' + transaction.status + '</span>',
+          '<button class="btn btn-primary view-transaction-btn" data-bs-posref="' + transaction.pos_ref + '">View</button>'
+        ]),
+        columns: [
+          { title: 'POS Ref' },
+          { title: 'Date' },
+          { title: 'Total' },
+          { title: 'Name' },
+          { title: 'Status' },
+          { title: 'Actions' }
+        ],
+        order: [[1, "desc"]],
+        destroy: true // Destroy the existing DataTable instance to recreate it
+      });
+      $('#transaction-table').on('click', '.view-transaction-btn', function () {
           var posRef = $(this).data('bs-posref');
           // Implement view transaction details functionality here
           $.ajax({
