@@ -21,10 +21,9 @@ $(document).ready(function () {
               '</tr>';
             $('#transaction-table-body').append(row);
           }
-        });
-        $('#transaction-table').DataTable();
+        })
         // Bind click event to view button (if not already bound)
-        $('#transaction-table-body').on('click', '.view-transaction-btn', function () {
+        $('.view-transaction-btn').off('click').on('click', function () {
           var posRef = $(this).data('bs-posref');
           // Implement view transaction details functionality here
           $.ajax({
@@ -251,9 +250,6 @@ $(document).ready(function () {
     }
     return badgeClass;
   }
-
-  fetchTransactions()
-
   let transactionStatus = '';
   //REFUND PROCESSING
   $("#refund-button").click(function () {
