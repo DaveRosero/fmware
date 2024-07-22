@@ -265,32 +265,56 @@ $(document).ready(function () {
     let badItemsCount = 0;
     let itemsRemaining = false;
     let newStatus = 'fully refunded';
+
+    // Validate reason and items
+    let isValid = true;
+    if (refundReason === "") {
+      isValid = false;
+      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+    } else {
+      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+    }
+
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
       const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
       const condition = $(this).closest("tr").find(".item-condition").val();
-      refundItems.push({ product_id, refund_qty, condition });
 
+      // Check if condition is selected
+      if (condition === "") {
+        isValid = false;
+        $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
+      } else {
+        $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
+      }
+
+      refundItems.push({ product_id, refund_qty, condition });
 
       if (condition === "1") {
         goodItemsCount += parseInt(refund_qty);
       } else if (condition === "2") {
         badItemsCount += parseInt(refund_qty);
       }
+
       const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text()) - parseInt(refund_qty);
       if (remainingQty > 0) {
         itemsRemaining = true;
       }
-      console.log("Refund Item: ", {
-        product_id: product_id,
-        refund_qty: refund_qty,
-        condition: condition
-      });
 
       if (itemsRemaining) {
         newStatus = 'partially refunded';
       }
     });
+
+    if (!isValid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please select a condition for all selected items and provide a reason for the refund.',
+      });
+      return; // Stop further processing
+    }
+
     $.ajax({
       url: "/pos-processRefund",
       method: "POST",
@@ -302,7 +326,6 @@ $(document).ready(function () {
         status: newStatus
       },
       success: function (response) {
-        console.log("Refund response: ", response);
         Swal.fire({
           icon: 'success',
           title: 'Refund Processed',
@@ -310,10 +333,9 @@ $(document).ready(function () {
         });
         $("#transaction-status").text(newStatus);
         $("#transaction-viewModal").modal("hide");
-        fetchTransactions()
+        fetchTransactions();
       },
       error: function (xhr, status, error) {
-        console.error("Error processing refund: ", status, error);
         Swal.fire({
           icon: 'error',
           title: 'Refund Failed',
@@ -323,8 +345,6 @@ $(document).ready(function () {
     });
   });
 
-
-  //REPLACEMENT PROCESSING
   $("#replace-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
     const totalRefundValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
@@ -335,12 +355,29 @@ $(document).ready(function () {
     let itemsRemaining = false;
     let newStatus = 'fully replaced';
 
+    // Validate reason and items
+    let isValid = true;
+    if (replacementReason === "") {
+      isValid = false;
+      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+    } else {
+      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+    }
+
     $(".selectedItem:checked").each(function () {
       const product_id = $(this).data("product-id");
       const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
       const condition = $(this).closest("tr").find(".item-condition").val();
-      replacedItems.push({ product_id, refund_qty, condition });
 
+      // Check if condition is selected
+      if (condition === "") {
+        isValid = false;
+        $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
+      } else {
+        $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
+      }
+
+      replacedItems.push({ product_id, refund_qty, condition });
 
       if (condition === "1") {
         goodItemsCount += parseInt(refund_qty);
@@ -352,17 +389,21 @@ $(document).ready(function () {
       if (remainingQty > 0) {
         itemsRemaining = true;
       }
-      console.log("Replacement Item: ", {
-        product_id: product_id,
-        refund_qty: refund_qty,
-        condition: condition
-      });
 
       if (itemsRemaining) {
         newStatus = 'partially replaced';
       }
-
     });
+
+    if (!isValid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please select a condition for all selected items and provide a reason for the replacement.',
+      });
+      return; // Stop further processing
+    }
+
     $.ajax({
       url: "/pos-processReplace",
       method: "POST",
@@ -374,25 +415,22 @@ $(document).ready(function () {
         status: newStatus
       },
       success: function (response) {
-        console.log("Replace response: ", response);
         Swal.fire({
           icon: 'success',
           title: 'Replacement Processed',
           html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
         });
-        $("#transaction-status").text(newStatus); // Use newStatus variable
+        $("#transaction-status").text(newStatus);
         $("#transaction-viewModal").modal("hide");
-        fetchTransactions()
+        fetchTransactions();
       },
       error: function (xhr, status, error) {
-        console.error("Error processing replacement: ", status, error);
         Swal.fire({
           icon: 'error',
           title: 'Replacement Failed',
-          text: 'Failed to process Replacement. Please try again.',
+          text: 'Failed to process replacement. Please try again.',
         });
       }
     });
   });
-  
 });
