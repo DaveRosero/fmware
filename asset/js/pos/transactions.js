@@ -24,7 +24,7 @@ $(document).ready(function () {
         });
         $('#transaction-table').DataTable();
         // Bind click event to view button (if not already bound)
-        $('.view-transaction-btn').off('click').on('click', function () {
+        $('#transaction-table-body').on('click', '.view-transaction-btn', function () {
           var posRef = $(this).data('bs-posref');
           // Implement view transaction details functionality here
           $.ajax({
