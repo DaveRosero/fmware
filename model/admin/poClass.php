@@ -1133,6 +1133,18 @@
         }
 
         public function updateActualPrice ($po_ref, $product_id, $price) {
+            if (!$this->isBasePrice($product_id, $price)) {
+                $product = $this->getPrices($product_id);
+                $json = array(
+                    'not_base_price' => 'not_base_price',
+                    'base_price' => '₱'.number_format($product['base_price'], 2),
+                    'selling_price' => '₱'.number_format($product['selling_price'], 2),
+                    'new_base_price' => '₱'.number_format($price, 2)
+                );
+                echo json_encode($json);
+                return;
+            }
+
             $query = 'UPDATE purchase_order_items SET actual_price = ? WHERE product_id = ? AND po_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('dis', $price, $product_id, $po_ref);
@@ -1210,6 +1222,55 @@
 
             $this->updatePOTotal($grand_total, $po_ref);
             return number_format($grand_total, 2);
+        }
+
+        public function isBasePrice ($product_id, $actual_price) {
+            $query = 'SELECT base_price FROM price_list WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($base_price);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ((float)$base_price !== (float)$actual_price) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public function getPrices ($product_id) {
+            $query = 'SELECT base_price, unit_price FROM price_list WHERE product_id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $product_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($base_price, $selling_price);
+            $stmt->fetch();
+            $stmt->close();
+
+            return [
+                'base_price' => $base_price,
+                'selling_price' => $selling_price
+            ];
         }
     }
 ?>
