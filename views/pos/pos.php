@@ -85,7 +85,7 @@ if ($_SESSION['group'] !== 'cashier') {
       <div class="col right-section border-end">
         <div class="col-body mt-2">
           <div class="table-container"
-            style="max-height: 93vh; height: 100%; width:auto; overflow-x:hidden; overflow-y:auto;">
+            style="max-height: 90vh; height: 100%; width:auto; overflow-x:hidden; overflow-y:auto;">
             <form class="d-flex" role="search" id="barcode-form">
               <input class="form-control me-2" type="text" name="barcode" id="barcode" placeholder="Search">
             </form>
