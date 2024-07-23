@@ -250,4 +250,48 @@ $(document).ready(function(){
     //         }
     //     });
     // })
+
+    const $tableContainer = $('#draggable-table-container');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    $tableContainer.on('mousedown', function(e) {
+        isDown = true;
+        $tableContainer.addClass('active');
+        startX = e.pageX - $tableContainer.offset().left;
+        scrollLeft = $tableContainer.scrollLeft();
+    });
+
+    $tableContainer.on('mouseleave', function() {
+        isDown = false;
+        $tableContainer.removeClass('active');
+    });
+
+    $tableContainer.on('mouseup', function() {
+        isDown = false;
+        $tableContainer.removeClass('active');
+    });
+
+    $tableContainer.on('mousemove', function(e) {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - $tableContainer.offset().left;
+        const walk = (x - startX) * 3; // Scroll-fast
+        $tableContainer.scrollLeft(scrollLeft - walk);
+    });
+
+    $('#printButton').click(function() {
+        var content = $('#printContent').html();
+        var header = '<div id="printHeader">FMWware Order Reports</div>'; // Replace with your header content
+    
+        // Append the header to the content
+        $('body').html(header + content);
+    
+        // Print the page
+        window.print();
+    
+        // Restore the original content
+        location.reload();
+    });
 })
