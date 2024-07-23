@@ -1,4 +1,5 @@
-<div class="modal fade" id="transaction-viewModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" tabindex="-1">
+<div class="modal fade" id="transaction-viewModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true"
+    tabindex="-1">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
@@ -55,14 +56,16 @@
                                     <select class="form-select   w-50" aria-label="Default select example" disabled>
                                         <option id="rtransaction-type" selected></option>
                                     </select>
-                                    <select class="form-select   w-50" aria-label="Default select example" id="rpaymentMethod" disabled>
+                                    <select class="form-select   w-50" aria-label="Default select example"
+                                        id="rpaymentMethod" disabled>
                                     </select>
                                 </div>
                                 <h3>Refund Details</h3>
                                 <div class="d-flex justify-content-between text-end">
                                     <div>
                                         <h5 class="text-secondary my-auto">Returned/Refunded Reason:</h5>
-                                        <select class="form-select select-reason" aria-label="Default select example" id="replace-refund-reason" disabled>
+                                        <select class="form-select select-reason" aria-label="Default select example"
+                                            id="replace-refund-reason" disabled>
                                             <option value="">Select Reason</option>
                                             <option value="wrong items">Wrong Items</option>
                                             <option value="duplicated items">Duplicated Items</option>
@@ -84,20 +87,24 @@
                                     <input type="text" class="form-control" id="viewstreet-input" disabled />
                                     <label for="viewbrgy-input" class="form-label" id="brgy-label">Baranggay:</label>
                                     <input type="text" class="form-control" id="viewbrgy-input" disabled />
-                                    <label for="viewmunicipality-input" class="form-label" id="municipality-label">Municipality:</label>
+                                    <label for="viewmunicipality-input" class="form-label"
+                                        id="municipality-label">Municipality:</label>
                                     <input type="text" class="form-control" id="viewmunicipality-input" disabled />
                                     <label for="contact-input" class="form-label" id="contact-label">Contact:</label>
                                     <input type="text" class="form-control" id="viewcontact-input" disabled />
-                                    <label for="viewdeliverer-input" class="form-label" id="deliverer-label">Deliverer:</label>
+                                    <label for="viewdeliverer-input" class="form-label"
+                                        id="deliverer-label">Deliverer:</label>
                                     <input type="text" class="form-control" id="viewdeliverer-input" disabled />
-                                    <input type="hidden" id="deliverer-name-hidden" name="deliverer_name" value="Deliverer Name">
+                                    <input type="hidden" id="deliverer-name-hidden" name="deliverer_name"
+                                        value="Deliverer Name">
                                 </form>
                             </form>
                         </div>
                         <div class="col d-flex justify-content-end">
                             <p class="text-secondary">Request fulfilled by:</p>
                             <p class="ms-2" id="rtrans-username"></p>
-                            <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_info['id']); ?>">
+                            <input type="hidden" name="user_id"
+                                value="<?php echo htmlspecialchars($user_info['id']); ?>">
                         </div>
                     </div>
                 </div>

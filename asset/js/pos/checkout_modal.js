@@ -422,7 +422,9 @@ $(document).ready(function () {
   }
 
   // Printing Functionality
-  $(".print").on("click", function () {
+  $(".print").on("click", function (e) {
+    e.preventDefault(); // Prevent default button behavior
+
     var pos_ref = generateRef();
 
     submitForm(pos_ref); // Submit the form before printing
@@ -498,23 +500,6 @@ $(document).ready(function () {
       transaction2();
     }
 
-    $.ajax({
-      url: "/pos-checkout",
-      method: "POST",
-      data: $.param(formData),
-      success: function (response) {
-        resetCart();
-        resetForm();
-        handlePrintAndAlert();
-      },
-      error: function (xhr, status, error) {
-        console.error("Error in form submission:", status, error);
-      },
-    });
-  }
-
-  function handlePrintAndAlert() {
-    // Show SweetAlert first
     Swal.fire({
       title: "Transaction successful!",
       icon: "success",
@@ -523,7 +508,17 @@ $(document).ready(function () {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        printReceipt();
+        $.ajax({
+          url: "/pos-checkout",
+          method: "POST",
+          data: $.param(formData),
+          success: function (response) {
+            printReceipt();
+          },
+          error: function (xhr, status, error) {
+            console.error("Error in form submission:", status, error);
+          },
+        });
       }
     });
   }
@@ -554,6 +549,9 @@ $(document).ready(function () {
 
       // Remove the iframe after printing
       iframe.parentNode.removeChild(iframe);
+
+      resetCart();
+      resetForm();
     }
 
     if (logo.complete) {
