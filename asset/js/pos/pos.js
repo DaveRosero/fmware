@@ -118,11 +118,17 @@ $(document).ready(function () {
     });
   }
 
-  $("#barcode").on("input", function () {
-    handleSearch();
-  });
   fetchAllProducts();
 
+  let debounceTimeout;
+  const debounceDelay = 100; // Adjust as needed
+
+  $("#barcode").on("input", function () {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(function () {
+      handleSearch();
+    }, debounceDelay);
+  });
   $("#barcode").on("keydown", function (event) {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent default form submission
@@ -144,7 +150,10 @@ $(document).ready(function () {
         dataType: "json",
         success: function (response) {
           addPOS(response.id, response.price);
-          $("#barcode").val("").focus();
+          $("#barcode").val(""); // Clear the input field
+          setTimeout(function () {
+            $("#barcode").focus(); // Set focus back to the input field
+          }, 100); // Slight delay to ensure the focus is properly set
         },
         error: function (xhr, status, error) {
           console.error("AJAX call failed");
