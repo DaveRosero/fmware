@@ -20,6 +20,11 @@
     ?>
     <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
     <link rel="stylesheet" href="/asset/css/admin/style.css">
+    <style>
+      .table-responsive:active {
+          cursor: grabbing;
+      }
+    </style>
 </head>
 <body class="bg-light">
   <!--  Body Wrapper -->

@@ -7,30 +7,53 @@
                     <h5 class="card-title fw-semibold mb-4">Order List</h5>
                 </div>
                 <div class="col text-end">
-                    <button class="btn btn-secondary print"><i class="fa-solid fa-print"></i></button>
+                    <button class="btn btn-primary" id="printButton"><i class="fa-solid fa-print"></i></button>
                 </div>
             </div>
-            <table class="table table-borderless" id="order-table">
-                <thead>
-                    <tr>
-                        <th>Order Ref</th>
-                        <th>Customer</th>
-                        <th>Date</th>
-                        <th>Transaction</th>
-                        <th>Payment</th>
-                        <th>Total</th>
-                        <th>Profit</th>
-                        <th>Paid</th>
-                        <th>Status</th>
-                        <th><i class="fas fa-cog"></i></th>
-                    </tr>
-                </thead>
-                <tbody id="order-table-content">
-                    <?php echo $order->getOrders(); ?>
-                </tbody>
-            </table>
+            <div class="table-responsive" id="draggable-table-container">
+                <table class="table table-borderless" id="order-table">
+                    <thead>
+                        <tr>
+                            <th>Order Ref</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Transaction</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+                            <th>Profit</th>
+                            <th>Paid</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-content">
+                        <?php echo $order->getOrders(); ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <!--Brand Table End-->
+</div>
+
+<div class="d-none" id="printContent">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th>Order Ref</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Transaction</th>
+                <th>Payment</th>
+                <th>Total</th>
+                <th>Profit</th>
+                <th>Paid</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="order-table-content">
+            <?php echo $order->getPrintOrders(); ?>
+        </tbody>
+    </table>
 </div>
 
