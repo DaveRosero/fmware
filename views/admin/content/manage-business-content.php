@@ -9,10 +9,10 @@
                     <div class="row">
                         <table class="table table-borderless" id="municipal-table">
                             <thead>
-                                <th>Status</th>
-                                <th>Municipal</th>
-                                <th>Delivery Fee</th>
-                                <th></th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Municipal</th>
+                                <th class="text-center">Delivery Fee</th>
+                                <th class="text-center"><i class="fas fa-cog"></i></th>
                             </thead>
                             <tbody>
                                 <?php $manage->showDeliveryFee(); ?>
@@ -36,10 +36,10 @@
                     <div class="row">
                         <table class="table table-borderless" id="expenses-table">
                             <thead>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th></th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center"></th>
                             </thead>
                             <tbody>
                                 <?php $manage->showExpenses(); ?>

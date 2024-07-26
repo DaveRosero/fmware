@@ -1,31 +1,7 @@
-/* Custom styles for the toggle switch */
-.custom-control-input:checked ~ .custom-control-label .custom-control-description::before {
-    transform: translateX(30px);
-}
-
-.left-sidebar span {
-    color: white;
-}
-
-/* For Webkit-based browsers (Chrome, Safari) */
-.left-sidebar::-webkit-scrollbar {
-    width: 12px;
-}
-
-.left-sidebar::-webkit-scrollbar-track {
-    background: #2a3547; /* Dark background */
-}
-
-.left-sidebar::-webkit-scrollbar-thumb {
-    background-color: #2a3547; /* Darker thumb */
-    border-radius: 10px;
-    border: 2px solid #2a3547; /* Matches track background */
-}
-
-/* For Firefox */
-.left-sidebar {
-    scrollbar-width: thin;
-    scrollbar-color: #495057 #2a3547;
+.tooltip.custom-tooltip .tooltip-inner {
+    font-size: 1.25rem; /* Increase font size */
+    padding: 1rem; /* Increase padding */
+    max-width: none; /* Remove default max-width */
 }
 
 .card-strip {
@@ -35,4 +11,33 @@
     width: 0.5rem; /* Adjust the width of the color strip as needed */
     height: 100%;
     border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.nav-link[aria-expanded="true"] .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+/* Center the dropdown menu relative to the toggle button */
+.dropdown-menu {
+    transform: translateX(-50%);
+    left: 50%;
+}
+
+/* Show dropdown menu on hover */
+.nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+#expandButton {
+    transition: color 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+
+#expandButton:hover {
+    color: #00d084; /* Change to your desired hover color */
+    transform: scale(1.1); /* Slightly enlarge the icon */
 }

@@ -1,7 +1,7 @@
-<div class="container-fluid">
+
     <!--Product Table Start-->
     <div class="card">
-        <div class="card-body" style="width: 100%; overflow-x: auto;">
+        <div class="card-body">
             <div class="row justify-content-between">
                 <div class="col">
                     <h5 class="card-title fw-semibold mb-4">Product List</h5>
@@ -17,15 +17,15 @@
             <table class="table table-borderless" id="product-table">
                 <thead>
                     <tr>
-                        <th>Status</th>
-                        <th>Image</th>
-                        <th>Product</th>
-                        <th>Brand</th>
-                        <th>Category</th>
-                        <th>Base Price</th>
-                        <th>Selling Price</th>
-                        <th>Stock</th>
-                        <th>Action</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Image</th>
+                        <th class="text-center">Product</th>
+                        <th class="text-center">Brand</th>
+                        <th class="text-center">Category</th>
+                        <th class="text-center">Base Price</th>
+                        <th class="text-center">Selling Price</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-center"><i class="fas fa-cog"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,5 +35,4 @@
         </div>
     </div>
     <!--Product Table End-->
-</div>
 

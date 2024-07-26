@@ -17,12 +17,12 @@
             </div>
             <table class="table table-borderless" id="staff-table">
                 <thead>
-                    <th>Status</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile Number</th>
-                    <th>Date Created</th>
-                    <th>Position</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Mobile Number</th>
+                    <th class="text-center">Date Created</th>
+                    <th class="text-center">Position</th>
                 </thead>
                 <tbody>
                     <?php $staff->getStaffList(); ?>

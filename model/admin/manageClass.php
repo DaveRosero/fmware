@@ -54,10 +54,10 @@
             $content = '';
             while ($stmt->fetch()) {
                 $content .= '<tr>
-                                <td>'.ucfirst($description).'</td>
-                                <td>₱'.number_format($amount, 2).'</td>
-                                <td>'.$date.'</td>
-                                <td>
+                                <td class="text-center">'.ucfirst($description).'</td>
+                                <td class="text-center">₱'.number_format($amount, 2).'</td>
+                                <td class="text-center">'.$date.'</td>
+                                <td class="text-center">
                                     <button 
                                         class="btn btn-sm btn-danger delete" 
                                         type="button"
@@ -90,7 +90,7 @@
             $content = '';
             while ($stmt->fetch()) {
                 $status = $active == 1
-                                ? '<div class="form-check form-switch">
+                                ? '<div class="form-check form-switch d-flex justify-content-center">
                                         <input class="form-check-input status" 
                                             type="checkbox" 
                                             id="toggleSwitch"
@@ -98,7 +98,7 @@
                                             checked
                                         >
                                     </div>'
-                                : '<div class="form-check form-switch">
+                                : '<div class="form-check form-switch d-flex justify-content-center">
                                         <input class="form-check-input status" 
                                             type="checkbox" 
                                             id="toggleSwitch"
@@ -107,10 +107,10 @@
                                     </div>';
 
                 $content .= '<tr>
-                                <td>'.$status.'</td>
-                                <td>'.ucfirst($municipality).'</td>
-                                <td>₱'.number_format($delivery_fee, 2).'</td>
-                                <td>
+                                <td class="text-center">'.$status.'</td>
+                                <td class="text-center">'.ucfirst($municipality).'</td>
+                                <td class="text-center">₱'.number_format($delivery_fee, 2).'</td>
+                                <td class="text-center">
                                     <button 
                                         class="btn btn-sm btn-success edit" 
                                         type="button"

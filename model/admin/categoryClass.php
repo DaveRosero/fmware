@@ -110,21 +110,21 @@
                     $stmt->bind_result($id, $name, $date, $active, $product_count);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
-                            $status = '<div class="form-check form-switch">
+                            $status = '<div class="form-check form-switch d-flex justify-content-center">
                                             <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-category-id="'.$id.'" data-category-status="'.$active.'" checked>
                                         </div>';
                         } else {
-                            $status = '<div class="form-check form-switch">
+                            $status = '<div class="form-check form-switch d-flex justify-content-center">
                                             <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-category-id="'.$id.'" data-category-status="'.$active.'">
                                         </div>';
                         }
                         
                         echo '<tr>
-                                <td>'.$status.'</td>
-                                <td>'.ucwords($name).'</td>
-                                <td>'.$product_count.'</td>
-                                <td>'.date('F j, Y', strtotime($date)).'</td>
-                                <td>
+                                <td class="text-center">'.$status.'</td>
+                                <td class="text-center">'.ucwords($name).'</td>
+                                <td class="text-center">'.$product_count.'</td>
+                                <td class="text-center">'.date('F j, Y', strtotime($date)).'</td>
+                                <td class="text-center">
                                     <button 
                                         class="btn btn-sm btn-success edit" 
                                         type="button" 

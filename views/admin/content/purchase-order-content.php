@@ -14,12 +14,12 @@
             <table class="table table-borderless" id="purchase-order-table">
                 <thead>
                     <tr>
-                        <th>P.O. #</th>
-                        <th>Supplier</th>
-                        <th>Date Created</th>
-                        <th>Date Received</th>
-                        <th>Status</th>
-                        <th style="width: 100px;">Action</th>
+                        <th class="text-center">P.O. #</th>
+                        <th class="text-center">Supplier</th>
+                        <th class="text-center">Date Created</th>
+                        <th class="text-center">Date Received</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center" style="width: 100px;"><i class="fas fa-cog"></i></th>
                     </tr>
                 </thead>
                 <tbody>

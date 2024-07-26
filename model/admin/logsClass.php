@@ -22,9 +22,9 @@
             $content = '';
             while ($stmt->fetch()) {
                 $content .= '<tr>
-                                <td>'.ucfirst($description).'</td>
-                                <td>'.ucfirst($fname).' '.ucfirst($lname).'</td>
-                                <td>'.$date.'</td>
+                                <td class="text-center">'.ucfirst($description).'</td>
+                                <td class="text-center">'.ucfirst($fname).' '.ucfirst($lname).'</td>
+                                <td class="text-center">'.$date.'</td>
                             </tr>';
             }
             $stmt->close();

@@ -17,14 +17,14 @@
             </div>
             <table class="table table-borderless" id="suppliers-table">
                 <thead>
-                    <th>Status</th>
-                    <th>Supplier</th>
-                    <th>Email</th>
-                    <th>Contact Person</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Date Added</th>
-                    <th></th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Supplier</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Contact Person</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Address</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center"><i class="fas fa-cog"></i></th>
                 </thead>
                 <tbody>
                     <?php $supplier->showSupplier(); ?>

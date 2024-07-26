@@ -27,7 +27,7 @@
                         }
 
                         if ($active == 1) {
-                            $switch_btn = '<div class="form-check form-switch">
+                            $switch_btn = '<div class="form-check form-switch d-flex justify-content-center">
                                         <input class="form-check-input status" 
                                             type="checkbox" 
                                             id="toggleSwitch"
@@ -36,7 +36,7 @@
                                         >
                                     </div>';
                         } else {
-                            $switch_btn = '<div class="form-check form-switch">
+                            $switch_btn = '<div class="form-check form-switch d-flex justify-content-center">
                                         <input class="form-check-input status" 
                                             type="checkbox" 
                                             id="toggleSwitch"
@@ -47,12 +47,12 @@
 
                         $name = $fname . ' ' . $lname;
                         echo '<tr>
-                                <td>'.$switch_btn.'</td>
-                                <td>'.$name.'</td>
-                                <td>'.$email.'</td>
-                                <td>'.$phone.'</td>
-                                <td>'.$date.'</td>
-                                <td>'.$last_login.'</td>
+                                <td class="text-center">'.$switch_btn.'</td>
+                                <td class="text-center">'.$name.'</td>
+                                <td class="text-center">'.$email.'</td>
+                                <td class="text-center">'.$phone.'</td>
+                                <td class="text-center">'.$date.'</td>
+                                <td class="text-center">'.$last_login.'</td>
                             </tr>';
                     }
                 } else {

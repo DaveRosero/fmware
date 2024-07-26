@@ -20,11 +20,11 @@
             <table class="table table-borderless" id="brand-table">
                 <thead>
                     <tr>
-                        <th>Status</th>
-                        <th>Brand</th>
-                        <th>Number of Products</th>
-                        <th>Date Added</th>
-                        <th>Action</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Brand</th>
+                        <th class="text-center">Number of Products</th>
+                        <th class="text-center">Date Added</th>
+                        <th class="text-center"><i class="fas fa-cog"></i></th>
                     </tr>
                 </thead>
                 <tbody>

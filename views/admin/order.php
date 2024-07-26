@@ -10,51 +10,38 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Manage Orders | FMWare</title>
-    <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
-    <?php 
-      require_once 'config/load_vendors.php';
-    ?>
-    <link rel="stylesheet" href="/asset/css/admin/dashboard.css">
-    <link rel="stylesheet" href="/asset/css/admin/style.css">
-    <style>
-      .table-responsive:active {
-          cursor: grabbing;
-      }
-    </style>
-</head>
-<body class="bg-light">
-  <!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-      <?php include 'views/admin/template/sidebar.php'; ?>
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Manage Orders | FMWare</title>
+      <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
+      <?php require_once 'config/load_vendors.php'; ?>
+      <link rel="stylesheet" href="/asset/css/admin/style.css">
+  </head>
+  <body class="bg-light">
+    <?php include_once 'views/admin/template/header.php'; ?>
 
+    <div class="container-fluid">
+      <div class="row">
+          <!-- Sidebar -->
+          <div class="col-lg-1 col-md-1 bg-dark sticky-top">
+            <?php include_once 'views/admin/template/sidebar.php'; ?>
+          </div>
+          <!-- Sidebar -->
 
-    <!--  Main wrapper -->
-    <div class="body-wrapper">
-      <?php include 'views/admin/template/header.php'; ?>
-    
-
-      <!-- Content Start -->
-        <?php include 'views/admin/content/order-content.php'; ?>
-      <!-- Content End -->  
-      
-      
+          <!-- Content -->
+          <div class="col-lg-11 col-md-11 p-3 min-vh-100"> 
+            <?php include_once 'views/admin/content/order-content.php'; ?>
+          </div>
+          <!-- Content -->
+      </div>
     </div>
-  </div>
 
-  <!-- Modal Start -->
-    <?php
-      include_once 'views/admin/modals/order-modal.php';
-    ?>
-  <!-- Modal End-->
-   
-  <script src="/asset/js/admin/dashboard.js"></script>
-  <script src="/asset/js/admin/mini-sidebar.js"></script>
-  <script src="/asset/js/admin/sidebarmenu.js"></script>
-  <script src="/asset/js/admin/order.js"></script>
-</body>
+    <!-- Modal Start -->
+    <?php include_once 'views/admin/modals/order-modal.php'; ?>
+    <!-- Modal End-->
+
+    <script src="/asset/js/admin/order.js"></script>
+    <script src="/asset/js/template/sidebar.js"></script>
+  </body>
 </html>

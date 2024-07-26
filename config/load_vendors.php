@@ -10,7 +10,7 @@
 <!-- SCRIPT OPEN -->
     <script src="/vendor/jQuery/jquery-3.7.1.min.js"></script>
     <script src="/vendor/jQuery-easing/jquery.easing.min.js"></script>
-    <script src="/vendor/Bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/vendor/Bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/vendor/ApexCharts/dist/apexcharts.min.js"></script>
     <script src="/vendor/DataTables/datatables.min.js"></script>
     <script src="/vendor/FontAwesome/js/all.min.js"></script>

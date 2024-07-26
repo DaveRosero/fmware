@@ -472,11 +472,11 @@
                     $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant, $base_price, $selling_price, $stock, $critical_level, $stockable);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
-                            $status = '<div class="form-check form-switch">
+                            $status = '<div class="form-check form-switch d-flex justify-content-center">
                                             <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'" checked>
                                         </div>';
                         } else {
-                            $status = '<div class="form-check form-switch">
+                            $status = '<div class="form-check form-switch d-flex justify-content-center">
                                             <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-product-id="'.$id.'">
                                         </div>';
                         }
@@ -484,27 +484,27 @@
                         $legend = $this->stockLegend($stock, $critical_level, $stockable);
 
                         echo '<tr>
-                                <td class="text-start">'.$status.'</td>
-                                <td class="text-start"><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 50px;"></td>
-                                <td class="text-start">'.$name.' ('.$variant.') '.$unit_value.' '.strtoupper($unit).'</td>
-                                <td class="text-start">'.$brand.'</td>
-                                <td class="text-start">'.$category.'</td>
-                                <td class="text-start">₱'.number_format($base_price, 2).'</td>
-                                <td class="text-start">₱'.number_format($selling_price, 2).'</td>
-                                <td class="text-start">'.$legend.'</td>
-                                <td class="text-start">
+                                <td class="text-center">'.$status.'</td>
+                                <td class="text-center"><img src="/asset/images/products/'.$image.'" alt="" srcset="" style="width: 50px;"></td>
+                                <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.strtoupper($unit).'</td>
+                                <td class="text-center">'.$brand.'</td>
+                                <td class="text-center">'.$category.'</td>
+                                <td class="text-center">₱'.number_format($base_price, 2).'</td>
+                                <td class="text-center">₱'.number_format($selling_price, 2).'</td>
+                                <td class="text-center">'.$legend.'</td>
+                                <td class="text-center">
                                     <div class="d-flex">
                                         <button 
-                                            class="btn btn-sm btn-secondary view me-1" 
+                                            class="btn btn-sm btn-primary view me-1" 
                                             type="button" 
                                             data-product-id="'.$id.'"
                                             data-bs-toggle="modal"
                                             data-bs-target="#viewProduct";
                                         >
-                                            <i class="fa-solid fa-eye fs-1"></i>
+                                            <i class="fa-solid fa-eye"></i>
                                         </button>   
                                         <button 
-                                            class="btn btn-sm btn-primary edit" 
+                                            class="btn btn-sm btn-success edit" 
                                             type="button" 
                                             data-product-id="'.$id.'"
                                             data-bs-toggle="modal"

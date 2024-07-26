@@ -1,178 +1,141 @@
-    <!-- Sidebar Start -->
-    <aside class="left-sidebar bg-dark"  style="height: 100vh; overflow-y: auto;">
-      <!-- Sidebar scroll-->
-      <div>
-        <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="/dashboard" class="text-nowrap logo-img">
-            <img src="/asset/images/store/logo.png" width="180" alt=""/>
-          </a>
-          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-          <i class="fa-solid fa-xmark fs-8"></i>
-          </div>
+<aside class="d-flex flex-sm-column flex-row flex-nowrap bg-dark align-items-center sticky-top">
+    <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap text-center align-items-center">
+        <!-- Section 1 -->
+        <li class="nav-item">
+            <a href="#section1" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section1">
+                <span class="d-block small">HOME</span>
+                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
+            </a>
+        </li>
+        <div id="section1" class="collapse">
+            <li class="nav-item">
+                <a href="/dashboard" class="nav-link text-light" data-bs-toggle="tooltip" title="Dashboard">
+                    <i class="fa-solid fa-chart-pie fs-5"></i>
+                    <span class="d-block small">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/manage-business" class="nav-link text-light" data-bs-toggle="tooltip" title="Manage Business">
+                    <i class="fa-solid fa-store fs-5"></i>
+                    <span class="d-block small">Manage</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/activity-logs" class="nav-link text-light" data-bs-toggle="tooltip" title="Activity Logs">
+                    <i class="fa-solid fa-book fs-5"></i>
+                    <span class="d-block small">Logs</span>
+                </a>
+            </li>
         </div>
-        <p class="text-muted text-center mb-0 py-0 mt-0">&copy; <?php echo date('Y'); ?> FMWARE. PDM Capstone</p>
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav p-2" data-simplebar="">
-          <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <span class="hide-menu">Home</span>
+        <hr class="text-light border w-100 mt-0 mb-0">
+
+        <!-- Section 2 -->
+        <li class="nav-item">
+            <a href="#section2" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section2">
+                <span class="d-block small">SALES</span>
+                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
+            </a>
+        </li>
+        <div id="section2" class="collapse">
+            <li class="nav-item">
+                <a href="/manage-sales" class="nav-link text-light" data-bs-toggle="tooltip" title="Point of Sales">
+                    <i class="fa-solid fa-cash-register fs-5"></i>
+                    <span class="d-block small">POS</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/dashboard" aria-expanded="false">
-                <span>
-                    <i class="fa-solid fa-chart-pie fs-4"></i>
-                </span>
-                <span class="hide-menu">Dashboard</span>
-              </a>
+            <li class="nav-item">
+                <a href="/manage-orders" class="nav-link text-light" data-bs-toggle="tooltip" title="Online Order">
+                    <i class="fa-solid fa-file-invoice fs-5"></i>
+                    <span class="d-block small">Orders</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/manage-business" aria-expanded="false">
-                <span>
-                <i class="fas fa-store fs-4"></i>
-                </span>
-                <span class="hide-menu">Manage Business</span>
-              </a>
+            <li class="nav-item">
+                <a href="/manage-returns" class="nav-link text-light" data-bs-toggle="tooltip" title="Returns">
+                    <i class="fa-solid fa-undo fs-5"></i>
+                    <span class="d-block small">Returns</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/activity-logs" aria-expanded="false">
-                <span>
-                <i class="fas fa-book fs-4"></i>
-                </span>
-                <span class="hide-menu">Activity Logs</span>
-              </a>
+        </div>
+        <hr class="text-light border w-100 mt-0 mb-0">
+
+        <!-- Section 3 -->
+        <li class="nav-item">
+            <a href="#section3" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section3">
+                <span class="d-block small">INVENTORY</span>
+                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
+            </a>
+        </li>
+        <div id="section3" class="collapse">
+            <li class="nav-item">
+                <a href="/manage-products" class="nav-link text-light" data-bs-toggle="tooltip" title="Products">
+                    <i class="fa-solid fa-barcode fs-5"></i>
+                    <span class="d-block small">Products</span>
+                </a>
             </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">Transactions</span>
+            <li class="nav-item">
+                <a href="/purchase-orders" class="nav-link text-light" data-bs-toggle="tooltip" title="Purchase Orders">
+                    <i class="fa-solid fa-dolly fs-5"></i>
+                    <span class="d-block small">P.O.</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/manage-sales" aria-expanded="false">
-                <span>
-                <i class="fas fa-money-bill fs-4"></i>
-                </span>
-                <span class="hide-menu">Point of Sales</span>
-              </a>
+            <li class="nav-item">
+                <a href="/manage-suppliers" class="nav-link text-light" data-bs-toggle="tooltip" title="Suppliers">
+                    <i class="fa-solid fa-truck fs-5"></i>
+                    <span class="d-block small">Suppliers</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/manage-orders" aria-expanded="false">
-                <span>
-                <i class="fas fa-file-invoice fs-4"></i>
-                </span>
-                <span class="hide-menu">Online Orders</span>
-              </a>
+        </div>
+        <hr class="text-light border w-100 mt-0 mb-0">
+
+        <!-- Section 4 -->
+        <li class="nav-item">
+            <a href="#section4" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section4">
+                <span class="d-block small">PEOPLE</span>
+                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
+            </a>
+        </li>
+        <div id="section4" class="collapse">
+            <li class="nav-item">
+                <a href="/users" class="nav-link text-light" data-bs-toggle="tooltip" title="Users">
+                    <i class="fa-solid fa-users fs-5"></i>
+                    <span class="d-block small">Users</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/returns" aria-expanded="false">
-                <span>
-                <i class="fas fa-undo fs-4"></i>
-                </span>
-                <span class="hide-menu">Returns</span>
-              </a>
+            <li class="nav-item">
+                <a href="/staff" class="nav-link text-light" data-bs-toggle="tooltip" title="Staff">
+                    <i class="fa-solid fa-user-tie fs-5"></i>
+                    <span class="d-block small">Staff</span>
+                </a>
             </li>
-            <!-- <li class="sidebar-item">
-              <a class="sidebar-link" href="/replacements" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-arrow-right-arrow-left fs-4"></i>
-                </span>
-                <span class="hide-menu">Replacements</span>
-              </a>
-            </li> -->
-            <li class="nav-small-cap">
-              <span class="hide-menu">Inventory</span>
+        </div>
+        <hr class="text-light border w-100 mt-0 mb-0">
+
+        <!-- Section 5 -->
+        <li class="nav-item">
+            <a href="#section5" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section5">
+                <span class="d-block small">MAINTENANCE</span>
+                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
+            </a>
+        </li>
+        <div id="section5" class="collapse">
+            <li class="nav-item">
+                <a href="/category" class="nav-link text-light" data-bs-toggle="tooltip" title="Categories">
+                    <i class="fa-solid fa-folder fs-5"></i>
+                    <span class="d-block small">Categories</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/manage-products" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-barcode fs-4"></i>
-                </span>
-                <span class="hide-menu">Products</span>
-              </a>
+            <li class="nav-item">
+                <a href="/brands" class="nav-link text-light" data-bs-toggle="tooltip" title="Brands">
+                    <i class="fa-solid fa-building fs-5"></i>
+                    <span class="d-block small">Brands</span>
+                </a>
             </li>
-            <!-- <li class="sidebar-item">
-              <a class="sidebar-link" href="/price-list" aria-expanded="false">
-                <span>
-                <i class="fas fa-list-alt"></i>
-                </span>
-                <span class="hide-menu">Price List</span>
-              </a>
-            </li> -->
-            <!-- <li class="sidebar-item">
-              <a class="sidebar-link" href="/stocks" aria-expanded="false">
-                <span>
-                <i class="fas fa-cube fs-4"></i>
-                </span>
-                <span class="hide-menu">Stocks</span>
-              </a>
-            </li> -->
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/purchase-orders" aria-expanded="false">
-                <span>
-                <i class="fas fa-dolly fs-4"></i>
-                </span>
-                <span class="hide-menu">Purchase Orders</span>
-              </a>
+            <li class="nav-item">
+                <a href="/unit" class="nav-link text-light" data-bs-toggle="tooltip" title="Units">
+                    <i class="fa-solid fa-balance-scale fs-5"></i>
+                    <span class="d-block small">Unit</span>
+                </a>
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/manage-suppliers" aria-expanded="false">
-                <span>
-                <i class="fas fa-truck fs-4"></i>
-                </span>
-                <span class="hide-menu">Suppliers</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">People</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/users" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-user fs-4"></i>
-                </span>
-                <span class="hide-menu">Users</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/staff" aria-expanded="false">
-                <span>
-                <i class="fa-solid fa-user-tie fs-4"></i>
-                </span>
-                <span class="hide-menu">Staff</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">Maintenance</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/category" aria-expanded="false">
-                <span>
-                <i class="fas fa-folder fs-4"></i>
-                </span>
-                <span class="hide-menu">Categories</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/brands" aria-expanded="false">
-                <span>
-                <i class="fas fa-building fs-4"></i>
-                </span>
-                <span class="hide-menu">Brands</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/unit" aria-expanded="false">
-                <span>
-                <i class="fas fa-balance-scale fs-4"></i>
-                </span>
-                <span class="hide-menu">Unit</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <span class="hide-menu">Archive</span>
-            </li>
-          </ul>
-          <div></div> 
-        </nav>
-        <!-- End Sidebar navigation -->
-      </div>
-      <!-- End Sidebar scroll-->
-    </aside>
-    <!--  Sidebar End -->
+        </div>
+    </ul>
+</aside>
