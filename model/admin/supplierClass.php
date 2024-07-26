@@ -53,7 +53,7 @@
             $content = '';
             while ($stmt->fetch()) {
                 if ($active == 1) {
-                    $status = '<div class="form-check form-switch">
+                    $status = '<div class="form-check form-switch d-flex justify-content-center">
                                 <input class="form-check-input status" 
                                     type="checkbox" 
                                     id="toggleSwitch"
@@ -62,7 +62,7 @@
                                 >
                             </div>';
                 } else {
-                    $status = '<div class="form-check form-switch">
+                    $status = '<div class="form-check form-switch d-flex justify-content-center">
                                 <input class="form-check-input status" 
                                     type="checkbox" 
                                     id="toggleSwitch"
@@ -72,14 +72,14 @@
                 }
 
                 $content .= '<tr>
-                                <td>'.$status.'</td>
-                                <td>'.$supplier.'</td>
-                                <td>'.$email.'</td>
-                                <td>'.ucfirst($contact).'</td>
-                                <td>'.$phone.'</td>
-                                <td>'.$address.'</td>
-                                <td>'.$date.'</td>
-                                <td>
+                                <td class="text-center">'.$status.'</td>
+                                <td class="text-center">'.$supplier.'</td>
+                                <td class="text-center">'.$email.'</td>
+                                <td class="text-center">'.ucfirst($contact).'</td>
+                                <td class="text-center">'.$phone.'</td>
+                                <td class="text-center">'.$address.'</td>
+                                <td class="text-center">'.$date.'</td>
+                                <td class="text-center">
                                     <button 
                                         class="btn btn-sm btn-success edit" 
                                         type="button"

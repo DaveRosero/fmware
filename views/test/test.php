@@ -1,36 +1,74 @@
-<?php
-    require_once 'vendor/PHPMailer/src/PHPMailer.php';
-    require_once 'vendor/PHPMailer/src/SMTP.php';
-    require_once 'vendor/PHPMailer/src/Exception.php';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <?php require_once 'config/load_vendors.php'; ?>
+    <style>
+        body {
+            display: flex;
+        }
+        #sidebar {
+            min-width: 200px;
+            max-width: 250px;
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        #sidebar .nav-link {
+            color: white;
+        }
+        #sidebar .nav-link.active {
+            background-color: #495057;
+        }
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .navbar {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
-    use PHPMailer\PHPMailer\Exception;
+    <div id="sidebar" class="d-flex flex-column p-3">
+        <a href="#" class="nav-link active">Dashboard</a>
+        <a href="#" class="nav-link">Posts</a>
+        <a href="#" class="nav-link">Pages</a>
+        <a href="#" class="nav-link">Comments</a>
+        <a href="#" class="nav-link">Settings</a>
+    </div>
 
-    $mail = new PHPMailer(true);
-    
-    try {
-        // Server settings
-        $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = 'smtp.hostinger.com';                   // Specify main and backup SMTP servers
-        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = 'no-reply@fmware.shop';               // SMTP username
-        $mail->Password   = 'Fmware2024!';                        // SMTP password
-        $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 587;                                    // TCP port to connect to
-    
-        // Recipients
-        $mail->setFrom('no-reply@fmware.shop', 'FMWare');
-        $mail->addAddress('kurei7476@gmail.com', 'Israle Gonzales');     // Add a recipient
-    
-        // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = 'Hindi ako nagpunta dito para makipag away';
-        $mail->Body    = '<h1>Natatae ako pre</h1>';
-    
-        $mail->send();
-        echo 'Message has been sent';
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    }
-?>
+    <div id="content">
+        <h1>Welcome to the Admin Panel</h1>
+        <p>This is the main content area.</p>
+    </div>
+
+</body>
+</html>

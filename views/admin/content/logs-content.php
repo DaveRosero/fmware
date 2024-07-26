@@ -8,9 +8,9 @@
                 <div class="row">
                     <table class="table table-borderless" id="logs-table">
                         <thead>
-                            <th>Description</th>
-                            <th>Author</th>
-                            <th>Date & Time</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Author</th>
+                            <th class="text-center">Date & Time</th>
                         </thead>
                         <tbody>
                             <?php $logs->showLogs(); ?>

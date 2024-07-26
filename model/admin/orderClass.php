@@ -86,7 +86,7 @@
 
         public function statusFormat ($status) {
             if ($status === 'to pay') {
-                $format = '<span class="badge bg-secondary text-wrap">'.strtoupper($status).'</span>';
+                $format = '<span class="badge bg-info text-wrap">'.strtoupper($status).'</span>';
             }
 
             if ($status === 'pending') {
@@ -94,7 +94,7 @@
             }
 
             if ($status === 'delivering') {
-                $format = '<span class="badge bg-secondary text-wrap">'.strtoupper($status).'</span>';
+                $format = '<span class="badge bg-info text-wrap">'.strtoupper($status).'</span>';
             }
 
             if ($status === 'delivered') {
@@ -215,16 +215,16 @@
                         $dateFormat = $dateObj->format('F j, Y');
 
                         $content .= '<tr>
-                                <td><strong>'.$ref.'</strong></td>
-                                <td class="text-primary"><strong>'.$customer.'</strong></td>
-                                <td>'.$dateFormat.'</td>
-                                <td>'.$transaction.'</td>
-                                <td>'.$payment.'</td>
-                                <td>₱'.number_format($gross).'.00</td>
-                                <td class="text-success"><strong>₱'.number_format($net).'.00</strong></td>
-                                <td>'.$this->paidFormat($paid).'</td>
-                                <td>'.$this->statusFormat($status).'</td>
-                                <td>
+                                <td class="text-center"><strong>'.$ref.'</strong></td>
+                                <td class="text-center text-primary"><strong>'.$customer.'</strong></td>
+                                <td class="text-center">'.$dateFormat.'</td>
+                                <td class="text-center">'.$transaction.'</td>
+                                <td class="text-center">'.$payment.'</td>
+                                <td class="text-center">₱'.number_format($gross, 2).'</td>
+                                <td class="text-center text-success"><strong>₱'.number_format($net, 2).'</strong></td>
+                                <td class="text-center">'.$this->paidFormat($paid).'</td>
+                                <td class="text-center">'.$this->statusFormat($status).'</td>
+                                <td class="text-center">
                                     <div class="d-flex">
                                         <button class="btn btn-sm btn-primary viewOrder"
                                             data-order-ref="'.$ref.'"
@@ -234,11 +234,11 @@
                                         >
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-secondary print-receipt ms-1"
+                                        <button class="btn btn-sm btn-info print-receipt ms-1"
                                             data-order-ref="'.$ref.'"
                                             data-customer-name="'.$customer.'"
                                         >
-                                            <i class="fas fa-print"></i>
+                                            <i class="fas fa-print text-light"></i>
                                         </button>
                                     </div>
                                 </td>

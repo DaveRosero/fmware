@@ -30,38 +30,38 @@
                     case 0:
                         $po_status = '<span class="badge bg-primary text-wrap">DRAFT</span>';
                         $button = '<a
-                                        class="btn btn-sm btn-secondary view me-1" 
+                                        class="btn btn-sm btn-primary" 
                                         type="button"
                                         href="/create-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-pen-to-square fs-1"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </a>';
                         break;
                     case 1:
                         $po_status = '<span class="badge bg-warning text-wrap">PENDING</span>';
                         $button = '<a
-                                        class="btn btn-sm btn-secondary" 
+                                        class="btn btn-sm btn-primary" 
                                         type="button"
                                         href="/view-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-eye fs-1"></i>
+                                        <i class="fa-solid fa-eye"></i>
                                     </a>
                                     <a
                                         class="btn btn-sm btn-success" 
                                         type="button"
                                         href="/receive-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-right-to-bracket fs-1"></i>
+                                        <i class="fa-solid fa-right-to-bracket"></i>
                                     </a>';
                         break;
                     case 2:
                         $po_status = '<span class="badge bg-success text-wrap">COMPLETED</span>';
                         $button = '<a
-                                        class="btn btn-sm btn-secondary" 
+                                        class="btn btn-sm btn-primary" 
                                         type="button"
                                         href="/view-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-eye fs-1"></i>
+                                        <i class="fa-solid fa-eye"></i>
                                     </a>';
                         break;
                     default:
@@ -69,12 +69,12 @@
                         break;
                 }
                 $content .= '<tr>
-                                <td>'.$po_ref.'</td>
-                                <td>'.$supplier.'</td>
-                                <td>'.$date.'</td>
-                                <td>'.$received.'</td>
-                                <td>'.$po_status.'</td>
-                                <td>'.$button.'</td>
+                                <td class="text-center">'.$po_ref.'</td>
+                                <td class="text-center">'.$supplier.'</td>
+                                <td class="text-center">'.$date.'</td>
+                                <td class="text-center">'.$received.'</td>
+                                <td class="text-center">'.$po_status.'</td>
+                                <td class="text-center">'.$button.'</td>
                             </tr>';
             }
             $stmt->close();
@@ -355,7 +355,7 @@
             while ($stmt->fetch()) {
                 $total = $qty * $price;
                 $content .= '<tr>
-                                <td>
+                                <td class="text-center">
                                     <button
                                         class="btn btn-sm btn-danger del me-1" 
                                         type="button"
@@ -364,20 +364,20 @@
                                     >
                                         <i class="fa-solid fa-xmark fa-solid fa-lg"></i>
                                     </button></td>
-                                <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
-                                <td>
-                                    <input class="form-control poi-qty" type="number" name="qty" min="1" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
-                                    <p class="fs-2 fst-italic text-muted text-center mb-0 mt-0">Recommended Min. Qty: '.(($critical_level - $stock) + 5).'</p>
-                                    <p class="fs-2 fst-italic text-muted text-center" mb-0 mt-0">Stock: '.$stock.' Crtical Level: '.$critical_level.'</p>
+                                <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
+                                <td class="text-center">
+                                    <input class="form-control poi-qty text-center" type="number" name="qty" min="1" value="'.$qty.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
+                                    <p class="fs-6 fst-italic text-muted text-center mb-0 mt-0">Recommended Min. Qty: '.(($critical_level - $stock) + 5).'</p>
+                                    <p class="fs-6 fst-italic text-muted text-center" mb-0 mt-0">Stock: '.$stock.' Crtical Level: '.$critical_level.'</p>
                                 </td>
-                                <td><input class="form-control poi-unit" type="text" name="unit" value="'.$po_unit.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
-                                <td>
+                                <td class="text-center"><input class="form-control poi-unit text-center" type="text" name="unit" value="'.$po_unit.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td class="text-center">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">₱</span>
                                         <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
                                     </div>
                                 </td>
-                                <td id="poi-total">₱'.number_format($total, 2).'</td>
+                                <td class="text-center" id="poi-total">₱'.number_format($total, 2).'</td>
                             </tr>';
             }
             $stmt->close();
@@ -613,20 +613,20 @@
                 $total = $qty * $price;
                 $amount = $received * $actual_price;
                 $content .= '<tr>
-                                <td>'.$count.'</td>
-                                <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
-                                <td>'.$qty.'</td>
-                                <td>'.$po_unit.'</td>
-                                <td>₱'.number_format($price, 2).'</td>
-                                <td id="poi-total">₱'.number_format($total, 2).'</td>
-                                <td>
+                                <td class="text-center">'.$count.'</td>
+                                <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
+                                <td class="text-center">'.$qty.'</td>
+                                <td class="text-center">'.$po_unit.'</td>
+                                <td class="text-center">₱'.number_format($price, 2).'</td>
+                                <td class="text-center" id="poi-total">₱'.number_format($total, 2).'</td>
+                                <td class="text-center">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">₱</span>
                                         <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$actual_price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
                                     </div>
                                 </td>
-                                <td><input class="form-control poi-received" type="number" name="received" value="'.$received.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
-                                <td>₱'.number_format($amount, 2).'</td>
+                                <td class="text-center"><input class="form-control poi-received text-center" type="number" name="received" value="'.$received.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
+                                <td class="text-center">₱'.number_format($amount, 2).'</td>
                             </tr>';
                 $count += 1;
             }
@@ -797,12 +797,12 @@
                 }
 
                 $content .= '<tr>
-                                <td>'.$count.'</td>
-                                <td>'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
-                                <td>'.$qty.'</td>
-                                <td>'.$po_unit.'</td>
-                                <td>'.$price.'</td>
-                                <td>'.$total.'</td>
+                                <td class="text-center">'.$count.'</td>
+                                <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
+                                <td class="text-center">'.$qty.'</td>
+                                <td class="text-center">'.$po_unit.'</td>
+                                <td class="text-center">'.$price.'</td>
+                                <td class="text-center">'.$total.'</td>
                             </tr>';
                 $count += 1;
             }
@@ -1004,7 +1004,7 @@
                                 <td class="text-center">'.$po_unit.'</td>
                                 <td class="text-center">₱'.number_format($price, 2).'</td>
                                 <td class="text-center" id="poi-total">₱'.number_format($total, 2).'</td>
-                                <td>₱'.number_format($actual_price, 2).'</td>
+                                <td class="text-center">₱'.number_format($actual_price, 2).'</td>
                                 <td class="text-center">'.$received.'</td>
                                 <td class="text-center">₱'.number_format($amount, 2).'</td>
                             </tr>';
@@ -1135,6 +1135,22 @@
         public function updateActualPrice ($po_ref, $product_id, $price) {
             if (!$this->isBasePrice($product_id, $price)) {
                 $product = $this->getPrices($product_id);
+
+                $query = 'UPDATE purchase_order_items SET actual_price = ? WHERE product_id = ? AND po_ref = ?';
+                $stmt = $this->conn->prepare($query);
+                $stmt->bind_param('dis', $price, $product_id, $po_ref);
+
+                if (!$stmt) {
+                    die("Error in preparing statement: " . $this->conn->error);
+                }
+                
+                if (!$stmt->execute()) {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+
+                $stmt->close();
+
                 $json = array(
                     'not_base_price' => 'not_base_price',
                     'base_price' => '₱'.number_format($product['base_price'], 2),

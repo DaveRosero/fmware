@@ -24,7 +24,7 @@
                         }
 
                         if ($active == 1) {
-                            $status = '<div class="form-check form-switch">
+                            $status = '<div class="form-check form-switch d-flex justfiy-content-center">
                                         <input class="form-check-input status" 
                                             type="checkbox" 
                                             id="toggleSwitch"
@@ -33,7 +33,7 @@
                                         >
                                     </div>';
                         } else {
-                            $status = '<div class="form-check form-switch">
+                            $status = '<div class="form-check form-switch justify-content-center">
                                         <input class="form-check-input status" 
                                             type="checkbox" 
                                             id="toggleSwitch"
@@ -44,12 +44,12 @@
 
                         $name = $fname . ' ' . $lname;
                         echo '<tr>
-                                <td>'.$status.'</td>
-                                <td>'.$name.'</td>
-                                <td>'.$email.'</td>
-                                <td>'.$phone.'</td>
-                                <td>'.$date.'</td>
-                                <td>'.ucfirst($group_name).'</td>
+                                <td class="text-center">'.$status.'</td>
+                                <td class="text-center">'.$name.'</td>
+                                <td class="text-center">'.$email.'</td>
+                                <td class="text-center">'.$phone.'</td>
+                                <td class="text-center">'.$date.'</td>
+                                <td class="text-center">'.ucfirst($group_name).'</td>
                             </tr>';
                     }
                 } else {

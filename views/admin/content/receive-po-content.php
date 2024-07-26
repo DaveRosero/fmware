@@ -33,15 +33,15 @@
             <div class="row">
                 <table class="table table-borderless">
                     <thead>
-                        <th>#</th>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Unit</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Actual Price</th>
-                        <th>Received</th>
-                        <th>Amount</th>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Unit</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">Actual Price</th>
+                        <th class="text-center">Received</th>
+                        <th class="text-center">Amount</th>
                     </thead>
                     <tbody id="po_item_content">
                         <!-- PO Content Here -->
@@ -73,9 +73,9 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer bg-white text-end">
+        <div class="card-footer bg-white text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
             <button class="btn btn-primary" id="save" data-po-ref="<?php echo $po_info['po_ref']; ?>">Save</button>
-            <a href="/purchase-orders" class="btn btn-muted">Cancel</a>
+            <a href="/purchase-orders" class="btn btn-secondary">Cancel</a>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col text-end">
-                    <button class="btn btn-secondary" id="imageButton" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="fa-solid fa-image"></i></button>
+                    <button class="btn btn-info text-white" id="imageButton" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="fa-solid fa-image"></i></button>
                     <button class="btn btn-primary" id="printButton"><i class="fa-solid fa-print"></i></button>
                 </div>
             </div>
@@ -40,22 +40,22 @@
                     <table class="table table-borderless">
                         <thead>
                         <?php if ($po_info['status'] !==2 ): ?>
-                            <th>#</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Price</th>
-                            <th>Total</th>
+                            <th class="text-center">#</th>
+                            <th class="text-center">Product</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Unit</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Total</th>
                         <?php else: ?>
-                            <th>#</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Actual Price</th>
-                            <th>Received</th>
-                            <th>Amount</th>
+                            <th class="text-center">#</th>
+                            <th class="text-center">Product</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Unit</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Total</th>
+                            <th class="text-center">Actual Price</th>
+                            <th class="text-center">Received</th>
+                            <th class="text-center">Amount</th>
                         <?php endif; ?>
                         </thead>
                         <tbody id="po_item_content">
@@ -90,9 +90,9 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer bg-white text-end">
+        <div class="card-footer bg-white text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
             <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>">Delete</button>
-            <a href="/purchase-orders" class="btn btn-muted">Back</a>
+            <a href="/purchase-orders" class="btn btn-secondary">Back</a>
         </div>
     </div>
 </div>
