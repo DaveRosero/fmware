@@ -34,30 +34,23 @@ function fetchAllProducts()
         while ($row = $result->fetch_assoc()) {
             $disabled = ($row['qty'] == 0) ? 'disabled' : '';
             $output .= '
-                <div class="col item-card">
-                    <div class="card">
-                        <img src="asset/images/products/' . $row['image'] . '" class="img-fluid" alt="' . htmlspecialchars($row['name']) . '">    
-                        <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($row['unit_price']) . ' </h5>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-secondary shadow-sm rounded">
+                        <img src="asset/images/products/' . $row['image'] . '" class="card-img-top img-fluid" alt="' . htmlspecialchars($row['name']) . '">
                         <div class="card-body">
-                            <h5 class="card-title  text-wrap">' . htmlspecialchars($row['name']) . ' (' . htmlspecialchars($row['variant_name']) . ')</h5>
-                            <div class="item-info">
-                                <div class="d-flex justify-content-between">
-                                    <p> ' . htmlspecialchars($row['unit_value']) . ' ' . strtoupper($row['unit_name']) . '</p>
-                                    <div class="d-flex">
-                                        <p>Stock:</p>
-                                        <p> ' . $row['qty'] . ' </p>
-                                    </div>
-                                </div>
-                            </div>
+                             <h5 class="card-title text-dark">' . htmlspecialchars($row['name']) . ' <small class="text-muted">(' . htmlspecialchars($row['variant_name']) . ')</small></h5>
+                             <p class="card-text">Unit: <strong>' . htmlspecialchars($row['unit_value']) . ' ' . strtoupper($row['unit_name']) . '</strong></p>
+                             <p class="card-text">Stock: <span class="badge ' . ($row['qty'] == 0 ? 'bg-danger' : 'bg-success') . '">' . $row['qty'] . '</span></p>
                             <div class="d-grid">
-                                <button class="btn btn-primary cart-button" 
+                                 <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
                                     data-product-id="' . $row['id'] . '"
-                                    data-product-price="' . $row['unit_price'] . '"
-                                    ' . $disabled . '
-                                >
+                                    data-product-price="' . $row['unit_price'] . '">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
-                                </button>
-                            </div>
+                                 </button>
+                             </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <h5 class="m-0 text-success">₱ ' . number_format($row['unit_price']) . '</h5>
                         </div>
                     </div>
                 </div>';

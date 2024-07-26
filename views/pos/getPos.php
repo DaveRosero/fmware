@@ -17,65 +17,68 @@ $query = 'SELECT pos_cart.product_id,
 $stmt = $mysqli->prepare($query);
 $stmt->execute();
 $stmt->bind_result($id, $qty, $price, $name, $unit_value, $unit, $variant);
+
 $tbody = '';
-$tbody_modal ='';
+$tbody_modal = '';
 $cart_total = array();
+
 while ($stmt->fetch()) {
     $total_price = $price * $qty;
-    $tbody .= '<tr>
-                    <td class="align-middle">' . $name . '</td>
-                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) . '</td>
-                    <td class="align-middle">' . $variant . '</td>
-                    <td class="align-middle">
-                        <div class="input-group">
+
+    $tbody .= '<tr style="text-align: center;">
+                    <td>' . htmlspecialchars($name) . '</td>
+                    <td>' . htmlspecialchars($unit_value) . ' ' . htmlspecialchars(strtoupper($unit)) . '</td>
+                    <td>' . htmlspecialchars($variant) . '</td>
+                    <td>
+                        <div class="input-group input-group-sm" style="justify-content: center; display: flex;">
                             <button 
-                                class="btn btn-sm btn-outline-secondary minus-qty" 
+                                class="btn btn-outline-secondary minus-qty" 
                                 type="button"
-                                data-product-id="' . $id . '"
-                                data-product-qty="' . $qty . '"
+                                data-product-id="' . htmlspecialchars($id) . '"
+                                data-product-qty="' . htmlspecialchars($qty) . '"
                             >
-                            <i class="fas fa-minus"></i>
+                                <i class="fas fa-minus"></i>
                             </button>
                             <input 
-                                type="text" 
-                                class="form-control text-center w-20 qty-input" 
-                                value="' . $qty . '" 
-                                style="max-width: 50px;"
+                                type="number" 
+                                class="form-control text-center qty-input" 
+                                value="' . htmlspecialchars($qty) . '" 
+                                id="quantity-input-' . htmlspecialchars($id) . '"
+                                style="max-width: 60px; text-align: center;"
                             >
                             <button 
-                                class="btn btn-sm btn-outline-secondary add-qty" 
+                                class="btn btn-outline-secondary add-qty" 
                                 type="button"
-                                data-product-id="' . $id . '"
-                                data-product-qty="' . $qty . '"
+                                data-product-id="' . htmlspecialchars($id) . '"
+                                data-product-qty="' . htmlspecialchars($qty) . '"
                             >
-                            <i class="fas fa-plus"></i>
+                                <i class="fas fa-plus"></i>
                             </button>
                         </div>
                     </td>
-                    <td class="align-middle">₱' . $total_price . '</td>
-                    <td class="align-middle">
+                    <td class="cart-price">₱' . number_format($total_price, 2) . '</td>
+                    <td>
                         <button class="btn btn-danger cart-delete"
-                            data-product-id="' . $id . '"
+                            data-product-id="' . htmlspecialchars($id) . '"
                         >
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
                 </tr>';
-    $tbody_modal.= '<tr>
-                    <td class="align-middle">' . $name . '</td>
-                    <td class="align-middle">' . $unit_value . ' ' . strtoupper($unit) .'</td>
-                    <td class="align-middle">' . $variant . '</td>
-                    <td class="align-middle">₱' . $price . '</td>
-                    <td class="align-middle text-center">'. $qty . '</td>
-                    <td class="align-middle">₱' . $total_price . '</td>
+
+    $tbody_modal .= '<tr style="text-align: center;">
+                    <td>' . htmlspecialchars($name) . '</td>
+                    <td>' . htmlspecialchars($unit_value) . ' ' . htmlspecialchars(strtoupper($unit)) . '</td>
+                    <td>' . htmlspecialchars($variant) . '</td>
+                    <td>₱' . number_format($price, 2) . '</td>
+                    <td>' . htmlspecialchars($qty) . '</td>
+                    <td>₱' . number_format($total_price, 2) . '</td>
                 </tr>';
 
     $cart_total[] = $total_price;
 }
 
 $stmt->close();
-
-
 
 // Assuming a discount value passed from the client, else default to 0
 $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
@@ -86,3 +89,4 @@ $json['tbody'] = $tbody;
 $json['tbody_modal'] = $tbody_modal;
 $json['cart_total'] = number_format($total_with_discount, 2);
 echo json_encode($json);
+?>

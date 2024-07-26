@@ -2,14 +2,15 @@
     aria-labelledby="transactionhistorySearch-ModalLabel" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="transactionhistorySearch-ModalLabel"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-dark text-white">
+                <h1 class="modal-title fs-5" id="transactionhistorySearch-ModalLabel"> History</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <!--Show Search Result & transaction Details-->
-                <table class="table align-middle" id="history-search">
-                    <thead class="table-secondary">
+                <table class="table table-striped table-hover align-middle" id="history-search">
+                    <thead class="table-dark">
                         <tr>
                             <th scope="col">Transaction #</th>
                             <th scope="col">Transaction Date</th>
@@ -30,7 +31,11 @@
                                 </td>
                                 <td>
                                     <?php
-                                    $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary' : ($history['status'] == 'void' ? 'text-bg-secondary' : '');
+                                    $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary'
+                                        : ($history['status'] == 'void' ? 'text-bg-secondary'
+                                            : ($history['status'] == 'fully refunded' ? 'bg-success text-white'
+                                                : ($history['status'] == 'fully replaced' ? 'bg-info text-white'
+                                                    : '')));
                                     ?>
                                     <span
                                         class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($history['status']); ?></span>
