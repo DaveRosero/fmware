@@ -1,5 +1,10 @@
 $(document).ready(function () {
-  $(".view-history-btn").click(function () {
+  var historyTable = $("#history-search").DataTable({
+    order: [[1, "desc"]], // Sort by second column (transaction date) in descending order
+    stateSave: true, // Save the state of the table
+  });
+
+  $("#history-search").on("click", ".view-history-btn", function () {
     const posRef = $(this).data("bs-posref");
 
     $.ajax({
@@ -45,6 +50,11 @@ $(document).ready(function () {
           $(".void").prop("disabled", true);
         } else if (data.status === "paid") {
           $(".void").prop("disabled", false);
+        } else if (
+          data.status === "fully refunded" ||
+          data.status === "fully replaced"
+        ) {
+          $(".void").prop("disabled", true);
         }
 
         // Clear and set payment method
@@ -128,10 +138,22 @@ $(document).ready(function () {
     });
   });
 
-  $("#history-search").DataTable({
-    order: [[1, "desc"]],
+  $("#historyView").on("shown.bs.modal", function () {
+    historyTable.order([[1, "desc"]]).draw();
   });
 
+  $("#historyView").on("hidden.bs.modal", function () {
+    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
+    historyTable.search("").draw(); // Clear search filter
+  });
+
+  // Reset DataTable when the modal is closed
+  $("#history-searchModal").on("hidden.bs.modal", function () {
+    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
+    historyTable.search("").draw(); // Clear search filter
+  });
+
+  // void button functionally
   $(".void").on("click", function (event) {
     event.preventDefault(); // Prevent default action if needed
 

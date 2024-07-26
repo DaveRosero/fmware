@@ -40,13 +40,18 @@ if ($_SESSION['group'] !== 'cashier') {
   require_once 'config/load_vendors.php';
   ?>
   <link rel="stylesheet" href="asset/css/pos/pos.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
 </head>
 
 <body style="overflow: hidden;">
-  <nav class="navbar navbar-expand-lg border-bottom">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom shadow-sm">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png"
-          alt="logo-img" style="width: 30px;" />FMWare|POS</a>
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="rounded-circle me-2 logo-img" src="asset/images/store/logo.png" alt="logo-img"
+          style="width: 40px; height: 40px;" />
+        <span class="fw-bold text-light">FMWare|POS</span>
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -54,29 +59,38 @@ if ($_SESSION['group'] !== 'cashier') {
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <!--Open Return & Refunds Modal (transaction search modal)-->
-            <a class="nav-link" data-bs-target="#transaction-searchModal" data-bs-toggle="modal"
-              id="transaction-searchBtn">Refund & Replace</a>
+            <a class="nav-link btn btn-outline-success text-light me-2 d-flex align-items-center"
+              data-bs-target="#transaction-searchModal" data-bs-toggle="modal" id="transaction-searchBtn">
+              Refund & Replace <i class="fa-solid fa-arrows-rotate ms-2"></i>
+            </a>
           </li>
           <li class="nav-item">
-            <!--Pick Up Modal (for pick up transaction search modal)-->
-            <a class="nav-link" data-bs-target="#pickup-searchModal" data-bs-toggle="modal">Pick-Up</a>
+            <a class="nav-link btn btn-outline-success text-light me-2 d-flex align-items-center"
+              data-bs-target="#pickup-searchModal" data-bs-toggle="modal">
+              Pick-Up <i class="fa-solid fa-right-to-bracket ms-2"></i>
+            </a>
           </li>
           <li class="nav-item">
-            <!--Pick Up Modal (for pick up transaction history search modal)-->
-            <a class="nav-link" data-bs-target="#history-searchModal" data-bs-toggle="modal">History</a>
+            <a class="nav-link btn btn-outline-success text-light d-flex align-items-center"
+              data-bs-target="#history-searchModal" data-bs-toggle="modal">
+              History <i class="fa-solid fa-clock ms-2"></i>
+            </a>
           </li>
         </ul>
         <div class="dropdown">
-          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Hi, <?php echo htmlspecialchars($user_name); ?>
+          <button class="btn btn-outline-success dropdown-toggle border-light text-light" type="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-2"></i> Hi, <?php echo htmlspecialchars($user_name); ?>
           </button>
-          <ul class="dropdown-menu">
-            <form action="/logout" method="post">
-              <button type="submit" class="dropdown-item">Logout</button>
-            </form>
+          <ul class="dropdown-menu dropdown-menu-end bg-dark border-0 shadow">
+            <li>
+              <form action="/logout" method="post" class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-outline-danger w-75">Logout</button>
+              </form>
+            </li>
           </ul>
         </div>
+
       </div>
     </div>
   </nav>
@@ -87,7 +101,8 @@ if ($_SESSION['group'] !== 'cashier') {
           <div class="table-container"
             style="max-height: 90vh; height: 100%; width:auto; overflow-x:hidden; overflow-y:auto;">
             <form class="d-flex" role="search" id="barcode-form">
-              <input class="form-control me-2" type="text" name="barcode" id="barcode" placeholder="Search">
+              <input class="form-control me-2 border-2 rounded-pill shadow-sm" type="text" name="barcode" id="barcode"
+                placeholder="Search">
             </form>
             <br>
             <tbody>
@@ -106,15 +121,15 @@ if ($_SESSION['group'] !== 'cashier') {
           </div>
           <!--Cart List-->
           <div class="col cart-list">
-            <table class="table align-middle">
+            <table class="table table-hover">
               <thead class="table-secondary">
                 <tr>
-                  <th>Item Name</th>
-                  <th>Variant</th>
-                  <th>Unit</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Actions</th>
+                  <th class="text-center">Item Name</th>
+                  <th class="text-center">Variant</th>
+                  <th class="text-center">Unit</th>
+                  <th class="text-center">Quantity</th>
+                  <th class="text-center">Price</th>
+                  <th class="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody id="cart-body">

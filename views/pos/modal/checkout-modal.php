@@ -3,27 +3,27 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Checkout</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
                     id="close-button"></button>
             </div>
             <div class="modal-body" style="max-height: 75vh; overflow-y:auto;">
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-lg-7">
                         <div class="modalBody-header">
                             <h3 class="modalHeader-title">Items</h3>
                         </div>
                         <div class="col modalItem-list">
-                            <table class="table align-middle">
-                                <thead class="table-secondary">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
                                     <tr>
-                                        <th>Item Name</th>
-                                        <th>Unit</th>
-                                        <th>Variant</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
+                                        <th class="text-center">Item Name</th>
+                                        <th class="text-center">Unit</th>
+                                        <th class="text-center">Variant</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-center">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody id="cart-body-modal">
@@ -109,7 +109,7 @@
                                     <div class="mb-3">
                                         <label for="contact-input" class="form-label">Contact:</label>
                                         <input type="text" class="form-control" name="contact" id="contact-input"
-                                            required />
+                                            maxlength="11" pattern="\d{11}" required />
                                     </div>
                                 </div>
                                 <div>

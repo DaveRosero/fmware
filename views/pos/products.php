@@ -29,25 +29,23 @@ $output = '';
 while ($stmt->fetch()) {
   $disabled = ($qty == 0) ? 'disabled' : '';
   $output .= '
-    <div class="item-card">
-      <div class="card">
-        <img src="asset/images/products/' . $image . '" class="img-fluid" alt="' . $name . '">
+    <div class="col-md-4 mb-4">
+      <div class="card border-secondary shadow-sm rounded">
+        <img src="asset/images/products/' . $image . '" class="card-img-top img-fluid" alt="' . $name . '">
         <div class="card-body">
-          <h5 class="card-title  text-wrap">' . $name . '(' . $variant . ')</h5>
-          <p class="card-text">Unit: ' . $unit_value . ' ' . strtoupper($unit) . '</p>
-          <p class="card-text">Stock: ' . $qty . '</p>
+          <h5 class="card-title text-dark">' . $name . ' <small class="text-muted">(' . $variant . ')</small></h5>
+          <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit) . '</strong></p>
+          <p class="card-text">Stock: <span class="badge ' . ($qty == 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
           <div class="d-grid">
-            <button class="btn btn-primary cart-button" 
+            <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
                     data-product-id="' . $id . '"
-                    data-product-price="' . $unit_price . '"
-                    ' . $disabled . '
-            >
+                    data-product-price="' . $unit_price . '">
               <i class="fas fa-cart-plus"></i> Add to Cart
             </button>
           </div>
         </div>
-        <div class="card-footer">
-          <h5 class="card-title p-2 w-50 bg-success text-white"> ₱ ' . number_format($unit_price) . ' </h5>
+        <div class="card-footer text-center">
+          <h5 class="m-0 text-success">₱ ' . number_format($unit_price, 2) . '</h5>
         </div>
       </div>
     </div>';

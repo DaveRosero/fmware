@@ -2,23 +2,24 @@
     tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="historyViewLabel"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body" style="max-height: 75vh; overflow-y:auto;">
                 <div class="row">
                     <div class="col-7">
                         <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
-                            <table class="table align-middle">
-                                <thead class="table table-secondary">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table table-dark">
                                     <tr>
-                                        <th scope="col">Item Name</th>
-                                        <th scope="col">Unit</th>
-                                        <th scope="col">Variant</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Subtotal</th>
+                                        <th class="text-center">Item Name</th>
+                                        <th class="text-center">Unit</th>
+                                        <th class="text-center">Variant</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-center">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody id="productDetails">
