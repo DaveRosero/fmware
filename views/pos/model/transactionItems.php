@@ -50,8 +50,8 @@ while ($row = $result->fetch_assoc()) {
     <td>
       <select class="form-select item-condition" aria-label="Default select example" disabled>
         <option value="">Select item condition</option>
-        <option value="1">Good</option>
-        <option value="2">Broken</option>
+        <option value="Good">Good</option>
+        <option value="Broken">Broken</option>
     </select>
     </td>
     </tr>';
