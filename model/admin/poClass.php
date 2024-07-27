@@ -565,6 +565,14 @@
         }
         
         public function savePO ($po_ref) {
+            if ($this->isPOEmpty($po_ref)) {
+                $json = array(
+                    'empty' => 'empty'
+                );
+                echo json_encode($json);
+                return;
+            }
+
             $query = 'UPDATE purchase_order SET status = 1 WHERE po_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $po_ref);
@@ -1307,6 +1315,31 @@
 
             $stmt->close();
             return;
+        }
+
+        public function isPOEmpty ($po_ref) {
+            $query = 'SELECT COUNT(*) FROM purchase_order_items WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($count);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($count == 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 ?>

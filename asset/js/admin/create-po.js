@@ -132,6 +132,17 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
+                if (json.empty) {
+                    Swal.fire({
+                        title: 'Please add at least one (1) product.',
+                        icon: 'error',
+                        showCancelButton: false,
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: true,
+                    })
+                    return;
+                }
+                
                 if (json.redirect) {
                     Swal.fire({
                         title: 'Purchase Order Saved!',
