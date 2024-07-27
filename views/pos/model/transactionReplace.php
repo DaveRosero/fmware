@@ -128,38 +128,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Invalid request method.";
 }
-
-
-  // foreach ($replaced_items as $item) {
-    //     $product_id = $mysqli->real_escape_string($item['product_id']);
-    //     $replace_qty = $mysqli->real_escape_string($item['refund_qty']);
-    //     $condition = $mysqli->real_escape_string($item['condition']);
-
-    //     // Check if replacement item exists for current replacement
-    //     $check_item_query = "SELECT id FROM replacement_items WHERE replacement_id = ? AND product_id = ?";
-    //     $stmt = prepareAndExecute($mysqli, $check_item_query, [$replace_id, $product_id], 'ii', "Error checking replacement item: ");
-    //     $check_item_result = $stmt->get_result();
-
-    //     if ($check_item_result && $check_item_result->num_rows > 0) {
-    //         // Update existing replacement item
-    //         $item_row = $check_item_result->fetch_assoc();
-    //         $item_id = $item_row['id'];
-
-    //         $update_item_query = "UPDATE replacement_items SET replace_qty = replace_qty + ? WHERE id = ?";
-    //         prepareAndExecute($mysqli, $update_item_query, [$replace_qty, $item_id], 'ii', "Error updating replacement item: ");
-    //     } else {
-    //         // Insert new replacement item
-    //         $item_query = "INSERT INTO replacement_items (replacement_id, product_id, replace_qty) VALUES (?, ?, ?)";
-    //         prepareAndExecute($mysqli, $item_query, [$replace_id, $product_id, $replace_qty], 'iii', "Error inserting replacement item: ");
-    //     }
-
-    //     // Update pos_items table to subtract replace_qty from qty
-    //     $update_pos_query = "UPDATE pos_items SET qty = qty - ? WHERE pos_ref = ? AND product_id = ?";
-    //     prepareAndExecute($mysqli, $update_pos_query, [$replace_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
-
-    //     // Update stock table if condition is '1' (Good condition)
-    //     if ($condition === '1') {
-    //         $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
-    //         prepareAndExecute($mysqli, $update_stock_query, [$replace_qty, $product_id], 'ii', "Error updating stock: ");
-    //     }
-    // }
