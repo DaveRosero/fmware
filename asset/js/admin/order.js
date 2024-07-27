@@ -283,7 +283,8 @@ $(document).ready(function(){
 
     $('#printButton').click(function() {
         var content = $('#printContent').html();
-        var header = '<div id="printHeader">FMWware Order Reports</div>'; // Replace with your header content
+        var apostrophe = "'";
+        var header = '<div id="printHeader"><div class="text-center"><h5 class="mb-0 fw-semibold">FM Odulio' + apostrophe + 's Enterprise & Gen. Merchandise</h5><p class="mb-0">Mc Arthur Hi-way, Poblacion II, Marilao, Bulacan</p><p class="mb-0">fmoduliogenmdse@yahoo.com</p><p class="mb-0">0922-803-3898</p><h6 class="mt-2 mb-2">Order Report</h6></div><hr></div>'; // Replace with your header content
     
         // Append the header to the content
         $('body').html(header + content);
