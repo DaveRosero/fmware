@@ -77,11 +77,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $replace_qty = $mysqli->real_escape_string($item['refund_qty']);
         $condition = $mysqli->real_escape_string($item['condition']);
 
-        if ($condition === 'Good') {
-            $good_items[] = ['product_id' => $product_id, 'replace_qty' => $replace_qty];
+        // Check if item already exists in replacement_items with the same condition
+        $check_item_query = "SELECT id, replace_qty FROM replacement_items WHERE replacement_id = ? AND product_id = ? AND item_condition = ?";
+        $stmt = prepareAndExecute($mysqli, $check_item_query, [$replace_id, $product_id, $condition], 'iis', "Error checking replacement item: ");
+        $check_result = $stmt->get_result();
+
+        if ($check_result && $check_result->num_rows > 0) {
+            // Update existing replacement item record
+            $item_row = $check_result->fetch_assoc();
+            $existing_replace_qty = $item_row['replace_qty'];
+            $new_replace_qty = $existing_replace_qty + $replace_qty;
+
+            $update_item_query = "UPDATE replacement_items SET replace_qty = ? WHERE id = ?";
+            prepareAndExecute($mysqli, $update_item_query, [$new_replace_qty, $item_row['id']], 'ii', "Error updating replacement item: ");
         } else {
-            $broken_items[] = ['product_id' => $product_id, 'replace_qty' => $replace_qty];
+            // Insert new replacement item record
+            $item_query = "INSERT INTO replacement_items (replacement_id, product_id, replace_qty, item_condition) VALUES (?, ?, ?, ?)";
+            prepareAndExecute($mysqli, $item_query, [$replace_id, $product_id, $replace_qty, $condition], 'iiis', "Error inserting replacement item: ");
         }
+
+        // Update pos_items table to subtract replace_qty from qty
+        $update_pos_query = "UPDATE pos_items SET qty = qty - ? WHERE pos_ref = ? AND product_id = ?";
+        prepareAndExecute($mysqli, $update_pos_query, [$replace_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
+
+        // Update stock table
+        $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
+        prepareAndExecute($mysqli, $update_stock_query, [$replace_qty, $product_id], 'ii', "Error updating stock: ");
     }
 
     // Process Good Items

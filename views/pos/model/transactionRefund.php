@@ -83,11 +83,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $refund_qty = $mysqli->real_escape_string($item['refund_qty']);
         $condition = $mysqli->real_escape_string($item['condition']);
 
-        if ($condition === 'Good') {
-            $good_items[] = ['product_id' => $product_id, 'refund_qty' => $refund_qty];
+        // Check if item already exists in refund_items with the same condition
+        $check_item_query = "SELECT id, refund_qty FROM refund_items WHERE refund_id = ? AND product_id = ? AND item_condition = ?";
+        $stmt = prepareAndExecute($mysqli, $check_item_query, [$refund_id, $product_id, $condition], 'iis', "Error checking refund item: ");
+        $check_result = $stmt->get_result();
+
+        if ($check_result && $check_result->num_rows > 0) {
+            // Update existing refund item record
+            $item_row = $check_result->fetch_assoc();
+            $existing_refund_qty = $item_row['refund_qty'];
+            $new_refund_qty = $existing_refund_qty + $refund_qty;
+
+            $update_item_query = "UPDATE refund_items SET refund_qty = ? WHERE id = ?";
+            prepareAndExecute($mysqli, $update_item_query, [$new_refund_qty, $item_row['id']], 'ii', "Error updating refund item: ");
         } else {
-            $broken_items[] = ['product_id' => $product_id, 'refund_qty' => $refund_qty];
+            // Insert new refund item record
+            $item_query = "INSERT INTO refund_items (refund_id, product_id, refund_qty, item_condition) VALUES (?, ?, ?, ?)";
+            prepareAndExecute($mysqli, $item_query, [$refund_id, $product_id, $refund_qty, $condition], 'iiis', "Error inserting refund item: ");
         }
+
+        // Update pos_items table to subtract refund_qty from qty
+        $update_pos_query = "UPDATE pos_items SET qty = qty - ? WHERE pos_ref = ? AND product_id = ?";
+        prepareAndExecute($mysqli, $update_pos_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
+
+        // Update stock table
+        $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
+        prepareAndExecute($mysqli, $update_stock_query, [$refund_qty, $product_id], 'ii', "Error updating stock: ");
+    
     }
     // Process Good Items
     foreach ($good_items as $item) {
