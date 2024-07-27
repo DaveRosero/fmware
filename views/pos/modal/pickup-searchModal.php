@@ -2,36 +2,31 @@
     tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="etransactionSearch-ModalLabel">Transaction Search</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header  bg-dark text-white">
+                <h1 class="modal-title fs-5" id="pickupSearch-ModalLabel">Pick-Up Transaction</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!--Search using Transaction/Invoice # -->
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
-                        aria-describedby="button-addon2">
-                    <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
-                </div>
                 <!--Show Search Result & transaction Details-->
-                <table class="table align-middle">
-                    <thead class="table-secondary">
+                <table class="table table-striped table-hover align-middle w-100" id="pickup-search">
+                    <thead class="table-dark">
                         <tr>
-                            <th scope="col">Transaction #</th>
-                            <th scope="col">Order Date</th>
-                            <th scope="col">Total Price</th>
-                            <th scope="col">Claimed Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th class="text-center">Transaction #</th>
+                            <th class="text-center">Order Date</th>
+                            <th class="text-center">Total Price</th>
+                            <th class="text-center">Claimed Date</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <tr>
-                            <th scope="row">1234567890</th>
-                            <td>09/11/2001</td>
-                            <td>$100.00</td>
+                            <th scope="row">POS_D4F3E0EE7820263C09E1</th>
+                            <td>July 26, 2024 09:43 AM</td>
+                            <td>₱750.00</td>
                             <td><span class="badge text-bg-secondary">Claimed</span></td>
-                            <td>09/12/2002</td>
+                            <td>July 27, 2024 10:45 AM</td>
                             <td>
                                 <button class="btn btn-primary" data-bs-target="#pickupView"
                                     data-bs-toggle="modal">View</button>

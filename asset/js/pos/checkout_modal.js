@@ -48,15 +48,20 @@ $(document).ready(function () {
     calculateChange(); // Recalculate change
   }
 
+  // Reset counterIncremented flag when starting a new transaction
+  function resetTransaction() {
+    toggleFields();
+  }
+
   // Initial setup: Set dropdown to default value and toggle fields
   $transactionTypeSelect.val("0"); // Set default selection to "POS"
   $paymentTypeSelect.val("3"); // Set default selection to "Cash"
   $brgySelect.val("0"); // Set default selection to "Select your Baranggay"
-  toggleFields();
+  resetTransaction();
 
   // Event listener for dropdown change
   $transactionTypeSelect.on("change", function () {
-    toggleFields();
+    resetTransaction();
   });
 
   // Handle change in barangay selection
@@ -261,38 +266,32 @@ $(document).ready(function () {
 
     var printableContent = `
       <style>
-        @page {
-          size: 80mm 70mm;
-          margin: 0;
+         @page {
+          size: 80mm 70mm; /* Paper size */
+          margin: 0; /* No margins */
         }
         body {
           margin: 0;
           padding: 0;
+          font-family: Arial, sans-serif;
         }
         .receipt {
-          width: 80mm;
-          max-width: 80mm;
-          margin: 0 auto;
-          font-family: Arial, sans-serif;
-          font-size: 10px;
-        }
-        .header {
-          text-align: center;
-          margin-bottom: 10px;
-        }
-        .logo {
-          width: 50px;
-          height: 50px;
-          margin-bottom: 5px;
+          width: 80mm; /* Matches the paper size */
+          font-size: 8px; /* Adjust font size for better fit */
+          line-height: 1.2;
+          padding: 2mm;
         }
         table {
           width: 100%;
           border-collapse: collapse;
+          margin: 0;
+          padding: 0;
         }
         th, td {
-          padding: 4px;
-          text-align: left;
+          padding: 2px; /* Reduce padding to fit more content */
+          text-align: center;
           border-bottom: 1px solid #ddd;
+          font-size: 8px; /* Adjust font size for better fit */
         }
         th {
           background-color: #f2f2f2;
@@ -300,17 +299,28 @@ $(document).ready(function () {
         .total {
           font-weight: bold;
           text-align: right;
-          margin-top: 5px;
+          margin-top: 2mm;
+          font-size: 8px; /* Adjust font size for better fit */
         }
         .center {
           text-align: center;
         }
+        .header {
+          text-align: center; /* Center align header */
+          margin-bottom: 2mm;
+        }
+        .logo {
+          width: 30px; /* Adjust logo size to fit */
+          height: 30px;
+          margin-bottom: 2mm;
+        }
         .signature {
-          margin-top: 15px;
+          margin-top: 10mm;
         }
         .signature p {
           text-align: center;
-          margin-top: 25px;
+          margin-top: 15mm;
+          font-size: 8px; /* Adjust font size for better fit */
         }
       </style>
       <div class="receipt">
