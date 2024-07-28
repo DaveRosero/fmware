@@ -122,7 +122,7 @@ $(document).ready(function () {
                     inputField.val(isChecked ? 1 : 0);
                     inputField.prop("disabled", !isChecked);
                     if (isChecked) {
-                      selectCondition.val('1');
+                      selectCondition.val('Good');
                       selectCondition.prop("disabled", false);
                     } else {
                       selectCondition.val(''); // Reset select to default value when unchecked
@@ -133,15 +133,6 @@ $(document).ready(function () {
                   $(".refund-quantity").change(function () {
                     updateRefundTotal();
                   });
-
-                  // function toggleRefundButton() {
-                  //   const anyItemsSelected = $(".selectedItem:checked").length > 0;
-                  //   $("#refund-button").prop("disabled", !anyItemsSelected || transactionStatus === 'replaced');
-                  // }
-                  // function toggleReplaceButton() {
-                  //   const anyItemsSelected = $(".selectedItem:checked").length > 0;
-                  //   $("#replace-button").prop("disabled", !anyItemsSelected || transactionStatus === 'refunded');
-                  // }
 
                   function toggleButtons() {
                     const anyItemsSelected = $(".selectedItem:checked").length > 0;
@@ -297,9 +288,9 @@ $(document).ready(function () {
 
       refundItems.push({ product_id, refund_qty, condition });
 
-      if (condition === "1") {
+      if (condition === "Good") {
         goodItemsCount += parseInt(refund_qty);
-      } else if (condition === "2") {
+      } else if (condition === "Broken") {
         badItemsCount += parseInt(refund_qty);
       }
 
@@ -386,9 +377,9 @@ $("#replace-button").click(function () {
 
         replacedItems.push({ product_id, refund_qty, condition });
 
-        if (condition === "1") {
+        if (condition === "Good") {
             goodItemsCount += refund_qty;
-        } else if (condition === "2") {
+        } else if (condition === "Broken") {
             badItemsCount += refund_qty;
         }
 
