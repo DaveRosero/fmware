@@ -9,18 +9,18 @@
             </div>
             <div class="modal-body">
                 <!--Show Search Result & transaction Details-->
-                <table class="table table-striped table-hover align-middle" id="history-search">
+                <table class="table table-striped table-hover align-middle w-100" id="history-search">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">Transaction #</th>
-                            <th scope="col">Transaction Date</th>
-                            <th scope="col">Total Price</th>
-                            <th scope="col">Transaction Type</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th class="text-center">Transaction #</th>
+                            <th class="text-center">Transaction Date</th>
+                            <th class="text-center">Total Price</th>
+                            <th class="text-center">Transaction Type</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <!---fetching information from the database -->
                         <?php foreach ($historys as $history): ?>
                             <tr>
