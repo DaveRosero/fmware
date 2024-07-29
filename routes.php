@@ -185,6 +185,20 @@ any('/disable-unit', 'controller/admin/unit/disable-unit.php');
 
 //*****************************************************************//
 
+// Manage Sales View
+any('/manage-sales', 'views/admin/sales.php');
+
+// Manage Sales Controller
+
+//*****************************************************************//
+
+// Manage Returns View
+any('/manage-returns', 'views/admin/return.php');
+
+// Manage Returns Controller
+
+//*****************************************************************//
+
 // POS Controller
 any('/pos', 'views/pos/pos.php');
 any('/pos-cart', 'views/pos/price_list_cart.php');
@@ -210,8 +224,6 @@ any('/pos-processReplace', 'views/pos/model/transactionReplace.php');
 any('/pos-change', 'views/pos/qtychange.php');
 any('/pos-search', 'views/pos/search.php');
 any('/pos-fetchall', 'views/pos/fetchallprod.php');
-
-
 
 //*****************************************************************//
 
