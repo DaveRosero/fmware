@@ -13,7 +13,7 @@
             </div>
             <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                 <div class="nav-item dropdown position-relative me-3">
-                    <a class="nav-link text-light position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link text-light position-relative" id="notificationDropdown" role="button" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 
                             <!-- Badge element -->

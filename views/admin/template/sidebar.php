@@ -3,7 +3,7 @@
         <!-- Section 1 -->
         <li class="nav-item">
             <a href="#section1" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section1">
-                <span class="d-block small">HOME</span>
+                <span class="d-block small fw-semibold">HOME</span>
                 <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
             </a>
         </li>
@@ -32,7 +32,7 @@
         <!-- Section 2 -->
         <li class="nav-item">
             <a href="#section2" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section2">
-                <span class="d-block small">SALES</span>
+                <span class="d-block small fw-semibold">SALES</span>
                 <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
             </a>
         </li>
@@ -61,7 +61,7 @@
         <!-- Section 3 -->
         <li class="nav-item">
             <a href="#section3" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section3">
-                <span class="d-block small">INVENTORY</span>
+                <span class="d-block small fw-semibold">INVENTORY</span>
                 <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
             </a>
         </li>
@@ -90,7 +90,7 @@
         <!-- Section 4 -->
         <li class="nav-item">
             <a href="#section4" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section4">
-                <span class="d-block small">PEOPLE</span>
+                <span class="d-block small fw-semibold">PEOPLE</span>
                 <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
             </a>
         </li>
@@ -113,7 +113,7 @@
         <!-- Section 5 -->
         <li class="nav-item">
             <a href="#section5" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section5">
-                <span class="d-block small">MAINTENANCE</span>
+                <span class="d-block small fw-semibold">MAINTENANCE</span>
                 <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
             </a>
         </li>
