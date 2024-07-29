@@ -47,7 +47,7 @@
                             </select>
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="cashRec-input" />
+                                <input type="number" class="form-control" id="pickupcashRec-input" />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
@@ -76,14 +76,14 @@
                                 <h3>Customer Details</h3>
                                 <form>
                                     <label for="fName-input" class="form-label">First Name:</label>
-                                    <input type="text" class="form-control" placeholder="Jhon" id="fName-input"
+                                    <input type="text" class="form-control" placeholder="Jhon" id="pickupfName-input"
                                         disabled />
                                     <label for="lName-input" class="form-label">Last Name:</label>
-                                    <input type="text" class="form-control" placeholder="Doe" id="lName-input"
+                                    <input type="text" class="form-control" placeholder="Doe" id="pickuplName-input"
                                         disabled />
                                     <label for="contact-input" class="form-label">Contact:</label>
                                     <input type="text" class="form-control" placeholder="1231-1231-1231"
-                                        id="contact-input" disabled />
+                                        id="pickupcontact-input" disabled />
                                 </form>
                             </form>
                         </div>
