@@ -283,8 +283,16 @@ $(document).ready(function(){
 
     $('#printButton').click(function() {
         var content = $('#printContent').html();
-        var apostrophe = "'";
-        var header = '<div id="printHeader"><div class="text-center"><h5 class="mb-0 fw-semibold">FM Odulio' + apostrophe + 's Enterprise & Gen. Merchandise</h5><p class="mb-0">Mc Arthur Hi-way, Poblacion II, Marilao, Bulacan</p><p class="mb-0">fmoduliogenmdse@yahoo.com</p><p class="mb-0">0922-803-3898</p><h6 class="mt-2 mb-2">Order Report</h6></div><hr></div>'; // Replace with your header content
+        var header = `<div id="printHeader">
+                        <div class="text-center" style="font-size: 12px;">
+                            <h5 class="mb-0 fw-semibold" style="font-size: 14px;">FM Odulio's Enterprise & Gen. Merchandise</h5>
+                            <p class="mb-0" style="font-size: 10px;">Mc Arthur Hi-way, Poblacion II, Marilao, Bulacan</p>
+                            <p class="mb-0" style="font-size: 10px;">fmoduliogenmdse@yahoo.com</p>
+                            <p class="mb-0" style="font-size: 10px;">0922-803-3898</p>
+                            <h6 class="mt-2 mb-2" style="font-size: 12px;">Order Report</h6>
+                        </div>
+                        <hr style="margin: 5px 0;">
+                    </div>`;
     
         // Append the header to the content
         $('body').html(header + content);
