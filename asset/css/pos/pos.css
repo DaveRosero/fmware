@@ -34,3 +34,23 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.product-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2; /* Show up to 2 lines */
+  height: 3rem; /* Height to accommodate 2 lines */
+}
+
+@media (max-width: 768px) {
+  .product-name {
+    font-size: 0.9rem; /* Adjust font size for smaller screens */
+    -webkit-line-clamp: 1; /* Show up to 1 line on smaller screens */
+  }
+}
+
+.card {
+  width: 100%;
+}

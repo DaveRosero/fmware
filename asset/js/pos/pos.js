@@ -75,95 +75,94 @@ $(document).ready(function () {
   getPOS();
 
   function handleSearch() {
-    var searchValue = $("#barcode").val().trim(); // Trim whitespace
+    var searchValue = $("#barcode").val().trim(); 
 
     if (searchValue === "") {
-      // If search value is empty, fetch all products
-      fetchAllProducts();
+        fetchAllProducts();
     } else {
-      // Perform AJAX call to fetch products based on searchValue
-      $.ajax({
-        url: "/pos-search",
-        method: "POST",
-        data: { search: searchValue },
-        dataType: "html",
-        success: function (response) {
-          // Update the product list with the search results
-          $(".item-list").html(response);
-        },
-        error: function (xhr, status, error) {
-          console.error("AJAX call failed");
-          console.error("Status:", status);
-          console.error("Error:", error);
-        },
-      });
-    }
-  }
+        $.ajax({
+            url: "/pos-search",
+            method: "POST",
+            data: { search: searchValue },
+            dataType: "html",
+            success: function (response) {
 
-  function fetchAllProducts() {
+                $(".item-list").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX call failed");
+                console.error("Status:", status);
+                console.error("Error:", error);
+            },
+        });
+    }
+}
+
+function fetchAllProducts() {
     // Perform AJAX call to fetch all products
     $.ajax({
-      url: "/pos-fetchall",
-      method: "POST",
-      dataType: "html",
-      success: function (response) {
-        // Update the product list with all products
-        $(".item-list").html(response);
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX call failed");
-        console.error("Status:", status);
-        console.error("Error:", error);
-      },
+        url: "/pos-fetchall",
+        method: "POST",
+        dataType: "html",
+        success: function (response) {
+            // Update the product list with all products
+            $(".item-list").html(response);
+            $("#barcode").focus();
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX call failed");
+            console.error("Status:", status);
+            console.error("Error:", error);
+        },
     });
-  }
+}
 
-  fetchAllProducts();
+// Initial fetch to load all products
+fetchAllProducts();
 
-  let debounceTimeout;
-  const debounceDelay = 100; // Adjust as needed
+let debounceTimeout;
+const debounceDelay = 100; // Adjust as needed
 
-  $("#barcode").on("input", function () {
+$("#barcode").on("input", function () {
     clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(function () {
-      handleSearch();
-    }, debounceDelay);
-  });
-  $("#barcode").on("keydown", function (event) {
-    if (event.key === "Enter") {
+    debounceTimeout = setTimeout(handleSearch, debounceDelay);
+});
+
+// Handle Enter key for barcode processing
+$("#barcode").on("keydown", function (event) {
+  if (event.key === "Enter") {
       event.preventDefault(); // Prevent default form submission
 
       var barcodeInput = $("#barcode").val().trim();
 
-      // Remove prefix (e.g., 'FM') if it exists
-      var prefix = "FM";
-      if (barcodeInput.startsWith(prefix)) {
-        barcodeInput = barcodeInput.slice(prefix.length); // Remove prefix
-      }
-
       console.log("Processed Barcode:", barcodeInput); // Debugging line
 
       $.ajax({
-        url: "/pos-barcode",
-        method: "POST",
-        data: $("#barcode-form").serialize(),
-        dataType: "json",
-        success: function (response) {
-          addPOS(response.id, response.price);
-          $("#barcode").val(""); // Clear the input field
-          setTimeout(function () {
-            $("#barcode").focus(); // Set focus back to the input field
-          }, 100); // Slight delay to ensure the focus is properly set
-        },
-        error: function (xhr, status, error) {
-          console.error("AJAX call failed");
-          console.error("Status:", status);
-          console.error("Error:", error);
-        },
+          url: "/pos-barcode",
+          method: "POST",
+          data: $("#barcode-form").serialize(),
+          dataType: "json",
+          success: function (response) {
+              addPOS(response.id, response.price);
+              $("#barcode").val(""); // Clear the input field
+              
+              // Fetch all products after processing the barcode
+              fetchAllProducts();
+
+              setTimeout(function () {
+                  $("#barcode").focus(); // Set focus back to the input field
+              }, 100); // Slight delay to ensure the focus is properly set
+          },
+          error: function (xhr, status, error) {
+              console.error("AJAX call failed");
+              console.error("Status:", status);
+              console.error("Error:", error);
+          },
       });
-      return false;
-    }
-  });
+      return false; // Prevent default action
+  }
+});
+
 
   $("#barcode-form").on("submit", function (event) {
     event.preventDefault();

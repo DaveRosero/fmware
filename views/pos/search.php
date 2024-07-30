@@ -1,7 +1,4 @@
 <?php
-// pos-live-search-products.php
-
-// Include your database connection
 require_once 'model/database/database.php';
 
 // Function to fetch product search results
@@ -16,6 +13,7 @@ function searchProducts($searchTerm)
                      product.unit_value,
                      stock.qty,
                      product.id,
+                     product.barcode,
                      unit.name AS unit_name,
                      variant.name AS variant_name
               FROM price_list
@@ -41,33 +39,34 @@ function searchProducts($searchTerm)
     $stmt->execute();
 
     // Bind result variables
-    $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $unit_name, $variant_name);
+    $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $barcode, $unit_name, $variant_name);
 
     // Fetch results into HTML format
     $output = '';
     while ($stmt->fetch()) {
         $disabled = ($qty == 0) ? 'disabled' : '';
         $output .= '
-            <div class="col-md-4 mb-4">
-      <div class="card border-secondary shadow-sm rounded">
-        <img src="asset/images/products/' . $image . '" class="card-img-top img-fluid" alt="' . $name . '">
-        <div class="card-body">
-          <h5 class="card-title text-dark">' . $name . ' <small class="text-muted">(' . $variant_name . ')</small></h5>
-          <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit_name) . '</strong></p>
-          <p class="card-text">Stock: <span class="badge ' . ($qty == 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
-          <div class="d-grid">
-            <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
-                    data-product-id="' . $id . '"
-                    data-product-price="' . $unit_price . '">
-              <i class="fas fa-cart-plus"></i> Add to Cart
-            </button>
-          </div>
-        </div>
-        <div class="card-footer text-center">
-          <h5 class="m-0 text-success">₱ ' . number_format($unit_price, 2) . '</h5>
-        </div>
-      </div>
-    </div>';
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+              <div class="card border-secondary shadow-sm rounded">
+                <img src="asset/images/products/' . $image . '" class="card-img-top img-fluid" alt="' . $name . '">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-dark product-name">' . $name . ' <small class="text-muted">(' . $variant_name . ')</small></h5>
+                  <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit_name) . '</strong></p>
+                  <p class="card-text">Stock: <span class="badge ' . ($qty == 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
+                  <input type="hidden" value="' . $barcode . '" class="product-barcode">
+                  <div class="d-grid">
+                    <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
+                            data-product-id="' . $id . '"
+                            data-product-price="' . $unit_price . '">
+                      <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                  </div>
+                </div>
+                <div class="card-footer text-center">
+                  <h5 class="m-0 text-success">₱ ' . number_format($unit_price) . '</h5>
+                </div>
+              </div>
+            </div>';
     }
 
     // Close statement and database connection
