@@ -279,12 +279,12 @@
             }
         }
 
-        public function insertPrice ($id, $base_price, $selling_price) {
+        public function insertPrice ($id, $selling_price) {
             $query = 'INSERT INTO price_list 
-                        (product_id, base_price, unit_price)
-                    VALUES (?,?,?)';
+                        (product_id, unit_price)
+                    VALUES (?,?)';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('idd', $id, $base_price, $selling_price);
+            $stmt->bind_param('id', $id, $selling_price);
 
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
@@ -397,7 +397,7 @@
                     $stmt->close();
                     $json = array('redirect' => '/manage-products');
                     $last_id = $this->conn->insert_id;
-                    $this->insertPrice($last_id, $_POST['base_price'], $_POST['selling_price']);
+                    $this->insertPrice($last_id, $_POST['selling_price']);
                     $this->insertStock($last_id, $_POST['initial_stock'], $_POST['critical_level'], $_POST['stockable']);
                     
                     $action_log = 'Added new product '.$name;
@@ -489,7 +489,16 @@
                                 <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.strtoupper($unit).'</td>
                                 <td class="text-center">'.$brand.'</td>
                                 <td class="text-center">'.$category.'</td>
-                                <td class="text-center">₱'.number_format($base_price, 2).'</td>
+                                <td class="text-center">
+                                        <button 
+                                            class="btn btn-sm btn-primary prev_bp me-1" 
+                                            type="button" 
+                                            data-product-id="'.$id.'"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#prevBP";
+                                        >
+                                            <i class="fa-solid fa-ellipsis-h"></i>
+                                        </button></td>
                                 <td class="text-center">₱'.number_format($selling_price, 2).'</td>
                                 <td class="text-center">'.$legend.'</td>
                                 <td class="text-center">
@@ -809,16 +818,16 @@
                 }
             }
             
-            if ($product && $product['base_price'] !== $_POST['edit_base_price']) {
-                $this->editBasePrice($_POST['edit_base_price'], $id);
-                $old_bp = '₱'.number_format($product['base_price'], 2);
-                $new_bp = '₱'.number_format($_POST['edit_base_price'], 2);
+            // if ($product && $product['base_price'] !== $_POST['edit_base_price']) {
+            //     $this->editBasePrice($_POST['edit_base_price'], $id);
+            //     $old_bp = '₱'.number_format($product['base_price'], 2);
+            //     $new_bp = '₱'.number_format($_POST['edit_base_price'], 2);
 
-                if ($old_bp !== $new_bp) {
-                    $action_log = 'Update base price of product '.$_POST['edit_name'].' from '.$old_bp.' to '.$new_bp;
-                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
-                }
-            }
+            //     if ($old_bp !== $new_bp) {
+            //         $action_log = 'Update base price of product '.$_POST['edit_name'].' from '.$old_bp.' to '.$new_bp;
+            //         $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+            //     }
+            // }
             
             if ($product && $product['selling_price'] !== $_POST['edit_selling_price']) {
                 $this->editSellingPrice($_POST['edit_selling_price'], $id);
@@ -1115,23 +1124,23 @@
             return;
         }
 
-        public function editBasePrice ($base_price, $id) {
-            $query = 'UPDATE price_list SET base_price = ? WHERE product_id = ?';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('di', $base_price, $id);
+        // public function editBasePrice ($base_price, $id) {
+        //     $query = 'UPDATE price_list SET base_price = ? WHERE product_id = ?';
+        //     $stmt = $this->conn->prepare($query);
+        //     $stmt->bind_param('di', $base_price, $id);
 
-            if (!$stmt) {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
+        //     if (!$stmt) {
+        //         die("Error in preparing statement: " . $this->conn->error);
+        //     }
             
-            if (!$stmt->execute()) {
-                die("Error in executing statement: " . $stmt->error);
-                $stmt->close();
-            }
+        //     if (!$stmt->execute()) {
+        //         die("Error in executing statement: " . $stmt->error);
+        //         $stmt->close();
+        //     }
 
-            $stmt->close();
-            return;
-        }
+        //     $stmt->close();
+        //     return;
+        // }
 
         public function editSellingPrice ($selling_price, $id) {
             $query = 'UPDATE price_list SET unit_price = ? WHERE product_id = ?';

@@ -157,7 +157,6 @@ $(document).ready(function(){
                 $('#view_brand').text(json.brand);
                 $('#view_unit').text(json.unit);
                 $('#view_variant').text(json.variant);
-                $('#view_base_price').text(json.base_price);
                 $('#view_selling_price').text(json.selling_price);
                 $('#view_stock').text(json.stock);
                 $('#view_critical_level').text(json.critical_level);
