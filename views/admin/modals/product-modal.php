@@ -82,11 +82,11 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="form-floating col-md-6">
+                                    <!-- <div class="form-floating col-md-6">
                                         <input class="form-control" type="number" name="base_price" id="base_price" min="1" step="any" placeholder="" required>
                                         <label for="" class="form-label mx-2">Base Price <span class="text-danger">*</span></label>
-                                    </div>
-                                    <div class="form-floating col-md-6">
+                                    </div> -->
+                                    <div class="form-floating col-md">
                                         <input class="form-control" type="number" name="selling_price" id="selling_price" min="1" step="any" placeholder="" required>
                                         <label for="" class="form-label mx-2">Selling Price <span class="text-danger">*</span></label>
                                     </div>
@@ -247,11 +247,11 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="form-floating col-md-6">
+                                    <!-- <div class="form-floating col-md-6">
                                         <input class="form-control" type="number" name="edit_base_price" id="edit_base_price" min="1" step="any" placeholder="" required>
                                         <label for="" class="form-label mx-2">Base Price <span class="text-danger">*</span></label>
-                                    </div>
-                                    <div class="form-floating col-md-6">
+                                    </div> -->
+                                    <div class="form-floating col-md">
                                         <input class="form-control" type="number" name="edit_selling_price" id="edit_selling_price" min="1" step="any" placeholder="" required>
                                         <label for="" class="form-label mx-2">Selling Price <span class="text-danger">*</span></label>
                                     </div>
@@ -366,8 +366,8 @@
                                 <dt class="col-sm-4 fw-semibold text-primary text-end">VARIANT:</dt>
                                 <dd class="col-sm-8 fw-semibold" id="view_variant"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">BASE PRICE:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_base_price"></dd>
+                                <!-- <dt class="col-sm-4 fw-semibold text-primary text-end">BASE PRICE:</dt>
+                                <dd class="col-sm-8 fw-semibold" id="view_base_price"></dd> -->
 
                                 <dt class="col-sm-4 fw-semibold text-primary text-end">SELLING PRICE:</dt>
                                 <dd class="col-sm-8 fw-semibold" id="view_selling_price"></dd>
