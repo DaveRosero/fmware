@@ -1,43 +1,33 @@
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-semibold d-flex align-items-center" href="/dashboard">
-                <img src="/asset/images/store/logo.png" alt="Icon" class="me-2" style="width: 36px; height: 36px;">
-                FMWare
-            </a>
-            <div class="navbar-collapse justify-content-end" id="navbarNav">
-                <div class="nav-item position-relative">
-                    <i class="fas fa-search position-absolute" style="top: 50%; left: 10px; transform: translateY(-50%);"></i>
-                    <input type="text" class="form-control ps-5" placeholder="Search...">
-                </div>
-            </div>
-            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                <div class="nav-item dropdown position-relative me-3">
-                    <a class="nav-link text-light position-relative" id="notificationDropdown" role="button" aria-expanded="false">
-                        <i class="fas fa-bell fs-5"></i>
-                        <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 
-                            <!-- Badge element -->
-                        </span>
+<!--begin::Header-->
+<nav class="app-header navbar navbar-expand bg-body"> <!--begin::Container-->
+    <div class="container-fluid"> <!--begin::Start Navbar Links-->
+        <ul class="navbar-nav">
+            <li class="nav-item"> <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"> <i class="bi bi-list"></i> </a> </li>
+        </ul> <!--end::Start Navbar Links--> <!--begin::End Navbar Links-->
+        <ul class="navbar-nav ms-auto"> <!--begin::Notifications Dropdown Menu-->
+            <li class="nav-item dropdown"> <a class="nav-link" data-bs-toggle="dropdown" href="#"> <i class="bi bi-bell-fill"></i> <span class="navbar-badge badge text-bg-warning">15</span> </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <span class="dropdown-item dropdown-header">15 Notifications</span>
+                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"> <i class="bi bi-envelope me-2"></i> 4 new messages
+                        <span class="float-end text-secondary fs-7">3 mins</span> </a>
+                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"> <i class="bi bi-people-fill me-2"></i> 8 friend requests
+                        <span class="float-end text-secondary fs-7">12 hours</span> </a>
+                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"> <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
+                        <span class="float-end text-secondary fs-7">2 days</span> </a>
+                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item dropdown-footer">
+                        See All Notifications
                     </a>
-                    <ul id="notificationMenu" class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                    </ul>
                 </div>
-                <div class="nav-item me-3">
-                    <i id="expandButton" class="fas fa-expand fs-5 text-light"></i>
-                </div>
-                <div class="dropdown">
-                    <a class="nav-icon position-relative text-decoration-none text-light dropdown-toggle text-white d-flex align-items-center" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-circle-user fs-5 me-2"></i>Hi, Admin
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            </li> <!--end::Notifications Dropdown Menu--> <!--begin::Fullscreen Toggle-->
+            <li class="nav-item"> <a class="nav-link" href="#" data-lte-toggle="fullscreen"> <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i> <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none;"></i> </a> </li> <!--end::Fullscreen Toggle--> <!--begin::User Menu Dropdown-->
+            <li class="nav-item"> <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> <span class="d-none d-md-inline">Hi, Admin</span> </a>
+                <ul class="dropdown-menu dropdown-menu dropdown-menu-end"><!--begin::Menu Footer-->
+                    <li class="user-footer">
                         <form action="/logout" method="post">
                             <button type="submit" class="dropdown-item">Logout</button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+                    </li> <!--end::Menu Footer-->
+                </ul>
+            </li> <!--end::User Menu Dropdown-->
+        </ul> <!--end::End Navbar Links-->
+    </div> <!--end::Container-->
+</nav> <!--end::Header--> 

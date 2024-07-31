@@ -1,141 +1,71 @@
-<aside class="d-flex flex-sm-column flex-row flex-nowrap bg-dark align-items-center sticky-top">
-    <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap text-center align-items-center">
-        <!-- Section 1 -->
-        <li class="nav-item">
-            <a href="#section1" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section1">
-                <span class="d-block small fw-semibold">HOME</span>
-                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
-            </a>
-        </li>
-        <div id="section1" class="collapse">
-            <li class="nav-item">
-                <a href="/dashboard" class="nav-link text-light" data-bs-toggle="tooltip" title="Dashboard">
-                    <i class="fa-solid fa-chart-pie fs-5"></i>
-                    <span class="d-block small">Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/manage-business" class="nav-link text-light" data-bs-toggle="tooltip" title="Manage Business">
-                    <i class="fa-solid fa-store fs-5"></i>
-                    <span class="d-block small">Manage</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/activity-logs" class="nav-link text-light" data-bs-toggle="tooltip" title="Activity Logs">
-                    <i class="fa-solid fa-book fs-5"></i>
-                    <span class="d-block small">Logs</span>
-                </a>
-            </li>
-        </div>
-        <hr class="text-light border w-100 mt-0 mb-0">
-
-        <!-- Section 2 -->
-        <li class="nav-item">
-            <a href="#section2" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section2">
-                <span class="d-block small fw-semibold">SALES</span>
-                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
-            </a>
-        </li>
-        <div id="section2" class="collapse">
-            <li class="nav-item">
-                <a href="/manage-sales" class="nav-link text-light" data-bs-toggle="tooltip" title="Point of Sales">
-                    <i class="fa-solid fa-cash-register fs-5"></i>
-                    <span class="d-block small">POS</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/manage-orders" class="nav-link text-light" data-bs-toggle="tooltip" title="Online Order">
-                    <i class="fa-solid fa-file-invoice fs-5"></i>
-                    <span class="d-block small">Orders</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/manage-returns" class="nav-link text-light" data-bs-toggle="tooltip" title="Returns">
-                    <i class="fa-solid fa-undo fs-5"></i>
-                    <span class="d-block small">Returns</span>
-                </a>
-            </li>
-        </div>
-        <hr class="text-light border w-100 mt-0 mb-0">
-
-        <!-- Section 3 -->
-        <li class="nav-item">
-            <a href="#section3" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section3">
-                <span class="d-block small fw-semibold">INVENTORY</span>
-                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
-            </a>
-        </li>
-        <div id="section3" class="collapse">
-            <li class="nav-item">
-                <a href="/manage-products" class="nav-link text-light" data-bs-toggle="tooltip" title="Products">
-                    <i class="fa-solid fa-barcode fs-5"></i>
-                    <span class="d-block small">Products</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/purchase-orders" class="nav-link text-light" data-bs-toggle="tooltip" title="Purchase Orders">
-                    <i class="fa-solid fa-dolly fs-5"></i>
-                    <span class="d-block small">P.O.</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/manage-suppliers" class="nav-link text-light" data-bs-toggle="tooltip" title="Suppliers">
-                    <i class="fa-solid fa-truck fs-5"></i>
-                    <span class="d-block small">Suppliers</span>
-                </a>
-            </li>
-        </div>
-        <hr class="text-light border w-100 mt-0 mb-0">
-
-        <!-- Section 4 -->
-        <li class="nav-item">
-            <a href="#section4" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section4">
-                <span class="d-block small fw-semibold">PEOPLE</span>
-                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
-            </a>
-        </li>
-        <div id="section4" class="collapse">
-            <li class="nav-item">
-                <a href="/users" class="nav-link text-light" data-bs-toggle="tooltip" title="Users">
-                    <i class="fa-solid fa-users fs-5"></i>
-                    <span class="d-block small">Users</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/staff" class="nav-link text-light" data-bs-toggle="tooltip" title="Staff">
-                    <i class="fa-solid fa-user-tie fs-5"></i>
-                    <span class="d-block small">Staff</span>
-                </a>
-            </li>
-        </div>
-        <hr class="text-light border w-100 mt-0 mb-0">
-
-        <!-- Section 5 -->
-        <li class="nav-item">
-            <a href="#section5" class="nav-link text-light" data-bs-toggle="collapse" aria-expanded="false" aria-controls="section5">
-                <span class="d-block small fw-semibold">MAINTENANCE</span>
-                <i class="fa-solid fa-chevron-down ms-1 toggle-icon"></i>
-            </a>
-        </li>
-        <div id="section5" class="collapse">
-            <li class="nav-item">
-                <a href="/category" class="nav-link text-light" data-bs-toggle="tooltip" title="Categories">
-                    <i class="fa-solid fa-folder fs-5"></i>
-                    <span class="d-block small">Categories</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/brands" class="nav-link text-light" data-bs-toggle="tooltip" title="Brands">
-                    <i class="fa-solid fa-building fs-5"></i>
-                    <span class="d-block small">Brands</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/unit" class="nav-link text-light" data-bs-toggle="tooltip" title="Units">
-                    <i class="fa-solid fa-balance-scale fs-5"></i>
-                    <span class="d-block small">Unit</span>
-                </a>
-            </li>
-        </div>
-    </ul>
-</aside>
+<!--begin::Sidebar-->
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark"> <!--begin::Sidebar Brand-->
+    <div class="sidebar-brand"> <!--begin::Brand Link--> <a href="/dashboard" class="brand-link"> <!--begin::Brand Image--> <img src="/asset/images/store/logo.png" alt="Logo" class="brand-image opacity-75 shadow"> <!--end::Brand Image--> <!--begin::Brand Text--> <span class="brand-text fw-light">FMWare</span> <!--end::Brand Text--> </a> <!--end::Brand Link--> </div> <!--end::Sidebar Brand--> <!--begin::Sidebar Wrapper-->
+    <div class="sidebar-wrapper">
+        <nav class="mt-2"> <!--begin::Sidebar Menu-->
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+                <li class="nav-header">Home</li>
+                <li class="nav-item"> <a href="/dashboard" class="nav-link"> <i class="nav-icon bi bi-speedometer2"></i>
+                        <p>Dashboard</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/manage-business" class="nav-link"> <i class="nav-icon bi bi-grid-1x2"></i>
+                        <p>Manage Business</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/activity-logs" class="nav-link"> <i class="nav-icon bi bi-clock-history"></i>
+                        <p>Activity Logs</p>
+                    </a> 
+                </li>
+                <li class="nav-header">Transactions</li>
+                <li class="nav-item"> <a href="/manage-sales" class="nav-link"> <i class="nav-icon bi bi-cash"></i>
+                        <p>Sales</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/manage-orders" class="nav-link"> <i class="nav-icon bi bi-box-seam"></i>
+                        <p>Online Orders</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/manage-returns" class="nav-link"> <i class="nav-icon bi bi-arrow-return-left"></i>
+                        <p>Returns</p>
+                    </a> 
+                </li>
+                <li class="nav-header">Inventory</li>
+                <li class="nav-item"> <a href="/manage-products" class="nav-link"> <i class="nav-icon bi bi-upc"></i>
+                        <p>Products</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/purchase-orders" class="nav-link"> <i class="nav-icon bi bi-file-earmark-text"></i>
+                        <p>Purchase Orders</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/manage-suppliers" class="nav-link"> <i class="nav-icon bi bi-truck"></i>
+                        <p>Suppliers</p>
+                    </a> 
+                </li>
+                <li class="nav-header">People</li>
+                <li class="nav-item"> <a href="/users" class="nav-link"> <i class="nav-icon bi bi-person"></i>
+                        <p>Users</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/staff" class="nav-link"> <i class="nav-icon bi bi-person-badge"></i>
+                        <p>Staff</p>
+                    </a> 
+                </li>
+                <li class="nav-header">Maintenance</li>
+                <li class="nav-item"> <a href="/brands" class="nav-link"> <i class="nav-icon bi bi-building"></i>
+                        <p>Brand</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/category" class="nav-link"> <i class="nav-icon bi bi-folder"></i>
+                        <p>Category</p>
+                    </a> 
+                </li>
+                <li class="nav-item"> <a href="/unit" class="nav-link"> <i class="nav-icon bi bi-grid"></i>
+                        <p>Unit</p>
+                    </a> 
+                </li>
+            </ul> <!--end::Sidebar Menu-->
+        </nav>
+    </div> <!--end::Sidebar Wrapper-->
+</aside> <!--end::Sidebar-->
