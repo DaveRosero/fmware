@@ -453,7 +453,6 @@
                         category.name,
                         unit.name,
                         variant.name,
-                        price_list.base_price,
                         price_list.unit_price,
                         stock.qty,
                         stock.critical_level,
@@ -469,7 +468,7 @@
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant, $base_price, $selling_price, $stock, $critical_level, $stockable);
+                    $stmt->bind_result($id, $name, $image, $unit_value, $active, $fname, $lname, $brand, $category, $unit, $variant, $selling_price, $stock, $critical_level, $stockable);
                     while ($stmt->fetch()) {
                         if ($active == 1) {
                             $status = '<div class="form-check form-switch d-flex justify-content-center">
