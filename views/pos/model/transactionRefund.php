@@ -42,26 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $stmt;
     }
 
-    // Calculate total loss_value
-    $total_loss_value = 0;
-    foreach ($refund_items as $item) {
-        if ($item['condition'] === 'Broken') {
-            $product_id = $mysqli->real_escape_string($item['product_id']);
-            $refund_qty = $mysqli->real_escape_string($item['refund_qty']);
-
-            // Get the base price of the product
-            $price_query = "SELECT base_price FROM price_list WHERE product_id = ?";
-            $stmt = prepareAndExecute($mysqli, $price_query, [$product_id], 'i', "Error retrieving product price: ");
-            $price_result = $stmt->get_result();
-            $price_row = $price_result->fetch_assoc();
-            $base_price = $price_row['base_price'];
-
-            // Calculate loss_value for this item
-            $total_loss_value += $refund_qty * $base_price;
-        }
-    }
-
-
     // Check if refund record already exists
     $check_refund_query = "SELECT id FROM refunds WHERE pos_ref = ?";
     $stmt = prepareAndExecute($mysqli, $check_refund_query, [$pos_ref], 's', "Error checking refund: ");
@@ -82,21 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Add the new refund value to the current total
         $new_total_refund_value = $current_total_refund_value + $total_refund_value;
 
-        // Update the refund record with the new total and loss_value
-        $refund_query = "UPDATE refunds SET total_refund_value = ?, loss_value = ? WHERE id = ?";
-        prepareAndExecute($mysqli, $refund_query, [$new_total_refund_value, $total_loss_value, $refund_id], 'dii', "Error updating refund: ");
-        $action_log = 'Updated refund for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_refund_value . ', Loss Value: ₱' . $total_loss_value;
+        // Update the refund record with the new total
+        $refund_query = "UPDATE refunds SET total_refund_value = ? WHERE id = ?";
+        prepareAndExecute($mysqli, $refund_query, [$new_total_refund_value, $refund_id], 'di', "Error updating refund: ");
+        $action_log = 'Updated refund for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_refund_value;
     } else {
         // Insert new refund record
-        $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason, loss_value) VALUES (?, ?, ?, ?)";
-        $stmt = prepareAndExecute($mysqli, $refund_query, [$pos_ref, $total_refund_value, $refund_reason, $total_loss_value], 'sdss', "Error inserting refund: ");
+        $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason) VALUES (?, ?, ?)";
+        $stmt = prepareAndExecute($mysqli, $refund_query, [$pos_ref, $total_refund_value, $refund_reason], 'sds', "Error inserting refund: ");
         $refund_id = $mysqli->insert_id; // Get the ID of the inserted refund record
-        $action_log = 'Created new refund for Transaction ' . $pos_ref . ', Amount: ₱' . $total_refund_value . ', Loss Value: ₱' . $total_loss_value;
+        $action_log = 'Created new refund for Transaction ' . $pos_ref . ', Amount: ₱' . $total_refund_value;
     }
 
-
-
-
+    // Separate items into 'Good' and 'Broken'
+    $good_items = [];
+    $broken_items = [];
     foreach ($refund_items as $item) {
         $product_id = $mysqli->real_escape_string($item['product_id']);
         $refund_qty = $mysqli->real_escape_string($item['refund_qty']);
@@ -130,9 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         prepareAndExecute($mysqli, $update_stock_query, [$refund_qty, $product_id], 'ii', "Error updating stock: ");
     }
 
-    // Separate items into 'Good' and 'Broken'
-    $good_items = [];
-    $broken_items = [];
     // Process Good Items
     foreach ($good_items as $item) {
         $product_id = $item['product_id'];
@@ -176,3 +153,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Invalid request method.";
 }
+?>
