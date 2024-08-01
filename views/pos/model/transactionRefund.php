@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $stmt;
     }
 
-    // Check if refund record already exists
+     // Check if refund record already exists
     $check_refund_query = "SELECT id FROM refunds WHERE pos_ref = ?";
     $stmt = prepareAndExecute($mysqli, $check_refund_query, [$pos_ref], 's', "Error checking refund: ");
     $check_result = $stmt->get_result();
@@ -67,6 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         prepareAndExecute($mysqli, $refund_query, [$new_total_refund_value, $refund_id], 'di', "Error updating refund: ");
         $action_log = 'Updated refund for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_refund_value;
     } else {
+        // Fetch the discount from the pos table
+        $discount_query = "SELECT discount FROM pos WHERE pos_ref = ?";
+        $stmt = prepareAndExecute($mysqli, $discount_query, [$pos_ref], 's', "Error retrieving discount: ");
+        $discount_result = $stmt->get_result();
+        $discount_row = $discount_result->fetch_assoc();
+        $discount = $discount_row['discount'] ?? 0; // If discount is null, set it to 0
+
+        // Subtract discount from total refund value
+        $total_refund_value -= $discount;
+
         // Insert new refund record
         $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason) VALUES (?, ?, ?)";
         $stmt = prepareAndExecute($mysqli, $refund_query, [$pos_ref, $total_refund_value, $refund_reason], 'sds', "Error inserting refund: ");

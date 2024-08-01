@@ -42,31 +42,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $stmt;
     }
 
-    // Check if replacement record already exists
-    $check_replace_query = "SELECT id, total_replace_value FROM replacements WHERE pos_ref = ?";
-    $stmt = prepareAndExecute($mysqli, $check_replace_query, [$pos_ref], 's', "Error checking replacement: ");
-    $check_result = $stmt->get_result();
-
-    if ($check_result && $check_result->num_rows > 0) {
-        // Update existing replacement record
-        $replace_row = $check_result->fetch_assoc();
-        $replace_id = $replace_row['id'];
-        $current_total_replace_value = $replace_row['total_replace_value'];
-
-        // Add the new replacement value to the current total
-        $new_total_replace_value = $current_total_replace_value + $total_replace_value;
-
-        // Update the replacement record with the new total
-        $replace_query = "UPDATE replacements SET total_replace_value = ? WHERE id = ?";
-        prepareAndExecute($mysqli, $replace_query, [$new_total_replace_value, $replace_id], 'di', "Error updating replacement: ");
-        $action_log = 'Updated replacement for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_replace_value;
-    } else {
-        // Insert new replacement record
-        $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value, reason) VALUES (?, ?, ?)";
-        $stmt = prepareAndExecute($mysqli, $replace_query, [$pos_ref, $total_replace_value, $replacement_reason], 'sds', "Error inserting replacement: ");
-        $replace_id = $mysqli->insert_id; // Get the ID of the inserted replacement record
-        $action_log = 'Created new replacement for Transaction ' . $pos_ref . ', Amount: ₱' . $total_replace_value;
-    }
+        // Check if replacement record already exists
+        $check_replace_query = "SELECT id, total_replace_value FROM replacements WHERE pos_ref = ?";
+        $stmt = prepareAndExecute($mysqli, $check_replace_query, [$pos_ref], 's', "Error checking replacement: ");
+        $check_result = $stmt->get_result();
+    
+        if ($check_result && $check_result->num_rows > 0) {
+            // Update existing replacement record
+            $replace_row = $check_result->fetch_assoc();
+            $replace_id = $replace_row['id'];
+            $current_total_replace_value = $replace_row['total_replace_value'];
+    
+            // Add the new replacement value to the current total
+            $new_total_replace_value = $current_total_replace_value + $total_replace_value;
+    
+            // Update the replacement record with the new total
+            $replace_query = "UPDATE replacements SET total_replace_value = ? WHERE id = ?";
+            prepareAndExecute($mysqli, $replace_query, [$new_total_replace_value, $replace_id], 'di', "Error updating replacement: ");
+            $action_log = 'Updated replacement for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_replace_value;
+        } else {
+            // Fetch the discount from the pos table
+            $discount_query = "SELECT discount FROM pos WHERE pos_ref = ?";
+            $stmt = prepareAndExecute($mysqli, $discount_query, [$pos_ref], 's', "Error retrieving discount: ");
+            $discount_result = $stmt->get_result();
+            $discount_row = $discount_result->fetch_assoc();
+            $discount = $discount_row['discount'] ?? 0; // If discount is null, set it to 0
+    
+            // Subtract discount from total replace value
+            $total_replace_value -= $discount;
+    
+            // Insert new replacement record
+            $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value, reason) VALUES (?, ?, ?)";
+            $stmt = prepareAndExecute($mysqli, $replace_query, [$pos_ref, $total_replace_value, $replacement_reason], 'sds', "Error inserting replacement: ");
+            $replace_id = $mysqli->insert_id; // Get the ID of the inserted replacement record
+            $action_log = 'Created new replacement for Transaction ' . $pos_ref . ', Amount: ₱' . $total_replace_value;
+        }
 
     // Insert or update replacement items
     // Separate items into 'Good' and 'Broken'
