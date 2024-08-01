@@ -50,7 +50,10 @@
                 });
             }
         });
-    </script> <!--end::OverlayScrollbars Configure--> <!--end::Script-->
+    </script> <!--end::OverlayScrollbars Configure-->
+    <script src="/asset/js/template/sidebar.js"></script>
+    <script src="/asset/js/template/theme.js"></script>
+    <script src="/asset/js/admin/dashboard.js"></script> <!--end::Script-->
 </body><!--end::Body-->
 
 </html>

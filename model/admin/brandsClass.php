@@ -102,7 +102,7 @@
                                         data-brand-id="'.$id.'" 
                                         data-brand-name="'.$name.'"
                                     >
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>                                  
                                 </td>
                             </tr>';

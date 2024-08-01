@@ -30,11 +30,11 @@
                     case 0:
                         $po_status = '<span class="badge bg-primary text-wrap">DRAFT</span>';
                         $button = '<a
-                                        class="btn btn-sm btn-primary" 
+                                        class="btn btn-sm btn-success" 
                                         type="button"
                                         href="/create-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="bi bi-pencil-square"></i>
                                     </a>';
                         break;
                     case 1:
@@ -44,14 +44,14 @@
                                         type="button"
                                         href="/view-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-eye"></i>
+                                        <i class="bi bi-eye-fill"></i>
                                     </a>
                                     <a
                                         class="btn btn-sm btn-success" 
                                         type="button"
                                         href="/receive-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                        <i class="bi bi-box-arrow-in-right"></i>
                                     </a>';
                         break;
                     case 2:
@@ -61,7 +61,7 @@
                                         type="button"
                                         href="/view-po/'.$supplier.'/'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-eye"></i>
+                                        <i class="bi bi-eye-fill"></i>
                                     </a>';
                         break;
                     default:
@@ -362,7 +362,7 @@
                                         data-product-id="'.$product_id.'"
                                         data-po-ref="'.$po_ref.'"
                                     >
-                                        <i class="fa-solid fa-xmark fa-solid fa-lg"></i>
+                                        <i class="bi bi-x-lg"></i>
                                     </button></td>
                                 <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
                                 <td class="text-center">
