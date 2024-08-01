@@ -62,7 +62,7 @@
                                 </div>
                                 <h3>Refund Details</h3>
                                 <div class="d-flex justify-content-between text-end">
-                                    <h5 class="text-secondary my-auto">Value Returned/Refunded:</h5>
+                                    <h5 class="text-secondary my-auto">Value Replaced/Refunded:</h5>
                                     <h1 class="text-success" id="refund-TotalValue"></h1>
                                 </div>
                                 <div>
