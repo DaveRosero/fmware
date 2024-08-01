@@ -17,6 +17,10 @@
                         <p>Activity Logs</p>
                     </a> 
                 </li>
+                <li class="nav-item"> <a href="/create-report" class="nav-link"> <i class="nav-icon bi bi-file-earmark-plus"></i>
+                        <p>Create Reports</p>
+                    </a> 
+                </li>
                 <li class="nav-header">Transactions</li>
                 <li class="nav-item"> <a href="/manage-sales" class="nav-link"> <i class="nav-icon bi bi-cash"></i>
                         <p>Sales</p>
@@ -54,15 +58,15 @@
                 </li>
                 <li class="nav-header">Maintenance</li>
                 <li class="nav-item"> <a href="/brands" class="nav-link"> <i class="nav-icon bi bi-building"></i>
-                        <p>Brand</p>
+                        <p>Brands</p>
                     </a> 
                 </li>
                 <li class="nav-item"> <a href="/category" class="nav-link"> <i class="nav-icon bi bi-folder"></i>
-                        <p>Category</p>
+                        <p>Categories</p>
                     </a> 
                 </li>
                 <li class="nav-item"> <a href="/unit" class="nav-link"> <i class="nav-icon bi bi-grid"></i>
-                        <p>Unit</p>
+                        <p>Units</p>
                     </a> 
                 </li>
             </ul> <!--end::Sidebar Menu-->

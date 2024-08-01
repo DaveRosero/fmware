@@ -232,13 +232,13 @@
                                             data-paid="'.$paid.'"
                                             data-status="'.$status.'"
                                         >
-                                            <i class="fas fa-eye"></i>
+                                            <i class="bi bi-eye-fill"></i>
                                         </button>
                                         <button class="btn btn-sm btn-info print-receipt ms-1"
                                             data-order-ref="'.$ref.'"
                                             data-customer-name="'.$customer.'"
                                         >
-                                            <i class="fas fa-print text-light"></i>
+                                            <i class="bi bi-printer-fill"></i>
                                         </button>
                                     </div>
                                 </td>

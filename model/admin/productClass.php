@@ -496,7 +496,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#prevBP";
                                         >
-                                            <i class="fa-solid fa-ellipsis-h"></i>
+                                            <i class="bi bi-three-dots"></i>
                                         </button></td>
                                 <td class="text-center">₱'.number_format($selling_price, 2).'</td>
                                 <td class="text-center">'.$legend.'</td>
@@ -509,7 +509,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#viewProduct";
                                         >
-                                            <i class="fa-solid fa-eye"></i>
+                                            <i class="bi bi-eye-fill"></i>
                                         </button>   
                                         <button 
                                             class="btn btn-sm btn-success edit" 
@@ -518,7 +518,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#editProduct"
                                         >
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <i class="bi bi-pencil-square"></i>
                                         </button>
                                     </div>                              
                                 </td>
@@ -606,7 +606,6 @@
                             product.category_id,
                             product.variant_id,
                             product.barcode,
-                            price_list.base_price,
                             price_list.unit_price,
                             stock.qty,
                             stock.critical_level,
@@ -631,7 +630,7 @@
             }
 
             $stmt->bind_result($name, $code, $supplier, $description, $expiration, $brand, $unit_value, $unit,
-                            $category, $variant, $barcode, $base_price, $selling_price, $stock, $critical_level,
+                            $category, $variant, $barcode, $selling_price, $stock, $critical_level,
                             $pickup, $delivery, $stockable, $image);
             $stmt->fetch();
             $stmt->close();
@@ -648,7 +647,6 @@
                 'unit' => $unit,
                 'category' => $category,
                 'variant' => $variant,
-                'base_price' => $base_price,
                 'selling_price' => $selling_price,
                 'stock' => $stock,
                 'critical_level' => $critical_level,
@@ -1279,7 +1277,6 @@
                             product.unit_value,
                             unit.name,
                             variant.name,
-                            price_list.base_price,
                             price_list.unit_price,
                             stock.qty,
                             stock.critical_level,
@@ -1309,21 +1306,21 @@
             }
 
             $stmt->bind_result($image, $code, $name, $supplier, $description, $expiration_date, $category,
-                                $brand, $unit_value, $unit, $variant, $base_price, $selling_price, $stock,
+                                $brand, $unit_value, $unit, $variant, $selling_price, $stock,
                                 $critical_level, $barcode, $pickup, $delivery, $product_id);
             $stmt->fetch();
             $stmt->close();
 
             if ($pickup == 1) {
-                $pickup_format = '<i class="fa-solid fa-square-check text-success fs-6"></i>';
+                $pickup_format = '<i class="bi bi-check-square-fill text-success fs-6"></i>';
             } else {
-                $pickup_format = '<i class="fa-solid fa-square-xmark text-danger fs-6"></i>';
+                $pickup_format = '<i class="bi bi-x-square-fill text-danger fs-6"></i>';
             }
 
             if ($delivery == 1) {
-                $delivery_format = '<i class="fa-solid fa-square-check text-success fs-6"></i>';
+                $delivery_format = '<i class="bi bi-check-square-fill text-success fs-6"></i>';
             } else {
-                $delivery_format = '<i class="fa-solid fa-square-xmark text-danger fs-6"></i>';
+                $delivery_format = '<i class="bi bi-x-square-fill text-danger fs-6"></i>';
             }
 
             $json = array(
@@ -1337,7 +1334,6 @@
                 'brand' => strtoupper($brand),
                 'unit' => $unit_value . ' ' . strtoupper($unit),
                 'variant' => ucwords($variant),
-                'base_price' => '₱'.number_format($base_price, 2),
                 'selling_price' => '₱'.number_format($selling_price, 2),
                 'stock' => $stock,
                 'critical_level' => $critical_level,

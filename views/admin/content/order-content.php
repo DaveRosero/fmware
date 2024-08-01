@@ -1,37 +1,56 @@
-<!--Order Table Start-->
-<div class="card">
-    <div class="card-body">
-        <div class="row justify-content-between">
-            <div class="col">
-                <h5 class="card-title fw-semibold mb-4">Order List</h5>
-            </div>
-            <div class="col text-end">
-                <button class="btn btn-primary" id="printButton"><i class="fa-solid fa-print"></i></button>
-            </div>
+<!--begin::App Main-->
+<main class="app-main"> <!--begin::App Content Header-->
+    <div class="app-content-header"> <!--begin::Container-->
+        <div class="container-fluid"> <!--begin::Row-->
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="mb-0">Manage Orders</h3>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-end">
+                        <li class="breadcrumb-item">Transactions</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Online Orders
+                        </li>
+                    </ol>
+                </div>
+            </div> <!--end::Row-->
+        </div> <!--end::Container-->
+    </div> <!--end::App Content Header--> <!--begin::App Content-->
+    <div class="app-content"> <!--begin::Container-->
+        <div class="container-fluid"> <!--begin::Row-->
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-borderless" id="order-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Order Ref</th>
+                                            <th class="text-center">Customer</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Transaction</th>
+                                            <th class="text-center">Payment</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Profit</th>
+                                            <th class="text-center">Paid</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="order-table-content">
+                                        <?php echo $order->getOrders(); ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--end::Row-->
         </div>
-        <table class="table table-borderless" id="order-table">
-            <thead>
-                <tr>
-                    <th class="text-center">Order Ref</th>
-                    <th class="text-center">Customer</th>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Transaction</th>
-                    <th class="text-center">Payment</th>
-                    <th class="text-center">Total</th>
-                    <th class="text-center">Profit</th>
-                    <th class="text-center">Paid</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center"><i class="fas fa-cog"></i></th>
-                </tr>
-            </thead>
-            <tbody id="order-table-content">
-                <?php echo $order->getOrders(); ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-<!--Brand Table End-->
-
+    </div> <!--end::App Content-->
+</main> <!--end::App Main--> 
 
 <div class="d-none" id="printContent">
     <table class="table table-borderless">

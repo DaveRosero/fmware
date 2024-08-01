@@ -63,7 +63,7 @@
                                         type="button"
                                         data-expense-id='.$id.'
                                     >
-                                        <i class="fa-solid fa-trash"></i>
+                                        <i class="bi bi-trash3"></i>
                                     </button>
                                 </td>
                             </tr>';
@@ -118,7 +118,7 @@
                                         data-bs-target="#df-modal"
                                         data-df-id='.$id.'
                                     >
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>
                                 </td>
                             </tr>';

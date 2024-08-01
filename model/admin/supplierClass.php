@@ -4,7 +4,7 @@
     require_once 'model/admin/logsClass.php';
 
     class Supplier extends Admin {
-        public function adddSupplier ($supplier, $email, $contact, $phone, $address) {
+        public function addSupplier ($supplier, $email, $contact, $phone, $address) {
             $logs = new Logs();
 
             $active = 1;
@@ -87,7 +87,7 @@
                                         data-bs-target="#editSupplier"
                                         data-supplier-id='.$id.'
                                     >
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>
                                 </td>
                             </tr>';

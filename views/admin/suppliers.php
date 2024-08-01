@@ -9,39 +9,53 @@
   $admin->isAdmin();
 ?>
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Manage Suppliers | FMWare</title>
-      <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
-      <?php require_once 'config/load_vendors.php'; ?>
-      <link rel="stylesheet" href="/asset/css/admin/style.css">
-  </head>
-  <body class="bg-light">
-    <?php include_once 'views/admin/template/header.php'; ?>
+<html lang="en"> <!--begin::Head-->
 
-    <div class="container-fluid">
-      <div class="row">
-          <!-- Sidebar -->
-          <div class="col-lg-1 col-md-1 bg-dark sticky-top">
-            <?php include_once 'views/admin/template/sidebar.php'; ?>
-          </div>
-          <!-- Sidebar -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Manage Suppliers | FMWare</title><!--begin::Primary Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Manage Suppliers | FMWare">
+    <?php include_once 'views/admin/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="/asset/css/admin/adminlte.css"><!--end::Required Plugin(AdminLTE)-->
+</head> <!--end::Head--> <!--begin::Body-->
 
-          <!-- Content -->
-          <div class="col-lg-11 col-md-11 p-3 min-vh-100"> 
-            <?php include_once 'views/admin/content/suppliers-content.php'; ?>
-          </div>
-          <!-- Content -->
-      </div>
-    </div>
-
-    <!-- Modal Start -->
-    <?php include_once 'views/admin/modals/suppliers-modal.php'; ?>
-    <!-- Modal End-->
-
-    <script src="/asset/js/admin/suppliers.js"></script>
+<body class="layout-fixed-complete sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+        <?php require_once 'views/admin/template/header.php'; ?>
+        <?php require_once 'views/admin/template/sidebar.php'; ?>
+        <?php require_once 'views/admin/content/suppliers-content.php'; ?>
+        <?php require_once 'views/admin/modals/suppliers-modal.php'; ?>
+        <?php require_once 'views/admin/template/footer.php'; ?>
+    </div> <!--end::App Wrapper--> <!--begin::Script--> 
+    <?php include_once 'views/admin/include/script.php'; ?><!--begin::Required Plugin(AdminLTE)-->
+    <script src="/asset/js/admin/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <script>
+        const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
+        const Default = {
+            scrollbarTheme: "os-theme-light",
+            scrollbarAutoHide: "leave",
+            scrollbarClickScroll: true,
+        };
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+            if (
+                sidebarWrapper &&
+                typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== "undefined"
+            ) {
+                OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                    scrollbars: {
+                        theme: Default.scrollbarTheme,
+                        autoHide: Default.scrollbarAutoHide,
+                        clickScroll: Default.scrollbarClickScroll,
+                    },
+                });
+            }
+        });
+    </script> <!--end::OverlayScrollbars Configure-->
     <script src="/asset/js/template/sidebar.js"></script>
-  </body>
+    <script src="/asset/js/template/theme.js"></script>
+    <script src="/asset/js/admin/suppliers.js"></script> <!--end::Script-->
+</body><!--end::Body-->
+
 </html>

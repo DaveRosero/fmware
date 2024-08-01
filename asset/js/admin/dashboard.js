@@ -4,21 +4,7 @@ $(document).ready(function(){
     labels: ['Online Order', 'Point of Sales'],
     chart: {
         type: 'pie',
-    },
-    legend: {
-        show: false, // Remove legends
-    },
-    responsive: [{
-        breakpoint: 480,
-        options: {
-            chart: {
-                width: 200
-            },
-            legend: {
-                position: 'bottom'
-            }
-        }
-    }]
+    }
 };
 
 
@@ -53,10 +39,6 @@ $(document).ready(function(){
   stroke: {
     curve: 'straight'
   },
-  title: {
-    text: 'Weekly Sales Trend',
-    align: 'left'
-  },
   grid: {
     row: {
       colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
@@ -64,7 +46,7 @@ $(document).ready(function(){
     },
   },
   xaxis: {
-    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   }
   };
 
