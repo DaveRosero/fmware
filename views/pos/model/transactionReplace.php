@@ -42,25 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $stmt;
     }
 
-    // Calculate total loss_value
-    $total_loss_value = 0;
-    foreach ($replaced_items as $item) {
-        if ($item['condition'] === 'Broken') {
-            $product_id = $mysqli->real_escape_string($item['product_id']);
-            $replace_qty = $mysqli->real_escape_string($item['refund_qty']);
-
-            // Get the base price of the product
-            $price_query = "SELECT base_price FROM price_list WHERE product_id = ?";
-            $stmt = prepareAndExecute($mysqli, $price_query, [$product_id], 'i', "Error retrieving product price: ");
-            $price_result = $stmt->get_result();
-            $price_row = $price_result->fetch_assoc();
-            $base_price = $price_row['base_price'];
-
-            // Calculate loss_value for this item
-            $total_loss_value += $replace_qty * $base_price;
-        }
-    }
-
     // Check if replacement record already exists
     $check_replace_query = "SELECT id, total_replace_value FROM replacements WHERE pos_ref = ?";
     $stmt = prepareAndExecute($mysqli, $check_replace_query, [$pos_ref], 's', "Error checking replacement: ");
@@ -76,19 +57,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $new_total_replace_value = $current_total_replace_value + $total_replace_value;
 
         // Update the replacement record with the new total
-        $replace_query = "UPDATE replacements SET total_replace_value = ?, loss_value = ? WHERE id = ?";
-        prepareAndExecute($mysqli, $replace_query, [$new_total_replace_value, $total_loss_value, $replace_id], 'dii', "Error updating replacement: ");
-        $action_log = 'Updated replacement for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_replace_value. ', Loss Value: ₱' . $total_loss_value;
+        $replace_query = "UPDATE replacements SET total_replace_value = ? WHERE id = ?";
+        prepareAndExecute($mysqli, $replace_query, [$new_total_replace_value, $replace_id], 'di', "Error updating replacement: ");
+        $action_log = 'Updated replacement for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_replace_value;
     } else {
         // Insert new replacement record
-        $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value, reason, loss_value) VALUES (?, ?, ?, ?)";
-        $stmt = prepareAndExecute($mysqli, $replace_query, [$pos_ref, $total_replace_value, $replacement_reason, $total_loss_value], 'sdss', "Error inserting replacement: ");
+        $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value, reason) VALUES (?, ?, ?)";
+        $stmt = prepareAndExecute($mysqli, $replace_query, [$pos_ref, $total_replace_value, $replacement_reason], 'sds', "Error inserting replacement: ");
         $replace_id = $mysqli->insert_id; // Get the ID of the inserted replacement record
-        $action_log = 'Created new replacement for Transaction ' . $pos_ref . ', Amount: ₱' . $total_replace_value. ', Loss Value: ₱' . $total_loss_value;
+        $action_log = 'Created new replacement for Transaction ' . $pos_ref . ', Amount: ₱' . $total_replace_value;
     }
 
     // Insert or update replacement items
-
+    // Separate items into 'Good' and 'Broken'
+    $good_items = [];
+    $broken_items = [];
     foreach ($replaced_items as $item) {
         $product_id = $mysqli->real_escape_string($item['product_id']);
         $replace_qty = $mysqli->real_escape_string($item['refund_qty']);
@@ -121,10 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
         prepareAndExecute($mysqli, $update_stock_query, [$replace_qty, $product_id], 'ii', "Error updating stock: ");
     }
-    
-    // Separate items into 'Good' and 'Broken'
-    $good_items = [];
-    $broken_items = [];
+
     // Process Good Items
     foreach ($good_items as $item) {
         $product_id = $item['product_id'];
@@ -143,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
         prepareAndExecute($mysqli, $update_stock_query, [$replace_qty, $product_id], 'ii', "Error updating stock: ");
     }
+
     // Process Broken Items
     foreach ($broken_items as $item) {
         $product_id = $item['product_id'];
@@ -158,7 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         prepareAndExecute($mysqli, $update_pos_query, [$replace_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
     }
 
-
     // Update transaction status
     $update_status_query = "UPDATE pos SET status = ? WHERE pos_ref = ?";
     prepareAndExecute($mysqli, $update_status_query, [$newStatus, $pos_ref], 'ss', "Error updating transaction status: ");
@@ -169,3 +149,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Invalid request method.";
 }
+?>
