@@ -5,5 +5,12 @@ $(document).ready(function () {
             $(this).addClass('active');
         }
     });
+
+    function updateBadge() {
+        var itemCount = $('.dropdown-menu a.dropdown-item').length;
+        $('.navbar-badge').text(itemCount);
+    }
+
+    updateBadge();
 });
 

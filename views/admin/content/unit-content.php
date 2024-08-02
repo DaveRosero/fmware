@@ -30,7 +30,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <table class="table table-borderless" id="unit-table">
+                            <table class="table table-borderless w-100" id="unit-table">
                                 <thead>
                                     <tr>
                                         <th class="text-center">Status</th>

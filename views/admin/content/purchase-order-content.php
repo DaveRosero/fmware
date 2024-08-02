@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-borderless" id="purchase-order-table">
+                                <table class="table table-borderless w-100" id="purchase-order-table">
                                     <thead>
                                         <tr>
                                             <th class="text-center">P.O. #</th>
@@ -41,7 +41,7 @@
                                             <th class="text-center">Date Created</th>
                                             <th class="text-center">Date Received</th>
                                             <th class="text-center">Status</th>
-                                            <th class="text-center" style="width: 100px;"><i class="fas fa-cog"></i></th>
+                                            <th class="text-center"><i class="bi bi-gear-fill"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody>

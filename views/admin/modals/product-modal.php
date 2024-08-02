@@ -402,6 +402,35 @@
         </div>
 </div>
 
+<div class="modal fade" id="prevBP" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Previous Base Price/s</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-borderless w-100" id="bp_table">
+                        <thead>
+                            <th class="text-center">P.O. #</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Date</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">FMPO_E53929A97676D0094A3C</td>
+                                <td class="text-center">P100,000</td>
+                                <td class="text-center">August 2, 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Loading Modal -->
 <div class="modal" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
