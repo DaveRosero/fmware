@@ -54,22 +54,24 @@
                             </div>
 
                             <div class="row">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <th class="text-center">#</th>
-                                        <th class="text-center">Product</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-center">Unit</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center">Total</th>
-                                        <th class="text-center">Actual Price</th>
-                                        <th class="text-center">Received</th>
-                                        <th class="text-center">Amount</th>
-                                    </thead>
-                                    <tbody id="po_item_content">
-                                        <!-- PO Content Here -->
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless w-100">
+                                        <thead>
+                                            <th class="text-center">#</th>
+                                            <th class="text-center">Product</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-center">Unit</th>
+                                            <th class="text-center">Price</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Actual Price</th>
+                                            <th class="text-center">Received</th>
+                                            <th class="text-center">Amount</th>
+                                        </thead>
+                                        <tbody id="po_item_content">
+                                            <!-- PO Content Here -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             <div class="row mt-4">

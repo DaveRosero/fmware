@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-borderless" id="brand-table">
+                            <table class="table table-borderless w-100" id="brand-table">
                                 <thead>
                                     <tr>
                                         <th class="text-center">Status</th>

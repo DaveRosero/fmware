@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-borderless" id="staff-table">
+                            <table class="table table-borderless w-100" id="staff-table">
                                 <thead>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Name</th>

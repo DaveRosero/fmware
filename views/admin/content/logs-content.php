@@ -23,7 +23,7 @@
                 <div class="col-12 col-sm-12 col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-borderless" id="logs-table">
+                            <table class="table table-borderless w-100" id="logs-table">
                                 <thead>
                                     <th class="text-start">Description</th>
                                     <th class="text-center">Author</th>

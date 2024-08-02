@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-borderless" id="user-table">
+                                <table class="table table-borderless w-100" id="user-table">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Status</th>

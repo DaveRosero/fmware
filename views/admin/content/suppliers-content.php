@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-borderless" id="suppliers-table">
+                                <table class="table table-borderless w-100" id="suppliers-table">
                                     <thead>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Supplier</th>

@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-borderless" id="sales-table">
+                                <table class="table table-borderless w-100" id="sales-table">
                                     <thead>
                                         <tr>
                                             <th class="text-center">POS Ref</th>
@@ -36,7 +36,7 @@
                                             <th class="text-center">Profit</th>
                                             <th class="text-center">Paid</th>
                                             <th class="text-center">Status</th>
-                                            <th class="text-center"><i class="fas fa-cog"></i></th>
+                                            <th class="text-center"><i class="bi bi-gear-fill"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody id="order-table-content">

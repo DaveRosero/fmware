@@ -462,4 +462,6 @@ $(document).ready(function(){
             $('#edit_delivery').val(0);
         }
     });
+
+    $('#bp_table').DataTable();
 });

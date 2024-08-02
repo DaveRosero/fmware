@@ -27,12 +27,12 @@
                                 <h5 class="card-title mb-9 fw-semibold">Delivery Fee</h5>
                             </div>
                             <div class="row">
-                                <table class="table table-borderless" id="municipal-table">
+                                <table class="table table-borderless w-100" id="municipal-table">
                                     <thead>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Municipal</th>
                                         <th class="text-center">Delivery Fee</th>
-                                        <th class="text-center"><i class="fas fa-cog"></i></th>
+                                        <th class="text-center"><i class="bi bi-gear-fill"></i></th>
                                     </thead>
                                     <tbody>
                                         <?php $manage->showDeliveryFee(); ?>
@@ -54,12 +54,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <table class="table table-borderless" id="expenses-table">
+                                <table class="table table-borderless w-100" id="expenses-table">
                                     <thead>
                                         <th class="text-center">Description</th>
                                         <th class="text-center">Amount</th>
                                         <th class="text-center">Date</th>
-                                        <th class="text-center"></th>
+                                        <th class="text-center"><i class="bi bi-gear-fill"></i></th>
                                     </thead>
                                     <tbody>
                                         <?php $manage->showExpenses(); ?>
