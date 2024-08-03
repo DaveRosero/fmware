@@ -3,14 +3,14 @@
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="transactionViewLabel"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-8">
                         <div class="col" style="height: calc(95vh - 100px);overflow-y: auto;overflow-x: hidden;">
-                            <table class="table align-middle">
-                                <thead class="table table-secondary">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table table-dark">
                                     <tr>
                                         <th scope="col">Selected</th>
                                         <th scope="col">Item Name</th>

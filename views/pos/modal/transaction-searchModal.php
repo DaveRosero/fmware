@@ -3,14 +3,14 @@
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="transaction-searchModalLabel">TRANSACTIONS</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
 
 
                 <!--Show Search Result & transaction Details-->
-                <table class="w-100" id="transaction-table">
-                    <thead>
+                <table class="table table-striped table-hover align-middle w-100" id="transaction-table">
+                    <thead class="table-dark">
                         <tr>
                             <th scope="col">Transaction #</th>
                             <th scope="col">Transaction Date</th>
