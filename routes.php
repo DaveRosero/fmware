@@ -230,7 +230,9 @@ any('/pos-puclaim', 'views/pos/model/pickupclaim.php');
 
 // RIDER
 //*****************************************************************//
-any('/rider', 'views/rider/dashboard.php');
+any('/rider-dashboard', 'views/rider/orders.php');
+any('/rider-orders', 'views/rider/orders.php');
+any('/rider-history', 'views/rider/history.php');
 
 //*****************************************************************//
 
