@@ -33,41 +33,7 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
-                if (json.not_base_price) {
-                    Swal.fire({
-                        title: "Oops!",
-                        html: "The Actual Price is not equal to the product's Base Price. Do you want to change the SRP?<br><br>Current Base Price: " + json.base_price + "<br>Current Selling Price: " + json.selling_price + "<br><br>New Base Price: " + json.new_base_price,
-                        icon: "warning",
-                        input: 'text',
-                        inputPlaceholder: 'Enter new SRP',
-                        showCancelButton: true,
-                        confirmButtonText: 'Submit',
-                        footer: 'This action will modify both the Base Price and Selling Price.',
-                        preConfirm: (newSrp) => {
-                            if (!newSrp) {
-                                Swal.showValidationMessage('Please enter a new SRP');
-                            } else if (isNaN(newSrp)) {
-                                Swal.showValidationMessage('SRP must be a number');
-                            }
-                            return newSrp;
-                        },
-                        willClose: () => {
-                            // This function will be called when the SweetAlert is closed
-                            if (Swal.getCancelButton().classList.contains('swal2-cancel')) {
-                                location.reload();
-                            }
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const newSrp = result.value;
-
-                            updateSRP(json.product_id, json.int_new_bp, newSrp);
-                        }
-                    });
-                    return;
-                }
-
-                $element.closest('tr').find('td:eq(8)').text('₱' + json.amount);
+                $element.closest('tr').find('td:eq(6)').text('₱' + json.amount);
                 $('#received_total').text('₱' + json.received_total);
                 $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
@@ -99,7 +65,7 @@ $(document).ready(function(){
                     return;
                 }
 
-                $element.closest('tr').find('td:eq(8)').text('₱' + json.amount);
+                $element.closest('tr').find('td:eq(6)').text('₱' + json.amount);
                 $('#received_total').text('₱' + json.received_total);
                 $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
