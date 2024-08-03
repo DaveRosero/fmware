@@ -565,6 +565,8 @@
         }
         
         public function savePO ($po_ref) {
+            $logs = new Logs();
+
             if ($this->isPOEmpty($po_ref)) {
                 $json = array(
                     'empty' => 'empty'
@@ -587,6 +589,11 @@
             }
 
             $stmt->close();
+
+            $action_log = 'Saved Purchase Order #'.strtoupper($po_ref);
+            $date_log = date('F j, Y g:i A');
+            $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
             $json = array(
                 'redirect' => '/purchase-orders'
             );
@@ -618,15 +625,12 @@
             $content = '';
             $count = 1;
             while ($stmt->fetch()) {
-                $total = $qty * $price;
                 $amount = $received * $actual_price;
                 $content .= '<tr>
                                 <td class="text-center">'.$count.'</td>
                                 <td class="text-center">'.$name.' ('.$variant.') '.$unit_value.' '.$unit.'</td>
                                 <td class="text-center">'.$qty.'</td>
                                 <td class="text-center">'.$po_unit.'</td>
-                                <td class="text-center">₱'.number_format($price, 2).'</td>
-                                <td class="text-center" id="poi-total">₱'.number_format($total, 2).'</td>
                                 <td class="text-center">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">₱</span>
@@ -644,9 +648,7 @@
             $received_total = $this->getPOReceivedTotal($po_ref);
             $grand_total = str_replace(',', '', $received_total) + $shipping + $others;
             $content .= '<tr>
-                            <td class="text-end fw-semibold" colspan="5">Order Total: </td>
-                            <td id="order_total">₱'.$order_total.'</td>
-                            <td class="text-end fw-semibold" colspan="2">Received Total: </td>
+                            <td class="text-end fw-semibold" colspan="6">Received Total: </td>
                             <td id="received_total">₱'.$received_total.'</td>
                         </tr>';
             $json = array(
@@ -1220,8 +1222,8 @@
             return number_format($grand_total, 2);
         }
 
-        public function getPrices ($product_id) {
-            $query = 'SELECT base_price, unit_price FROM price_list WHERE product_id = ?';
+        public function getSellingPrice ($product_id) {
+            $query = 'SELECT unit_price FROM price_list WHERE product_id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $product_id);
 
@@ -1234,14 +1236,11 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($base_price, $selling_price);
+            $stmt->bind_result($selling_price);
             $stmt->fetch();
             $stmt->close();
 
-            return [
-                'base_price' => $base_price,
-                'selling_price' => $selling_price
-            ];
+            return $selling_price;
         }
 
         public function updateSRP ($product_id, $base_price, $selling_price) {
