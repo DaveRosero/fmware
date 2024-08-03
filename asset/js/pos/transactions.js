@@ -6,34 +6,34 @@ $(document).ready(function () {
       method: 'GET', // or 'POST' as per your backend implementation
       dataType: 'json', // Assuming JSON response from server
       success: function (response) {
-          // Function to format date to month name and 12-hour time
-      function formatDateTime(dateTime) {
-        const date = new Date(dateTime);
-        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-        return date.toLocaleString('en-US', options);
-      }
+        // Function to format date to month name and 12-hour time
+        function formatDateTime(dateTime) {
+          const date = new Date(dateTime);
+          const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+          return date.toLocaleString('en-US', options);
+        }
         // Initialize DataTable
-      $('#transaction-table').DataTable({
-        data: response.filter(transaction => transaction.status !== 'void').map(transaction => [
-          transaction.pos_ref,
-          formatDateTime(transaction.date),
-          '₱' + parseFloat(transaction.total).toFixed(2),
-          transaction.name || '',
-          '<span class="' + getStatusBadgeClass(transaction.status) + '">' + transaction.status + '</span>',
-          '<button class="btn btn-primary view-transaction-btn" data-bs-posref="' + transaction.pos_ref + '">View</button>'
-        ]),
-        columns: [
-          { title: 'POS Ref' },
-          { title: 'Date' },
-          { title: 'Total' },
-          { title: 'Name' },
-          { title: 'Status' },
-          { title: 'Actions' }
-        ],
-        order: [[1, "desc"]],
-        destroy: true // Destroy the existing DataTable instance to recreate it
-      });
-      $('#transaction-table').on('click', '.view-transaction-btn', function () {
+        $('#transaction-table').DataTable({
+          data: response.filter(transaction => transaction.status !== 'void').map(transaction => [
+            transaction.pos_ref,
+            formatDateTime(transaction.date),
+            '₱' + parseFloat(transaction.total).toFixed(2),
+            transaction.name || '',
+            '<span class="' + getStatusBadgeClass(transaction.status) + '">' + transaction.status + '</span>',
+            '<button class="btn btn-primary view-transaction-btn" data-bs-posref="' + transaction.pos_ref + '">View</button>'
+          ]),
+          columns: [
+            { title: 'POS Ref' },
+            { title: 'Date' },
+            { title: 'Total' },
+            { title: 'Name' },
+            { title: 'Status' },
+            { title: 'Actions' }
+          ],
+          order: [[1, "desc"]],
+          destroy: true // Destroy the existing DataTable instance to recreate it
+        });
+        $('#transaction-table').on('click', '.view-transaction-btn', function () {
           var posRef = $(this).data('bs-posref');
           // Implement view transaction details functionality here
           $.ajax({
@@ -161,7 +161,6 @@ $(document).ready(function () {
                         default:
                           break;
                       }
-
                     }
                   }
 
@@ -251,7 +250,6 @@ $(document).ready(function () {
     }
     return badgeClass;
   }
-
   let transactionStatus = '';
   //REFUND PROCESSING
   $("#refund-button").click(function () {
@@ -263,6 +261,8 @@ $(document).ready(function () {
     let badItemsCount = 0;
     let itemsRemaining = false;
     let newStatus = 'fully refunded';
+
+
 
     // Validate reason and items
     let isValid = true;
@@ -284,6 +284,14 @@ $(document).ready(function () {
         $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
       } else {
         $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
+      }
+
+      // Validate quantity
+      if (refund_qty <= 0 || isNaN(refund_qty)) {
+        isValid = false;
+        $(this).closest("tr").find(".refund-quantity").addClass('is-invalid'); // Highlight invalid field
+      } else {
+        $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid'); // Remove highlight if valid
       }
 
       refundItems.push({ product_id, refund_qty, condition });
@@ -308,7 +316,7 @@ $(document).ready(function () {
       Swal.fire({
         icon: 'error',
         title: 'Validation Error',
-        text: 'Please select a condition for all selected items and provide a reason for the refund.',
+        text: 'Please ensure all selected items have a valid condition and quantity. Also, provide a reason for the refund.',
       });
       return; // Stop further processing
     }
@@ -343,7 +351,7 @@ $(document).ready(function () {
     });
   });
 
-$("#replace-button").click(function () {
+  $("#replace-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
     const totalReplaceValue = $("#refund-TotalValue").text().replace(/[^\d.-]/g, '');
     const replacementReason = $("#replace-refund-reason").val();
@@ -356,80 +364,88 @@ $("#replace-button").click(function () {
     // Validate reason and items
     let isValid = true;
     if (replacementReason === "") {
-        isValid = false;
-        $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+      isValid = false;
+      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
     } else {
-        $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
     }
 
     $(".selectedItem:checked").each(function () {
-        const product_id = $(this).data("product-id");
-        const refund_qty = parseInt($(this).closest("tr").find(".refund-quantity").val(), 10);
-        const condition = $(this).closest("tr").find(".item-condition").val();
+      const product_id = $(this).data("product-id");
+      const refund_qty = parseInt($(this).closest("tr").find(".refund-quantity").val(), 10);
+      const condition = $(this).closest("tr").find(".item-condition").val();
 
-        // Check if condition is selected
-        if (condition === "") {
-            isValid = false;
-            $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
-        } else {
-            $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
-        }
+      // Check if condition is selected
+      if (condition === "") {
+        isValid = false;
+        $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
+      } else {
+        $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
+      }
 
-        replacedItems.push({ product_id, refund_qty, condition });
+      // Validate quantity
+      if (refund_qty <= 0 || isNaN(refund_qty)) {
+        isValid = false;
+        $(this).closest("tr").find(".refund-quantity").addClass('is-invalid'); // Highlight invalid field
+      } else {
+        $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid'); // Remove highlight if valid
+      }
 
-        if (condition === "Good") {
-            goodItemsCount += refund_qty;
-        } else if (condition === "Broken") {
-            badItemsCount += refund_qty;
-        }
+      replacedItems.push({ product_id, refund_qty, condition });
 
-        const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10) - refund_qty;
-        if (remainingQty > 0) {
-            itemsRemaining = true;
-        }
+      if (condition === "Good") {
+        goodItemsCount += refund_qty;
+      } else if (condition === "Broken") {
+        badItemsCount += refund_qty;
+      }
 
-        if (itemsRemaining) {
-            newStatus = 'partially replaced';
-        }
+      const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10) - refund_qty;
+      if (remainingQty > 0) {
+        itemsRemaining = true;
+      }
+
+      if (itemsRemaining) {
+        newStatus = 'partially replaced';
+      }
     });
 
     if (!isValid) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Validation Error',
-            text: 'Please select a condition for all selected items and provide a reason for the replacement.',
-        });
-        return; // Stop further processing
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please select a condition for all selected items and provide a reason for the replacement.',
+      });
+      return; // Stop further processing
     }
 
     $.ajax({
-        url: "/pos-processReplace",
-        method: "POST",
-        data: {
-            pos_ref: posRef,
-            total_refund_value: totalReplaceValue,
-            replaced_items: replacedItems,
-            replacement_reason: replacementReason,
-            status: newStatus
-        },
-        success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Replacement Processed',
-                html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
-            });
-            $("#transaction-status").text(newStatus);
-            $("#transaction-viewModal").modal("hide");
-            fetchTransactions();
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Replacement Failed',
-                text: 'Failed to process replacement. Please try again.',
-            });
-        }
+      url: "/pos-processReplace",
+      method: "POST",
+      data: {
+        pos_ref: posRef,
+        total_refund_value: totalReplaceValue,
+        replaced_items: replacedItems,
+        replacement_reason: replacementReason,
+        status: newStatus
+      },
+      success: function (response) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Replacement Processed',
+          html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
+        });
+        $("#transaction-status").text(newStatus);
+        $("#transaction-viewModal").modal("hide");
+        fetchTransactions();
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Replacement Failed',
+          text: 'Failed to process replacement. Please try again.',
+        });
+      }
     });
-});
+  });
 
 });
