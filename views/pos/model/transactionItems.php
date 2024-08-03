@@ -59,4 +59,3 @@ while ($row = $result->fetch_assoc()) {
 echo $content;
 
 $mysqli->close();
-?>
