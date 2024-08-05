@@ -62,8 +62,6 @@
                                             <th class="text-center">Quantity</th>
                                             <th class="text-center">Unit</th>
                                             <th class="text-center">Price</th>
-                                            <th class="text-center">Total</th>
-                                            <th class="text-center">Actual Price</th>
                                             <th class="text-center">Received</th>
                                             <th class="text-center">Amount</th>
                                         </thead>
