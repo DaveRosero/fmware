@@ -417,12 +417,8 @@
                             <th class="text-center">Price</th>
                             <th class="text-center">Date</th>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center">FMPO_E53929A97676D0094A3C</td>
-                                <td class="text-center">P100,000</td>
-                                <td class="text-center">August 2, 2024</td>
-                            </tr>
+                        <tbody id="bp_table_content">
+
                         </tbody>
                     </table>
                 </div>
