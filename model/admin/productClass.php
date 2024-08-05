@@ -1445,5 +1445,37 @@
             $stmt->close();
             return $variant;
         }
+
+        public function getBasePrices ($product_id) {
+            $query = 'SELECT poi.actual_price, po.po_ref, po.date_received
+                    FROM purchase_order_items poi
+                    JOIN purchase_order po ON poi.po_ref = po.po_ref
+                    WHERE poi.product_id = ?
+                    AND po.status IN (2, 3)
+                    ORDER BY poi.id DESC';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $product_id);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($price, $po_ref, $received);
+            $content = '';
+            while ($stmt->fetch()) {
+                $content .= '<tr>
+                                <td class="text-center">'.strtoupper($po_ref).'</td>
+                                <td class="text-center">₱'.number_format($price, 2).'</td>
+                                <td class="text-center">'.$received.'</td>
+                            </tr>';
+            }
+            $stmt->close();
+            echo $content;
+        }
     }
 ?>

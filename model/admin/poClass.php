@@ -602,12 +602,20 @@
         }
 
         public function getPendingPOItems ($po_ref) {
-            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others, poi.actual_price
+            $query = 'SELECT poi.id, product.id, product.name, unit.name, product.unit_value, variant.name, poi.qty, poi.price, poi.unit, poi.received, po.shipping, po.others, poi.actual_price, pl.unit_price, poi.new_srp,
+                    (SELECT poi.actual_price
+                    FROM purchase_order_items poi
+                    JOIN purchase_order po ON poi.po_ref = po.po_ref
+                    WHERE poi.product_id = product.id
+                    AND po.status IN (2, 3)
+                    ORDER BY poi.id DESC
+                    LIMIT 1) AS last_bp
                     FROM purchase_order_items poi
                     INNER JOIN product ON product.id = poi.product_id
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
                     INNER JOIN purchase_order po ON po.po_ref = poi.po_ref
+                    INNER JOIN price_list pl ON pl.product_id = product.id
                     WHERE poi.po_ref = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $po_ref);
@@ -621,7 +629,7 @@
                 $stmt->close();
             }
 
-            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others, $actual_price);
+            $stmt->bind_result($id, $product_id, $name, $unit, $unit_value, $variant, $qty, $price, $po_unit, $received, $shipping, $others, $actual_price, $selling_price, $new_srp, $last_bp);
             $content = '';
             $count = 1;
             while ($stmt->fetch()) {
@@ -632,10 +640,18 @@
                                 <td class="text-center">'.$qty.'</td>
                                 <td class="text-center">'.$po_unit.'</td>
                                 <td class="text-center">
-                                    <div class="input-group mb-3">
+                                    <div class="input-group">
                                         <span class="input-group-text">₱</span>
                                         <input class="form-control poi-price" type="number" name="price" step="any" min="0" value="'.$actual_price.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
                                     </div>
+                                    <p class="fs-6 fst-italic text-muted text-center mb-0 mt-0">Last Base Price: ₱'.number_format($last_bp, 2).'</p>
+                                </td>
+                                <td class="text-center">
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input class="form-control poi-srp" type="number" name="selling_price" step="any" min="0" value="'.$new_srp.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'">
+                                    </div>
+                                    <p class="fs-6 fst-italic text-muted text-center mb-0 mt-0">Current SRP: ₱'.number_format($selling_price, 2).'</p>
                                 </td>
                                 <td class="text-center"><input class="form-control poi-received text-center" type="number" name="received" value="'.$received.'" data-product-id="'.$product_id.'" data-po-ref="'.$po_ref.'"></td>
                                 <td class="text-center">₱'.number_format($amount, 2).'</td>
@@ -648,7 +664,7 @@
             $received_total = $this->getPOReceivedTotal($po_ref);
             $grand_total = str_replace(',', '', $received_total) + $shipping + $others;
             $content .= '<tr>
-                            <td class="text-end fw-semibold" colspan="6">Received Total: </td>
+                            <td class="text-end fw-semibold" colspan="7">Received Total: </td>
                             <td id="received_total">₱'.$received_total.'</td>
                         </tr>';
             $json = array(
@@ -964,6 +980,7 @@
             }
 
             $stmt->close();
+            
             $json = array(
                 'redirect' => '/purchase-orders'
             );
@@ -976,6 +993,8 @@
             $action_log = 'Verified Purchase Order #'.$po_ref;
             $date_log = date('F j, Y g:i A');
             $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
+            $this->updateAllSRP($po_ref);
 
             echo json_encode($json);
             return;
@@ -1171,6 +1190,9 @@
                 'received_total' => $received_total,
                 'order_total' => $order_total
             );
+
+            $last_bp = $this->lastBasePrice($product_id);
+
             echo json_encode($json);
             return;
         }
@@ -1243,11 +1265,11 @@
             return $selling_price;
         }
 
-        public function updateSRP ($product_id, $base_price, $selling_price) {
-            $query = 'UPDATE price_list SET base_price = ?, unit_price = ? WHERE product_id = ?';
+        public function updateNewSRP ($po_ref, $product_id, $selling_price) {
+            $query = 'UPDATE purchase_order_items SET new_srp = ? WHERE po_ref = ? AND product_id = ?';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ddi', $base_price, $selling_price, $product_id);
-
+            $stmt->bind_param('dsi', $selling_price, $po_ref, $product_id);
+            
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
             }
@@ -1311,6 +1333,79 @@
             $stmt->close();
 
             return $last_bp;
+        }
+
+        public function updateAllSRP ($po_ref) {
+            $logs = new Logs();
+
+            $query = 'SELECT poi.product_id, 
+                            poi.new_srp,
+                            p.name,
+                            p.unit_value,
+                            v.name,
+                            u.name,
+                            pl.unit_price
+                    FROM purchase_order_items poi
+                    INNER JOIN product p ON p.id = poi.product_id
+                    INNER JOIN variant v ON v.id = p.variant_id
+                    INNER JOIN unit u ON u.id = p.unit_id
+                    INNER JOIN price_list pl ON pl.product_id = poi.product_id
+                    WHERE po_ref = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $po_ref);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($product_id, $new_srp, $name, $unit_value, $variant, $unit, $old_srp);
+            $products = array();
+            while ($stmt->fetch()) {
+                if ($new_srp == 0) {
+                    continue;
+                }
+
+                $products[] = array(
+                    'id' => $product_id,
+                    'selling_price' => $new_srp,
+                    'old_selling_price' => $old_srp,
+                    'name' => $name.' ('.$variant.') '.$unit_value.' '.strtoupper($unit)
+                );
+            }
+            $stmt->close();
+
+            foreach ($products as $product) {
+                $id = $product['id'];
+                $selling_price = $product['selling_price'];
+                $old_selling_price = $product['old_selling_price'];
+                $name = $product['name'];
+
+                $query = 'UPDATE price_list SET unit_price = ? WHERE product_id = ?';
+                $stmt = $this->conn->prepare($query);
+                $stmt->bind_param('di', $selling_price, $id);
+
+                if (!$stmt) {
+                    die("Error in preparing statement: " . $this->conn->error);
+                }
+                
+                if (!$stmt->execute()) {
+                    die("Error in executing statement: " . $stmt->error);
+                    $stmt->close();
+                }
+
+                $stmt->close();
+
+                $action_log = 'Updated SRP of '.$name.' from ₱'.number_format($old_selling_price, 2).' to ₱'.number_format($selling_price, 2);
+                $date_log = date('F j, Y g:i A');
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+            }
+
+            return;
         }
     }
 ?>

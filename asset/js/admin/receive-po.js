@@ -33,7 +33,7 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(json) {
-                $element.closest('tr').find('td:eq(6)').text('₱' + json.amount);
+                $element.closest('tr').find('td:eq(7)').text('₱' + json.amount);
                 $('#received_total').text('₱' + json.received_total);
                 $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
@@ -65,7 +65,7 @@ $(document).ready(function(){
                     return;
                 }
 
-                $element.closest('tr').find('td:eq(6)').text('₱' + json.amount);
+                $element.closest('tr').find('td:eq(7)').text('₱' + json.amount);
                 $('#received_total').text('₱' + json.received_total);
                 $('#grand_total').text('GRAND TOTAL: ₱' + json.grand_total);
             },
@@ -149,24 +149,24 @@ $(document).ready(function(){
         return num % 1 !== 0;
     }
 
-    function updateSRP (product_id, base_price, selling_price) {
+    function updateSRP (po_ref, product_id, selling_price) {
         $.ajax({
             url: '/update-srp-po',
             method: 'POST',
             data: {
+                po_ref : po_ref,
                 product_id : product_id,
-                base_price : base_price,
                 selling_price : selling_price
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
-        });
+        })
     }
 
     getPendingPOItems();
@@ -292,4 +292,12 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $(document).on('change', '.poi-srp', function(){
+        var po_ref = $(this).data('po-ref');
+        var product_id = $(this).data('product-id');
+        var selling_price = $(this).val();
+
+        updateSRP(po_ref, product_id, selling_price);
+    })
 });

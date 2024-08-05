@@ -100,6 +100,7 @@ any('/edit-product', 'controller/admin/product/edit-product.php');
 any('/disable-product', 'controller/admin/product/disable-product.php');
 any('/get-product', 'controller/admin/product/get-product.php');
 any('/view-product', 'controller/admin/product/view-product.php');
+any('/get-base-prices', 'controller/admin/product/base-prices.php');
 
 // Stocks Controller
 // any('/add-stock', 'controller/admin/stocks/add-stock.php');
