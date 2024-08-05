@@ -38,7 +38,8 @@ function fetchAllProducts()
                     <div class="card border-secondary shadow-sm rounded">
                         <img src="asset/images/products/' . $row['image'] . '" class="card-img-top img-fluid" alt="' . htmlspecialchars($row['name']) . '">
                         <div class="card-body d-flex flex-column">
-                             <h5 class="card-title text-dark product-name">' . htmlspecialchars($row['name']) . ' <small class="text-muted">(' . htmlspecialchars($row['variant_name']) . ')</small></h5>
+                             <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . htmlspecialchars($row['name']) . ' (' . htmlspecialchars($row['variant_name']) . ')">
+                             ' . htmlspecialchars($row['name']) . ' <small class="text-muted">(' . htmlspecialchars($row['variant_name']) . ')</small></h5>
                              <p class="card-text">Unit: <strong>' . htmlspecialchars($row['unit_value']) . ' ' . strtoupper($row['unit_name']) . '</strong></p>
                              <p class="card-text">Stock: <span class="badge ' . ($row['qty'] == 0 ? 'bg-danger' : 'bg-success') . '">' . $row['qty'] . '</span></p>
                             <div class="d-grid">
