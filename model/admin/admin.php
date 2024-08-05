@@ -224,8 +224,44 @@
             $stmt->bind_result($count);
             $stmt->fetch();
             $stmt->close();
-            echo $count;
+
+            if ($count > 0) {
+                echo '<div class="dropdown-divider"></div> 
+                        <a href="/purchase-orders" class="dropdown-item">
+                            <i class="bi bi-clock-fill me-2"></i>
+                            Pending Purchase Orders
+                            <span class="float-end text-secondary fs-7">'.$count.'</span> </a>
+                        </a>';
+            }
+
             return;
+        }
+
+        public function getLowStocks () {
+            $query = 'SELECT COUNT(*) FROM stock WHERE qty <= critical_level';
+            $stmt = $this->conn->prepare($query);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($count);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($count > 0) {
+                echo '<div class="dropdown-divider"></div> 
+                        <a href="/manage-products" class="dropdown-item">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Low on Stock
+                            <span class="float-end text-secondary fs-7">'.$count.'</span> </a>
+                        </a>';
+            }
         }
     }
 ?>

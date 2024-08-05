@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
+                        <div class="card-footer bg-transparent text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
                             <button class="btn btn-primary" id="save" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-floppy-fill"></i></button>
                             <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-trash3"></i></button>
                             <a href="/purchase-orders" class="btn btn-secondary"><i class="bi bi-arrow-left"></i></a>
