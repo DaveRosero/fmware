@@ -8,9 +8,15 @@ $(document).ready(function () {
 
     function updateBadge() {
         var itemCount = $('.dropdown-menu a.dropdown-item').length;
-        $('.navbar-badge').text(itemCount);
+        var badge = $('.navbar-badge');
+        
+        if (itemCount === 0) {
+            badge.remove();
+        } else {
+            badge.text(itemCount);
+        }
     }
-
-    updateBadge();
+    
+    updateBadge();    
 });
 

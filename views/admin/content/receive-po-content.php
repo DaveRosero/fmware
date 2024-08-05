@@ -62,6 +62,7 @@
                                             <th class="text-center">Quantity</th>
                                             <th class="text-center">Unit</th>
                                             <th class="text-center">Price</th>
+                                            <th>New Selling Price</th>
                                             <th class="text-center">Received</th>
                                             <th class="text-center">Amount</th>
                                         </thead>
@@ -96,7 +97,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
+                        <div class="card-footer bg-transparent text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
                             <button class="btn btn-primary" id="save" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-floppy-fill"></i></button>
                             <a href="/purchase-orders" class="btn btn-secondary"><i class="bi bi-arrow-left"></i></a>
                         </div>

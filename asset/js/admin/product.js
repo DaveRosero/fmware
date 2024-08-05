@@ -172,6 +172,25 @@ $(document).ready(function(){
         });
     }
 
+    function getBasePrices (product_id) {
+        $.ajax({
+            url: '/get-base-prices',
+            method: 'POST',
+            data: {
+                product_id : product_id
+            },
+            dataType: 'html',
+            success: function(html) {
+                $('#bp_table_content').html(html);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+            
+        })
+    }
+
     $('#product-table').DataTable({
         order: [
             [7, 'asc']
@@ -464,4 +483,9 @@ $(document).ready(function(){
     });
 
     $('#bp_table').DataTable();
+
+    $('.prev_bp').click(function(){
+        var product_id = $(this).data('product-id');
+        getBasePrices(product_id);
+    });
 });

@@ -86,7 +86,6 @@ $(document).ready(function () {
             data: { search: searchValue },
             dataType: "html",
             success: function (response) {
-
                 $(".item-list").html(response);
             },
             error: function (xhr, status, error) {
