@@ -67,19 +67,9 @@
                     <i class="bi bi-bell-fill"></i> 
                     <span class="navbar-badge badge text-bg-danger"></span> 
                 </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                    <div class="dropdown-divider"></div> 
-                        <a href="#" class="dropdown-item"> 
-                            4 new messages
-                        </a>
-                    <div class="dropdown-divider"></div> 
-                        <a href="#" class="dropdown-item"> 
-                            8 friend requests
-                        </a>
-                    <div class="dropdown-divider"></div> 
-                        <a href="#" class="dropdown-item"> 
-                            3 new reports
-                        </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" id="notification-list">
+                    <?php $admin->getLowStocks(); ?>
+                    <?php $admin->getPendingPO(); ?>
                 </div>
             </li> <!--end::Notifications Dropdown Menu--> <!--begin::Fullscreen Toggle-->
             <li class="nav-item"> <a class="nav-link" href="#" data-lte-toggle="fullscreen"> <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i> <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none;"></i> </a> </li> <!--end::Fullscreen Toggle--> <!--begin::User Menu Dropdown-->
