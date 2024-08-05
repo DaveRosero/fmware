@@ -228,12 +228,12 @@ any('/pos-pusearch', 'views/pos/model/pickup_searchprod.php');
 any('/pos-puprod', 'views/pos/model/pickup_product.php');
 any('/pos-puclaim', 'views/pos/model/pickupclaim.php');
 
-// RIDER
+// RIDER 
 //*****************************************************************//
 any('/rider-dashboard', 'views/rider/orders.php');
 any('/rider-orders', 'views/rider/orders.php');
 any('/rider-history', 'views/rider/history.php');
-
+any('/fetch-rider-orders', 'views/rider/models/fetch_orders.php');
 //*****************************************************************//
 
 // Test

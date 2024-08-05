@@ -19,6 +19,7 @@
         <?php require_once 'views/rider/template/header.php'; ?>
         <?php require_once 'views/rider/template/sidebar.php'; ?>
         <?php require_once 'views/rider/content/content-orders.php'; ?>
+        <?php require_once 'views/rider/modals/view-orderModal.php'; ?>
         <?php require_once 'views/rider/template/footer.php'; ?>
     </div>
     <!--end::App Wrapper-->
@@ -54,6 +55,7 @@
     <script src="/asset/js/template/sidebar.js"></script>
     <script src="/asset/js/template/theme.js"></script>
     <script src="/asset/js/admin/dashboard.js"></script>
+    <script src="/asset/js/rider/rider.js"></script>
     <!--end::Script-->
 </body>
 <!--end::Body-->
