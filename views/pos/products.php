@@ -17,7 +17,7 @@ $query = 'SELECT price_list.unit_price,
                   INNER JOIN product ON price_list.product_id = product.id
                   INNER JOIN variant ON variant.id = product.variant_id
                   INNER JOIN unit ON unit.id = product.unit_id
-                  WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode = ?
+                  WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode LIKE CONCAT("%", ?, "%")
                   ORDER BY product.name ASC';
 
 $stmt = $mysqli->prepare($query);
@@ -34,7 +34,8 @@ while ($stmt->fetch()) {
       <div class="card border-secondary shadow-sm rounded">
         <img src="asset/images/products/' . $image . '" class="card-img-top img-fluid" alt="' . $name . '">
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title text-dark product-name">' . $name . ' <small class="text-muted">(' . $variant . ')</small></h5>
+          <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . $name . ' (' . $variant_name . ')">
+          ' . $name . ' <small class="text-muted">(' . $variant . ')</small></h5>
           <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit) . '</strong></p>
           <p class="card-text">Stock: <span class="badge ' . ($qty == 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
           <input type="hidden" value="' . $barcode . '" class="product-barcode">
