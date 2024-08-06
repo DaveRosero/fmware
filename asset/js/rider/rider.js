@@ -88,7 +88,11 @@ $(document).ready(function() {
                     orderItemsTable.append(`
                         <tr class="text-center">
                             <td>${item.product_name}</td>
+                            <td>${item.variant_name || 'N/A'}</td>
+                            <td>${item.unit_name || 'N/A'}</td>
+                            <td>₱${parseFloat(item.price).toFixed(2)}</td>
                             <td>${item.qty}</td>
+                            <td>₱${(parseFloat(item.price) * item.qty).toFixed(2)}</td>
                         </tr>
                     `);
                 });

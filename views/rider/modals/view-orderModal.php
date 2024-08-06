@@ -10,7 +10,11 @@
           <thead>
             <tr class="text-center">
               <th>Product Name</th>
+              <th>Variant</th>
+              <th>Unit</th>
+              <th>Price</th>
               <th>Quantity</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
