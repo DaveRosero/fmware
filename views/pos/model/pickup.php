@@ -4,13 +4,13 @@ require_once 'model/database/database.php';
 $mysqli = database();
 
 
-$query = 'SELECT order.pos_ref,
-                 order.date,
-                 order.total,
+$query = 'SELECT orders.order_ref,
+                 orders.date,
+                 orders.gross,
                  transaction_type.name,
-                 order.status
-            FROM order
-            LEFT JOIN transaction_type ON pos.transaction_type_id = transaction_type.id';
+                 orders.status
+            FROM orders
+            LEFT JOIN transaction_type ON orders.transaction_type_id = transaction_type.id';
 $result = $mysqli->query($query);
 
 $pickups = [];
