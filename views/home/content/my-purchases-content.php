@@ -60,7 +60,7 @@
             </div>
 
             <div class="row">
-                <table id="purchase-table">
+                <table class="table table-borderless" id="purchase-table">
                     <thead>
                         <th>Order Reference ID</th>
                         <th>Total Amount</th>
