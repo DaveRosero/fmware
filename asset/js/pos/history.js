@@ -38,7 +38,7 @@ $(document).ready(function () {
 
         // Set status badge class based on status
         var statusBadge = $("#transaction-status");
-        statusBadge.removeClass("text-bg-primary text-bg-secondary"); // Remove existing classes
+        statusBadge.removeClass("text-bg-p rimary text-bg-secondary"); // Remove existing classes
         if (data.status === "paid") {
           statusBadge.addClass("text-bg-primary");
         } else if (data.status === "void") {
