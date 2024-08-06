@@ -169,7 +169,7 @@
             $payment_type_id = $_POST['payment_type'];
             $address_id = intval($_POST['address_id']);
             $paid = 'unpaid';
-            if ($payment_type_id == 1) {
+            if ($payment_type_id == 1 || $payment_type_id == 4) {
                 $status = 'pending';
             } else {
                 $status = 'to pay';

@@ -23,8 +23,7 @@
         <title>FMWare</title>
         <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
         <?php 
-            include_once 'vendor/Bootstrap/css/bundle.php';
-            include_once 'vendor/DataTables/css/bundle.php';
+            require_once 'config/load_vendors.php'; 
         ?>
         <link rel="stylesheet" href="/asset/css/index.css">
     </head>
@@ -34,15 +33,8 @@
         <?php include_once 'views/home/content/account-content.php'; ?>
 
         <?php // include_once 'views/home/modals/cart-modal.php'; ?>
-            
-        <?php
-            include_once 'vendor/jQuery/bundle.php';
-            include_once 'vendor/FontAwesome/kit.php';
-            include_once 'vendor/DataTables/js/bundle.php';
-            include_once 'vendor/Bootstrap/js/bundle.php'; 
-        ?>
-        <script src="/vendor/NotifyJS/js/notify.js"></script>
-        <script src="/asset/js/home/my-purchases.js"></script>
+
         <script src="/asset/js/home/home.js"></script>
+        <script src="/asset/js/home/my-purchases.js"></script>
     </body>
 </html>
