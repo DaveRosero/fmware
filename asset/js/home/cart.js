@@ -274,7 +274,8 @@ $(document).ready(function(){
             console.log('COD selected');
         } else if (selectedValue === '2') {
             console.log('GCash selected');
-            
+        } else if (selectedValue === '4') {
+            console.log('Pikcup selected');
         }
     });
 })
