@@ -235,6 +235,7 @@ any('/rider-dashboard', 'views/rider/orders.php');
 any('/rider-orders', 'views/rider/orders.php');
 any('/rider-history', 'views/rider/history.php');
 any('/fetch-rider-orders', 'views/rider/models/fetch_orders.php');
+any('/fetch-order-items', 'views/rider/models/fetch_orderItems.php');
 //*****************************************************************//
 
 // Test

@@ -34,7 +34,6 @@
                                         <th>Transaction</th>
                                         <th>Payment</th>
                                         <th>Total</th>
-                                        <th>Profit</th>
                                         <th>Paid</th>
                                         <th>Status</th>
                                         <th>Action</th>
