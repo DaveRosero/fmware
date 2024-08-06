@@ -256,6 +256,25 @@
 	});
 	// Event listener for webcam button
 	webcamButton.addEventListener('click', showWebcam);
+  // Variable to store the interval ID
+
+// Function to stop the webcam and clear the interval
+function stopWebcam() {
+    if (video.srcObject) {
+        const tracks = video.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        video.srcObject = null;
+    }
+    if (intervalId) {
+        clearInterval(intervalId);
+    }
+}
+// Event listener to stop webcam when modal is closed
+const qrModal = document.getElementById('qrModal');
+qrModal.addEventListener('hidden.bs.modal', function () {
+    stopWebcam();
+});
+
 	</script>
       </div>
     </div>
