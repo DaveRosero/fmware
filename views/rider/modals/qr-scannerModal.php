@@ -84,7 +84,8 @@
           // Get reference to the fileButton and fileInput elements in the HTML document
           const fileButton = document.getElementById('fileButton');
           const fileInput = document.getElementById('fileInput');
-
+     // Global variable for interval ID
+     let intervalId = null;
           // Function to show webcam scanning
           function showWebcam() {
             // Clear any previous QR code data and hide scanned image
@@ -122,7 +123,7 @@
           }
 
           // Continuously check for QR code in each frame
-          const intervalId = setInterval(() => {
+           intervalId = setInterval(() => {
             // Create a canvas element to draw video frames onto it
             const canvas = document.createElement('canvas');
             // Get the 2D rendering context of the canvas
