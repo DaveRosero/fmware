@@ -16,34 +16,34 @@
             return $prefix.strtoupper($hex);
         }
 
-        public function getNet ($id) {
-            $query = 'SELECT cart.qty,
-                            cart.subtotal,
-                            price_list.base_price
-                    FROM cart
-                    INNER JOIN price_list ON price_list.product_id = cart.product_id
-                    WHERE cart.user_id = ?
-                    AND active = 1';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('i', $id);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->bind_result($qty, $subtotal, $base_price);
-                    $net = 0;
-                    while ($stmt->fetch()) {
-                        $profit = $subtotal - ($base_price * $qty);
-                        $net += $profit;
-                    }
-                    $stmt->close();
-                    return $net;
-                } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
-                }
-            } else {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-        }
+        // public function getNet ($id) {
+        //     $query = 'SELECT cart.qty,
+        //                     cart.subtotal,
+        //                     price_list.base_price
+        //             FROM cart
+        //             INNER JOIN price_list ON price_list.product_id = cart.product_id
+        //             WHERE cart.user_id = ?
+        //             AND active = 1';
+        //     $stmt = $this->conn->prepare($query);
+        //     $stmt->bind_param('i', $id);
+        //     if ($stmt) {
+        //         if ($stmt->execute()) {
+        //             $stmt->bind_result($qty, $subtotal, $base_price);
+        //             $net = 0;
+        //             while ($stmt->fetch()) {
+        //                 $profit = $subtotal - ($base_price * $qty);
+        //                 $net += $profit;
+        //             }
+        //             $stmt->close();
+        //             return $net;
+        //         } else {
+        //             die("Error in executing statement: " . $stmt->error);
+        //             $stmt->close();
+        //         }
+        //     } else {
+        //         die("Error in preparing statement: " . $this->conn->error);
+        //     }
+        // }
 
         public function getGross ($id, $delivery_fee) {
             $query = 'SELECT subtotal FROM cart WHERE user_id = ? AND active = 1';
@@ -153,14 +153,14 @@
         public function placeOrder () {
             $this->newCart();
             $query = 'INSERT INTO orders
-                        (order_ref, firstname, lastname, phone, gross, delivery_fee, net, 
+                        (order_ref, firstname, lastname, phone, gross, delivery_fee, 
                         transaction_type_id, payment_type_id, address_id, user_id, paid, status, code)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
             $user_id = $_POST['user_id'];
             $order_ref = $this->generateRef();
             $delivery_fee = intval($_POST['delivery-fee-value']);
-            $net = $this->getNet($user_id);
+            // $net = $this->getNet($user_id);
             $gross = $this->getGross($user_id, $delivery_fee);
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
@@ -177,8 +177,8 @@
             $code = bin2hex(random_bytes(50));
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ssssiiiiiiisss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee, 
-                            $net, $transaction_type_id, $payment_type_id, $address_id, $user_id, 
+            $stmt->bind_param('ssssiiiiiisss', $order_ref, $fname, $lname, $phone, $gross, $delivery_fee, 
+                            $transaction_type_id, $payment_type_id, $address_id, $user_id, 
                             $paid, $status, $code);
             if ($stmt) {
                 if ($stmt->execute()) {

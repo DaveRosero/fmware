@@ -222,6 +222,10 @@ $(document).ready(function(){
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
             }
         });
     });
