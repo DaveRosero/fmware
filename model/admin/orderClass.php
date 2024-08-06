@@ -194,7 +194,6 @@
                             orders.lastname,
                             orders.date,
                             orders.gross,
-                            orders.net,
                             orders.paid,
                             orders.status,
                             transaction_type.name,
@@ -206,7 +205,7 @@
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $ref, $fname, $lname, $date, $gross, $net, $paid, $status, $transaction, $payment);
+                    $stmt->bind_result($id, $ref, $fname, $lname, $date, $gross, $paid, $status, $transaction, $payment);
                     $content = '';
                     while ($stmt->fetch()) {
                         $initial = substr($lname, 0, 1);
@@ -221,7 +220,6 @@
                                 <td class="text-center">'.$transaction.'</td>
                                 <td class="text-center">'.$payment.'</td>
                                 <td class="text-center">₱'.number_format($gross, 2).'</td>
-                                <td class="text-center text-success"><strong>₱'.number_format($net, 2).'</strong></td>
                                 <td class="text-center">'.$this->paidFormat($paid).'</td>
                                 <td class="text-center">'.$this->statusFormat($status).'</td>
                                 <td class="text-center">
@@ -551,7 +549,6 @@
                             orders.lastname,
                             orders.date,
                             orders.gross,
-                            orders.net,
                             orders.paid,
                             orders.status,
                             transaction_type.name,
@@ -563,7 +560,7 @@
             $stmt = $this->conn->prepare($query);
             if ($stmt) {
                 if ($stmt->execute()) {
-                    $stmt->bind_result($id, $ref, $fname, $lname, $date, $gross, $net, $paid, $status, $transaction, $payment);
+                    $stmt->bind_result($id, $ref, $fname, $lname, $date, $gross, $paid, $status, $transaction, $payment);
                     $content = '';
                     while ($stmt->fetch()) {
                         $initial = substr($lname, 0, 1);
@@ -578,7 +575,6 @@
                                 <td>'.$transaction.'</td>
                                 <td>'.$payment.'</td>
                                 <td>₱'.number_format($gross).'.00</td>
-                                <td class="text-success"><strong>₱'.number_format($net).'.00</strong></td>
                                 <td>'.strtoupper($paid).'</td>
                                 <td>'.strtoupper($status).'</td>
                             </tr>';
