@@ -33,7 +33,7 @@
             <hr>
             <div class="row mb-2">
               <label for="">Payment Method</label>
-              <div class="col-md-6">
+              <div class="col-md-4">
                   <div class="card h-100">
                       <div class="card-body d-flex align-items-center justify-content-center">
                           <input type="radio" name="payment_type" id="cod" value="1" required>
@@ -41,11 +41,19 @@
                       </div>
                   </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
                   <div class="card h-100">
                       <div class="card-body d-flex align-items-center justify-content-center">
                           <input type="radio" name="payment_type" id="gcash" value="2" required>
                           <img class="me-2" width="100px" src="/asset/images/payments/gcash.png" alt="GCash" />
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="card h-100">
+                      <div class="card-body d-flex align-items-center justify-content-center">
+                          <input type="radio" name="payment_type" id="pickup" value="4" required>
+                          <img class="me-2 ms-2" width="75px" src="/asset/images/payments/pickup.jpg" alt="Pickup" />
                       </div>
                   </div>
               </div>
