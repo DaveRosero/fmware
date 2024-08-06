@@ -23,6 +23,7 @@
         </table>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#qrModal">Delivered</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
