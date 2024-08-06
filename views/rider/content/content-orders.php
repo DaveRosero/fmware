@@ -25,7 +25,7 @@
                 <div class="col-12 col-sm-12 col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="orders-table" class="table">
+                            <table id="orders-table" class="table table-borderless w-100">
                                 <thead>
                                     <tr class="text-center">
                                         <th>Order Ref</th>
@@ -36,7 +36,7 @@
                                         <th>Total</th>
                                         <th>Paid</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-gear-fill"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>

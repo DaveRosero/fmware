@@ -3,22 +3,31 @@ require_once 'model/database/database.php';
 
 $mysqli = database();
 
-$order_ref = $_GET['order_ref'];
+// Ensure the order_ref parameter is provided
+$order_ref = $_GET['order_ref'] ?? ''; // Get the order reference from the request
 
-// Sanitize input
-$order_ref = $mysqli->real_escape_string($order_ref);
+if (empty($order_ref)) {
+    http_response_code(400); // Bad Request
+    echo json_encode(['error' => 'Order reference is required']);
+    exit();
+}
 
-// SQL query to fetch order items
-$query = 'SELECT order_items.product_id, 
-                 product.name AS product_name, 
-                 order_items.qty, 
-                 price_list.unit_price
+// SQL query to fetch items of the specific order
+$query = 'SELECT order_items.id,
+                 order_items.order_ref,
+                 product.name AS product_name,
+                 order_items.qty
           FROM order_items
-          JOIN product ON order_items.product_id = product.id
-          JOIN price_list ON product.id = price_list.product_id
+          LEFT JOIN product ON order_items.product_id = product.id
           WHERE order_items.order_ref = ?';
 
 $stmt = $mysqli->prepare($query);
+if (!$stmt) {
+    http_response_code(500); // Internal Server Error
+    echo json_encode(['error' => 'Database query error']);
+    exit();
+}
+
 $stmt->bind_param('s', $order_ref);
 $stmt->execute();
 $result = $stmt->get_result();

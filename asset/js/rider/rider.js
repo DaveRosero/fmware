@@ -5,6 +5,7 @@ $(document).ready(function() {
             method: 'GET',
             dataType: 'json',
             success: function (response) {
+                console.log('Orders Response:', response);
                 // Function to format date
                 function formatDateTime(dateTime) {
                     const date = new Date(dateTime);
@@ -51,7 +52,7 @@ $(document).ready(function() {
                         '₱' + parseFloat(order.gross).toFixed(2),
                         '<span class="' + getPaidStatusBadgeClass(order.paid) + '">' + order.paid + '</span>',
                         '<span class="badge ' + getStatusBadgeClass(order.status) + '">' + order.status + '</span>',
-                        '<button class="btn btn-primary view-order-btn" data-order-id="' + order.id + '">View</button>'
+                        '<button class="btn btn-primary view-order-btn" data-order-ref="' + order.order_ref + '">View</button>'
                     ]),
                     columns: [
                         { title: 'Order Ref' },
@@ -67,46 +68,51 @@ $(document).ready(function() {
                     order: [[2, "desc"]], // Order by date descending
                     destroy: true // Destroy the existing DataTable instance to recreate it
                 });
-
-                $('#orders-table').on('click', '.view-order-btn', function () {
-                    var orderRef = $(this).data('order-ref');
-                    $.ajax({
-                        url: "/fetch-order-items", // Endpoint to fetch order items
-                        method: "GET",
-                        data: { order_ref: orderRef },
-                        dataType: "json",
-                        success: function (data) {
-                            if (Array.isArray(data)) {
-                                var modalBody = $('#orderItemsModal .modal-body');
-                                var tableBody = $('#order-items-table tbody');
-                                tableBody.empty(); // Clear existing content
-                
-                                if (data.length > 0) {
-                                    data.forEach(function(item) {
-                                        var totalPrice = (item.qty * item.unit_price).toFixed(2);
-                                        tableBody.append('<tr><td>' + item.product_name + '</td><td>' + item.qty + '</td><td>₱' + parseFloat(item.unit_price).toFixed(2) + '</td><td>₱' + totalPrice + '</td></tr>');
-                                    });
-                                } else {
-                                    tableBody.html('<tr><td colspan="4" class="text-center">No items found for this order.</td></tr>');
-                                }
-                
-                                $('#orderItemsModal').modal('show'); // Show the modal
-                            } else {
-                                console.error("Unexpected response format:", data);
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Error fetching order items:", status, error);
-                            console.error("Response text:", xhr.responseText); // Log response text for debugging
-                        }
-                    });
-                });
-                
+                     
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching orders:', error);
             }
         });
     }
+    function fetchOrderItems(orderRef) {
+        $.ajax({
+            url: '/fetch-order-items', // Replace with actual endpoint
+            method: 'GET',
+            data: { order_ref: orderRef }, // Ensure correct parameter name
+            dataType: 'json',
+            success: function (response) {
+                let orderItemsTable = $('#orderItems-table tbody');
+                orderItemsTable.empty(); // Clear previous items
+                response.forEach(item => {
+                    orderItemsTable.append(`
+                        <tr class="text-center">
+                            <td>${item.product_name}</td>
+                            <td>${item.qty}</td>
+                        </tr>
+                    `);
+                });
+                $('#exampleModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching order items:', error);
+                console.error('Response text:', xhr.responseText); // Log response text
+            }
+        });
+    }
+    
+
+    $(document).on('click', '.view-order-btn', function() {
+        const orderRef = $(this).data('order-ref');
+        console.log('Order Ref:', orderRef); // Debugging line
+        if (orderRef) {
+            fetchOrderItems(orderRef);
+        } else {
+            console.error('Order reference is not provided');
+        }
+    });
+    
+    
+    
     fetchOrders();
 });
