@@ -20,6 +20,7 @@
         <?php require_once 'views/rider/template/sidebar.php'; ?>
         <?php require_once 'views/rider/content/content-orders.php'; ?>
         <?php require_once 'views/rider/modals/view-orderModal.php'; ?>
+        <?php require_once 'views/rider/modals/qr-scannerModal.php'; ?>
         <?php require_once 'views/rider/template/footer.php'; ?>
     </div>
     <!--end::App Wrapper-->
