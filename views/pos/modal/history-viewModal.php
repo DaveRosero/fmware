@@ -22,7 +22,7 @@
                                         <th class="text-center">Subtotal</th>
                                     </tr>
                                 </thead>
-                                <tbody id="productDetails">
+                                <tbody id="productInfo">
                                 </tbody>
                             </table>
                         </div>

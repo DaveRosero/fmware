@@ -6,7 +6,7 @@ if (!isset($_GET['order_ref'])) {
 }
 
 $mysqli = database();
-$pos_ref = $mysqli->real_escape_string($_GET['order_ref']);
+$order_ref = $mysqli->real_escape_string($_GET['order_ref']);
 
 $query = "SELECT  product.name AS product_name,
                   product.unit_value AS product_uvalue,

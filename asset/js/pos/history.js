@@ -129,7 +129,7 @@ $(document).ready(function () {
             pos_ref: posRef,
           },
           success: function (data) {
-            $("#productDetails").html(data);
+            $("#productInfo").html(data);
           },
         });
 

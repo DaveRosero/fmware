@@ -31,13 +31,13 @@ $(document).ready(function () {
         });
 
         // Update general transaction details
-        $("#pickupViewLabel").text("Transaction #" + data.pos_ref);
+        $("#pickupViewLabel").text("Transaction #" + data.order_ref);
         $("#transaction-date").text(data.date);
         $("#transaction-subtotal").text(
-          formatter.format(Number(data.subtotal))
+          formatter.format(Number(data.gross))
         );
         $("#transaction-status").text(data.status);
-        $("#ptransaction-total").text(formatter.format(Number(data.total)));
+        $("#ptransaction-total").text(formatter.format(Number(data.gross)));
         $("#pickupcashRec-input").val(Number(data.cash).toFixed(2));
         $("#pickup-change").text(formatter.format(Number(data.changes)));
         $("#pickup-username").text(data.username);
@@ -64,75 +64,38 @@ $(document).ready(function () {
         }
 
         // Clear and set payment method
-        $("#paymentMethod").empty();
-        $("#paymentMethod").append(new Option("G-Cash", "G-Cash"));
-        $("#paymentMethod").append(new Option("Cash", "Cash"));
+        $("#ptransactionStatus").empty();
+        $("#ptransactionStatus").append(new Option("G-Cash", "G-Cash"));
+        $("#ptransactionStatus").append(new Option("Cash", "Cash"));
         if (
-          $("#paymentMethod option[value='" + data.payment_type + "']")
+          $("#ptransactionStatus option[value='" + data.payment_type + "']")
             .length === 0
         ) {
-          $("#paymentMethod").append(
+          $("#ptransactionStatus").append(
             $("<option>", {
               value: data.payment_type,
               text: data.payment_type,
             })
           );
         }
-        $("#paymentMethod").val(data.payment_type);
+        $("#ptransactionStatus").val(data.payment_type);
 
         // Clear and set transaction type
-        $("#history-transaction-type").empty();
-        if (
-          $(
-            "#history-transaction-type option[value='" +
-              data.transaction_type +
-              "']"
-          ).length === 0
-        ) {
-          $("#history-transaction-type").append(
-            $("<option>", {
-              value: data.transaction_type,
-              text: data.transaction_type,
-            })
-          );
-        }
-        $("#history-transaction-type").val(data.transaction_type);
+        $("#pickupStatus").empty().append(new Option("Online Order", "Online Order"));
+        $("#pickupStatus").val("Online Order");
 
-        if (data.transaction_type === "Walk-in") {
-          $("#customer-details").show();
-          $("#viewfName-input").val(data.firstname);
-          $("#viewlName-input").val(data.lastname);
-          $("#viewstreet-input, #street-label").val("").hide();
-          $("#viewbrgy-input, #brgy-label").val("").hide();
-          $("#viewmunicipality-input, #municipality-label").val("").hide();
-          $("#viewcontact-input, #contact-label").val("").hide();
-          $("#viewdeliverer-input, #deliverer-label").val("").hide();
-        } else if (data.transaction_type === "Delivery") {
-          $("#customer-details").show();
-          $("#viewfName-input").val(data.firstname);
-          $("#viewlName-input").val(data.lastname);
+        // Show and fill customer details
+        $("#customer-details").show();
+        $("#pickupfName-input").val(data.firstname);
+        $("#pickuplName-input").val(data.lastname);
+        $("#pickupcontact-input").val(data.phone);
 
-          let addressParts = data.address.split(", ");
-          let street = addressParts[0];
-          let baranggay = addressParts[1];
-          let municipality = addressParts[2];
-
-          $("#viewstreet-input, #street-label").val(street).show();
-          $("#viewbrgy-input, #brgy-label").val(baranggay).show();
-          $("#viewmunicipality-input, #municipality-label")
-            .val(municipality)
-            .show();
-          $("#viewcontact-input, #contact-label").val(data.contact_no).show();
-          $("#viewdeliverer-input, #deliverer-label")
-            .val(data.deliverer_name)
-            .show();
-        }
 
         $.ajax({
-          url: "/pos-historyprod",
+          url: "/pos-puprod",
           method: "GET",
           data: {
-            pos_ref: posRef,
+            order_ref: orderRef,
           },
           success: function (data) {
             $("#productDetails").html(data);
@@ -178,7 +141,7 @@ $(document).ready(function () {
         $.ajax({
           url: "/pos-transvoid",
           method: "POST",
-          data: { pos_ref: posRef },
+          data: { order_ref: orderRef },
           success: function (response) {
             // Transaction voided successfully
             Swal.fire({
