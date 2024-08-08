@@ -11,7 +11,6 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(feedback){
-                console.log(feedback);
                 if (feedback.product_total) {
                     $('#product-total').text(feedback.product_total);
                 }
@@ -23,7 +22,13 @@ $(document).ready(function(){
         });
     }
 
+    function updateMasterCheckbox() {
+        var allChecked = $('.cart-checkbox').length === $('.cart-checkbox:checked').length;
+        $('#checkAll').prop('checked', allChecked);
+    }
+
     getCartTotal();
+    updateMasterCheckbox();
 
     // function getDeliveryFee () {
     //     $.ajax({
@@ -124,49 +129,128 @@ $(document).ready(function(){
         });
     })
     
-    $(document).on('click', '.addQty', function(){
-        var id = $(this).data('product-id');
-        var qty = $('.qty_' + id);
-        var subtotal = $('.subtotal_' + id);
+    // $(document).on('click', '.addQty', function(){
+    //     var id = $(this).data('product-id');
+    //     var qty = $('.qty_' + id);
+    //     var subtotal = $('.subtotal_' + id);
+    //     $.ajax({
+    //         url: '/add-qty',
+    //         method: 'POST',
+    //         data: {
+    //             id: $(this).data('cart-id')
+    //         },
+    //         dataType: 'json',
+    //         success: function(feedback){
+    //             qty.val(feedback.qty);
+    //             subtotal.text(feedback.subtotal);
+    //             getCartTotal();
+    //         }
+    //     });
+    // });
+
+    // $(document).on('click', '.subQty', function(){
+    //     var id = $(this).data('product-id');
+    //     var qty = $('.qty_' + id);
+    //     var subtotal = $('.subtotal_' + id);
+
+    //     if (qty.val() == 1) {
+    //         return;
+    //     }
+
+    //     $.ajax({
+    //         url: '/sub-qty',
+    //         method: 'POST',
+    //         data: {
+    //             id: $(this).data('cart-id')
+    //         },
+    //         dataType: 'json',
+    //         success: function(feedback){
+    //             qty.val(feedback.qty);
+    //             subtotal.text(feedback.subtotal);
+    //             getCartTotal();
+    //         }
+    //     });
+    // });
+
+    $(document).on('click', '.addQty', function() {
+        var productId = $(this).data('product-id');
+        var cartId = $(this).data('cart-id');
+        var qtyInput = $('input[data-product-id="' + productId + '"]');
+        var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
+    
         $.ajax({
             url: '/add-qty',
             method: 'POST',
             data: {
-                id: $(this).data('cart-id')
+                id: cartId
             },
             dataType: 'json',
-            success: function(feedback){
-                qty.val(feedback.qty);
+            success: function(feedback) {
+                console.log(feedback);
+                qtyInput.val(feedback.qty);
                 subtotal.text(feedback.subtotal);
                 getCartTotal();
             }
         });
     });
-
-    $(document).on('click', '.subQty', function(){
-        var id = $(this).data('product-id');
-        var qty = $('.qty_' + id);
-        var subtotal = $('.subtotal_' + id);
-
-        if (qty.val() == 1) {
+    
+    $(document).on('click', '.subQty', function() {
+        var productId = $(this).data('product-id');
+        var cartId = $(this).data('cart-id');
+        var qtyInput = $('input[data-product-id="' + productId + '"]');
+        var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
+    
+        if (qtyInput.val() == 1) {
             return;
         }
-
+    
         $.ajax({
             url: '/sub-qty',
             method: 'POST',
             data: {
-                id: $(this).data('cart-id')
+                id: cartId
             },
             dataType: 'json',
-            success: function(feedback){
-                qty.val(feedback.qty);
+            success: function(feedback) {
+                console.log(feedback);
+                qtyInput.val(feedback.qty);
                 subtotal.text(feedback.subtotal);
                 getCartTotal();
             }
         });
     });
 
+    $(document).on('change', '.qty-input', function() {
+        var productId = $(this).data('product-id');
+        var cartId = $(this).data('cart-id');
+        var qty = $(this).val();
+        var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
+    
+        if (qty < 1) {
+            qty = 1;
+            $(this).val(qty);
+        }
+    
+        $.ajax({
+            url: '/cart-update-qty',
+            method: 'POST',
+            data: {
+                id: cartId,
+                qty: qty
+            },
+            dataType: 'json',
+            success: function(feedback) {
+                console.log(feedback);
+                subtotal.text(feedback.subtotal);
+                getCartTotal();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
+        });
+    });
+    
     $('#checkout').on('click', function(){
         var id = $(this).data('user-id');
         $.ajax({
@@ -247,7 +331,9 @@ $(document).ready(function(){
                         getCartTotal();
                     }
                 }
-            })
+            });
+
+            updateMasterCheckbox();
         } else {
             console.log('Checkbox clicked and unchecked', $(this).val());
 
@@ -264,7 +350,9 @@ $(document).ready(function(){
                         getCartTotal();
                     }
                 }
-            })
+            });
+
+            updateMasterCheckbox();
         }
     });
 
@@ -272,10 +360,68 @@ $(document).ready(function(){
         var selectedValue = $('input[name="payment_type"]:checked').val();
         if (selectedValue === '1') {
             console.log('COD selected');
+            $('#address').prop('disabled', false);
+            $('#address').trigger('change');
         } else if (selectedValue === '2') {
             console.log('GCash selected');
+            $('#address').prop('disabled', false);
+            $('#address').trigger('change');
         } else if (selectedValue === '4') {
             console.log('Pikcup selected');
+            $('#delivery-fee').text('-');
+            $('#delivery-fee-value').val(0);
+            $('#address').val('');
+            $('#address').trigger('change');
+            $('#address').prop('disabled', true);
         }
     });
+
+    $('#checkAll').click(function() {
+        var isChecked = this.checked;
+        $('.cart-checkbox').each(function() {
+            var $checkbox = $(this);
+            if (isChecked && !$checkbox.is(':checked')) {
+                // If master checkbox is checked and individual checkbox is not checked, trigger click
+                $checkbox.click();
+            } else if (!isChecked && $checkbox.is(':checked')) {
+                // If master checkbox is unchecked and individual checkbox is checked, trigger click
+                $checkbox.click();
+            }
+        });
+    });
+
+    $('.del-cart').click(function(){
+        var product_id = $(this).data('product-id');
+        var cart_id = $(this).data('cart-id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to remove this product from your cart?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'No, cancel!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/del-cart-item',
+                    method: 'POST',
+                    data: {
+                        product_id : product_id,
+                        cart_id : cart_id
+                    },
+                    dataType: 'json',
+                    success: function(json) {
+                        if(json.redirect) {
+                            window.location.href = json.redirect;
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log("Error:", textStatus, errorThrown);
+                        console.log("Response:", jqXHR.responseText);
+                    }
+                });
+            }
+        });
+    })
 })

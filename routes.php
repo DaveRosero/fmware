@@ -22,6 +22,8 @@ any('/uncheck-product', 'controller/home/cart/uncheck-product.php');
 any('/delivery-fee', 'controller/home/cart/delivery-fee.php');
 any('/cart-total', 'controller/home/cart/cart-total.php');
 any('/checkout', 'controller/home/cart/checkout.php');
+any('/cart-update-qty', 'controller/home/cart/update-qty.php');
+any('/del-cart-item', 'controller/home/cart/del-cart-item.php');
 
 // User Controller
 any('/has-address', 'controller/home/user/has-address.php');

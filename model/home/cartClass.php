@@ -109,17 +109,19 @@
                             product.unit_value,
                             product.description,
                             price_list.unit_price,
-                            unit.name
+                            unit.name,
+                            variant.name
                     FROM cart
                     INNER JOIN product ON product.id = cart.product_id
                     INNER JOIN price_list ON price_list.product_id = product.id
                     INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
                     WHERE cart.user_id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
                 if ($stmt->execute()) { 
-                    $stmt->bind_result($cart_id, $user_id, $qty, $product_id, $subtotal, $active, $image, $name, $unit_value, $description, $price, $unit);
+                    $stmt->bind_result($cart_id, $user_id, $qty, $product_id, $subtotal, $active, $image, $name, $unit_value, $description, $price, $unit, $variant);
                     while ($stmt->fetch()) {
                         if ($active == 0) {
                             $checkbox = '<input class="form-check-input cart-checkbox" type="checkbox" name="selected_products[]" value="'.$product_id.'" data-user-id="'.$user_id.'">';
@@ -149,17 +151,17 @@
                         
                             <div class="col-lg-4 col-md-5 mb-4 mb-lg-0">
                                 <!-- Data -->
-                                <p><strong>'.$name.'</strong></p>
-                                <p>Unit: '.$unit_value.' '.$unit.' </p>
-                                <p>Description: '. (!empty($description) ? $description : 'N/A') .'</p>
-                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                                <p><strong>'.$name.' ('.$variant.') '.$unit_value.' '.strtoupper($unit).'</strong></p>
+                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2 del-cart" data-mdb-toggle="tooltip"
+                                    data-product-id='.$product_id.'
+                                    data-cart-id="'.$cart_id.'"
                                     title="Remove item">
                                     <i class="fas fa-trash"></i>
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm mb-2" data-mdb-toggle="tooltip"
+                                <a href="/view-product/product/'.$product_id.'" class="mb-2" data-mdb-toggle="tooltip"
                                     title="View Product">
                                     <i class="fas fa-eye"></i>
-                                </button>
+                                </a>
                                 <!-- Data -->
                             </div>
                         
@@ -174,8 +176,9 @@
                         
                                     <div class="form-outline">
                                         <input min="0" name="quantity" value="'.$qty.'" type="number" 
-                                            class="form-control qty_'.$product_id.'" />
-                                        <label class="form-label">Quantity</label>
+                                            class="form-control text-center qty-input" 
+                                            data-product-id="'.$product_id.'"
+                                            data-cart-id="'.$cart_id.'"/>
                                     </div>
                         
                                     <button class="btn btn-primary px-3 ms-2 addQty"
@@ -188,7 +191,7 @@
                         
                                 <!-- Price -->
                                 <p class="text-start text-md-center">
-                                    <strong class="subtotal_'.$product_id.'">₱'.number_format($subtotal).'.00</strong>
+                                    <strong class="subtotal" data-product-id="'.$product_id.'">₱'.number_format($subtotal).'.00</strong>
                                 </p>
                                 <!-- Price -->
                             </div>
@@ -372,19 +375,26 @@
         }
 
         public function getDeliveryFee ($brgy) {
-            $query = 'SELECT delivery_fee FROM delivery_fee WHERE brgys LIKE ?';
+            $query = 'SELECT delivery_fee FROM delivery_fee WHERE FIND_IN_SET(?, brgys) > 0';
             $stmt = $this->conn->prepare($query);
-            $param = '%'.$brgy.'%';
-            $stmt->bind_param('s', $param);
+            $stmt->bind_param('s', $brgy);
+        
             if ($stmt) {
                 if ($stmt->execute()) {
                     $stmt->bind_result($delivery_fee);
-                    $stmt->fetch();
-                    $stmt->close();
-                    return [
-                        'delivery_fee' => number_format($delivery_fee),
-                        'delivery_value' => $delivery_fee
-                    ];
+                    if ($stmt->fetch()) {
+                        $stmt->close();
+                        return [
+                            'delivery_fee' => number_format($delivery_fee),
+                            'delivery_value' => $delivery_fee
+                        ];
+                    } else {
+                        $stmt->close();
+                        return [
+                            'delivery_fee' => 0,
+                            'delivery_value' => 0
+                        ];
+                    }
                 } else {
                     die("Error in executing statement: " . $stmt->error);
                     $stmt->close();
@@ -392,6 +402,55 @@
             } else {
                 die("Error in preparing statement: " . $this->conn->error);
             }
+        }
+
+        public function updateQty ($id, $qty) {
+            $query = 'UPDATE cart SET qty = ? WHERE id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $qty, $id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $new_cart = $this->getNewSubtotal($id);
+            $this->updateSubtotal($id, $new_cart['subtotal']);
+            $subtotal = number_format($new_cart['subtotal']);
+            $subtotal = '₱'.$subtotal.'.00';
+            $json = array(
+                'qty' => $new_cart['qty'],
+                'subtotal' => $subtotal
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function delCartItem ($product_id, $cart_id) {
+            $query = 'DELETE FROM cart WHERE product_id = ? AND id = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $product_id, $cart_id);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+            
+            $stmt->close();
+            $json = array(
+                'redirect' => '/cart'
+            );
+            echo json_encode($json);
+            return;
         }
     }
 ?>
