@@ -1,4 +1,4 @@
-<div class="modal fade" id="pickupView" aria-hidden="true" tabindex="-1">
+<div class="modal fade" id="pickupView" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
@@ -6,30 +6,22 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="max-height: 75vh; overflow:hidden;">
+            <div class="modal-body" style="max-height: 75vh; overflow-y:auto;">
                 <div class="row">
                     <div class="col-7">
                         <div class="col" style="height: calc(75vh - 100px);overflow-y: auto;overflow-x: hidden;">
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table table-dark">
                                     <tr>
-                                        <th scope="col">Item Name</th>
-                                        <th scope="col">Unit</th>
-                                        <th scope="col">Variant</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Subtotal</th>
+                                        <th scope="text-center">Item Name</th>
+                                        <th scope="text-center">Unit</th>
+                                        <th scope="text-center">Variant</th>
+                                        <th scope="text-center">Price</th>
+                                        <th scope="text-center">Quantity</th>
+                                        <th scope="text-center">Subtotal</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Boysen Paint (W)</td>
-                                        <td>1 Liter</td>
-                                        <td>White</td>
-                                        <td>$99.00</td>
-                                        <td>3</td>
-                                        <td>$297.00</td>
-                                    </tr>
+                                <tbody id="productDetails">
                                 </tbody>
                             </table>
                         </div>
@@ -41,10 +33,6 @@
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">
-                            <select class="form-select   w-50" aria-label="Default select example" id="paymentMethod"
-                                disabled>
-                                <option value="1">G-Cash</option>
-                            </select>
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
                                 <input type="number" class="form-control" id="pickupcashRec-input" />
@@ -61,15 +49,9 @@
                                 <div class="d-flex justify-content-end gap-2">
                                     <select class="form-select   w-50" aria-label="Default select example"
                                         id="pickupStatus" disabled>
-                                        <option value="1">Claimable</option>
-                                        <option value="2">Claimed</option>
-                                        <option value="3">Unclaimed</option>
                                     </select>
-                                    <select class="form-select   w-50" aria-label="Default select example"
-                                        id="transactionStatus" disabled>
-                                        <option value="1">Un-Paid</option>
-                                        <option value="2">Paid Online</option>
-                                        <option value="3">Paid Cash</option>
+                                    <select class="form-select   w-50" aria-label="Default select example" 
+                                    id="ptransactionStatus" disabled>
                                     </select>
                                 </div>
                                 <!--Show the details  of customer this can be blank-->

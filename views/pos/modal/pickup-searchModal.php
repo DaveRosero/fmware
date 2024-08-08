@@ -21,7 +21,9 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                    <?php foreach ($pickups as $pickup): ?>
+                    <?php foreach ($pickups as $pickup): 
+                            if (in_array($pickup['status'], ['pending', 'prepared', 'claimed'])):
+                        ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($pickup['order_ref']); ?></td>
                                 <td><?php echo date('F j, Y h:i A', strtotime($pickup['date'])); ?></td>
@@ -30,23 +32,22 @@
                                 </td>
                                 <td>
                                     <?php
-                                    $badgeClass = $pickup['status'] == 'pending' ? 'text-bg-primary'
-                                        : ($pickup['status'] == 'Claimed' ? 'text-bg-secondary'
-                                            : ($pickup['status'] == 'fully refunded' ? 'bg-success text-white'
-                                                : ($pickup['status'] == 'fully replaced' ? 'bg-info text-white'
-                                                    : '')));
+                                    $badgeClass = $pickup['status'] == 'pending' ? 'text-bg-warning text-white'
+                                        : ($pickup['status'] == 'prepared' ? 'text-bg-light'
+                                            : ($pickup['status'] == 'claimed' ? 'bg-primary text-white'
+                                                    : ''));
                                     ?>
                                     <span
                                         class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($pickup['status']); ?></span>
-                                    <!-- <span
-                                        class="badge text-bg-primary"><?php echo htmlspecialchars($pickup['status']); ?></span> -->
                                 </td>
                                 <td>
                                     <button class="btn btn-primary view-pickup-btn"
                                         data-bs-orderref="<?php echo htmlspecialchars($pickup['order_ref']); ?>">View</button>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php 
+                         endif;
+                        endforeach; ?>
                     </tbody>
                 </table>
             </div>
