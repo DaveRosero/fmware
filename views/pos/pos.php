@@ -28,6 +28,7 @@ if ($_SESSION['group'] !== 'cashier') {
 
 ?>
 <?php include_once 'model/history.php' ?>
+<?php include_once 'model/pickup.php' ?>
 
 
 <!DOCTYPE html>

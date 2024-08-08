@@ -20,7 +20,6 @@
     if (!in_array($status, $statusType)) {
         header('Location: /404');
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +29,7 @@
         <title>FMWare</title>
         <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
         <?php 
-            include_once 'vendor/Bootstrap/css/bundle.php';
-            include_once 'vendor/DataTables/css/bundle.php';
+            require_once 'config/load_vendors.php'; 
         ?>
         <link rel="stylesheet" href="/asset/css/index.css">
     </head>
@@ -42,13 +40,6 @@
 
         <?php include_once 'views/home/modals/my-purchases-modal.php'; ?>
             
-        <?php
-            include_once 'vendor/jQuery/bundle.php';
-            include_once 'vendor/FontAwesome/kit.php';
-            include_once 'vendor/DataTables/js/bundle.php';
-            include_once 'vendor/Bootstrap/js/bundle.php'; 
-        ?>
-        
         <script src="/vendor/jQueryQr/src/jquery.qrcode.js"></script>
         <script src="/vendor/jQueryQr/src/qrcode.js"></script>
         <script src="/vendor/NotifyJS/js/notify.js"></script>

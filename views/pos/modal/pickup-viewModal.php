@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h1 class="modal-title fs-5" id="pickupViewLabel">Transaction #1234567890</h1>
+                <h1 class="modal-title fs-5" id="pickupViewLabel"></h1>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -37,7 +37,7 @@
                     <!--Show the details  and total of the items to be  returned or refunded-->
                     <div class="col-5">
                         <div class="row text-center border-bottom mb-2">
-                            <h1 class="text-danger" id="transaction-total">$297.00</h1>
+                            <h1 class="text-danger" id="ptransaction-total"></h1>
                             <p class="text-secondary">Total Price</p>
                         </div>
                         <div class="col border-bottom mb-2">

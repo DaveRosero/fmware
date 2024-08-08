@@ -11,6 +11,195 @@ $(document).ready(function () {
     pickupTable.search("").draw(); // Clear search filter
   });
 
-  //view button to show the modal and detail based on the order_ref
-  $;
+  $("#pickup-search").on("click", ".view-pickup-btn", function () {
+    const orderRef = $(this).data("bs-orderref");
+
+    $.ajax({
+      url: "/pos-pusearch",
+      method: "GET",
+      data: {
+        order_ref: orderRef,
+      },
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+
+        // Number formatter for currency
+        var formatter = new Intl.NumberFormat("en-PH", {
+          style: "currency",
+          currency: "PHP",
+        });
+
+        // Update general transaction details
+        $("#pickupViewLabel").text("Transaction #" + data.pos_ref);
+        $("#transaction-date").text(data.date);
+        $("#transaction-subtotal").text(
+          formatter.format(Number(data.subtotal))
+        );
+        $("#transaction-status").text(data.status);
+        $("#ptransaction-total").text(formatter.format(Number(data.total)));
+        $("#pickupcashRec-input").val(Number(data.cash).toFixed(2));
+        $("#pickup-change").text(formatter.format(Number(data.changes)));
+        $("#pickup-username").text(data.username);
+
+        // Set status badge class based on status
+        var statusBadge = $("#transaction-status");
+        statusBadge.removeClass("text-bg-p rimary text-bg-secondary"); // Remove existing classes
+        if (data.status === "paid") {
+          statusBadge.addClass("text-bg-primary");
+        } else if (data.status === "void") {
+          statusBadge.addClass("text-bg-secondary");
+        }
+
+        // Enable or disable the "Void" button based on status
+        if (data.status === "Claimed") {
+          $(".claim").prop("disabled", true);
+        } else if (data.status === "Not Claimed") {
+          $(".claim").prop("disabled", false);
+        } else if (
+          data.status === "fully refunded" ||
+          data.status === "fully replaced"
+        ) {
+          $(".claim").prop("disabled", true);
+        }
+
+        // Clear and set payment method
+        $("#paymentMethod").empty();
+        $("#paymentMethod").append(new Option("G-Cash", "G-Cash"));
+        $("#paymentMethod").append(new Option("Cash", "Cash"));
+        if (
+          $("#paymentMethod option[value='" + data.payment_type + "']")
+            .length === 0
+        ) {
+          $("#paymentMethod").append(
+            $("<option>", {
+              value: data.payment_type,
+              text: data.payment_type,
+            })
+          );
+        }
+        $("#paymentMethod").val(data.payment_type);
+
+        // Clear and set transaction type
+        $("#history-transaction-type").empty();
+        if (
+          $(
+            "#history-transaction-type option[value='" +
+              data.transaction_type +
+              "']"
+          ).length === 0
+        ) {
+          $("#history-transaction-type").append(
+            $("<option>", {
+              value: data.transaction_type,
+              text: data.transaction_type,
+            })
+          );
+        }
+        $("#history-transaction-type").val(data.transaction_type);
+
+        if (data.transaction_type === "Walk-in") {
+          $("#customer-details").show();
+          $("#viewfName-input").val(data.firstname);
+          $("#viewlName-input").val(data.lastname);
+          $("#viewstreet-input, #street-label").val("").hide();
+          $("#viewbrgy-input, #brgy-label").val("").hide();
+          $("#viewmunicipality-input, #municipality-label").val("").hide();
+          $("#viewcontact-input, #contact-label").val("").hide();
+          $("#viewdeliverer-input, #deliverer-label").val("").hide();
+        } else if (data.transaction_type === "Delivery") {
+          $("#customer-details").show();
+          $("#viewfName-input").val(data.firstname);
+          $("#viewlName-input").val(data.lastname);
+
+          let addressParts = data.address.split(", ");
+          let street = addressParts[0];
+          let baranggay = addressParts[1];
+          let municipality = addressParts[2];
+
+          $("#viewstreet-input, #street-label").val(street).show();
+          $("#viewbrgy-input, #brgy-label").val(baranggay).show();
+          $("#viewmunicipality-input, #municipality-label")
+            .val(municipality)
+            .show();
+          $("#viewcontact-input, #contact-label").val(data.contact_no).show();
+          $("#viewdeliverer-input, #deliverer-label")
+            .val(data.deliverer_name)
+            .show();
+        }
+
+        $.ajax({
+          url: "/pos-historyprod",
+          method: "GET",
+          data: {
+            pos_ref: posRef,
+          },
+          success: function (data) {
+            $("#productDetails").html(data);
+          },
+        });
+
+        $("#pickupView").modal("show");
+      },
+    });
+  });
+
+  $("#pickupView").on("shown.bs.modal", function () {
+    historyTable.order([[1, "desc"]]).draw();
+  });
+
+  $("#pickupView").on("hidden.bs.modal", function () {
+    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
+    historyTable.search("").draw(); // Clear search filter
+  });
+
+  // Reset DataTable when the modal is closed
+  $("#pickup-searchModal").on("hidden.bs.modal", function () {
+    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
+    historyTable.search("").draw(); // Clear search filter
+  });
+
+  // void button functionally
+  $(".claim").on("click", function (event) {
+    event.preventDefault(); // Prevent default action if needed
+
+    Swal.fire({
+      title: "Are you sure you want to claim this product?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, claim it",
+      cancelButtonText: "Cancel",
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // User confirmed, proceed with voiding the transaction
+        var posRef = $("#pickupViewLabel").text().replace("Transaction #", "");
+
+        $.ajax({
+          url: "/pos-transvoid",
+          method: "POST",
+          data: { pos_ref: posRef },
+          success: function (response) {
+            // Transaction voided successfully
+            Swal.fire({
+              title: "Transaction Claimed!",
+              text: "The transaction has been successfully claimed.",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => {
+              // Redirect or perform any other action
+              window.location.href = "/pos";
+            });
+          },
+        });
+      } else if (result.isDenied) {
+        // User clicked Cancel, log this event
+        console.log("User clicked Cancel");
+      } else {
+        // Handle other scenarios if needed
+        console.log("Other result:", result);
+      }
+    });
+  });
 });
