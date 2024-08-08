@@ -31,6 +31,20 @@
             require_once 'config/load_vendors.php';
         ?>
         <link rel="stylesheet" href="/asset/css/index.css">
+        <style>
+            .form-check-input {
+                border-color: #444; /* Darker border */
+            }
+            .form-check-input:checked {
+                border-color: #000; /* Darker border when checked */
+            }
+            .form-check-input:focus {
+                box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25); /* Darker focus shadow */
+            }
+            .custom-icon-size {
+                font-size: 6rem; /* Adjust size as needed */
+            }
+        </style>
     </head>
     <body>
         <?php include_once 'views/home/template/header.php'; ?>

@@ -4,16 +4,11 @@
       <div class="col-md-8">
         <div class="card mb-4">
           <div class="card-header py-3">
-            <h5 class="mb-0">Cart - <?php echo $cart->cartCount($user_info['id']); ?> items</h5>
+            <h5 class="mb-0">Cart - <?php echo $cart->cartCount($user_info['id']); ?> item/s</h5>
           </div>
           <div class="card-body">
+            <input class="form-check-input" type="checkbox" id="checkAll"> All
             <?php $cart->getCart($user_info['id']); ?>
-          </div>
-        </div>
-        <div class="card mb-4">
-          <div class="card-body">
-            <p><strong>Receive by</strong></p>
-            <p class="mb-0">#</p>
           </div>
         </div>
       </div>
@@ -50,6 +45,9 @@
             <img class="me-2" width="100px"
               src="/asset/images/payments/gcash.png"
               alt="GCash" />
+            <img class="me-2" width="75px"
+              src="/asset/images/payments/pickup.jpg"
+              alt="Pickup" />
           </div>
         </div>
       </div>
