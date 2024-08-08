@@ -231,11 +231,24 @@ any('/pos-puclaim', 'views/pos/model/pickupclaim.php');
 
 // RIDER 
 //*****************************************************************//
-any('/rider-dashboard', 'views/rider/orders.php');
-any('/rider-orders', 'views/rider/orders.php');
-any('/rider-history', 'views/rider/history.php');
-any('/fetch-rider-orders', 'views/rider/models/fetch_orders.php');
-any('/fetch-order-items', 'views/rider/models/fetch_orderItems.php');
+// any('/rider-dashboard', 'views/rider/orders.php');
+// any('/rider-orders', 'views/rider/orders.php');
+// any('/rider-history', 'views/rider/history.php');
+// any('/fetch-rider-orders', 'views/rider/models/fetch_orders.php');
+// any('/fetch-order-items', 'views/rider/models/fetch_orderItems.php');
+//*****************************************************************//
+
+// Rider_v2
+//*****************************************************************//
+//screens
+any('/rider-order', 'views/rider_v2/screen-riderOrder.php');
+//modal
+//model
+any('/model-order', 'views/rider_v2/model/model-order.php');
+any('/model-order-details', 'views/rider_v2/model/model-order-details.php');
+any('/model-order-items', 'views/rider_v2/model/model-order-items.php');
+
+
 //*****************************************************************//
 
 // Test

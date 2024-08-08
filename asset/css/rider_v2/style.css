@@ -1,0 +1,37 @@
+/* Make sure the table container is responsive */
+.table-responsive {
+    overflow-x: auto;
+  }
+  
+  /* Adjust table styling for smaller screens */
+  @media only screen and (max-width: 767px) {
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      padding: 0 2px;
+    }
+  
+    .dataTables_wrapper .dataTables_paginate .paginate_button:focus {
+      outline: none;
+    }
+  
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      font-size: 0.8em;
+    }
+  
+    .dataTables_wrapper .dataTables_info {
+      font-size: 0.9em;
+    }
+  
+    .dataTables_wrapper .dataTables_filter label {
+      font-size: 0.9em;
+    }
+  }
+  /* Make buttons and badges responsive */
+.btn {
+    font-size: 0.9em; /* Adjust button font size */
+    padding: 0.4em 0.8em; /* Adjust button padding */
+  }
+  
+  .badge {
+    font-size: 0.8em; /* Adjust badge font size */
+    padding: 0.2em 0.6em; /* Adjust badge padding */
+  }
