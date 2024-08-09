@@ -19,12 +19,14 @@ foreach ($post_keys as $key) {
 
 
 $order_ref = $_POST['order_ref'];
+$cash= isset($_POST['cash']) ? $_POST['cash'] : null;
+$changes = isset($_POST['changes']) ? $_POST['changes'] : null;
 
 // Prepare and execute the query to update the order status
-$query = "UPDATE orders SET status = 'claimed', paid = 'paid' WHERE order_ref=?";
+$query = "UPDATE orders SET status = 'claimed', paid = 'paid', cash = ?, changes = ? WHERE order_ref=?";
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
-    $stmt->bind_param('s', $order_ref);
+    $stmt->bind_param('dds', $cash, $changes, $order_ref);
 
     if ($stmt->execute()) {
         $stmt->close();
