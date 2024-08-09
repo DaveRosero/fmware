@@ -183,15 +183,15 @@ $(document).ready(function () {
     }).then((result) => {
       if (result.isConfirmed) {
         var orderRef = $("#pickupViewLabel").text().replace("Transaction #", "");
-        var cash = $('#pickupcashRec-input').val();
-        var change = $('#pickup-change').text().replace('₱', '').replace(/,/g, '') || 0;
+        var cash = parseFloat($("#pickupcashRec-input").val()) || 0;
+        var changes = parseFloat($("#pickup-change").text().replace("₱", "").replace(/,/g, "")) || 0;
 
         $.ajax({
           url: "/pos-puclaim",
           method: "POST",
           data: { order_ref: orderRef,
             cash: cash,
-            change: change },
+            changes: changes },
           success: function (response) {
             Swal.fire({
               title: "Transaction Claimed!",
