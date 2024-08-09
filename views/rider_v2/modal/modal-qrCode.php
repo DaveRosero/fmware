@@ -14,18 +14,13 @@
           <img id="scannedImage">
           <!-- Div element for displaying QR code data -->
           <div id="qrData"></div>
-          <!-- Div element for containing buttons -->
-          <div id="buttons">
-            <!-- Button for initiating webcam QR code scanning -->
-            <button class="button" id="webcamButton">Webcam QR Code Scanner</button>
-            <!-- Label for file input -->
-            <label for="fileInput">Scan QR Code from Image</label>
-            <!-- File input for selecting an image file -->
-            <input type="file" accept="image/*" id="fileInput">
-          </div>
         </div>
       </div>
       <div class="modal-footer">
+     <!-- Hidden file input for selecting an image file -->
+     <input type="file" accept="image/*" id="fileInput" style="display: none;">
+        <!-- Button to trigger file input -->
+        <button type="button" class="btn btn-secondary" id="fileInputButton">Choose a file</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>

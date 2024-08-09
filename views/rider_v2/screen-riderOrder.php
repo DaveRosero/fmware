@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Orders | FMWare</title><!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="Dashboard | FMWare">
+    <meta name="title" content="Orders | FMWare">
     <?php include_once 'views/rider_v2/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="/asset/css/admin/adminlte.css"><!--end::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="/asset/css/rider_v2/style.css">

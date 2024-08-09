@@ -219,6 +219,7 @@ $(document).ready(function () {
  const qrDataLabel = document.getElementById("qrData");
  const webcamButton = document.getElementById("webcamButton");
  const fileInput = document.getElementById("fileInput");
+ const fileInputButton = document.getElementById("fileInputButton");
 
  function showWebcam() {
    qrDataLabel.textContent = "";
@@ -300,38 +301,43 @@ $(document).ready(function () {
  }
 
  fileInput.addEventListener("change", function (event) {
-   const file = event.target.files[0];
-   const reader = new FileReader();
-   reader.onload = function (event) {
-     const image = new Image();
-     image.onload = function () {
-       const canvas = document.createElement("canvas");
-       const ctx = canvas.getContext("2d");
-       canvas.width = image.width;
-       canvas.height = image.height;
-       ctx.drawImage(image, 0, 0);
-       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-       const code = jsQR(imageData.data, imageData.width, imageData.height);
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const image = new Image();
+    image.onload = function () {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-       if (code) {
-         qrDataLabel.textContent = "QR Code Data: " + code.data;
-         qrDataLabel.style.display = "block";
-         scannedImage.src = event.target.result;
-         scannedImage.style.display = "block";
-         video.style.display = "none";
+      if (code) {
+        qrDataLabel.textContent = "QR Code Data: " + code.data;
+        qrDataLabel.style.display = "block";
+        scannedImage.src = event.target.result;
+        scannedImage.style.display = "block";
+        video.style.display = "none";
 
-         if (isUrl(code.data)) {
-           window.open(code.data, "_blank");
-         }
-       } else {
-         qrDataLabel.textContent = "No QR code found in the selected image";
-         qrDataLabel.style.display = "block";
-       }
-     };
-     image.src = event.target.result;
-   };
-   reader.readAsDataURL(file);
- });
+        if (isUrl(code.data)) {
+          window.open(code.data, "_blank");
+        }
+      } else {
+        qrDataLabel.textContent = "No QR code found in the selected image";
+        qrDataLabel.style.display = "block";
+      }
+    };
+    image.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Add event listener to file input button to trigger file input click
+fileInputButton.addEventListener("click", function () {
+  fileInput.click();
+});
 
  webcamButton.addEventListener("click", function () {
    $("#qr-scanner-modal").modal("show");
