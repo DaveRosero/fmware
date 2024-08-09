@@ -69,6 +69,8 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" id="notification-list">
                     <?php $admin->getLowStocks(); ?>
+                    <?php $admin->getPendingOrders(); ?>
+                    <?php $admin->getToPayOrders(); ?>
                     <?php $admin->getPendingPO(); ?>
                 </div>
             </li> <!--end::Notifications Dropdown Menu--> <!--begin::Fullscreen Toggle-->
