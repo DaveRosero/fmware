@@ -1,3 +1,9 @@
+<?php
+    require_once 'model/user/logoutClass.php';
+
+    $logout = new Logout();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
@@ -56,7 +62,6 @@
     <!--end::OverlayScrollbars Configure-->
     <script src="/asset/js/template/sidebar.js"></script>
     <script src="/asset/js/template/theme.js"></script>
-    <script src="/asset/js/admin/dashboard.js"></script>
     <script src="/asset/js/rider_v2/rider.js"></script>
     <!--end::Script-->
 </body>
