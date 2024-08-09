@@ -263,5 +263,59 @@
                         </a>';
             }
         }
+
+        public function getPendingOrders () {
+            $query = 'SELECT COUNT(*) FROM orders WHERE status = "pending"';
+            $stmt = $this->conn->prepare($query);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($count);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($count > 0) {
+                echo '<div class="dropdown-divider"></div> 
+                        <a href="/manage-products" class="dropdown-item">
+                            <i class="bi bi-hourglass-split me-2"></i>
+                            Pending Online Orders
+                            <span class="float-end text-secondary fs-7">'.$count.'</span> </a>
+                        </a>';
+            }
+        }
+
+        public function getToPayOrders () {
+            $query = 'SELECT COUNT(*) FROM orders WHERE status = "to pay"';
+            $stmt = $this->conn->prepare($query);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($count);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($count > 0) {
+                echo '<div class="dropdown-divider"></div> 
+                        <a href="/manage-products" class="dropdown-item">
+                            <i class="bi bi-credit-card-fill me-2"></i>
+                            To Pay Online Orders
+                            <span class="float-end text-secondary fs-7">'.$count.'</span> </a>
+                        </a>';
+            }
+        }
     }
 ?>
