@@ -33,7 +33,7 @@
                                 <td>
                                     <?php
                                     $badgeClass = $pickup['status'] == 'pending' ? 'text-bg-warning text-white'
-                                        : ($pickup['status'] == 'prepared' ? 'text-bg-light'
+                                        : ($pickup['status'] == 'prepared' ? 'text-bg-info text-white'
                                             : ($pickup['status'] == 'claimed' ? 'bg-primary text-white'
                                                     : ''));
                                     ?>

@@ -230,6 +230,7 @@ any('/pos-fetchall', 'views/pos/fetchallprod.php');
 any('/pos-pusearch', 'views/pos/model/pickup_searchprod.php');
 any('/pos-puprod', 'views/pos/model/pickup_product.php');
 any('/pos-puclaim', 'views/pos/model/pickupclaim.php');
+any('/pos-puprepare', 'views/pos/model/pickup_prepared.php');
 
 // RIDER 
 //*****************************************************************//
