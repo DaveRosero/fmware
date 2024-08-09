@@ -36,11 +36,6 @@
     padding: 0.2em 0.6em; /* Adjust badge padding */
   }
 
-  /* Ensure the modal container and video element are properly sized */
-#qr-scanner-modal .modal-dialog {
-  max-width: 100%; /* Ensure modal does not exceed viewport width */
-  width: 100%; /* Full width of the parent container */
-}
 
 #qr-scanner-modal .modal-body {
   display: flex;
