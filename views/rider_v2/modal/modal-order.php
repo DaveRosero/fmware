@@ -36,6 +36,7 @@
         </div>
       </div>
       <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#qr-scanner-modal">Scan QR Code</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
