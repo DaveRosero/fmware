@@ -193,10 +193,7 @@ $(document).ready(function () {
               ? data.address.municipality + "<br>"
               : "")
         );
-        $("#order-address-desc").html(
-            (data.address.description || "N/A")
-        );
-
+        $("#order-address-desc").html(data.address.description || "N/A");
 
         // Display the order items modal
         $("#order-items-modal").modal("show");
