@@ -9,6 +9,7 @@
     <meta name="title" content="Dashboard | FMWare">
     <?php include_once 'views/rider_v2/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="/asset/css/admin/adminlte.css"><!--end::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="/asset/css/rider_v2/style.css">
 </head>
 <!--end::Head-->
 
@@ -57,8 +58,6 @@
     <script src="/asset/js/template/theme.js"></script>
     <script src="/asset/js/admin/dashboard.js"></script>
     <script src="/asset/js/rider_v2/rider.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
-
     <!--end::Script-->
 </body>
 <!--end::Body-->

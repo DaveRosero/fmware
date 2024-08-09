@@ -9,3 +9,4 @@
 <script src="/vendor/Select2/dist/js/select2.full.min.js"></script>
 <script src="/vendor/SweetAlert2/sweetalert2.all.min.js"></script>
 <script src="/vendor/Html2Canvas/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
