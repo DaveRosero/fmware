@@ -1,3 +1,9 @@
+<?php
+    require_once 'model/user/logoutClass.php';
+
+    $logout = new Logout();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
@@ -6,9 +12,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Orders | FMWare</title><!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="Dashboard | FMWare">
+    <meta name="title" content="Orders | FMWare">
     <?php include_once 'views/rider_v2/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="/asset/css/admin/adminlte.css"><!--end::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="/asset/css/rider_v2/style.css">
 </head>
 <!--end::Head-->
 
@@ -20,6 +27,7 @@
         <?php require_once 'views/rider_v2/template/sidebar.php'; ?>
         <?php require_once 'views/rider_v2/content/content-order.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-order.php'; ?>
+        <?php require_once 'views/rider_v2/modal/modal-qrCode.php'; ?>
         <?php require_once 'views/rider_v2/template/footer.php'; ?>
     </div>
     <!--end::App Wrapper-->
@@ -54,7 +62,6 @@
     <!--end::OverlayScrollbars Configure-->
     <script src="/asset/js/template/sidebar.js"></script>
     <script src="/asset/js/template/theme.js"></script>
-    <script src="/asset/js/admin/dashboard.js"></script>
     <script src="/asset/js/rider_v2/rider.js"></script>
     <!--end::Script-->
 </body>
