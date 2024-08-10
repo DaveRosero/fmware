@@ -17,6 +17,32 @@ foreach ($post_keys as $key) {
 }
 
 $pos_ref = $_POST['pos_ref'];
+$enteredPin = $_POST['pin'];
+
+
+if (!preg_match('/^\d{4}$/', $enteredPin)) {
+    die("Error: Invalid PIN format.");
+}
+
+
+$query = "SELECT category FROM company WHERE user_group_id = ?";
+$stmt = $mysqli->prepare($query);
+if ($stmt) {
+    $stmt->bind_param('i', $user_id); 
+    $stmt->execute();
+    $stmt->bind_result($storedPin);
+    $stmt->fetch();
+    $stmt->close();
+
+    
+    if ($enteredPin !== $storedPin) {
+        die("Error: Invalid PIN.");
+    }
+} else {
+    die("Error in preparing statement: " . $mysqli->error);
+}
+
+
 
 $query = "UPDATE pos SET status = 'void' WHERE pos_ref=?";
 
