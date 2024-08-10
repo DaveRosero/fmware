@@ -74,8 +74,14 @@ $(document).ready(function () {
         $("#ptransaction-total").text(formatter.format(totalAmount));
 
 
-        // Initialize change to 0
-        $("#pickup-change").text(formatter.format(0));
+        // Display cash and changes if status is claimed
+        if (data.status === "claimed") {
+          $("#pickupcashRec-input").val(data.cash);
+          $("#pickup-change").text(formatter.format(data.changes));
+        } else {
+          $("#pickupcashRec-input").val('');
+          $("#pickup-change").text(formatter.format(0));
+        }
 
 
         // Handle visibility and button state
