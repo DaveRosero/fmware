@@ -67,6 +67,9 @@
                 if ($stmt->execute()) {
                     $stmt->bind_result($id, $name, $image, $stock);
                     while ($stmt->fetch()) {
+                        if ($stock == 0) {
+                            continue;
+                        }
                         echo '<div class="col-md-4 mb-3">
                                 <div class="card h-100">
                                     <a href="/view-product/product/'.$id.'">
@@ -210,7 +213,8 @@
                     $stmt->bind_result($id, $name, $image, $unit_value, $unit, $variant, $stock, $price);
                     while ($stmt->fetch()) {
                         if ($stock == 0) {
-                            $button = '<input type="radio" name="product_id" value="'.$id.'" disabled />';
+                            continue;
+                            // $button = '<input type="radio" name="product_id" value="'.$id.'" disabled />';
                         } else {
                             $button = '<input type="radio" name="product_id" value="'.$id.'" required />';
                         }
