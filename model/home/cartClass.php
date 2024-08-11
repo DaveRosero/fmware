@@ -110,18 +110,20 @@
                             product.description,
                             price_list.unit_price,
                             unit.name,
-                            variant.name
+                            variant.name,
+                            stock.qty
                     FROM cart
                     INNER JOIN product ON product.id = cart.product_id
                     INNER JOIN price_list ON price_list.product_id = product.id
                     INNER JOIN unit ON unit.id = product.unit_id
                     INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN stock ON stock.product_id = product.id
                     WHERE cart.user_id = ?';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i', $id);
             if ($stmt) {
                 if ($stmt->execute()) { 
-                    $stmt->bind_result($cart_id, $user_id, $qty, $product_id, $subtotal, $active, $image, $name, $unit_value, $description, $price, $unit, $variant);
+                    $stmt->bind_result($cart_id, $user_id, $qty, $product_id, $subtotal, $active, $image, $name, $unit_value, $description, $price, $unit, $variant, $stock);
                     while ($stmt->fetch()) {
                         if ($active == 0) {
                             $checkbox = '<input class="form-check-input cart-checkbox" type="checkbox" name="selected_products[]" value="'.$product_id.'" data-user-id="'.$user_id.'">';
@@ -176,12 +178,14 @@
                         
                                     <div class="form-outline">
                                         <input min="0" name="quantity" value="'.$qty.'" type="number" 
-                                            class="form-control text-center qty-input" 
+                                            class="form-control text-center qty-input"
+                                            data-current-stock="'.$stock.'"
                                             data-product-id="'.$product_id.'"
                                             data-cart-id="'.$cart_id.'"/>
                                     </div>
                         
                                     <button class="btn btn-primary px-3 ms-2 addQty"
+                                        data-current-stock="'.$stock.'"
                                         data-product-id="'.$product_id.'"
                                         data-cart-id="'.$cart_id.'">
                                         <i class="fas fa-plus"></i>
@@ -280,7 +284,17 @@
 
         public function addQty () {
             $id = $_POST['id'];
+            $current_stock = $_POST['current_stock'];
+            $current_qty = $_POST['qty'];
             $qty = 1;
+
+            if ($current_qty >= $current_stock) {
+                $json = array(
+                    'stock' => 'stock'
+                );
+                echo json_encode($json);
+                return;
+            }
 
             $query = 'UPDATE cart SET qty = qty + ? WHERE id = ?';
             $stmt = $this->conn->prepare($query);
