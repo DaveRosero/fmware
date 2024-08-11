@@ -176,20 +176,39 @@ $(document).ready(function(){
         var productId = $(this).data('product-id');
         var cartId = $(this).data('cart-id');
         var qtyInput = $('input[data-product-id="' + productId + '"]');
+        var qtyValue = qtyInput.val();
         var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
+        var current_stock = $(this).data('current-stock');
     
         $.ajax({
             url: '/add-qty',
             method: 'POST',
             data: {
-                id: cartId
+                id: cartId,
+                qty: qtyValue,
+                current_stock: current_stock
             },
             dataType: 'json',
             success: function(feedback) {
+                if (feedback.stock) {
+                    Swal.fire({
+                        title: "Oops!",
+                        text: "You can't enter quantity greater than current stock.",
+                        icon: "error"
+                    });
+                    qty = current_stock;
+                    qtyInput.val(qty);
+                    return;
+                }
+
                 console.log(feedback);
                 qtyInput.val(feedback.qty);
                 subtotal.text(feedback.subtotal);
                 getCartTotal();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
             }
         });
     });
@@ -221,13 +240,25 @@ $(document).ready(function(){
     });
 
     $(document).on('change', '.qty-input', function() {
+        var input = $(this);
         var productId = $(this).data('product-id');
         var cartId = $(this).data('cart-id');
         var qty = $(this).val();
         var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
+        var current_stock = $(this).data('current-stock');
     
         if (qty < 1) {
             qty = 1;
+            $(this).val(qty);
+        }
+
+        if (qty > current_stock) {
+            Swal.fire({
+                title: "Oops!",
+                text: "You can't enter quantity greater than current stock.",
+                icon: "error"
+            });
+            qty = current_stock;
             $(this).val(qty);
         }
     
