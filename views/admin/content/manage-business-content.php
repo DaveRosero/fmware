@@ -20,6 +20,11 @@
     <div class="app-content"> <!--begin::Container-->
         <div class="container-fluid"> <!--begin::Row-->
             <div class="row">
+                <div class="col col-6 mb-2">
+                    <button class="btn btn-success" id="change_pin">Change PIN</button>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col col-6">
                     <div class="card">
                         <div class="card-body">
