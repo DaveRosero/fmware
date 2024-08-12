@@ -19,8 +19,8 @@ foreach ($post_keys as $key) {
 
 
 $order_ref = $_POST['order_ref'];
-$cash= isset($_POST['cash']) ? $_POST['cash'] : null;
-$changes = isset($_POST['changes']) ? $_POST['changes'] : null;
+$cash=  $_POST['cash'];
+$changes = $_POST['changes'];
 
 // Prepare and execute the query to update the order status
 $query = "UPDATE orders SET status = 'claimed', paid = 'paid', cash = ?, changes = ? WHERE order_ref=?";
