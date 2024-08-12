@@ -32,15 +32,15 @@
                             <h1 class="text-danger" id="ptransaction-total"></h1>
                             <p class="text-secondary">Total Price</p>
                         </div>
-                        <div class="col border-bottom mb-2">
+                        <div class="col border-bottom mb-2" id="payment-section">
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="pickupcashRec-input" />
+                                <input type="number" class="form-control" name="cash" id="pickupcashRec-input" />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
                                     <h5 class="text-secondary my-auto">Change:</h5>
-                                    <h1 class="text-success" id="pickup-change">₱0.00</h1>
+                                    <h1 class="text-success" name="changes" id="pickup-change">₱0.00</h1>
                                 </div>
                             </div>
                         </div>
@@ -71,15 +71,17 @@
                         </div>
                         <div class="col d-flex justify-content-end">
                             <p class="text-secondary">Request fulfilled by:</p>
-                            <p class="ms-2" name="user_id" id="pickup-username"></p>
+                            <?php echo htmlspecialchars($user_name); ?>
                         </div>
                     </div>
                 </div>
             </div>
             <!--choose to confirm or you can cancel it by pressing the x on the top of the view modal -->
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#claimConfirmationModal">Claim</button>
+                <button class="btn btn-primary prepared" data-bs-toggle="modal"
+                    data-bs-target="#claimConfirmationModal">Prepared</button>
+                <button class="btn btn-primary claim" data-bs-toggle="modal"
+                    data-bs-target="#claimConfirmationModal" disabled>Claim</button>
             </div>
         </div>
     </div>

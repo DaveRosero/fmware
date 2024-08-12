@@ -1,88 +1,115 @@
 $(document).ready(function () {
-  // To sort the pickup order based on the transaction date
   var pickupTable = $("#pickup-search").DataTable({
     order: [[1, "desc"]],
     stateSave: true,
   });
 
-  // Reset DataTable when the modal is closed
-  $("#pickup-searchModal").on("hidden.bs.modal", function () {
-    pickupTable.order([[1, "desc"]]).draw(); // Reset sorting order
-    pickupTable.search("").draw(); // Clear search filter
+  function resetDataTable() {
+    pickupTable.order([[1, "desc"]]).draw();
+    pickupTable.search("").draw();
+  }
+
+  function updateChange() {
+    var cashReceived = parseFloat($("#pickupcashRec-input").val()) || 0;
+    var totalAmount = parseFloat($("#ptransaction-total").text().replace("₱", "").replace(/,/g, "")
+    ) || 0;
+  
+    // Calculate the change
+    var change = cashReceived - totalAmount;
+    if (change < 0) {
+      change = 0;
+    }
+    $("#pickup-change").text(
+      `₱${change.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+    );
+    validateupdateChange();
+  }
+
+  function validateupdateChange() {
+    let cashReceived = parseFloat($("#pickupcashRec-input").val()) || 0;
+    let totalAmount = parseFloat($("#ptransaction-total").text().replace("₱", "").replace(/,/g, "")) || 0;
+  
+    // Enable the claim button only if the cash received is greater than or equal to the total amount
+    let isValid = cashReceived >= totalAmount;
+  
+    $(".claim").prop("disabled", !isValid);
+  }
+  
+
+  $("#pickupcashRec-input").on("input", validateupdateChange);
+
+  $("#pickupcashRec-input").on("input", updateChange);
+  $("#ptransaction-total").on("DOMSubtreeModified", updateChange);
+  updateChange(); 
+  
+  
+  $("#pickup-searchModal, #pickupView").on("hidden.bs.modal", function () {
+    resetDataTable();
   });
 
+  // View pickup button functionality
   $("#pickup-search").on("click", ".view-pickup-btn", function () {
-    const orderRef = $(this).data("bs-orderref");
+    var orderRef = $(this).data("bs-orderref");
 
     $.ajax({
       url: "/pos-pusearch",
       method: "GET",
-      data: {
-        order_ref: orderRef,
-      },
+      data: { order_ref: orderRef },
       dataType: "json",
       success: function (data) {
         console.log(data);
 
-        // Number formatter for currency
         var formatter = new Intl.NumberFormat("en-PH", {
           style: "currency",
           currency: "PHP",
         });
 
-        // Update general transaction details
+        var totalAmount = Number(data.gross) || 0;
+
+        // Update transaction details
         $("#pickupViewLabel").text("Transaction #" + data.order_ref);
         $("#transaction-date").text(data.date);
-        $("#transaction-subtotal").text(
-          formatter.format(Number(data.gross))
-        );
+        $("#transaction-subtotal").text(formatter.format(totalAmount));
         $("#transaction-status").text(data.status);
-        $("#ptransaction-total").text(formatter.format(Number(data.gross)));
-        $("#pickupcashRec-input").val(Number(data.cash).toFixed(2));
-        $("#pickup-change").text(formatter.format(Number(data.changes)));
-        $("#pickup-username").text(data.username);
+        $("#ptransaction-total").text(formatter.format(totalAmount));
 
-        // Set status badge class based on status
-        var statusBadge = $("#transaction-status");
-        statusBadge.removeClass("text-bg-p rimary text-bg-secondary"); // Remove existing classes
-        if (data.status === "paid") {
-          statusBadge.addClass("text-bg-primary");
-        } else if (data.status === "void") {
-          statusBadge.addClass("text-bg-secondary");
+
+        // Initialize change to 0
+        $("#pickup-change").text(formatter.format(0));
+
+
+        // Handle visibility and button state
+        if (data.status === "pending") {
+          $("#payment-section").hide();
+          $(".claim").hide();
+          $(".prepared").show();
+          $("#pickupcashRec-input").prop("disabled", false); // Enable input
+        } else if (data.status === "claimed") {
+          $("#payment-section").show();
+          $(".claim").show();
+          $(".prepared").hide();
+          $("#pickupcashRec-input").prop("disabled", true); // Disable input
+        } else {
+          $("#payment-section").show();
+          $(".claim").show();
+          $(".prepared").hide();
+          $("#pickupcashRec-input").prop("disabled", false); // Enable input for other statuses
         }
 
-        // Enable or disable the "Void" button based on status
-        if (data.status === "Claimed") {
-          $(".claim").prop("disabled", true);
-        } else if (data.status === "Not Claimed") {
-          $(".claim").prop("disabled", false);
-        } else if (
-          data.status === "fully refunded" ||
-          data.status === "fully replaced"
-        ) {
-          $(".claim").prop("disabled", true);
-        }
+        // Set claim button state
+        $(".claim").prop("disabled", true);
 
-        // Clear and set payment method
+        // Set payment method
         $("#ptransactionStatus").empty();
         $("#ptransactionStatus").append(new Option("G-Cash", "G-Cash"));
         $("#ptransactionStatus").append(new Option("Cash", "Cash"));
-        if (
-          $("#ptransactionStatus option[value='" + data.payment_type + "']")
-            .length === 0
-        ) {
-          $("#ptransactionStatus").append(
-            $("<option>", {
-              value: data.payment_type,
-              text: data.payment_type,
-            })
-          );
+        if (!$("#ptransactionStatus option[value='" + data.payment_type + "']").length) {
+          $("#ptransactionStatus").append(new Option(data.payment_type, data.payment_type));
         }
         $("#ptransactionStatus").val(data.payment_type);
 
-        // Clear and set transaction type
-        $("#pickupStatus").empty().append(new Option("Online Order", "Online Order"));
-        $("#pickupStatus").val("Online Order");
+        // Set transaction type
+        $("#pickupStatus").empty().append(new Option("Online Order", "Online Order")).val("Online Order");
 
         // Show and fill customer details
         $("#customer-details").show();
@@ -90,13 +117,11 @@ $(document).ready(function () {
         $("#pickuplName-input").val(data.lastname);
         $("#pickupcontact-input").val(data.phone);
 
-
+        // Fetch product details
         $.ajax({
           url: "/pos-puprod",
           method: "GET",
-          data: {
-            order_ref: orderRef,
-          },
+          data: { order_ref: orderRef },
           success: function (data) {
             $("#productDetails").html(data);
           },
@@ -107,27 +132,49 @@ $(document).ready(function () {
     });
   });
 
-  $("#pickupView").on("shown.bs.modal", function () {
-    historyTable.order([[1, "desc"]]).draw();
-  });
-
-  $("#pickupView").on("hidden.bs.modal", function () {
-    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
-    historyTable.search("").draw(); // Clear search filter
-  });
-
-  // Reset DataTable when the modal is closed
-  $("#pickup-searchModal").on("hidden.bs.modal", function () {
-    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
-    historyTable.search("").draw(); // Clear search filter
-  });
-
-  // void button functionally
-  $(".claim").on("click", function (event) {
-    event.preventDefault(); // Prevent default action if needed
+  // Prepared button functionality
+  $(".prepared").on("click", function (event) {
+    event.preventDefault();
 
     Swal.fire({
-      title: "Are you sure you want to claim this product?",
+      title: "Are You Sure Change Status Pending to Prepared?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, set to Prepared",
+      cancelButtonText: "Cancel",
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var orderRef = $("#pickupViewLabel").text().replace("Transaction #", "");
+
+        $.ajax({
+          url: "/pos-puprepare",
+          method: "POST",
+          data: { order_ref: orderRef },
+          success: function (response) {
+            Swal.fire({
+              title: "Status Changed",
+              text: "Status pending has been changed to prepared",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => {
+              window.location.href = "/pos";
+            });
+          },
+        });
+      } else {
+        console.log("User clicked Cancel");
+      }
+    });
+  });
+
+  // Claim button functionality
+  $(".claim").on("click", function (event) {
+    event.preventDefault();
+
+    Swal.fire({
+      title: "Are You Sure, You want to claim this product?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, claim it",
@@ -135,15 +182,17 @@ $(document).ready(function () {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        // User confirmed, proceed with voiding the transaction
-        var posRef = $("#pickupViewLabel").text().replace("Transaction #", "");
+        var orderRef = $("#pickupViewLabel").text().replace("Transaction #", "");
+        var cash = parseFloat($("#pickupcashRec-input").val()) || 0;
+        var changes = parseFloat($("#pickup-change").text().replace("₱", "").replace(/,/g, "")) || 0;
 
         $.ajax({
-          url: "/pos-transvoid",
+          url: "/pos-puclaim",
           method: "POST",
-          data: { order_ref: orderRef },
+          data: { order_ref: orderRef,
+            cash: cash,
+            changes: changes },
           success: function (response) {
-            // Transaction voided successfully
             Swal.fire({
               title: "Transaction Claimed!",
               text: "The transaction has been successfully claimed.",
@@ -151,17 +200,12 @@ $(document).ready(function () {
               timer: 1500,
               showConfirmButton: false,
             }).then(() => {
-              // Redirect or perform any other action
               window.location.href = "/pos";
             });
           },
         });
-      } else if (result.isDenied) {
-        // User clicked Cancel, log this event
-        console.log("User clicked Cancel");
       } else {
-        // Handle other scenarios if needed
-        console.log("Other result:", result);
+        console.log("User clicked Cancel");
       }
     });
   });
