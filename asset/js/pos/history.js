@@ -156,7 +156,7 @@ $(document).ready(function () {
   // void button functionally
   $(".void").on("click", function (event) {
     event.preventDefault(); // Prevent default action if needed
-
+  
     Swal.fire({
       title: "Are you sure you want to void this transaction?",
       icon: "warning",
@@ -166,26 +166,70 @@ $(document).ready(function () {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        // User confirmed, proceed with voiding the transaction
-        var posRef = $("#historyViewLabel").text().replace("Transaction #", "");
-
-        $.ajax({
-          url: "/pos-transvoid",
-          method: "POST",
-          data: { pos_ref: posRef },
-          success: function (response) {
-            // Transaction voided successfully
-            Swal.fire({
-              title: "Transaction Voided!",
-              text: "The transaction has been successfully voided.",
-              icon: "success",
-              timer: 1500,
-              showConfirmButton: false,
-            }).then(() => {
-              // Redirect or perform any other action
-              window.location.href = "/pos";
-            });
+        // Prompt user to enter a PIN
+        Swal.fire({
+          title: "Enter your PIN",
+          input: "password",
+          inputAttributes: {
+            maxlength: 4, // Limit input to 4 digits
+            pattern: "\\d{4}", // Ensure only 4 digits are entered
+            placeholder: "PIN",
+            autocapitalize: "off",
           },
+          showCancelButton: true,
+          confirmButtonText: "Submit",
+          cancelButtonText: "Cancel",
+          allowOutsideClick: false,
+          preConfirm: (pin) => {
+            if (!pin) {
+              Swal.showValidationMessage("PIN is required");
+              return false;
+            }
+            return pin; // Return the entered PIN
+          },
+        }).then((pinResult) => {
+          if (pinResult.isConfirmed) {
+            var posRef = $("#historyViewLabel").text().replace("Transaction #", "");
+            var pin = pinResult.value; // The entered PIN
+  
+            // Proceed with the AJAX request to void the transaction
+            $.ajax({
+              url: "/pos-transvoid",
+              method: "POST",
+              data: {
+                pos_ref: posRef,
+                pin: pin, // Include the PIN in the request
+              },
+              success: function (response) {
+                if (response.success) {
+                  // Transaction voided successfully
+                  Swal.fire({
+                    title: "Transaction Voided!",
+                    text: "The transaction has been successfully voided.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false,
+                  }).then(() => {
+                    // Redirect or perform any other action
+                    window.location.href = "/pos";
+                  });
+                } else {
+                  // PIN validation failed
+                  Swal.fire({
+                    title: "Invalid PIN",
+                    text: "The PIN you entered is incorrect.",
+                    icon: "error",
+                  });
+                }
+              },
+            });
+          } else if (pinResult.isDenied) {
+            // User clicked Cancel, log this event
+            console.log("User clicked Cancel after PIN prompt");
+          } else {
+            // Handle other scenarios if needed
+            console.log("Other result:", pinResult);
+          }
         });
       } else if (result.isDenied) {
         // User clicked Cancel, log this event
@@ -195,5 +239,5 @@ $(document).ready(function () {
         console.log("Other result:", result);
       }
     });
-  });
+  });  
 });
