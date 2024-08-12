@@ -17,7 +17,7 @@ foreach ($post_keys as $key) {
 }
 
 $pos_ref = $_POST['pos_ref'];
-$enteredPin = $_POST['pin'];
+$enteredPin = $_POST['category'];
 
 
 if (!preg_match('/^\d{4}$/', $enteredPin)) {
@@ -25,18 +25,19 @@ if (!preg_match('/^\d{4}$/', $enteredPin)) {
 }
 
 
-$query = "SELECT category FROM company WHERE user_group_id = ?";
+$query = "SELECT value FROM company WHERE category = 'PIN'";
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
-    $stmt->bind_param('i', $user_id); 
     $stmt->execute();
     $stmt->bind_result($storedPin);
     $stmt->fetch();
     $stmt->close();
 
     
-    if ($enteredPin !== $storedPin) {
-        die("Error: Invalid PIN.");
+    if ($enteredPin != $storedPin) {
+        $json = array('invalid' => 'invalid');
+        echo json_encode($json);
+        return;
     }
 } else {
     die("Error in preparing statement: " . $mysqli->error);
@@ -86,7 +87,6 @@ if ($stmt) {
                         die("Error in preparing statement: " . $mysqli->error);
                     }
                 }
-                echo "Transaction successful.";
             } else {
                 die("Error in executing statement: " . $stmt->error);
             }
@@ -99,4 +99,7 @@ if ($stmt) {
 } else {
     die("Error in preparing statement: " . $mysqli->error);
 }
+$json = array('success' => 'success');
+echo json_encode($json);
+return;
 ?>
