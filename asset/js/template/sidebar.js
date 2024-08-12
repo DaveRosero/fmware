@@ -7,7 +7,7 @@ $(document).ready(function () {
     });
 
     function updateBadge() {
-        var itemCount = $('.dropdown-menu a.dropdown-item').length;
+        var itemCount = $('.notif-dropdown a.dropdown-item').length;
         var badge = $('.navbar-badge');
         
         if (itemCount === 0) {

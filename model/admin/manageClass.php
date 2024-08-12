@@ -2,6 +2,13 @@
     include_once 'session.php';
     require_once 'model/admin/admin.php';
     require_once 'model/admin/logsClass.php';
+    require_once 'vendor/PHPMailer/src/PHPMailer.php';
+    require_once 'vendor/PHPMailer/src/SMTP.php';
+    require_once 'vendor/PHPMailer/src/Exception.php';
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
 
     class Manage extends Admin {
         public function addExpenses ($description, $amount, $user_id) {
@@ -276,6 +283,112 @@
                 'description' => $description,
                 'amount' => $amount
             ];
+        }
+
+        public function getPIN () {
+            $query = 'SELECT value FROM company WHERE category = "PIN"';
+            $stmt = $this->conn->prepare($query);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($current);
+            $stmt->fetch();
+            $stmt->close();
+            return $current;
+        }
+
+        public function changePIN ($old, $new) {
+            $current = $this->getPIN();
+
+            if ($current != $old) {
+                $json = array(
+                    'invalid' => 'invalid'
+                );
+                echo json_encode($json);
+                return;
+            }
+
+            $query = 'UPDATE company SET value = ? WHERE category = "PIN"';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $new);
+            
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+            $json = array(
+                'success' => 'success'
+            );
+            echo json_encode($json);
+            return;
+        }
+
+        public function resetPIN ($email) {
+            $mail = new PHPMailer(true);
+            $pin = mt_rand(1000, 9999);
+
+            $query = 'UPDATE company SET value = ? WHERE category = "PIN"';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $pin);
+        
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+            
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->close();
+
+            // Server settings
+            $mail->isSMTP(); // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com'; // Specify SMTP server
+            $mail->SMTPAuth = true; // Enable SMTP authentication
+            $mail->Username = '21shingie@gmail.com'; // SMTP username
+            $mail->Password = 'mboi hjvb lbud zkrk'; // SMTP password
+            $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587; // TCP port to connect to
+        
+            // Recipients
+            $mail->setFrom('no-reply@fmware.shop', 'FMWare');
+            $mail->addAddress($email);
+        
+            // Email content
+            $mail->isHTML(true); // Set email format to HTML
+            $mail->Subject = 'FMWare Account Verification';
+        
+            // Email body with the confirmation link
+            $mail->Body = '<h1>Your PIN has been reset.</h1>
+                           <p>This is now your current PIN:</p>
+                           <h4>'.$pin.'</h4>
+                           <p>We highly suggest that you change your PIN.</p>';
+        
+            // Send the email
+            try {
+                $mail->send();
+                $json = array(
+                    'success' => 'success'
+                );
+                echo json_encode($json);
+                return true; // Email sent successfully
+            } catch (Exception $e) {
+                return false; // Failed to send email
+            }
         }
     }
 ?>

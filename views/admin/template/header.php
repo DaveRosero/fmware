@@ -67,7 +67,7 @@
                     <i class="bi bi-bell-fill"></i> 
                     <span class="navbar-badge badge text-bg-danger"></span> 
                 </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" id="notification-list">
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end notif-dropdown" id="notification_list">
                     <?php $admin->getLowStocks(); ?>
                     <?php $admin->getPendingOrders(); ?>
                     <?php $admin->getToPayOrders(); ?>
@@ -77,6 +77,9 @@
             <li class="nav-item"> <a class="nav-link" href="#" data-lte-toggle="fullscreen"> <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i> <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none;"></i> </a> </li> <!--end::Fullscreen Toggle--> <!--begin::User Menu Dropdown-->
             <li class="nav-item"> <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> <span class="d-none d-md-inline">Hi, Admin</span> </a>
                 <ul class="dropdown-menu dropdown-menu dropdown-menu-end"><!--begin::Menu Footer-->
+                    <li class="user-footer">
+                        <a class="dropdown-item" href="/settings">Settings</a>
+                    </li>
                     <li class="user-footer">
                         <form action="/logout" method="post">
                             <button type="submit" class="dropdown-item">Logout</button>
