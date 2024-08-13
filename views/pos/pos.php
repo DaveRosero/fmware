@@ -79,6 +79,23 @@ if ($_SESSION['group'] !== 'cashier') {
             </a>
           </li>
         </ul>
+        <!-- Notification Bell and Account Name -->
+    <div class="d-flex align-items-center">
+      <!-- Notification Bell -->
+      <div class="dropdown me-3">
+        <button class="btn btn-outline-success position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-bell"></i>
+          <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            0
+          </span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end bg-dark border-0 shadow" aria-labelledby="notificationDropdown">
+          <li><h6 class="dropdown-header text-light">Notifications</h6></li>
+          <li id="notification-list">
+            <span class="dropdown-item text-light">No new notifications</span>
+          </li>
+        </ul>
+      </div>
         <div class="dropdown">
           <button class="btn btn-outline-success dropdown-toggle border-light text-light" type="button"
             data-bs-toggle="dropdown" aria-expanded="false">
