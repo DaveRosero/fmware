@@ -60,6 +60,10 @@ any('/new-password', 'controller/auth/new-password.php');
 get('/dashboard', 'views/admin/dashboard.php');
 get('/activity-logs', 'views/admin/logs.php');
 get('/settings', 'views/admin/settings.php');
+get('/create-reports', 'views/admin/create-reports.php');
+
+// Reports Controller
+any('/create-report-content', 'controller/admin/create-reports/create-report-content.php');
 
 //*****************************************************************//
 
