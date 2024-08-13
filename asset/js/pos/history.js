@@ -4,6 +4,11 @@ $(document).ready(function () {
     stateSave: true, // Save the state of the table
   });
 
+  function reset() {
+    historyTable.order([[1, "desc"]]).draw();
+    historyTable.search("").draw();
+  }
+
   $("#history-search").on("click", ".view-history-btn", function () {
     const posRef = $(this).data("bs-posref");
 
@@ -138,19 +143,8 @@ $(document).ready(function () {
     });
   });
 
-  $("#historyView").on("shown.bs.modal", function () {
-    historyTable.order([[1, "desc"]]).draw();
-  });
-
-  $("#historyView").on("hidden.bs.modal", function () {
-    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
-    historyTable.search("").draw(); // Clear search filter
-  });
-
-  // Reset DataTable when the modal is closed
-  $("#history-searchModal").on("hidden.bs.modal", function () {
-    historyTable.order([[1, "desc"]]).draw(); // Reset sorting order
-    historyTable.search("").draw(); // Clear search filter
+  $("#history-searchModal, #historyView").on("hidden.bs.modal", function () {
+    reset();
   });
 
   // void button functionally
@@ -198,8 +192,9 @@ $(document).ready(function () {
               method: "POST",
               data: {
                 pos_ref: posRef,
-                pin: pin, // Include the PIN in the request
+                category: pin, // Include the PIN in the request
               },
+              dataType: 'json',
               success: function (response) {
                 if (response.success) {
                   // Transaction voided successfully
@@ -222,6 +217,10 @@ $(document).ready(function () {
                   });
                 }
               },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error:", textStatus, errorThrown);
+                    console.log("Response:", jqXHR.responseText);
+}
             });
           } else if (pinResult.isDenied) {
             // User clicked Cancel, log this event

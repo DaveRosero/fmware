@@ -34,7 +34,7 @@ while ($stmt->fetch()) {
       <div class="card border-secondary shadow-sm rounded">
         <img src="asset/images/products/' . $image . '" class="card-img-top img-fluid" alt="' . $name . '">
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . $name . ' (' . $variant_name . ')">
+          <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . $name . ' (' . $variant . ')">
           ' . $name . ' <small class="text-muted">(' . $variant . ')</small></h5>
           <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit) . '</strong></p>
           <p class="card-text">Stock: <span class="badge ' . ($qty == 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
