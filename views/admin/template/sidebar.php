@@ -17,7 +17,7 @@
                         <p>Activity Logs</p>
                     </a> 
                 </li>
-                <li class="nav-item"> <a href="/create-report" class="nav-link"> <i class="nav-icon bi bi-file-earmark-plus"></i>
+                <li class="nav-item"> <a href="/create-reports" class="nav-link"> <i class="nav-icon bi bi-file-earmark-plus"></i>
                         <p>Create Reports</p>
                     </a> 
                 </li>
