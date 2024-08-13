@@ -59,6 +59,7 @@ any('/new-password', 'controller/auth/new-password.php');
 // Admin Dashboard
 get('/dashboard', 'views/admin/dashboard.php');
 get('/activity-logs', 'views/admin/logs.php');
+get('/settings', 'views/admin/settings.php');
 
 //*****************************************************************//
 
@@ -73,6 +74,10 @@ any('/delete-expenses', 'controller/admin/manage-business/delete-expenses.php');
 any('/get-df', 'controller/admin/manage-business/get-df.php');
 any('/update-df', 'controller/admin/manage-business/update-df.php');
 any('/update-df-status', 'controller/admin/manage-business/update-df-status.php');
+
+// PIN Controller
+any('/change-pin', 'controller/admin/manage-business/change-pin.php');
+any('/reset-pin', 'controller/admin/manage-business/reset-pin.php');
 
 // People
 get('/users', 'views/admin/user.php');
