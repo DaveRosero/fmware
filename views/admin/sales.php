@@ -1,8 +1,11 @@
 <?php
   include_once 'session.php';
   require_once 'model/admin/admin.php';
+  require_once 'model/admin/salesClass.php';
 
   $admin = new Admin();
+  $sales = new Sales();
+
   $admin->isAdmin();
 ?>
 <!DOCTYPE html>

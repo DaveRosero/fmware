@@ -66,7 +66,7 @@
                                     <button class="btn btn-primary" id="print"><i class="bi bi-printer-fill"></i></button>
                                 </div>
                             </div>
-                            <div class="row" id="printContent">
+                            <div class="row table-responsive" id="printContent">
                                 <table class="table table-borderless">
                                     <thead id="content-thead">
 

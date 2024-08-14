@@ -198,9 +198,10 @@ any('/disable-unit', 'controller/admin/unit/disable-unit.php');
 //*****************************************************************//
 
 // Manage Sales View
-any('/manage-sales', 'views/admin/sales.php');
+get('/manage-sales', 'views/admin/sales.php');
 
 // Manage Sales Controller
+any('/view-sales', 'controller/admin/sales/view-sales.php');
 
 //*****************************************************************//
 
