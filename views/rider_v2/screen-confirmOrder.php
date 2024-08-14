@@ -1,13 +1,25 @@
 <?php
-	include_once 'session.php';
-	require_once 'model/admin/admin.php';
-    require_once 'model/user/logoutClass.php';
+  include_once 'session.php';
+  require_once 'model/admin/admin.php';
+  require_once 'model/admin/orderClass.php';
+  require_once 'model/user/logoutClass.php';
 
-    $admin = new Admin();
-    $admin->isDelivery();
-    $logout = new Logout();
-    
+  $admin = new Admin();
+  $admin->isDelivery();
+  $order = new Order();
+  $logout = new Logout();
+
+  if (!$order->checkOrder($order_ref, $code)) {
+      header('Location: /404');
+      exit();
+  }
+
+//   if ($order->confirmOrder($order_ref)) {
+//     echo '<h1>Order Confirmed!</h1>';
+//   }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->

@@ -193,7 +193,7 @@
                                 $action_log = 'Customer Login';
                                 break;
                             case 'delivery':
-                                $json['redirect'] = '/scan-qr';
+                                $json['redirect'] = '/rider-order';
                                 $action_log = 'Login to delivery';
                                 break;
                             case 'admin':

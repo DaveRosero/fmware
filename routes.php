@@ -147,7 +147,7 @@ get('/print-receipt/$order_ref', 'views/admin/receipt.php');
 
 // Confirm Order Views
 get('/scan-qr', 'views/admin/scan-qr.php');
-get('/confirm-order/$code/$order_ref', 'views/admin/confirm-order.php');
+get('/confirm-order/$code/$order_ref', 'views/rider_v2/screen-confirmOrder.php');
 
 // Manage Orders Controller
 any('/get-orders', 'controller/admin/order/get-orders.php');

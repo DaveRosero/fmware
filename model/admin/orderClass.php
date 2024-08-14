@@ -383,10 +383,10 @@
 
         public function generateQrCode ($order_ref) {
             $code = $this->getCode($order_ref);
-            $url = 'https://fmware.shop/confirm-order/'.$code.'/'.$order_ref;
+            $url = 'https://localhost/confirm-order/'.$code.'/'.$order_ref;
             return $url;
         }
-
+        
         public function confirmOrder ($order_ref) {
             $query = 'UPDATE orders SET code = NULL WHERE order_ref = ?';
             $stmt = $this->conn->prepare($query);

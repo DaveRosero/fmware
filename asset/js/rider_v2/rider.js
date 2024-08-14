@@ -48,18 +48,18 @@ $(document).ready(function () {
             order.order_ref || "N/A",
             formatDateTime(order.date) || "N/A",
             '<span class="' +
-              getPaidStatusBadgeClass(order.paid) +
-              '">' +
-              (order.paid || "N/A") +
-              "</span>",
+            getPaidStatusBadgeClass(order.paid) +
+            '">' +
+            (order.paid || "N/A") +
+            "</span>",
             '<span class="badge ' +
-              getStatusBadgeClass(order.status) +
-              '">' +
-              (order.status || "N/A") +
-              "</span>",
+            getStatusBadgeClass(order.status) +
+            '">' +
+            (order.status || "N/A") +
+            "</span>",
             '<button class="btn btn-primary view-order-btn" data-order-ref="' +
-              (order.order_ref || "") +
-              '">View</button>',
+            (order.order_ref || "") +
+            '">View</button>',
           ]),
           columns: [
             { title: "Order Ref" },
@@ -123,24 +123,24 @@ $(document).ready(function () {
         $("#order-date").text(formatDateTime(data.date) || "N/A");
         $("#order-paid").html(
           '<span class="' +
-            getPaidStatusBadgeClass(data.paid) +
-            '">' +
-            (data.paid || "N/A") +
-            "</span>"
+          getPaidStatusBadgeClass(data.paid) +
+          '">' +
+          (data.paid || "N/A") +
+          "</span>"
         );
         $("#order-status").html(
           '<span class="badge ' +
-            getStatusBadgeClass(data.status) +
-            '">' +
-            (data.status || "N/A") +
-            "</span>"
+          getStatusBadgeClass(data.status) +
+          '">' +
+          (data.status || "N/A") +
+          "</span>"
         );
         $("#order-gross").text("₱" + (parseFloat(data.gross) || 0).toFixed(2));
         $("#order-delivery-fee").text(
           "₱" +
-            (data.delivery_fee
-              ? parseFloat(data.delivery_fee).toFixed(2)
-              : "N/A")
+          (data.delivery_fee
+            ? parseFloat(data.delivery_fee).toFixed(2)
+            : "N/A")
         );
         $("#order-vat").text(
           "₱" + (data.vat ? parseFloat(data.vat).toFixed(2) : "N/A")
@@ -154,24 +154,24 @@ $(document).ready(function () {
         $("#order-date").text(formatDateTime(data.date) || "N/A");
         $("#order-paid").html(
           '<span class="' +
-            getPaidStatusBadgeClass(data.paid) +
-            '">' +
-            (data.paid || "N/A") +
-            "</span>"
+          getPaidStatusBadgeClass(data.paid) +
+          '">' +
+          (data.paid || "N/A") +
+          "</span>"
         );
         $("#order-status").html(
           '<span class="badge ' +
-            getStatusBadgeClass(data.status) +
-            '">' +
-            (data.status || "N/A") +
-            "</span>"
+          getStatusBadgeClass(data.status) +
+          '">' +
+          (data.status || "N/A") +
+          "</span>"
         );
         $("#order-gross").text("₱" + (parseFloat(data.gross) || 0).toFixed(2));
         $("#order-delivery-fee").text(
           "₱" +
-            (data.delivery_fee
-              ? parseFloat(data.delivery_fee).toFixed(2)
-              : "N/A")
+          (data.delivery_fee
+            ? parseFloat(data.delivery_fee).toFixed(2)
+            : "N/A")
         );
         $("#order-vat").text(
           "₱" + (data.vat ? parseFloat(data.vat).toFixed(2) : "N/A")
@@ -187,11 +187,11 @@ $(document).ready(function () {
         // Add address info
         $("#order-address").html(
           (data.address.house_no ? data.address.house_no + ", " : "") +
-            (data.address.street ? data.address.street + ", " : "") +
-            (data.address.brgy ? data.address.brgy + ", " : "") +
-            (data.address.municipality
-              ? data.address.municipality + "<br>"
-              : "")
+          (data.address.street ? data.address.street + ", " : "") +
+          (data.address.brgy ? data.address.brgy + ", " : "") +
+          (data.address.municipality
+            ? data.address.municipality + "<br>"
+            : "")
         );
         $("#order-address-desc").html(data.address.description || "N/A");
 
@@ -213,139 +213,140 @@ $(document).ready(function () {
     fetchOrderDetails(orderRef);
   });
 
- // QR Code Scanner Modal integration
- const video = document.getElementById("video");
- const scannedImage = document.getElementById("scannedImage");
- const qrDataLabel = document.getElementById("qrData");
- const webcamButton = document.getElementById("webcamButton");
- const fileInput = document.getElementById("fileInput");
- const fileInputButton = document.getElementById("fileInputButton");
+  // QR Code Scanner Modal integration
+  const video = document.getElementById("video");
+  const scannedImage = document.getElementById("scannedImage");
+  const qrDataLabel = document.getElementById("qrData");
+  const webcamButton = document.getElementById("webcamButton");
+  const fileInput = document.getElementById("fileInput");
+  const fileInputButton = document.getElementById("fileInputButton");
 
- function showWebcam() {
-   qrDataLabel.textContent = "";
-   qrDataLabel.style.display = "none";
-   scannedImage.style.display = "none";
-   video.style.display = "block";
-   startWebcamScanning();
- }
+  function showWebcam() {
+    qrDataLabel.textContent = "";
+    qrDataLabel.style.display = "none";
+    scannedImage.style.display = "none";
+    video.style.display = "block";
+    startWebcamScanning();
+  }
 
- function startWebcamScanning() {
-   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-     navigator.mediaDevices
-       .getUserMedia({ video: { facingMode: "environment" } })
-       .then(function (stream) {
-         video.srcObject = stream;
-         video.play();
+  function startWebcamScanning() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "environment" } })
+        .then(function (stream) {
+          video.srcObject = stream;
+          video.play();
 
-         // Adjust the canvas size once the video metadata is loaded
-         video.onloadedmetadata = function () {
-           const canvas = document.createElement("canvas");
-           const ctx = canvas.getContext("2d");
+          // Adjust the canvas size once the video metadata is loaded
+          video.onloadedmetadata = function () {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
 
-           // Continuously check for QR code in each frame
-           const intervalId = setInterval(() => {
-             if (video.videoWidth > 0 && video.videoHeight > 0) {
-               canvas.width = video.videoWidth;
-               canvas.height = video.videoHeight;
-               ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-               const imageData = ctx.getImageData(
-                 0,
-                 0,
-                 canvas.width,
-                 canvas.height
-               );
-               const code = jsQR(
-                 imageData.data,
-                 imageData.width,
-                 imageData.height
-               );
+            // Continuously check for QR code in each frame
+            const intervalId = setInterval(() => {
+              if (video.videoWidth > 0 && video.videoHeight > 0) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(
+                  0,
+                  0,
+                  canvas.width,
+                  canvas.height
+                );
+                const code = jsQR(
+                  imageData.data,
+                  imageData.width,
+                  imageData.height
+                );
 
-               if (code) {
-                 const qrData = code.data;
-                 qrDataLabel.textContent = "QR Code Data: " + qrData;
-                 qrDataLabel.style.display = "block";
-                 clearInterval(intervalId);
-                 const tracks = video.srcObject.getTracks();
-                 tracks.forEach((track) => track.stop());
-                 scannedImage.src = canvas.toDataURL();
-                 scannedImage.style.display = "block";
-                 video.style.display = "none";
+                if (code) {
+                  const qrData = code.data;
+                  qrDataLabel.textContent = "QR Code Data: " + qrData;
+                  qrDataLabel.style.display = "block";
+                  clearInterval(intervalId);
+                  const tracks = video.srcObject.getTracks();
+                  tracks.forEach((track) => track.stop());
+                  scannedImage.src = canvas.toDataURL();
+                  scannedImage.style.display = "block";
+                  video.style.display = "none";
 
-                 if (isUrl(qrData)) {
-                   window.open(qrData, "_blank");
-                 }
-               }
-             }
-           }, 100); // Adjust the interval as needed (milliseconds)
-         };
-       })
-       .catch(function (error) {
-         qrDataLabel.textContent = "Error accessing camera: " + error;
-       });
-   } else {
-     qrDataLabel.textContent = "getUserMedia is not supported";
-   }
- }
+                  if (isUrl(qrData)) {
+                    window.location.href = qrData;
+                  }
+                }
+              }
+            }, 100); // Adjust the interval as needed (milliseconds)
+          };
+        })
+        .catch(function (error) {
+          qrDataLabel.textContent = "Error accessing camera: " + error;
+        });
+    } else {
+      qrDataLabel.textContent = "getUserMedia is not supported";
+    }
+  }
 
- function stopVideoStream() {
-   const stream = video.srcObject;
-   if (stream) {
-     const tracks = stream.getTracks();
-     tracks.forEach((track) => track.stop());
-     video.srcObject = null;
-   }
- }
+  function stopVideoStream() {
+    const stream = video.srcObject;
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      video.srcObject = null;
+    }
+  }
 
- function isUrl(str) {
-   return str.startsWith("http://") || str.startsWith("https://");
- }
+  function isUrl(str) {
+    return str.startsWith("http://") || str.startsWith("https://");
+  }
 
- fileInput.addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = function (event) {
-    const image = new Image();
-    image.onload = function () {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
+  fileInput.addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        ctx.drawImage(image, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-      if (code) {
-        qrDataLabel.textContent = "QR Code Data: " + code.data;
-        qrDataLabel.style.display = "block";
-        scannedImage.src = event.target.result;
-        scannedImage.style.display = "block";
-        video.style.display = "none";
+        if (code) {
+          qrDataLabel.textContent = "QR Code Data: " + code.data;
+          qrDataLabel.style.display = "block";
+          scannedImage.src = event.target.result;
+          scannedImage.style.display = "block";
+          video.style.display = "none";
 
-        if (isUrl(code.data)) {
-          window.open(code.data, "_blank");
+          if (isUrl(code.data)) {
+            window.location.href = code.data;
+
+          }
+        } else {
+          qrDataLabel.textContent = "No QR code found in the selected image";
+          qrDataLabel.style.display = "block";
         }
-      } else {
-        qrDataLabel.textContent = "No QR code found in the selected image";
-        qrDataLabel.style.display = "block";
-      }
+      };
+      image.src = event.target.result;
     };
-    image.src = event.target.result;
-  };
-  reader.readAsDataURL(file);
-});
+    reader.readAsDataURL(file);
+  });
 
-// Add event listener to file input button to trigger file input click
-fileInputButton.addEventListener("click", function () {
-  fileInput.click();
-});
+  // Add event listener to file input button to trigger file input click
+  fileInputButton.addEventListener("click", function () {
+    fileInput.click();
+  });
 
- webcamButton.addEventListener("click", function () {
-   $("#qr-scanner-modal").modal("show");
-   showWebcam();
- });
+  webcamButton.addEventListener("click", function () {
+    $("#qr-scanner-modal").modal("show");
+    showWebcam();
+  });
 
- // Stop video stream when QR Scanner Modal is hidden
- $("#qr-scanner-modal").on("hidden.bs.modal", function () {
-   stopVideoStream();
- });
+  // Stop video stream when QR Scanner Modal is hidden
+  $("#qr-scanner-modal").on("hidden.bs.modal", function () {
+    stopVideoStream();
+  });
 });

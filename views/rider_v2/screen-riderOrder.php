@@ -1,7 +1,12 @@
 <?php
+	include_once 'session.php';
+	require_once 'model/admin/admin.php';
     require_once 'model/user/logoutClass.php';
 
+    $admin = new Admin();
+    $admin->isDelivery();
     $logout = new Logout();
+    
 ?>
 
 <!DOCTYPE html>

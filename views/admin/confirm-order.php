@@ -6,8 +6,7 @@
   $admin = new Admin();
   $order = new Order();
 
-//   $admin->isAdmin();
-  if ($order->checkOrder($order_ref, $code)) {
+  if (!$order->checkOrder($order_ref, $code)) {
       header('Location: /404');
       exit();
   }
