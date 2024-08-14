@@ -23,7 +23,7 @@
                                             <th>Date</th>
                                             <th>Paid</th>
                                             <th>Status</th>
-                                            <th><i class="bi bi-gear-fill"></i></th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>

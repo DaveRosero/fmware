@@ -9,6 +9,10 @@
                         <p>Orders</p>
                     </a>
                 </li>
+                <li class="nav-item"> <a href="/rider-order" class="nav-link"> <i class="bi bi-clipboard2-check-fill"></i>
+                        <p>Accepted Orders</p>
+                    </a>
+                </li>
                 <li class="nav-item"> <a href="/rider-history" class="nav-link"> <i class="nav-icon bi bi-clock-history"></i>
                         <p>History</p>
                     </a>

@@ -1,4 +1,24 @@
 $(document).ready(function () {
+  function getRiderId() {
+    $.ajax({
+      url: "/model-get-riderId", // Create this PHP file to return the logged-in rider ID
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        if (data.success) {
+          $("#rider-id").val(data.rider_id);
+        } else {
+          console.error("Failed to retrieve rider ID:", data.message);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error retrieving rider ID:", error);
+      }
+    });
+  }
+
+  // Fetch rider ID on page load
+  getRiderId();
   // Function to format date
   function formatDateTime(dateTime) {
     const date = new Date(dateTime);
@@ -42,9 +62,13 @@ $(document).ready(function () {
       type: "GET",
       dataType: "json",
       success: function (data) {
+        const filteredOrders = data.filter(order =>
+          order.status.toLowerCase() === 'pending' &&
+          (!order.rider_id || order.rider_id === null)
+        );
         // Initialize DataTable
         $("#orders-table").DataTable({
-          data: data.map((order) => [
+          data: filteredOrders.map((order) => [
             order.order_ref || "N/A",
             formatDateTime(order.date) || "N/A",
             '<span class="' +
@@ -210,7 +234,51 @@ $(document).ready(function () {
   // Handle View button click
   $("#orders-table").on("click", ".view-order-btn", function () {
     var orderRef = $(this).data("order-ref");
+    $("#accept-order-btn").data("order-ref", orderRef);
     fetchOrderDetails(orderRef);
+  });
+
+  $("#accept-order-btn").on("click", function () {
+    var orderRef = $(this).data("order-ref");
+    var riderId = $("#rider-id").val(); // Get the current rider's ID
+    // Debugging: Log the data being sent
+    console.log("Data being sent:", {
+      order_ref: orderRef,
+      rider_id: riderId,
+      status: "delivering"
+    });
+
+    if (!orderRef || !riderId) {
+      console.error("Order reference or rider ID is missing.");
+      return;
+    }
+
+    // Send AJAX request to update the order
+    $.ajax({
+      url: "/model-update-order", // Update this URL to your PHP script
+      type: "POST",
+      data: {
+        order_ref: orderRef,
+        rider_id: riderId,
+        status: "delivering"
+      },
+      success: function (response) {
+        console.log("Server response:", response);
+        try {
+          // Parse the response if it’s a string
+          const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+      
+          if (jsonResponse.success) {
+            fetchOrders(); // Refresh the orders table
+            $("#order-items-modal").modal("hide"); // Hide the modal
+          } else {
+            console.error("Order update failed:", jsonResponse.message);
+          }
+        } catch (e) {
+          console.error("Error parsing server response:", e);
+        }
+      }
+    });
   });
 
   // QR Code Scanner Modal integration
