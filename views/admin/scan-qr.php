@@ -202,7 +202,7 @@
 			// If the scanned QR code is a URL
 			if(isUrl(qrData)) {
 				// Open the URL in a new tab
-				window.open(qrData, '_blank');
+				window.location.href = qrData;
 			}
 		}
 	}, 100); // Adjust the interval as needed (milliseconds)
@@ -248,7 +248,8 @@
 					// If the QR code data is a URL
 					if(isUrl(code.data)) {
 						// Open the URL in a new tab
-						window.open(code.data, '_blank');
+						window.location.href = code.data;
+
 					}
 				} else {
 					// If no QR code is found in the image
