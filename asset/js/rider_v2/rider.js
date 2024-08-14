@@ -1,12 +1,14 @@
 $(document).ready(function () {
+  let riderId = null; // Declare a global variable
+
   function getRiderId() {
     $.ajax({
-      url: "/model-get-riderId", // Create this PHP file to return the logged-in rider ID
+      url: "/model-get-riderId",
       type: "GET",
       dataType: "json",
       success: function (data) {
         if (data.success) {
-          $("#rider-id").val(data.rider_id);
+          riderId = data.rider_id; // Assign to global variable
         } else {
           console.error("Failed to retrieve rider ID:", data.message);
         }
@@ -16,6 +18,7 @@ $(document).ready(function () {
       }
     });
   }
+  
 
   // Fetch rider ID on page load
   getRiderId();
@@ -240,7 +243,6 @@ $(document).ready(function () {
 
   $("#accept-order-btn").on("click", function () {
     var orderRef = $(this).data("order-ref");
-    var riderId = $("#rider-id").val(); // Get the current rider's ID
     // Debugging: Log the data being sent
     console.log("Data being sent:", {
       order_ref: orderRef,
