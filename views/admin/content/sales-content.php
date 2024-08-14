@@ -30,17 +30,16 @@
                                             <th class="text-center">POS Ref</th>
                                             <th class="text-center">Customer</th>
                                             <th class="text-center">Date</th>
+                                            <th class="text-center">Subtotal</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Discount</th>
                                             <th class="text-center">Transaction</th>
                                             <th class="text-center">Payment</th>
-                                            <th class="text-center">Total</th>
-                                            <th class="text-center">Profit</th>
-                                            <th class="text-center">Paid</th>
-                                            <th class="text-center">Status</th>
                                             <th class="text-center"><i class="bi bi-gear-fill"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody id="order-table-content">
-
+                                        <?php $sales->showSales(); ?>
                                     </tbody>
                                 </table>
                             </div>
