@@ -82,8 +82,8 @@ if ($stmt) {
         $date_log = date('F j, Y g:i A');
         $logs->newLog($action_log, $user_id, $date_log);
 
-        $query = 'INSERT INTO pos_items (pos_ref, product_id, qty)
-                  SELECT ?, product_id, qty
+        $query = 'INSERT INTO pos_items (pos_ref, product_id, qty, total)
+                  SELECT ?, product_id, qty, qty * price
                   FROM pos_cart
                   WHERE user_id = ?';
         $stmt = $mysqli->prepare($query);
