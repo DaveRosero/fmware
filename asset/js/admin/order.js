@@ -1,3 +1,5 @@
+$.fn.dataTable.moment('MMMM D, YYYY');
+
 $(document).ready(function(){
     // function paidOpt (paid) {
     //     var select = $('#paid');
