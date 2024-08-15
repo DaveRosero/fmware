@@ -16,7 +16,7 @@
                     <div class="card">
                         <div class="card-body p-2">
                             <div class="table-responsive flex-fill">
-                                <table id="orders-table" class="table table-borderless text-center align-middle w-100">
+                                <table id="acceptedOrder-table" class="table table-borderless text-center align-middle w-100">
                                     <thead>
                                         <tr>
                                             <th>Order Ref</th>
