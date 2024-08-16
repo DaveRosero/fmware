@@ -9,15 +9,6 @@
   $order = new Order();
   $logout = new Logout();
 
-  if (!$order->checkOrder($order_ref, $code)) {
-      header('Location: /404');
-      exit();
-  }
-
-//   if ($order->confirmOrder($order_ref)) {
-//     echo '<h1>Order Confirmed!</h1>';
-//   }
-
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +17,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Orders | FMWare</title><!--begin::Primary Meta Tags-->
+    <title>Confirm Order | FMWare</title><!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="title" content="Orders | FMWare">
     <?php include_once 'views/rider_v2/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
@@ -41,9 +32,7 @@
     <div class="app-wrapper">
         <?php require_once 'views/rider_v2/template/header.php'; ?>
         <?php require_once 'views/rider_v2/template/sidebar.php'; ?>
-        <?php require_once 'views/rider_v2/content/content-order.php'; ?>
-        <?php require_once 'views/rider_v2/modal/modal-order.php'; ?>
-        <?php require_once 'views/rider_v2/modal/modal-qrCode.php'; ?>
+        <?php require_once 'views/rider_v2/content/content-confirmOrder.php'; ?>
         <?php require_once 'views/rider_v2/template/footer.php'; ?>
     </div>
     <!--end::App Wrapper-->
@@ -79,6 +68,7 @@
     <script src="/asset/js/template/sidebar.js"></script>
     <script src="/asset/js/template/theme.js"></script>
     <script src="/asset/js/rider_v2/rider.js"></script>
+    <script src="/asset/js/rider_v2/confirm_order.js"></script>
     <!--end::Script-->
 </body>
 <!--end::Body-->

@@ -3,33 +3,58 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h3 class="mb-0">Confirm Delivery</h3>
+                    <h3 class="mb-0">Payment</h3>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-body p-2">
-                            <div class="table-responsive flex-fill">
-                                <table id="orders-table" class="table table-borderless text-center align-middle w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>Order Ref</th>
-                                            <th>Date</th>
-                                            <th>Paid</th>
-                                            <th>Status</th>
-                                            <th><i class="bi bi-gear-fill"></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Orders will be dynamically added here -->
-                                    </tbody>
-                                </table>
+                        <div class="card-body">
+                            <!-- Placeholder for Order Ref -->
+                            <h1 id="order-ref">Order Ref: N/A</h1>
+                            
+                            <!-- Order details -->
+                            <div class="d-flex flex-column text-end">
+                                <!-- Placeholders for Order Price, Discount, and Delivery Fee -->
+                                <h3 id="order-price">Order Price: N/A</h3>
+                                <h3 id="order-discount">Discount: N/A</h3>
+                                <h3 id="order-delivery-fee">Delivery Fee: N/A</h3>
+                            </div>
+                            
+                            <!-- Payment Method -->
+                            <div class="d-flex flex-column">
+                                <h1>Payment Method</h1>
+                                <div class="d-flex">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Cash">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Cash
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Gcash" checked>
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Gcash
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Input for Additional Info -->
+                            <div>
+                                <input class="form-control" type="text" placeholder="Additional Info" aria-label="default input example">
+                                <div class="d-flex flex-column text-end">
+                                    <h3 id="order-change">Change: N/A</h3>
+                                </div>
+                            </div>
+                            
+                            <!-- Button for Order Status -->
+                            <div>
+                                <button type="button" class="btn btn-primary">Delivered</button>
                             </div>
                         </div>
                     </div>
