@@ -17,12 +17,14 @@ class Dashboard extends Admin
                 $expenses = $this->getDailyExpenses(date('F j, Y', $date->getTimestamp()));
                 break;
             case 'weekly':
+                $date = clone $current_date;
+                $date->modify('-6 day');
                 $start_date = clone $current_date;
                 $start_date->modify('-1 week');
                 $end_date = clone $current_date;
-                $title = $this->getWeeklyDates($start_date);
-                $sales_data = [1, 2, 3, 4, 5, 6, 7];
-                $orders = $this->getWeeklyOrders();
+                $title = $this->getWeeklyDates($date);
+                $sales_data = $this->salesWeekly($title);
+                $orders = $this->getWeeklyOrders($date->format('Y-m-d'));
                 $sales = $this->getWeeklySales($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
                 $expenses = $this->getWeeklyExpenses($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
                 break;
@@ -45,7 +47,9 @@ class Dashboard extends Admin
             'line_title' => $title,
             'sales_data' => $sales_data,
             'start_date' => $start_date ?? 0,
-            'end_date' => $end_date ?? 0
+            'end_date' => $end_date ?? 0,
+            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - $expenses), 2),
+            'expenses_test' => $expenses
         );
         echo json_encode($json);
         return;
@@ -76,11 +80,12 @@ class Dashboard extends Admin
         ];
     }
 
-    public function getWeeklyOrders()
+    public function getWeeklyOrders($date)
     {
         $query = 'SELECT SUM(gross), COUNT(*) FROM orders 
-              WHERE DATE(date) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 WEEK) AND CURDATE()';
+              WHERE DATE(date) BETWEEN DATE_SUB(?, INTERVAL 1 WEEK) AND ?';
         $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $date, $date);
 
         if (!$stmt) {
             die("Error in preparing statement: " . $this->conn->error);
@@ -168,10 +173,31 @@ class Dashboard extends Admin
             $stmt->close();
         }
 
-        $stmt->bind_result($total);
+        $stmt->bind_result($expenses);
         $stmt->fetch();
         $stmt->close();
 
+        $query = 'SELECT COALESCE(SUM(poi.actual_price * poi.received), 0)
+                FROM purchase_order_items poi 
+                INNER JOIN purchase_order po ON po.po_ref = poi.po_ref
+                WHERE po.date = ? AND po.status IN (2, 3)';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($po_total);
+        $stmt->fetch();
+        $stmt->close();
+
+        $total = $expenses + $po_total;
         return $total;
     }
 
@@ -190,9 +216,32 @@ class Dashboard extends Admin
             $stmt->close();
         }
 
-        $stmt->bind_result($total);
+        $stmt->bind_result($expenses);
         $stmt->fetch();
         $stmt->close();
+
+        $query = 'SELECT COALESCE(SUM(poi.actual_price * poi.received), 0) 
+                FROM purchase_order po 
+                INNER JOIN purchase_order_items poi ON poi.po_ref = po.po_ref
+                WHERE STR_TO_DATE(date_received, "%M %e, %Y") BETWEEN ? AND ?
+                AND po.status IN (2, 3)';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($po_total);
+        $stmt->fetch();
+        $stmt->close();
+
+        $total = $expenses + $po_total;
 
         return $total;
     }
@@ -227,19 +276,59 @@ class Dashboard extends Admin
             $start_time = $time[0];
             $end_time = $time[1];
 
-            $query = 'SELECT DATE_FORMAT(o.date, "%H:%i") AS time,
-                        SUM(o.gross) AS total_orders,
-                        COALESCE(SUM(p.total), 0) AS total_sales
-                    FROM orders o
-                    LEFT JOIN pos p
-                    ON DATE(o.date) = DATE(p.date)
-                    AND TIME(p.date) BETWEEN ? AND ?
-                    WHERE DATE(o.date) = ?
-                    AND TIME(o.date) BETWEEN ? AND ?
-                    GROUP BY DATE(o.date), DATE_FORMAT(o.date, "%H:%i")
-                    ORDER BY DATE(o.date), time';
+            // Query for Orders
+            $orders_query = 'SELECT COALESCE(SUM(gross), 0) AS total_orders
+                         FROM orders
+                         WHERE DATE(date) = ?
+                         AND TIME(date) BETWEEN ? AND ?';
+            $stmt = $this->conn->prepare($orders_query);
+            $stmt->bind_param('sss', $date, $start_time, $end_time);
+            if (!$stmt->execute()) {
+                die("Error in executing orders query: " . $stmt->error);
+            }
+            $stmt->bind_result($total_orders);
+            $stmt->fetch();
+            $stmt->close();
+
+            // Query for Sales
+            $sales_query = 'SELECT COALESCE(SUM(total), 0) AS total_sales
+                        FROM pos
+                        WHERE DATE(date) = ?
+                        AND TIME(date) BETWEEN ? AND ?';
+            $stmt = $this->conn->prepare($sales_query);
+            $stmt->bind_param('sss', $date, $start_time, $end_time);
+            if (!$stmt->execute()) {
+                die("Error in executing sales query: " . $stmt->error);
+            }
+            $stmt->bind_result($total_sales);
+            $stmt->fetch();
+            $stmt->close();
+
+            // Combine Orders and Sales
+            $grand_total = $total_orders + $total_sales;
+            $data[] = $grand_total;
+        }
+
+        return $data;
+    }
+
+
+    public function salesWeekly($dates)
+    {
+        $sales = array();
+        foreach ($dates as $date) {
+            $query = 'SELECT (
+                      SELECT COALESCE(SUM(pos.total), 0) 
+                      FROM pos 
+                      WHERE DATE(pos.date) = ?
+                  ) AS total_sales,
+                  (
+                      SELECT COALESCE(SUM(orders.gross), 0) 
+                      FROM orders 
+                      WHERE DATE(orders.date) = ?
+                  ) AS total_orders';
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sssss', $start_time, $end_time, $date, $start_time, $end_time);
+            $stmt->bind_param('ss', $date, $date);
 
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
@@ -250,16 +339,11 @@ class Dashboard extends Admin
                 $stmt->close();
             }
 
-            $stmt->bind_result($time, $total_orders, $total_sales);
-            $grand_total = 0;
-            while ($stmt->fetch()) {
-                $grand_total += $total_orders;
-            }
+            $stmt->bind_result($total_sales, $total_orders);
+            $stmt->fetch();
             $stmt->close();
-
-            $data[] = $grand_total;
+            $sales[] = $total_sales + $total_orders;
         }
-
-        return $data;
+        return $sales;
     }
 }

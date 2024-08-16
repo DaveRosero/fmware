@@ -144,6 +144,9 @@ function getDashboard(sort) {
       $('#sales').text(json.sales);
       $('#discounts').text(json.discounts);
       $('#expenses').text(json.expenses);
+      $('#profit').text(json.profit);
+
+      console.log(json.expenses_test);
 
       lineChart(json.line_title, json.sales_data);
       pieChart(json.orders_count, json.sales_count);
