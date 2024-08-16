@@ -37,7 +37,7 @@
                     </div> <!-- /.info-box -->
                 </div> <!-- /.col -->
                 <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cart-fill"></i> </span>
+                    <div class="info-box"> <span class="info-box-icon text-bg-info shadow-sm"> <i class="bi bi-cart-fill text-white"></i> </span>
                         <div class="info-box-content"> <span class="info-box-text">Sales</span>
                             <span class="info-box-number" id="sales"></span>
                         </div> <!-- /.info-box-content -->
@@ -51,9 +51,9 @@
                     </div> <!-- /.info-box -->
                 </div> <!-- /.col -->
                 <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box"> <span class="info-box-icon text-bg-info shadow-sm"> <i class="bi bi-tag-fill"></i> </span>
-                        <div class="info-box-content"> <span class="info-box-text">Discounts</span>
-                            <span class="info-box-number" id="discounts"></span>
+                    <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cash-stack"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Profit</span>
+                            <span class="info-box-number" id="profit"></span>
                         </div> <!-- /.info-box-content -->
                     </div> <!-- /.info-box -->
                 </div> <!-- /.col -->
