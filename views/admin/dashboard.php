@@ -1,11 +1,11 @@
 <?php
-    include_once 'session.php';
-    require_once 'model/admin/admin.php';
-    require_once 'model/user/logoutClass.php';
+include_once 'session.php';
+require_once 'model/admin/admin.php';
+require_once 'model/user/logoutClass.php';
 
-    $admin = new Admin();
-    $logout = new Logout();
-    $admin->isAdmin();
+$admin = new Admin();
+$logout = new Logout();
+$admin->isAdmin();
 ?>
 <!DOCTYPE html>
 <html lang="en"> <!--begin::Head-->
@@ -17,6 +17,27 @@
     <meta name="title" content="Dashboard | FMWare">
     <?php include_once 'views/admin/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="/asset/css/admin/adminlte.css"><!--end::Required Plugin(AdminLTE)-->
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #sales-chart,
+        #profits-chart {
+            width: 100%;
+            height: 100%;
+            /* Make sure it fills the height of the card-body */
+        }
+    </style>
+
 </head> <!--end::Head--> <!--begin::Body-->
 
 <body class="layout-fixed-complete sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
@@ -25,7 +46,7 @@
         <?php require_once 'views/admin/template/sidebar.php'; ?>
         <?php require_once 'views/admin/content/dashboard-content.php'; ?>
         <?php require_once 'views/admin/template/footer.php'; ?>
-    </div> <!--end::App Wrapper--> <!--begin::Script--> 
+    </div> <!--end::App Wrapper--> <!--begin::Script-->
     <?php include_once 'views/admin/include/script.php'; ?><!--begin::Required Plugin(AdminLTE)-->
     <script src="/asset/js/admin/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>

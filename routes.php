@@ -62,6 +62,9 @@ get('/activity-logs', 'views/admin/logs.php');
 get('/settings', 'views/admin/settings.php');
 get('/create-reports', 'views/admin/create-reports.php');
 
+// Admin Dashboard Controller
+any('/get-dashboard', 'controller/admin/dashboard/get-dashboard.php');
+
 // Reports Controller
 any('/create-report-content', 'controller/admin/create-reports/create-report-content.php');
 
