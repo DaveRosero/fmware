@@ -29,13 +29,21 @@ class Dashboard extends Admin
                 $expenses = $this->getWeeklyExpenses($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
                 break;
             case 'monthly':
-                $current_date->modify('-1 month');
-                $date = $current_date;
+                $title = $this->getMonthlyTitles($current_date);
+                $sales_data = $this->salesMonthly($title);
+                $start_date = (new DateTime())->modify('-5 months')->format('Y-m-01');
+                $end_date = $current_date->format('Y-m-t');
+                $orders = $this->getMonthlyOrders($title);
+                $sales = $this->getMonthlySales($title);
+                $expenses = $this->getPastSixMonthsExpenses();
                 break;
             default:
                 $date = $current_date;
                 break;
         }
+
+        $end_date = date('F t, Y'); // End of the current month
+        $start_date = date('F 1, Y', strtotime('-5 months')); // Start of the month 6 months ago
 
         $json = array(
             'orders' => '₱' . number_format($orders['total'], 2),
@@ -48,8 +56,7 @@ class Dashboard extends Admin
             'sales_data' => $sales_data,
             'start_date' => $start_date ?? 0,
             'end_date' => $end_date ?? 0,
-            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - $expenses), 2),
-            'expenses_test' => $expenses
+            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - $expenses), 2)
         );
         echo json_encode($json);
         return;
@@ -345,5 +352,219 @@ class Dashboard extends Admin
             $sales[] = $total_sales + $total_orders;
         }
         return $sales;
+    }
+
+    public function getMonthlyTitles($current_date)
+    {
+        $titles = array();
+        for ($i = 0; $i < 6; $i++) {
+            $titles[] = $current_date->format('F Y');
+            $current_date->modify('-1 month');
+        }
+        return array_reverse($titles); // Reverse the order to keep it chronological
+    }
+
+    public function salesMonthly($titles)
+    {
+        $sales = array();
+        foreach ($titles as $title) {
+            $month = DateTime::createFromFormat('F Y', $title)->format('Y-m');
+            $query = 'SELECT (
+                      SELECT COALESCE(SUM(pos.total), 0) 
+                      FROM pos 
+                      WHERE DATE_FORMAT(pos.date, "%Y-%m") = ?
+                  ) AS total_sales,
+                  (
+                      SELECT COALESCE(SUM(orders.gross), 0) 
+                      FROM orders 
+                      WHERE DATE_FORMAT(orders.date, "%Y-%m") = ?
+                  ) AS total_orders';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $month, $month);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($total_sales, $total_orders);
+            $stmt->fetch();
+            $stmt->close();
+            $sales[] = $total_sales + $total_orders;
+        }
+        return $sales;
+    }
+
+    public function getMonthlyOrders($titles)
+    {
+        $total_orders = 0;
+        $total_count = 0;
+
+        foreach ($titles as $title) {
+            $month = DateTime::createFromFormat('F Y', $title)->format('Y-m');
+            $query = 'SELECT COALESCE(SUM(gross), 0), COUNT(*) 
+                  FROM orders 
+                  WHERE DATE_FORMAT(date, "%Y-%m") = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $month);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($total, $count);
+            $stmt->fetch();
+            $stmt->close();
+
+            $total_orders += $total;
+            $total_count += $count;
+        }
+
+        return [
+            'total' => $total_orders,
+            'count' => $total_count
+        ];
+    }
+
+    public function getMonthlySales($titles)
+    {
+        $total_sales = 0;
+        $total_discounts = 0;
+        $total_count = 0;
+
+        foreach ($titles as $title) {
+            $month = DateTime::createFromFormat('F Y', $title)->format('Y-m');
+            $query = 'SELECT COALESCE(SUM(total), 0), COALESCE(SUM(discount), 0), COUNT(*) 
+                  FROM pos 
+                  WHERE DATE_FORMAT(date, "%Y-%m") = ?';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $month);
+
+            if (!$stmt) {
+                die("Error in preparing statement: " . $this->conn->error);
+            }
+
+            if (!$stmt->execute()) {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+
+            $stmt->bind_result($total, $discount, $count);
+            $stmt->fetch();
+            $stmt->close();
+
+            $total_sales += $total;
+            $total_discounts += $discount;
+            $total_count += $count;
+        }
+
+        return [
+            'total' => $total_sales,
+            'discounts' => $total_discounts,
+            'count' => $total_count
+        ];
+    }
+
+    public function getPastSixMonthsExpenses()
+    {
+        // Calculate the start date (6 months ago) and end date (current date)
+        $end_date = date('F t, Y'); // End of the current month
+        $start_date = date('F 1, Y', strtotime('-6 months')); // Start of the month 6 months ago
+
+        // Query to sum up expenses for the given date range
+        $query = 'SELECT SUM(amount) FROM expenses WHERE STR_TO_DATE(date, "%M %e, %Y") BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($expenses);
+        $stmt->fetch();
+        $stmt->close();
+
+        // Query to sum up purchase order amounts for the given date range
+        $query = 'SELECT COALESCE(SUM(poi.actual_price * poi.received), 0) AS total_price
+                FROM purchase_order po
+                INNER JOIN purchase_order_items poi ON poi.po_ref = po.po_ref
+                WHERE STR_TO_DATE(po.date_received, "%M %e, %Y") 
+                BETWEEN STR_TO_DATE(?, "%M %e, %Y") AND STR_TO_DATE(?, "%M %e, %Y")
+                AND po.status IN (2, 3);';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($po_total);
+        $stmt->fetch();
+        $stmt->close();
+
+        $query = 'SELECT COALESCE(SUM(po.shipping), 0) AS total_shipping
+                FROM purchase_order po
+                WHERE STR_TO_DATE(po.date_received, "%M %e, %Y") 
+                BETWEEN STR_TO_DATE(?, "%M %e, %Y") AND STR_TO_DATE(?, "%M %e, %Y")
+                AND po.status IN (2, 3);';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($shipping);
+        $stmt->fetch();
+        $stmt->close();
+
+        $query = 'SELECT COALESCE(SUM(po.others), 0) AS total_shipping
+                FROM purchase_order po
+                WHERE STR_TO_DATE(po.date_received, "%M %e, %Y") 
+                BETWEEN STR_TO_DATE(?, "%M %e, %Y") AND STR_TO_DATE(?, "%M %e, %Y")
+                AND po.status IN (2, 3);';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($others);
+        $stmt->fetch();
+        $stmt->close();
+
+        $total = $expenses + $po_total + $shipping + $others;
+
+        return $total;
     }
 }
