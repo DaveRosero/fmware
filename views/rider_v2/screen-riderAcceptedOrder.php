@@ -68,6 +68,7 @@
     <script src="/asset/js/template/sidebar.js"></script>
     <script src="/asset/js/template/theme.js"></script>
     <script src="/asset/js/rider_v2/rider.js"></script>
+    <script src="/asset/js/rider_v2/qr_scanner.js"></script>
     <!--end::Script-->
 </body>
 <!--end::Body-->
