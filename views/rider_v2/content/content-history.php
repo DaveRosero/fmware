@@ -16,14 +16,14 @@
                     <div class="card">
                         <div class="card-body p-2">
                             <div class="table-responsive flex-fill">
-                                <table id="orders-table" class="table table-borderless text-center align-middle w-100">
+                                <table id="historyOrder-table" class="table table-borderless text-center align-middle w-100">
                                     <thead>
                                         <tr>
                                             <th>Order Ref</th>
                                             <th>Date</th>
                                             <th>Paid</th>
                                             <th>Status</th>
-                                            <th><i class="bi bi-gear-fill"></i></th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>

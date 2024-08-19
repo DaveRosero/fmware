@@ -261,6 +261,7 @@ any('/pos-notify', 'views/pos/notification.php');
 //screens
 any('/rider-order', 'views/rider_v2/screen-riderOrder.php');
 any('/rider-acceptedOrder', 'views/rider_v2/screen-riderAcceptedOrder.php');
+any('/rider-history', 'views/rider_v2/screen-riderHistory.php');
 //modal
 //model
 any('/model-order', 'views/rider_v2/model/model-order.php');
@@ -273,6 +274,8 @@ any('/model-order-details', 'views/rider_v2/model/model-order-details.php');
 any('/model-order-items', 'views/rider_v2/model/model-order-items.php');
 any('/model-update-order', 'views/rider_v2/model/model-update-order.php');
 any('/model-get-riderId', 'views/rider_v2/model/model-get-riderId.php');
+any('/model-history', 'views/rider_v2/model/model-history.php');
+any('/model-history-details', 'views/rider_v2/model/model-history-details.php');
 
 
 //*****************************************************************//
