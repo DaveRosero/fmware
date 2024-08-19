@@ -6,6 +6,15 @@ $(document).ready(function () {
   const fileInput = document.getElementById("fileInput");
   const fileInputButton = document.getElementById("fileInputButton");
 
+  // Variable to store selected order_ref
+  let selectedOrderRef = '';
+
+  // Function to set the selected order_ref
+  function setSelectedOrderRef(orderRef) {
+    selectedOrderRef = orderRef;
+    console.log('Selected order_ref set to:', selectedOrderRef); // Debugging line
+  }
+
   function showWebcam() {
     qrDataLabel.textContent = "";
     qrDataLabel.style.display = "none";
@@ -55,10 +64,13 @@ $(document).ready(function () {
                   video.style.display = "none";
 
                   if (isUrl(qrData)) {
-                    const orderRef = extractOrderRef(qrData);
-                    localStorage.setItem('order_ref', orderRef);
-                    console.log('Redirecting to:', qrData); // Debugging line
-                    window.location.href = qrData;
+                    const qrOrderRef = extractOrderRef(qrData);
+                    if (qrOrderRef === selectedOrderRef) {
+                      console.log('Redirecting to:', qrData); // Debugging line
+                      window.location.href = qrData;
+                    } else {
+                      alert('QR code does not match the selected order.');
+                    }
                   } else {
                     qrDataLabel.textContent = "Invalid QR code URL: " + qrData;
                   }
@@ -120,10 +132,13 @@ $(document).ready(function () {
           video.style.display = "none";
 
           if (isUrl(code.data)) {
-            const orderRef = extractOrderRef(code.data);
-            localStorage.setItem('order_ref', orderRef);
-            console.log('Redirecting to:', code.data); // Debugging line
-            window.location.href = code.data;
+            const qrOrderRef = extractOrderRef(code.data);
+            if (qrOrderRef === selectedOrderRef) {
+              console.log('Redirecting to:', code.data); // Debugging line
+              window.location.href = code.data;
+            } else {
+              alert('QR code does not match the selected order.');
+            }
           } else {
             qrDataLabel.textContent = "Invalid QR code URL: " + code.data;
           }
@@ -148,5 +163,11 @@ $(document).ready(function () {
 
   $("#qr-scanner-modal").on("hidden.bs.modal", function () {
     stopVideoStream();
+  });
+
+  // Add event listener to view-order buttons
+  $(document).on('click', '.view-order-btn', function () {
+    const orderRef = $(this).data('order-ref');
+    setSelectedOrderRef(orderRef);
   });
 });

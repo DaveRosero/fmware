@@ -266,6 +266,7 @@ any('/model-acceptedOrder', 'views/rider_v2/model/model-acceptedOrder.php');
 any('/model-acceptedOrder-details', 'views/rider_v2/model/model-acceptedOrder-details.php');
 any('/model-acceptedOrder-items', 'views/rider_v2/model/model-acceptedOrder-items.php');
 any('/model-confirmedOrder-details', 'views/rider_v2/model/model-confirmedOrder-details.php');
+any('/model-processPayment', 'views/rider_v2/model/model-processPayment.php');
 any('/model-order-details', 'views/rider_v2/model/model-order-details.php');
 any('/model-order-items', 'views/rider_v2/model/model-order-items.php');
 any('/model-update-order', 'views/rider_v2/model/model-update-order.php');
