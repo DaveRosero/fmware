@@ -21,10 +21,10 @@
                         <h6>Description:</h6>
                         <p><?php echo isset($product_info['description']) && empty($product_info['description']) ? 'N/A' : $product_info['description']; ?></p>
 
-                        <?php if (isset($_SESSION['email'])):?>
+                        <?php if (isset($_SESSION['email'])): ?>
                             <div class="row pb-3">
                                 <div class="col d-grid">
-                                    <button class="btn btn-success btn-lg" value="buy">Buy</button>
+                                    <button class="btn btn-success btn-lg buy-now-btn" value="buy">Buy Now</button>
                                 </div>
                                 <div class="col d-grid">
                                     <button class="btn btn-success btn-lg add-to-cart-btn" value="addtocard">Add To Cart</button>
