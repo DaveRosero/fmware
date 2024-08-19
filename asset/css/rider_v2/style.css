@@ -56,3 +56,11 @@
   max-height: 100%; /* Ensure image does not exceed container height */
   object-fit: contain; /* Scale image to fit within the container while preserving aspect ratio */
 }
+
+/* Hide up and down buttons for number input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
