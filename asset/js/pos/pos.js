@@ -122,6 +122,26 @@ fetchAllProducts();
 let debounceTimeout;
 const debounceDelay = 100; // Adjust as needed
 
+//notification 
+function updateNotificationCount() {
+  $.ajax({
+    url: "/pos-notify",  
+    method: "POST",
+    dataType: "json",
+    success: function (response) {
+      $("#notification-count").text(response.count);
+    },
+    error: function (xhr, status, error) {
+      console.error("Failed to fetch notification count");
+      console.error("Status:", status);
+      console.error("Error:", error);
+    },
+  });
+}
+
+setInterval(updateNotificationCount, 30000);
+updateNotificationCount();
+
 $("#barcode").on("input", function () {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(handleSearch, debounceDelay);
