@@ -24,6 +24,7 @@ any('/cart-total', 'controller/home/cart/cart-total.php');
 any('/checkout', 'controller/home/cart/checkout.php');
 any('/cart-update-qty', 'controller/home/cart/update-qty.php');
 any('/del-cart-item', 'controller/home/cart/del-cart-item.php');
+any('/buy-now', 'controller/home/cart/buy-now.php');
 
 // User Controller
 any('/has-address', 'controller/home/user/has-address.php');
