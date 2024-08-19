@@ -86,7 +86,7 @@ if ($_SESSION['group'] !== 'cashier') {
         <div class="dropdown me-3">
             <button class="btn btn-outline-success position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-bell"></i>
-                <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span id="notification-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     0
                 </span>
             </button>
