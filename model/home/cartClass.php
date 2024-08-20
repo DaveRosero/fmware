@@ -1,4 +1,5 @@
 <?php
+require_once 'session.php';
 require_once 'model/home/home.php';
 
 class Cart extends Home
@@ -515,5 +516,57 @@ class Cart extends Home
         }
 
         $stmt->close();
+
+        $query = 'SELECT cart.id,
+                        cart.qty,
+                        product.image,
+                        product.name,
+                        product.unit_value,
+                        product.description,
+                        price_list.unit_price,
+                        unit.name,
+                        variant.name,
+                        stock.qty
+                    FROM cart
+                    INNER JOIN product ON product.id = cart.product_id
+                    INNER JOIN price_list ON price_list.product_id = product.id
+                    INNER JOIN unit ON unit.id = product.unit_id
+                    INNER JOIN variant ON variant.id = product.variant_id
+                    INNER JOIN stock ON stock.product_id = product.id
+                    WHERE cart.product_id = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('i', $product_id);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($cart_id, $qty, $image, $name, $unit_value, $description, $price, $unit, $variant, $stock);
+        $stmt->fetch();
+        $stmt->close();
+        $product = array(
+            'cart_id' => $cart_id,
+            'qty' => $qty,
+            'id' => $product_id,
+            'image' => $image,
+            'name' => $name,
+            'variant' => $variant,
+            'unit_value' => $unit_value,
+            'unit' => $unit,
+            'stock' => $stock
+        );
+
+        $_SESSION['buynow'] = 1;
+        $_SESSION['product'] = $product;
+        $json = array(
+            'success' => 'success'
+        );
+        echo json_encode($json);
+        return;
     }
 }
