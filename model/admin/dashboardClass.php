@@ -14,6 +14,8 @@ class Dashboard extends Admin
                 $sales_data = $this->salesDaily($date->format('Y-m-d'));
                 $orders = $this->getDailyOrders($date->format('Y-m-d'));
                 $sales = $this->getDailySales($date->format('Y-m-d'));
+                $refunds = $this->getRefundDaily($date->format('Y-m-d'));
+                $discount = $this->getDiscountDaily($date->format('Y-m-d'));
                 $expenses = $this->getDailyExpenses(date('F j, Y', $date->getTimestamp()));
                 break;
             case 'weekly':
@@ -27,6 +29,8 @@ class Dashboard extends Admin
                 $orders = $this->getWeeklyOrders($date->format('Y-m-d'));
                 $sales = $this->getWeeklySales($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
                 $expenses = $this->getWeeklyExpenses($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
+                $refunds = $this->getRefundWeekly($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
+                $discount = $this->getDiscountWeekly($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
                 break;
             case 'monthly':
                 $title = $this->getMonthlyTitles($current_date);
@@ -36,6 +40,8 @@ class Dashboard extends Admin
                 $orders = $this->getMonthlyOrders($title);
                 $sales = $this->getMonthlySales($title);
                 $expenses = $this->getPastSixMonthsExpenses();
+                $refunds = $this->getRefundMonthly();
+                $discount = $this->getDiscountMonthly();
                 break;
             default:
                 $date = $current_date;
@@ -56,7 +62,9 @@ class Dashboard extends Admin
             'sales_data' => $sales_data,
             'start_date' => $start_date ?? 0,
             'end_date' => $end_date ?? 0,
-            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - $expenses), 2)
+            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - $expenses), 2),
+            'refunds' => '₱' . number_format($refunds, 2),
+            'discount' => '₱' . number_format($discount, 2),
         );
         echo json_encode($json);
         return;
@@ -319,7 +327,6 @@ class Dashboard extends Admin
         return $data;
     }
 
-
     public function salesWeekly($dates)
     {
         $sales = array();
@@ -564,6 +571,146 @@ class Dashboard extends Admin
         $stmt->close();
 
         $total = $expenses + $po_total + $shipping + $others;
+
+        return $total;
+    }
+
+    public function getRefundDaily($date)
+    {
+        $query = 'SELECT SUM(total_refund_value) FROM refunds WHERE DATE(refund_date) = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+
+        return $total;
+    }
+
+    public function getRefundWeekly($start_date, $end_date)
+    {
+        $query = 'SELECT SUM(total_refund_value) FROM refunds WHERE DATE(refund_date) BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+
+        return $total;
+    }
+
+    public function getRefundMonthly()
+    { // Calculate the start date (6 months ago) and end date (current date)
+        $end_date = date('Y-m-d'); // End of the current month
+        $start_date = date('Y-m-d', strtotime('-6 months')); // Start of the month 6 months ago
+
+        // Query to sum up expenses for the given date range
+        $query = 'SELECT SUM(total_refund_value) FROM refunds WHERE DATE(refund_date) BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+
+        return $total;
+    }
+
+    public function getDiscountDaily($date)
+    {
+        $query = 'SELECT SUM(discount) FROM pos WHERE DATE(date) = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+
+        return $total;
+    }
+
+    public function getDiscountWeekly($start_date, $end_date)
+    {
+        $query = 'SELECT SUM(discount) FROM pos WHERE DATE(date) BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+
+        return $total;
+    }
+
+    public function getDiscountMonthly()
+    { // Calculate the start date (6 months ago) and end date (current date)
+        $end_date = date('Y-m-d'); // End of the current month
+        $start_date = date('Y-m-d', strtotime('-6 months')); // Start of the month 6 months ago
+
+        // Query to sum up expenses for the given date range
+        $query = 'SELECT SUM(discount) FROM pos WHERE DATE(date) BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
 
         return $total;
     }

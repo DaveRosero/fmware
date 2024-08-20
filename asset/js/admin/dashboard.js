@@ -104,7 +104,7 @@ function lineChart(line_title, sales_data) {
         formatter: function (value) {
           return "₱" + value.toFixed(2); // Format values as currency
         }
-      }  
+      }
     },
     legend: {
       show: true, // Ensure the legend is shown
@@ -145,6 +145,8 @@ function getDashboard(sort) {
       $('#discounts').text(json.discounts);
       $('#expenses').text(json.expenses);
       $('#profit').text(json.profit);
+      $('#refunds').text(json.refunds);
+      $('#discount').text(json.discount);
 
       console.log(json.expenses_test);
 
