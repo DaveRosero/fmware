@@ -1,16 +1,21 @@
-$(document).ready(function(){
-    function getCartTotal () {
+$(document).ready(function () {
+    console.log($('#is_buy_now').val());
+    if ($('#is_buy_now').val() == 1) {
+        $('#checkout-form').modal('show');
+    }
+
+    function getCartTotal() {
         var id = $('#checkout').data('user-id');
         var delivery_fee = $('#delivery-fee-value').val();
         $.ajax({
             url: '/cart-total',
             method: 'POST',
             data: {
-                id : id,
+                id: id,
                 delivery_fee, delivery_fee
             },
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.product_total) {
                     $('#product-total').text(feedback.product_total);
                 }
@@ -55,7 +60,7 @@ $(document).ready(function(){
     // getDeliveryFee();
     // getVAT();
     // getCartTotal();
-      
+
     // $(document).on('click', '.add-cart', function(){
     //     var parentButton = $(this).closest('.add-cart');
     //     $.ajax({
@@ -86,7 +91,7 @@ $(document).ready(function(){
         placeholder: 'Select your Baranggay'
     });
 
-    $('#brgy').change(function(){
+    $('#brgy').change(function () {
         var brgy = $(this).val();
         console.log('changed');
 
@@ -94,10 +99,10 @@ $(document).ready(function(){
             url: '/get-municipality',
             method: 'POST',
             data: {
-                brgy : brgy
+                brgy: brgy
             },
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 console.log('success');
                 console.log(feedback.municipality);
                 if (feedback.municipality) {
@@ -107,7 +112,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#address').change(function(){
+    $('#address').change(function () {
         var brgy = $(this).val();
         var selected = $(this).find('option:selected');
         var address_id = selected.data('address-id');
@@ -115,10 +120,10 @@ $(document).ready(function(){
             url: '/delivery-fee',
             method: 'POST',
             data: {
-                brgy : brgy
+                brgy: brgy
             },
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback) {
                     $('#delivery-fee').text('₱' + feedback.delivery_fee + '.00');
                     $('#delivery-fee-value').val(feedback.delivery_value);
@@ -128,7 +133,7 @@ $(document).ready(function(){
             }
         });
     })
-    
+
     // $(document).on('click', '.addQty', function(){
     //     var id = $(this).data('product-id');
     //     var qty = $('.qty_' + id);
@@ -172,14 +177,14 @@ $(document).ready(function(){
     //     });
     // });
 
-    $(document).on('click', '.addQty', function() {
+    $(document).on('click', '.addQty', function () {
         var productId = $(this).data('product-id');
         var cartId = $(this).data('cart-id');
         var qtyInput = $('input[data-product-id="' + productId + '"]');
         var qtyValue = qtyInput.val();
         var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
         var current_stock = $(this).data('current-stock');
-    
+
         $.ajax({
             url: '/add-qty',
             method: 'POST',
@@ -189,7 +194,7 @@ $(document).ready(function(){
                 current_stock: current_stock
             },
             dataType: 'json',
-            success: function(feedback) {
+            success: function (feedback) {
                 if (feedback.stock) {
                     Swal.fire({
                         title: "Oops!",
@@ -206,23 +211,23 @@ $(document).ready(function(){
                 subtotal.text(feedback.subtotal);
                 getCartTotal();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
-    
-    $(document).on('click', '.subQty', function() {
+
+    $(document).on('click', '.subQty', function () {
         var productId = $(this).data('product-id');
         var cartId = $(this).data('cart-id');
         var qtyInput = $('input[data-product-id="' + productId + '"]');
         var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
-    
+
         if (qtyInput.val() == 1) {
             return;
         }
-    
+
         $.ajax({
             url: '/sub-qty',
             method: 'POST',
@@ -230,7 +235,7 @@ $(document).ready(function(){
                 id: cartId
             },
             dataType: 'json',
-            success: function(feedback) {
+            success: function (feedback) {
                 console.log(feedback);
                 qtyInput.val(feedback.qty);
                 subtotal.text(feedback.subtotal);
@@ -239,14 +244,14 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('change', '.qty-input', function() {
+    $(document).on('change', '.qty-input', function () {
         var input = $(this);
         var productId = $(this).data('product-id');
         var cartId = $(this).data('cart-id');
         var qty = $(this).val();
         var subtotal = $('.subtotal[data-product-id="' + productId + '"]');
         var current_stock = $(this).data('current-stock');
-    
+
         if (qty < 1) {
             qty = 1;
             $(this).val(qty);
@@ -261,7 +266,7 @@ $(document).ready(function(){
             qty = current_stock;
             $(this).val(qty);
         }
-    
+
         $.ajax({
             url: '/cart-update-qty',
             method: 'POST',
@@ -270,19 +275,19 @@ $(document).ready(function(){
                 qty: qty
             },
             dataType: 'json',
-            success: function(feedback) {
+            success: function (feedback) {
                 console.log(feedback);
                 subtotal.text(feedback.subtotal);
                 getCartTotal();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
-    
-    $('#checkout').on('click', function(){
+
+    $('#checkout').on('click', function () {
         var id = $(this).data('user-id');
         $.ajax({
             url: '/has-address',
@@ -291,7 +296,7 @@ $(document).ready(function(){
                 id: id
             },
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 console.log(feedback);
                 if (feedback.has_address) {
                     $('#checkout-form').modal('show');
@@ -304,20 +309,20 @@ $(document).ready(function(){
             }
         });
     });
-    
-    $('#checkout-address').on('click', function(){
+
+    $('#checkout-address').on('click', function () {
         $('#checkout-form').modal('hide');
         $('#address-form').modal('show');
     });
 
-    $('#newAddress').on('submit', function(event){
+    $('#newAddress').on('submit', function (event) {
         event.preventDefault();
         $.ajax({
             url: '/new-address',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect
                 }
@@ -325,27 +330,27 @@ $(document).ready(function(){
         });
     });
 
-    $('#place-order').on('submit', function(event){
+    $('#place-order').on('submit', function (event) {
         event.preventDefault();
         $.ajax({
             url: '/checkout',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 console.log(feedback);
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
 
-    $('.cart-checkbox').click(function() {
+    $('.cart-checkbox').click(function () {
         if ($(this).is(':checked')) {
             console.log('Checkbox clicked and checked', $(this).val(), $(this).data('user-id'));
 
@@ -353,11 +358,11 @@ $(document).ready(function(){
                 url: '/check-product',
                 method: 'POST',
                 data: {
-                    user_id : $(this).data('user-id'),
-                    product_id : $(this).val()
+                    user_id: $(this).data('user-id'),
+                    product_id: $(this).val()
                 },
                 dataType: 'json',
-                success: function(feedback) {
+                success: function (feedback) {
                     if (feedback.checked) {
                         getCartTotal();
                     }
@@ -372,11 +377,11 @@ $(document).ready(function(){
                 url: '/uncheck-product',
                 method: 'POST',
                 data: {
-                    user_id : $(this).data('user-id'),
-                    product_id : $(this).val()
+                    user_id: $(this).data('user-id'),
+                    product_id: $(this).val()
                 },
                 dataType: 'json',
-                success: function(feedback) {
+                success: function (feedback) {
                     if (feedback.unchecked) {
                         getCartTotal();
                     }
@@ -387,7 +392,7 @@ $(document).ready(function(){
         }
     });
 
-    $('input[name="payment_type"]').on('change', function() {
+    $('input[name="payment_type"]').on('change', function () {
         var selectedValue = $('input[name="payment_type"]:checked').val();
         if (selectedValue === '1') {
             console.log('COD selected');
@@ -407,9 +412,9 @@ $(document).ready(function(){
         }
     });
 
-    $('#checkAll').click(function() {
+    $('#checkAll').click(function () {
         var isChecked = this.checked;
-        $('.cart-checkbox').each(function() {
+        $('.cart-checkbox').each(function () {
             var $checkbox = $(this);
             if (isChecked && !$checkbox.is(':checked')) {
                 // If master checkbox is checked and individual checkbox is not checked, trigger click
@@ -421,7 +426,7 @@ $(document).ready(function(){
         });
     });
 
-    $('.del-cart').click(function(){
+    $('.del-cart').click(function () {
         var product_id = $(this).data('product-id');
         var cart_id = $(this).data('cart-id');
 
@@ -438,16 +443,16 @@ $(document).ready(function(){
                     url: '/del-cart-item',
                     method: 'POST',
                     data: {
-                        product_id : product_id,
-                        cart_id : cart_id
+                        product_id: product_id,
+                        cart_id: cart_id
                     },
                     dataType: 'json',
-                    success: function(json) {
-                        if(json.redirect) {
+                    success: function (json) {
+                        if (json.redirect) {
                             window.location.href = json.redirect;
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Error:", textStatus, errorThrown);
                         console.log("Response:", jqXHR.responseText);
                     }
