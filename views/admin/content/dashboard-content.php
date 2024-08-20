@@ -29,31 +29,45 @@
                 </div>
             </div> <!--end::Row--> <!--begin::Row-->
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box"> <span class="info-box-icon text-bg-primary shadow-sm"> <i class="bi bi-bag-fill"></i> </span>
                         <div class="info-box-content"> <span class="info-box-text">Online Orders</span>
                             <span class="info-box-number" id="orders"></span>
                         </div> <!-- /.info-box-content -->
                     </div> <!-- /.info-box -->
                 </div> <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box"> <span class="info-box-icon text-bg-info shadow-sm"> <i class="bi bi-cart-fill text-white"></i> </span>
                         <div class="info-box-content"> <span class="info-box-text">Sales</span>
                             <span class="info-box-number" id="sales"></span>
                         </div> <!-- /.info-box-content -->
                     </div> <!-- /.info-box -->
-                </div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
-                <div class="col-12 col-sm-6 col-md-3">
+                </div> <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cash-stack"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Profit</span>
+                            <span class="info-box-number" id="profit"></span>
+                        </div> <!-- /.info-box-content -->
+                    </div> <!-- /.info-box -->
+                </div> <!-- /.col --><!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box"> <span class="info-box-icon text-bg-danger shadow-sm"> <i class="bi bi-wallet-fill"></i> </span>
                         <div class="info-box-content"> <span class="info-box-text">Expenses</span>
                             <span class="info-box-number" id="expenses"></span>
                         </div> <!-- /.info-box-content -->
                     </div> <!-- /.info-box -->
-                </div> <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box"> <span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cash-stack"></i> </span>
-                        <div class="info-box-content"> <span class="info-box-text">Profit</span>
-                            <span class="info-box-number" id="profit"></span>
+                </div> <!-- /.col --><!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="info-box"> <span class="info-box-icon text-bg-warning shadow-sm"> <i class="bi bi-tag-fill text-light"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Discount</span>
+                            <span class="info-box-number" id="discount"></span>
+                        </div> <!-- /.info-box-content -->
+                    </div> <!-- /.info-box -->
+                </div> <!-- /.col --><!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="info-box"> <span class="info-box-icon text-bg-secondary shadow-sm"> <i class="bi bi-arrow-counterclockwise text-light"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Refunds</span>
+                            <span class="info-box-number" id="refunds"></span>
                         </div> <!-- /.info-box-content -->
                     </div> <!-- /.info-box -->
                 </div> <!-- /.col -->
