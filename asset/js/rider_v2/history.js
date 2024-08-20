@@ -68,8 +68,10 @@ function fetchHistoryOrders() {
     dataType: "json",
     success: function (data) {
       const filteredOrders = data.filter(order =>
-        order.status.toLowerCase() === "delivered" && order.rider_id == riderId
+        (order.status.toLowerCase() === "delivered" || order.status.toLowerCase() === "cancelled") &&
+        order.rider_id == riderId
       );
+      
 
       $("#historyOrder-table").DataTable({
         data: filteredOrders.map(order => [

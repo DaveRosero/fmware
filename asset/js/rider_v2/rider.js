@@ -317,5 +317,36 @@ $("#acceptedOrder-table").on("click", ".view-order-btn", function () {
   fetchAcceptedOrderDetails(orderRef);
 });
 
+// Handle Cancel Order button click
+$('#cancelOrderButton').on('click', function () {
+  const orderRef = $('#acceptedOrder-items-modal-label').text().replace('Order: ', ''); // Get the order reference from the modal
+
+  $.ajax({
+    url: '/model-cancelOrder', // Update with the correct backend URL
+    type: 'POST',
+    data: {
+      order_ref: orderRef  // Send only the order reference to be canceled
+    },
+    success: function (response) {
+      // Parse the response if it's returned as a JSON object
+      const res = JSON.parse(response);
+      if (res.success) {
+        alert('Order has been successfully canceled!');
+        $('#acceptedOrder-items-modal').modal('hide'); // Close the modal
+
+        // Optionally, refresh the orders list to reflect the updated status
+        fetchAcceptedOrders();
+      } else {
+        alert('Failed to cancel the order: ' + res.message);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error('Error canceling order:', error);
+      alert('Failed to cancel the order. Please try again.');
+    }
+  });
+});
+
+
 
 });
