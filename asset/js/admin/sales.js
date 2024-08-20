@@ -1,28 +1,33 @@
-$(document).ready(function(){
-    function viewPOS (pos_ref) {
+$.fn.dataTable.moment('MMMM D, YYYY');
+$(document).ready(function () {
+    function viewPOS(pos_ref) {
         $.ajax({
             url: '/view-sales',
             method: 'POST',
             data: {
-                pos_ref : pos_ref
+                pos_ref: pos_ref
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 console.log(json);
                 $('#viewModalLabel').text(json.pos_ref);
                 $('#view-content').html(json.content);
                 $('#staff').text(json.staff);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     }
 
-    $('#sales-table').DataTable();
+    $('#sales-table').DataTable({
+        order: [
+            [2, 'desc']
+        ]
+    });
 
-    $(document).on('click', '.viewPOS', function(){
+    $(document).on('click', '.viewPOS', function () {
         viewPOS($(this).data('pos-ref'));
     });
 })
