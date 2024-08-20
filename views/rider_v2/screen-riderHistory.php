@@ -29,9 +29,8 @@
     <div class="app-wrapper">
         <?php require_once 'views/rider_v2/template/header.php'; ?>
         <?php require_once 'views/rider_v2/template/sidebar.php'; ?>
-        <?php require_once 'views/rider_v2/content/content-order.php'; ?>
-        <?php require_once 'views/rider_v2/modal/modal-order.php'; ?>
-        <?php require_once 'views/rider_v2/modal/modal-qrCode.php'; ?>
+        <?php require_once 'views/rider_v2/content/content-history.php'; ?>
+        <?php require_once 'views/rider_v2/modal/modal-history.php'; ?>
         <?php require_once 'views/rider_v2/template/footer.php'; ?>
     </div>
     <!--end::App Wrapper-->
@@ -66,7 +65,7 @@
     <!--end::OverlayScrollbars Configure-->
     <script src="/asset/js/template/sidebar.js"></script>
     <script src="/asset/js/template/theme.js"></script>
-    <script src="/asset/js/rider_v2/rider.js"></script>
+    <script src="/asset/js/rider_v2/history.js"></script>
     <!--end::Script-->
 </body>
 <!--end::Body-->
