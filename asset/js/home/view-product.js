@@ -7,7 +7,13 @@ function buy_now(product_id) {
         },
         dataType: 'json',
         success: function (json) {
-
+            if (json.success) {
+                window.location.href = '/cart';
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error:", textStatus, errorThrown);
+            console.log("Response:", jqXHR.responseText);
         }
     });
 }
@@ -33,9 +39,8 @@ $(document).ready(function () {
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function (feedback) {
+            success: function (json) {
                 buy_now(product_id);
-                window.location.href = '/cart';
             }, error: function (xhr, status, error) {
                 console.error(error);
             }
