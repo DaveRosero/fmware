@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     function getOrderRefFromPath() {
         const path = window.location.pathname;
         const segments = path.split('/');
@@ -14,7 +14,7 @@ $(document).ready(function() {
             url: '/model-confirmedOrder-details',
             method: 'GET',
             data: { order_ref: orderRef },
-            success: function(response) {
+            success: function (response) {
                 if (response) {
                     const orderPrice = response.gross ?? 0;
                     const discount = response.discount ?? 0;
@@ -28,21 +28,34 @@ $(document).ready(function() {
                     $('#order-discount').text(`Discount: ${formatCurrency(discount)}`);
                     $('#order-delivery-fee').text(`Delivery Fee: ${formatCurrency(deliveryFee)}`);
                     $('#total-price').text(`Total Price: ${formatCurrency(totalPrice)}`);
+
+                    // Enable or disable 'Delivered' button and cash input field based on payment status
+                    if (response.paid === 'paid') {
+                        $('#delivered-btn').prop('disabled', false); // Enable button
+                        $('input[type="number"]').prop('disabled', true); // Enable input field
+                    } else {
+                        $('#delivered-btn').prop('disabled', true); // Disable button
+                        $('input[type="number"]').prop('disabled', false); // Disable input field
+                    }
                 } else {
                     $('#order-ref').text('Order Ref: N/A');
                     $('#order-price').text('Order Price: ₱0.00');
                     $('#order-discount').text('Discount: ₱0.00');
                     $('#order-delivery-fee').text('Delivery Fee: ₱0.00');
                     $('#total-price').text('Total Price: ₱0.00');
+                    $('input[type="number"]').prop('disabled', false);
+                    $('#delivered-btn').prop('disabled', true);
                 }
             },
-            error: function() {
+            error: function () {
                 console.error('Failed to fetch order data');
                 $('#order-ref').text('Order Ref: N/A');
                 $('#order-price').text('Order Price: ₱0.00');
                 $('#order-discount').text('Discount: ₱0.00');
                 $('#order-delivery-fee').text('Delivery Fee: ₱0.00');
                 $('#total-price').text('Total Price: ₱0.00');
+                $('input[type="number"]').prop('disabled', false);
+                $('#delivered-btn').prop('disabled', true);
             }
         });
     }
@@ -66,13 +79,17 @@ $(document).ready(function() {
         const orderRef = getOrderRefFromPath();
         const cashReceived = parseFloat($('input[type="number"]').val()) || 0;
 
-        if (!orderRef || !cashReceived) {
-            alert('Please ensure all information is provided.');
+        if (!orderRef || isNaN(cashReceived)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Information',
+                text: 'Please ensure all information is provided.'
+            });
             return;
         }
 
         $.ajax({
-            url: '/model-processPayment', // Update with the path to your PHP file
+            url: '/model-processPayment',
             method: 'POST',
             data: {
                 order_ref: orderRef,
@@ -80,26 +97,41 @@ $(document).ready(function() {
                 payment_type: paymentMethod,
                 cash_received: cashReceived
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
-                    alert('Order status updated successfully.');
-                    // Redirect or update the UI as needed
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Updated',
+                        text: 'Order status updated successfully.'
+                    }).then(() => {
+                        // Redirect to the main screen
+                        window.location.href = '/rider-history'; // Replace with your main screen URL
+                    });
                 } else {
-                    alert('Failed to update order status. Please try again.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: 'Failed to update order status. Please try again.'
+                    });
                 }
             },
-            error: function() {
+            error: function () {
                 console.error('Failed to update order status');
-                alert('Failed to update order status. Please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed',
+                    text: 'Failed to update order status. Please try again.'
+                });
             }
         });
     }
 
-    $('input[type="number"]').on('input', function() {
+
+    $('input[type="number"]').on('input', function () {
         updateChange();
     });
 
-    $('#delivered-btn').on('click', function() {
+    $('#delivered-btn').on('click', function () {
         handleDelivery();
     });
 

@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h3 class="mb-0">Manage Deliveries</h3>
+                    <h3 class="mb-0">Delivery History</h3>
                 </div>
             </div>
         </div>

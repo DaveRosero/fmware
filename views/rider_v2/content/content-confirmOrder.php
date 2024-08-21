@@ -48,9 +48,9 @@
 
                             <!-- Input for Cash Received Info -->
                             <div>
-                                <input class="form-control" type="number" placeholder="Cash Received" aria-label="default input example">
+                                <input class="form-control" type="number" placeholder="Cash Received" aria-label="default input example" disabled>
                                 <div class="d-flex flex-column text-end">
-                                    <h3 id="order-change">Change: N/A</h3>
+                                    <h3 id="order-change">Change: ₱0.00</h3>
                                 </div>
                             </div>
 
