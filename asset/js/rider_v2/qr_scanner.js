@@ -69,7 +69,13 @@ $(document).ready(function () {
                       console.log('Redirecting to:', qrData); // Debugging line
                       window.location.href = qrData;
                     } else {
-                      alert('QR code does not match the selected order.');
+                      // Use SweetAlert for a better alert
+                      Swal.fire({
+                        icon: 'warning',
+                        title: 'QR Code Mismatch',
+                        text: 'The QR code does not match the selected order.',
+                        confirmButtonText: 'OK'
+                      });
                     }
                   } else {
                     qrDataLabel.textContent = "Invalid QR code URL: " + qrData;
@@ -137,7 +143,13 @@ $(document).ready(function () {
               console.log('Redirecting to:', code.data); // Debugging line
               window.location.href = code.data;
             } else {
-              alert('QR code does not match the selected order.');
+              // Use SweetAlert for mismatch alert
+              Swal.fire({
+                icon: 'warning',
+                title: 'QR Code Mismatch',
+                text: 'The QR code does not match the selected order.',
+                confirmButtonText: 'OK'
+              });
             }
           } else {
             qrDataLabel.textContent = "Invalid QR code URL: " + code.data;
@@ -153,6 +165,7 @@ $(document).ready(function () {
   });
 
   fileInputButton.addEventListener("click", function () {
+    stopVideoStream(); 
     fileInput.click();
   });
 
