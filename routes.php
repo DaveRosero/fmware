@@ -213,6 +213,8 @@ any('/view-sales', 'controller/admin/sales/view-sales.php');
 any('/manage-returns', 'views/admin/return.php');
 
 // Manage Returns Controller
+any('/view-refund', 'controller/admin/returns/view-refund.php');
+any('/view-replacement', 'controller/admin/returns/view-replacement.php');
 
 //*****************************************************************//
 
