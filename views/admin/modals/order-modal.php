@@ -3,11 +3,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title text-success" id="orderLabel"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title text-success" id="orderLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="card shadow-lg">
+                <div class="card shadow-lg mb-2">
                     <div class="card-header text-center mb-0 pb-0 bg-primary">
                         <p class="text-light fw-bold fs-5">Paid Status</p>
                     </div>
@@ -31,9 +31,9 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="card shadow-lg">
-                    <div class="card-header text-center mb-0 pb-0 bg-primary">
+
+                <div class="card shadow-lg mb-2">
+                    <div class="card-header text-center mb-2 pb-0 bg-primary">
                         <p class="text-light fw-bold fs-5">Order Status</p>
                     </div>
                     <div class="card-body">
@@ -50,9 +50,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <button class="btn btn-lg btn-primary mb-2" id="view-proof">View Proof of Payment</button>
-                    <button class="btn btn-lg btn-danger mb-2" id="cancel-order">Cancel Order</button>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <button class="btn btn-lg btn-primary w-100 mb-2" id="view-proof">Proof of Payment</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-lg btn-danger w-100 mb-2" id="cancel-order">Cancel Order</button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -72,7 +76,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center fw-bold fs-6" id="paid-modal-warning">
-                
+
             </div>
             <div class="modal-footer">
                 <input type="hidden" name="paid" value="paid" id="paid">
@@ -91,7 +95,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center fw-bold fs-6" id="delivering-modal-warning">
-                
+
             </div>
             <div class="modal-footer">
                 <input type="hidden" name="status" value="delivering" id="delivering">
@@ -110,7 +114,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center fw-bold fs-6" id="delivered-modal-warning">
-                
+
             </div>
             <div class="modal-footer">
                 <input type="hidden" name="status" value="delivered" id="delivered">
@@ -129,7 +133,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center fw-bold fs-6" id="receipt-content">
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -147,7 +151,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center fw-bold fs-6" id="proof-content">
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="proof-modal-close">Close</button>
