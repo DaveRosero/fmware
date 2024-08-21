@@ -98,7 +98,7 @@ function fetchHistoryOrders() {
   });
 }
 
-// Function to fetch and display history order details
+// Function to fetch and display history order details without using DataTables
 function fetchHistoryOrderDetails(orderRef) {
   $.ajax({
     url: "/model-history-details",
@@ -113,26 +113,26 @@ function fetchHistoryOrderDetails(orderRef) {
 
       const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
 
-      $("#historyOrder-items-table").DataTable({
-        data: data.items.map(item => [
-          item.product_name || "N/A",
-          item.variant_name || "N/A",
-          item.unit_name || "N/A",
-          item.qty || 0,
-          formatPrice(item.unit_price),
-          formatPrice(item.total_price)
-        ]),
-        columns: [
-          { title: "Product" },
-          { title: "Variant" },
-          { title: "Unit" },
-          { title: "Quantity" },
-          { title: "Unit Price" },
-          { title: "Total Price" }
-        ],
-        destroy: true
+      // Clear existing table rows
+      const itemsTableBody = $("#historyOrder-items-table tbody");
+      itemsTableBody.empty();
+
+      // Generate rows for order items
+      data.items.forEach(item => {
+        const row = `
+          <tr>
+            <td>${item.product_name || "N/A"}</td>
+            <td>${item.variant_name || "N/A"}</td>
+            <td>${item.unit_name || "N/A"}</td>
+            <td>${item.qty || 0}</td>
+            <td>${formatPrice(item.unit_price)}</td>
+            <td>${formatPrice(item.total_price)}</td>
+          </tr>
+        `;
+        itemsTableBody.append(row);
       });
 
+      // Populate other order details
       $("#historyOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
       $("#historyOrder-date").text(formatDateTime(data.date) || "N/A");
       $("#historyOrder-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
@@ -163,6 +163,7 @@ function fetchHistoryOrderDetails(orderRef) {
     }
   });
 }
+
 
 // Fetch history orders on page load
 fetchHistoryOrders();

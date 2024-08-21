@@ -27,7 +27,7 @@
         <div class="ms-3 flex-shrink-1">
           <h3>Order Info</h3>
           <p><strong>Date:</strong> <span id="historyOrder-date"></span></p>
-          <p><strong>Total Gross:</strong> <span id="historyOrder-gross"></span></p>
+          <p><strong>Total Price:</strong> <span id="historyOrder-gross"></span></p>
           <p><strong>Delivery Fee:</strong> <span id="historyOrder-delivery-fee"></span></p>
           <p><strong>Customer Name:</strong> <span id="historyOrder-user-name"></span></p>
           <p><strong>Phone#:</strong> <span id="historyOrder-user-phone"></span></p>
