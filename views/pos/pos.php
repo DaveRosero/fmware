@@ -1,10 +1,9 @@
 <?php
 include_once 'session.php';
-require_once 'model/admin/admin.php';
 require_once 'model/user/addressClass.php';
 require_once 'model/user/user.php';
 
-$admin = new admin();
+
 $posaddress = new Address();
 $user = new User();
 
@@ -92,7 +91,7 @@ if ($_SESSION['group'] !== 'cashier') {
             </button>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end notif-dropdown " aria-labelledby="notificationDropdown">
                 <li><h6 class="dropdown-header text-dark">Notifications</h6></li>
-                <?php $admin->getPendingOrders(); ?>
+                <?php include_once 'notify-pickup.php' ?>
             </ul>
         </div>
         <div class="dropdown">
