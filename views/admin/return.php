@@ -1,9 +1,11 @@
 <?php
-  include_once 'session.php';
-  require_once 'model/admin/admin.php';
+include_once 'session.php';
+require_once 'model/admin/admin.php';
+require_once 'model/admin/returnClass.php';
 
-  $admin = new Admin();
-  $admin->isAdmin();
+$admin = new Admin();
+$admin->isAdmin();
+$returns = new Returns();
 ?>
 <!DOCTYPE html>
 <html lang="en"> <!--begin::Head-->
@@ -22,8 +24,9 @@
         <?php require_once 'views/admin/template/header.php'; ?>
         <?php require_once 'views/admin/template/sidebar.php'; ?>
         <?php require_once 'views/admin/content/return-content.php'; ?>
+        <?php require_once 'views/admin/modals/return-modal.php'; ?>
         <?php require_once 'views/admin/template/footer.php'; ?>
-    </div> <!--end::App Wrapper--> <!--begin::Script--> 
+    </div> <!--end::App Wrapper--> <!--begin::Script-->
     <?php include_once 'views/admin/include/script.php'; ?><!--begin::Required Plugin(AdminLTE)-->
     <script src="/asset/js/admin/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
