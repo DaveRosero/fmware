@@ -32,7 +32,7 @@ function fetchAllProducts()
 
         // Fetch and generate HTML for each product
         while ($row = $result->fetch_assoc()) {
-            $disabled = ($row['qty'] == 0) ? 'disabled' : '';
+            $disabled = ($row['qty'] <= 0) ? 'disabled' : '';
             $output .= '
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                     <div class="card border-secondary shadow-sm rounded">
@@ -41,7 +41,7 @@ function fetchAllProducts()
                              <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . htmlspecialchars($row['name']) . ' (' . htmlspecialchars($row['variant_name']) . ')">
                              ' . htmlspecialchars($row['name']) . ' <small class="text-muted">(' . htmlspecialchars($row['variant_name']) . ')</small></h5>
                              <p class="card-text">Unit: <strong>' . htmlspecialchars($row['unit_value']) . ' ' . strtoupper($row['unit_name']) . '</strong></p>
-                             <p class="card-text">Stock: <span class="badge ' . ($row['qty'] == 0 ? 'bg-danger' : 'bg-success') . '">' . $row['qty'] . '</span></p>
+                             <p class="card-text">Stock: <span class="badge ' . ($row['qty'] <= 0 ? 'bg-danger' : 'bg-success') . '">' . $row['qty'] . '</span></p>
                             <div class="d-grid">
                                  <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
                                     data-product-id="' . $row['id'] . '"
