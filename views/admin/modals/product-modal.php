@@ -326,80 +326,80 @@
 </form>
 
 <div class="modal fade" id="viewProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="view-label">View Product</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <img src="#" alt="Product Image" srcset="" id="view_image">
-                        </div>
-                        <div class="col-md-6">
-                            <dl class="row">
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">NAME:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_name"></dd>
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="view-label">View Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="#" alt="Product Image" srcset="" id="view_image">
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">NAME:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_name"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">CODE:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_code"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">CODE:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_code"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">SUPPLIER:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_supplier"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">SUPPLIER:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_supplier"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">DESCRIPTION:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_description"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">DESCRIPTION:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_description"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">EXPIRATION DATE:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_expiration_date"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">EXPIRATION DATE:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_expiration_date"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">CATEGORY:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_category"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">CATEGORY:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_category"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">BRAND:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_brand"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">BRAND:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_brand"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">UNIT:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_unit"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">UNIT:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_unit"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">VARIANT:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_variant"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">VARIANT:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_variant"></dd>
 
-                                <!-- <dt class="col-sm-4 fw-semibold text-primary text-end">BASE PRICE:</dt>
+                            <!-- <dt class="col-sm-4 fw-semibold text-primary text-end">BASE PRICE:</dt>
                                 <dd class="col-sm-8 fw-semibold" id="view_base_price"></dd> -->
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">SELLING PRICE:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_selling_price"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">SELLING PRICE:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_selling_price"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">STOCKS:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_stock"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">STOCKS:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_stock"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">CRITICAL LEVEL:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_critical_level"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">CRITICAL LEVEL:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_critical_level"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">BARCODE:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_barcode"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">BARCODE:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_barcode"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">FOR PICKUP:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_pickup"></dd>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">FOR PICKUP:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_pickup"></dd>
 
-                                <dt class="col-sm-4 fw-semibold text-primary text-end">FOR DELIVERY:</dt>
-                                <dd class="col-sm-8 fw-semibold" id="view_delivery"></dd>
-                            </dl>
-                        </div>
+                            <dt class="col-sm-4 fw-semibold text-primary text-end">FOR DELIVERY:</dt>
+                            <dd class="col-sm-8 fw-semibold" id="view_delivery"></dd>
+                        </dl>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary edit"
-                        id = "view-edit-button" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#editProduct"
-                    >Edit</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger del" id="del-btn">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary edit"
+                    id="view-edit-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editProduct">Edit</button>
             </div>
         </div>
+    </div>
 </div>
 
 <div class="modal fade" id="prevBP" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
