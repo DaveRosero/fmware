@@ -1,4 +1,6 @@
-$(document).ready(function(){
+$.fn.dataTable.moment('MMMM D, YYYY');
+
+$(document).ready(function () {
     var stock;
     var critical_level;
 
@@ -9,12 +11,12 @@ $(document).ready(function(){
 
         // Split the date string into components
         const parts = dateString.split('-');
-        
+
         // Ensure we have year, month, and day parts
         if (parts.length !== 3) {
             return null;
         }
-        
+
         const year = parts[0];
         const month = parts[1];
         const day = parts[2];
@@ -44,22 +46,22 @@ $(document).ready(function(){
         return formattedDate;
     }
 
-    function updateProductStatus (active, id) {
+    function updateProductStatus(active, id) {
         $.ajax({
             url: '/disable-product',
             method: 'POST',
             data: {
-                active : active,
-                id : id
+                active: active,
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
                 $('#discount').val(json.cart_total);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
@@ -73,15 +75,15 @@ $(document).ready(function(){
         return 'FM' + randomNumber.toString();
     }
 
-    function getProductInfo (id) {
+    function getProductInfo(id) {
         $.ajax({
-            url:'/get-product',
+            url: '/get-product',
             method: 'POST',
             data: {
-                id : id
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 stock = json.stock;
                 critical_level = json.critical_level;
 
@@ -111,7 +113,7 @@ $(document).ready(function(){
                     $('#edit_stock').prop('readonly', true);
                     $('#edit_critical_level').prop('readonly', true);
                 }
-                
+
                 if (json.pickup == 1) {
                     $('#edit_pickup_checkbox').prop('checked', true);
                     $('#edit_pickup').val(json.pickup);
@@ -128,22 +130,22 @@ $(document).ready(function(){
                     $('#edit_delivery').val(json.delivery);
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
     }
 
-    function viewProductInfo (id) {
+    function viewProductInfo(id) {
         $.ajax({
             url: '/view-product',
             method: 'POST',
             data: {
-                id : id
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 var image = '/asset/images/products/' + json.image;
                 var expiration_date = convertDateFormat(json.expiration_date);
 
@@ -165,29 +167,58 @@ $(document).ready(function(){
                 $('#view_delivery').html(json.delivery);
                 $('#view-edit-button').data('product-id', json.id);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     }
 
-    function getBasePrices (product_id) {
+    function getBasePrices(product_id) {
         $.ajax({
             url: '/get-base-prices',
             method: 'POST',
             data: {
-                product_id : product_id
+                product_id: product_id
             },
             dataType: 'html',
-            success: function(html) {
+            success: function (html) {
                 $('#bp_table_content').html(html);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
-            
+
+        })
+    }
+
+    function delProduct(product_id) {
+        $.ajax({
+            url: '/delete-product',
+            method: 'POST',
+            data: {
+                product_id: product_id
+            },
+            dataType: 'json',
+            success: function (json) {
+                if (json.redirect) {
+                    Swal.fire({
+                        title: 'Product Deleted Successfully!',
+                        icon: 'success',
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = json.redirect;
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
+            }
         })
     }
 
@@ -203,7 +234,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select or type a category <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -214,7 +245,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select or type a brand <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -225,7 +256,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select or type a unit <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -236,7 +267,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select a variant of the product <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -247,7 +278,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select a supplier <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -258,7 +289,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select or type a category <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -269,7 +300,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select or type a brand <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -280,7 +311,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select or type a unit <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -291,7 +322,7 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select a variant of the product <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
@@ -302,22 +333,22 @@ $(document).ready(function(){
         width: '100%',
         placeholder: 'Select a supplier <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
-        escapeMarkup: function(markup) {
+        escapeMarkup: function (markup) {
             return markup;
         }
     });
 
-    $('.edit').click(function(){
+    $('.edit').click(function () {
         var id = $(this).data('product-id');
         getProductInfo(id);
     });
 
-    $('.view').click(function(){
+    $('.view').click(function () {
         var id = $(this).data('product-id');
         viewProductInfo(id);
     });
 
-    $('#new-product').on('submit', function(event){
+    $('#new-product').on('submit', function (event) {
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
@@ -327,7 +358,7 @@ $(document).ready(function(){
             processData: false,  // Prevent jQuery from processing the data
             contentType: false,
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
@@ -336,17 +367,17 @@ $(document).ready(function(){
                     $.notify('Product already exist', 'error');
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
 
-    $('.status').change(function(){
+    $('.status').change(function () {
         var id = $(this).data('product-id');
         var checkbox = $(this);
-        
+
         if ($(this).is(':checked')) {
             Swal.fire({
                 title: 'Enabling Product',
@@ -384,7 +415,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#generate_barcode').change(function(){
+    $('#generate_barcode').change(function () {
         if ($(this).is(':checked')) {
             var barcode = generateBarcode();
             $('#barcode').val(barcode);
@@ -395,7 +426,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#non-stockable').change(function(){
+    $('#non-stockable').change(function () {
         if ($(this).is(':checked')) {
             $('#stockable').val(0);
             $('#initial_stock').val(0);
@@ -411,7 +442,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#pickup_checkbox').change(function(){
+    $('#pickup_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $('#pickup').val(1);
         } else {
@@ -419,7 +450,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#delivery_checkbox').change(function(){
+    $('#delivery_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $('#delivery').val(1);
         } else {
@@ -427,7 +458,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#edit-product').on('submit', function(event){
+    $('#edit-product').on('submit', function (event) {
         event.preventDefault();
         var formData = new FormData(this);
 
@@ -438,19 +469,19 @@ $(document).ready(function(){
             processData: false,  // Prevent jQuery from processing the data
             contentType: false,
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
-                    window.location.href =  json.redirect;
+                    window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
 
-    $('#edit_non_stockable_checkbox').change(function(){
+    $('#edit_non_stockable_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $('#edit_stock').val(0);
             $('#edit_critical_level').val(0);
@@ -466,7 +497,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#edit_pickup_checkbox').change(function(){
+    $('#edit_pickup_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $('#edit_pickup').val(1);
         } else {
@@ -474,7 +505,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#edit_delivery_checkbox').change(function(){
+    $('#edit_delivery_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $('#edit_delivery').val(1);
         } else {
@@ -482,10 +513,31 @@ $(document).ready(function(){
         }
     });
 
-    $('#bp_table').DataTable();
+    $('#bp_table').DataTable({
+        order: [
+            [2, 'desc']
+        ]
+    });
 
-    $('.prev_bp').click(function(){
+    $('.prev_bp').click(function () {
         var product_id = $(this).data('product-id');
         getBasePrices(product_id);
     });
+
+    $('.del').click(function () {
+        Swal.fire({
+            title: 'Deleting Product',
+            text: "Do you want to delete this product?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var product_id = $('#view-edit-button').data('product-id');
+                delProduct(product_id);
+            }
+        });
+    })
 });
