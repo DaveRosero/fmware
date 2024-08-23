@@ -54,23 +54,66 @@ $(document).ready(function () {
 
   function updateQty(id, qty) {
     $.ajax({
-      url: "/pos-change",
-      method: "POST",
-      data: {
-        id: id,
-        qty: qty,
-      },
-      dataType: "json",
-      success: function (response) {
-        updateCartUI(response);
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX call failed");
-        console.error("Status:", status);
-        console.error("Error:", error);
-      },
+        url: "/pos-checkstock", // Create this new endpoint to check stock
+        method: "POST",
+        data: { id: id },
+        dataType: "json",
+        success: function (response) {
+            var availableStock = response.stock;
+
+            if (qty > availableStock) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Quantity Exceeds Available Stock',
+                text: 'Please enter a valid quantity.',
+            }).then(() => {
+              qty = 1; // Revert to 1
+              $(".qty-input").val(1); // Update the input field with 1
+              $.ajax({
+                  url: "/pos-change",
+                  method: "POST",
+                  data: {
+                      id: id,
+                      qty: qty,
+                  },
+                  dataType: "json",
+                  success: function (response) {
+                      updateCartUI(response);
+                  },
+                  error: function (xhr, status, error) {
+                      console.error("AJAX call failed");
+                      console.error("Status:", status);
+                      console.error("Error:", error);
+                  },
+              });
+          });
+          return; // Exit the function to prevent sending invalid quantity
+            }
+
+            $.ajax({
+                url: "/pos-change",
+                method: "POST",
+                data: {
+                    id: id,
+                    qty: qty,
+                },
+                dataType: "json",
+                success: function (response) {
+                    updateCartUI(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error:", textStatus, errorThrown);
+                    console.log("Response:", jqXHR.responseText);
+                },
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("Error:", textStatus, errorThrown);
+            console.log("Response:", jqXHR.responseText);
+        },
     });
   }
+
 
   getPOS();
 
