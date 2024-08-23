@@ -61,6 +61,41 @@ $(document).ready(function () {
   }
 
   // Function to fetch and display orders
+  // function fetchOrders() {
+  //   $.ajax({
+  //     url: "/model-order",
+  //     type: "GET",
+  //     dataType: "json",
+  //     success: function (data) {
+  //       const filteredOrders = data.filter(order =>
+  //         order.status.toLowerCase() === "pending" &&
+  //         (!order.rider_id || order.rider_id === null)
+  //       );
+
+  //       $("#orders-table").DataTable({
+  //         data: filteredOrders.map(order => [
+  //           order.order_ref || "N/A",
+  //           formatDateTime(order.date) || "N/A",
+  //           `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
+  //           `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
+  //           `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
+  //         ]),
+  //         columns: [
+  //           { title: "Order Ref" },
+  //           { title: "Date" },
+  //           { title: "Paid" },
+  //           { title: "Status" },
+  //           { title: "Actions" }
+  //         ],
+  //         order: [[1, "desc"]],
+  //         destroy: true
+  //       });
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error fetching orders:", error);
+  //     }
+  //   });
+  // }
   function fetchOrders() {
     $.ajax({
       url: "/model-order",
@@ -71,24 +106,35 @@ $(document).ready(function () {
           order.status.toLowerCase() === "pending" &&
           (!order.rider_id || order.rider_id === null)
         );
-
-        $("#orders-table").DataTable({
-          data: filteredOrders.map(order => [
-            order.order_ref || "N/A",
-            formatDateTime(order.date) || "N/A",
-            `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
-            `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
-            `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
-          ]),
-          columns: [
-            { title: "Order Ref" },
-            { title: "Date" },
-            { title: "Paid" },
-            { title: "Status" },
-            { title: "Actions" }
-          ],
-          order: [[1, "desc"]],
-          destroy: true
+  
+        // Clear the container where cards will be appended
+        $("#orders-container").empty();
+  
+        // Loop through the filtered orders and create Bootstrap cards
+        filteredOrders.forEach(order => {
+          const orderRef = order.order_ref || "N/A";
+          const orderDate = formatDateTime(order.date) || "N/A";
+          const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
+          const deliveryStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
+  
+          const orderCard = `
+            <div class="card mb-3">
+              <div class="card-body">
+                <div><strong>Order Ref:</strong> ${orderRef}</div>
+                <div><strong>Date:</strong> ${orderDate}</div>
+                <div class="d-flex mb-2">
+                   ${paidStatus} 
+                  ${deliveryStatus}
+                </div>
+                <div>
+                  <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View</button>
+                </div>
+              </div>
+            </div>
+          `;
+  
+          // Append the card to the container
+          $("#orders-container").append(orderCard);
         });
       },
       error: function (xhr, status, error) {
@@ -96,6 +142,7 @@ $(document).ready(function () {
       }
     });
   }
+  
 
  // Function to fetch and display order details without using DataTables
 function fetchOrderDetails(orderRef) {
@@ -168,7 +215,7 @@ function fetchOrderDetails(orderRef) {
   fetchOrders();
 
   // Handle View button click
-  $("#orders-table").on("click", ".view-order-btn", function () {
+  $("#orders-container").on("click", ".view-order-btn", function () {
     const orderRef = $(this).data("order-ref");
     $("#accept-order-btn").data("order-ref", orderRef);
     fetchOrderDetails(orderRef);
