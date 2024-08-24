@@ -8,33 +8,24 @@
             </div>
         </div>
     </div>
-
     <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <!-- <div class="card">
-                        <div class="card-body p-2">
-                            <div class="table-responsive flex-fill">
-                                <table id="orders-table" class="table table-borderless text-center align-middle w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>Order Ref</th>
-                                            <th>Date</th>
-                                            <th>Paid</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="d-flex">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                               Sort By
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Order</a></li>
+                                <li><a class="dropdown-item" href="#">Date</a></li>
+                                <li><a class="dropdown-item" href="#">Paid</a></li>
+                            </ul>
                         </div>
-                    </div> -->
-                    <div id="orders-container" class="mt-3" style="overflow-y:auto;">
-                        <!-- Orders will be dynamically appended here -->
+                    </div>
+                    <div id="orders-container" class="mt-3">
                     </div>
                 </div>
             </div>
