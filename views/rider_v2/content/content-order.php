@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <!-- <div class="card">
                         <div class="card-body p-2">
                             <div class="table-responsive flex-fill">
                                 <table id="orders-table" class="table table-borderless text-center align-middle w-100">
@@ -27,11 +27,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Orders will be dynamically added here -->
+                                    
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                    </div> -->
+                    <div id="orders-container" class="mt-3" style="overflow-y:auto;">
+                        <!-- Orders will be dynamically appended here -->
                     </div>
                 </div>
             </div>
