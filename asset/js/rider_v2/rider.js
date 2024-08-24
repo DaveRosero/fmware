@@ -106,17 +106,17 @@ $(document).ready(function () {
           order.status.toLowerCase() === "pending" &&
           (!order.rider_id || order.rider_id === null)
         );
-  
+
         // Clear the container where cards will be appended
         $("#orders-container").empty();
-  
+
         // Loop through the filtered orders and create Bootstrap cards
         filteredOrders.forEach(order => {
           const orderRef = order.order_ref || "N/A";
           const orderDate = formatDateTime(order.date) || "N/A";
           const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
           const deliveryStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
-  
+
           const orderCard = `
             <div class="card mb-3">
               <div class="card-body">
@@ -132,7 +132,7 @@ $(document).ready(function () {
               </div>
             </div>
           `;
-  
+
           // Append the card to the container
           $("#orders-container").append(orderCard);
         });
@@ -142,30 +142,30 @@ $(document).ready(function () {
       }
     });
   }
-  
 
- // Function to fetch and display order details without using DataTables
-function fetchOrderDetails(orderRef) {
-  $.ajax({
-    url: "/model-order-details",
-    type: "GET",
-    data: { order_ref: orderRef },
-    dataType: "json",
-    success: function (data) {
-      if (!data) {
-        console.error("No data found for order details.");
-        return;
-      }
 
-      const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
+  // Function to fetch and display order details without using DataTables
+  function fetchOrderDetails(orderRef) {
+    $.ajax({
+      url: "/model-order-details",
+      type: "GET",
+      data: { order_ref: orderRef },
+      dataType: "json",
+      success: function (data) {
+        if (!data) {
+          console.error("No data found for order details.");
+          return;
+        }
 
-      // Clear existing table rows
-      const itemsTableBody = $("#order-items-table tbody");
-      itemsTableBody.empty();
+        const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
 
-      // Generate rows for order items
-      data.items.forEach(item => {
-        const row = `
+        // Clear existing table rows
+        const itemsTableBody = $("#order-items-table tbody");
+        itemsTableBody.empty();
+
+        // Generate rows for order items
+        data.items.forEach(item => {
+          const row = `
           <tr>
             <td>${item.product_name || "N/A"}</td>
             <td>${item.variant_name || "N/A"}</td>
@@ -175,40 +175,40 @@ function fetchOrderDetails(orderRef) {
             <td>${formatPrice(item.total_price)}</td>
           </tr>
         `;
-        itemsTableBody.append(row);
-      });
+          itemsTableBody.append(row);
+        });
 
-      // Populate other order details
-      $("#order-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
-      $("#order-date").text(formatDateTime(data.date) || "N/A");
-      $("#order-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
-      $("#order-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
-      $("#order-gross").text(formatPrice(data.gross));
-      $("#order-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
-      $("#order-vat").text(formatPrice(data.vat) || "N/A");
-      $("#order-discount").text(formatPrice(data.discount) || "N/A");
+        // Populate other order details
+        $("#order-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
+        $("#order-date").text(formatDateTime(data.date) || "N/A");
+        $("#order-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
+        $("#order-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
+        $("#order-gross").text(formatPrice(data.gross));
+        $("#order-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
+        $("#order-vat").text(formatPrice(data.vat) || "N/A");
+        $("#order-discount").text(formatPrice(data.discount) || "N/A");
 
-      // Populate additional order info
-      $("#order-user-name").text(data.user_name || "N/A");
-      $("#order-user-phone").text(data.user_phone || "N/A");
+        // Populate additional order info
+        $("#order-user-name").text(data.user_name || "N/A");
+        $("#order-user-phone").text(data.user_phone || "N/A");
 
-      // Add address info
-      $("#order-address").html(
-        `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-        `${data.address.street ? data.address.street + ", " : ""}` +
-        `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-        `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
-      );
-      $("#order-address-desc").html(data.address.description || "N/A");
+        // Add address info
+        $("#order-address").html(
+          `${data.address.house_no ? data.address.house_no + ", " : ""}` +
+          `${data.address.street ? data.address.street + ", " : ""}` +
+          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
+          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
+        );
+        $("#order-address-desc").html(data.address.description || "N/A");
 
-      // Display the order items modal
-      $("#order-items-modal").modal("show");
-    },
-    error: function (xhr, status, error) {
-      console.error("Error fetching order details:", error);
-    }
-  });
-}
+        // Display the order items modal
+        $("#order-items-modal").modal("show");
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching order details:", error);
+      }
+    });
+  }
 
 
   // Fetch orders on page load
@@ -280,6 +280,40 @@ function fetchOrderDetails(orderRef) {
 
 
   // Function to fetch and display accepted orders
+  // function fetchAcceptedOrders() {
+  //   $.ajax({
+  //     url: "/model-acceptedOrder",
+  //     type: "GET",
+  //     dataType: "json",
+  //     success: function (data) {
+  //       const filteredOrders = data.filter(order =>
+  //         order.status.toLowerCase() === "delivering" && order.rider_id == riderId
+  //       );
+
+  //       $("#acceptedOrder-table").DataTable({
+  //         data: filteredOrders.map(order => [
+  //           order.order_ref || "N/A",
+  //           formatDateTime(order.date) || "N/A",
+  //           `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
+  //           `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
+  //           `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
+  //         ]),
+  //         columns: [
+  //           { title: "Order Ref" },
+  //           { title: "Date" },
+  //           { title: "Paid" },
+  //           { title: "Status" },
+  //           { title: "Actions" }
+  //         ],
+  //         order: [[1, "desc"]],
+  //         destroy: true
+  //       });
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error("Error fetching accepted orders:", error);
+  //     }
+  //   });
+  // }
   function fetchAcceptedOrders() {
     $.ajax({
       url: "/model-acceptedOrder",
@@ -290,23 +324,34 @@ function fetchOrderDetails(orderRef) {
           order.status.toLowerCase() === "delivering" && order.rider_id == riderId
         );
 
-        $("#acceptedOrder-table").DataTable({
-          data: filteredOrders.map(order => [
-            order.order_ref || "N/A",
-            formatDateTime(order.date) || "N/A",
-            `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
-            `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
-            `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
-          ]),
-          columns: [
-            { title: "Order Ref" },
-            { title: "Date" },
-            { title: "Paid" },
-            { title: "Status" },
-            { title: "Actions" }
-          ],
-          order: [[1, "desc"]],
-          destroy: true
+        // Clear the container where accepted order cards will be appended
+        $("#accepted-orders-container").empty();
+
+        // Loop through the filtered orders and create Bootstrap cards
+        filteredOrders.forEach(order => {
+          const orderRef = order.order_ref || "N/A";
+          const orderDate = formatDateTime(order.date) || "N/A";
+          const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
+          const deliveryStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
+
+          const orderCard = `
+            <div class="card mb-3">
+              <div class="card-body">
+                <div><strong>Order Ref:</strong> ${orderRef}</div>
+                <div><strong>Date:</strong> ${orderDate}</div>
+                <div class="d-flex mb-2">
+                  ${paidStatus} 
+                  ${deliveryStatus}
+                </div>
+                <div>
+                  <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View</button>
+                </div>
+              </div>
+            </div>
+          `;
+
+          // Append the card to the container
+          $("#accepted-orders-container").append(orderCard);
         });
       },
       error: function (xhr, status, error) {
@@ -315,28 +360,29 @@ function fetchOrderDetails(orderRef) {
     });
   }
 
- // Function to fetch and display accepted order details without using DataTables
-function fetchAcceptedOrderDetails(orderRef) {
-  $.ajax({
-    url: "/model-acceptedOrder-details",
-    type: "GET",
-    data: { order_ref: orderRef },
-    dataType: "json",
-    success: function (data) {
-      if (!data) {
-        console.error("No data found for order details.");
-        return;
-      }
 
-      const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
+  // Function to fetch and display accepted order details without using DataTables
+  function fetchAcceptedOrderDetails(orderRef) {
+    $.ajax({
+      url: "/model-acceptedOrder-details",
+      type: "GET",
+      data: { order_ref: orderRef },
+      dataType: "json",
+      success: function (data) {
+        if (!data) {
+          console.error("No data found for order details.");
+          return;
+        }
 
-      // Clear existing table rows
-      const itemsTableBody = $("#acceptedOrder-items-table tbody");
-      itemsTableBody.empty();
+        const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
 
-      // Generate rows for order items
-      data.items.forEach(item => {
-        const row = `
+        // Clear existing table rows
+        const itemsTableBody = $("#acceptedOrder-items-table tbody");
+        itemsTableBody.empty();
+
+        // Generate rows for order items
+        data.items.forEach(item => {
+          const row = `
           <tr>
             <td>${item.product_name || "N/A"}</td>
             <td>${item.variant_name || "N/A"}</td>
@@ -346,47 +392,47 @@ function fetchAcceptedOrderDetails(orderRef) {
             <td>${formatPrice(item.total_price)}</td>
           </tr>
         `;
-        itemsTableBody.append(row);
-      });
+          itemsTableBody.append(row);
+        });
 
-      // Populate additional order information
-      $("#acceptedOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
-      $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
-      $("#acceptedOrder-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
-      $("#acceptedOrder-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
-      $("#acceptedOrder-gross").text(formatPrice(data.gross));
-      $("#acceptedOrder-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
-      $("#acceptedOrder-vat").text(formatPrice(data.vat) || "N/A");
-      $("#acceptedOrder-discount").text(formatPrice(data.discount) || "N/A");
+        // Populate additional order information
+        $("#acceptedOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
+        $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
+        $("#acceptedOrder-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
+        $("#acceptedOrder-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
+        $("#acceptedOrder-gross").text(formatPrice(data.gross));
+        $("#acceptedOrder-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
+        $("#acceptedOrder-vat").text(formatPrice(data.vat) || "N/A");
+        $("#acceptedOrder-discount").text(formatPrice(data.discount) || "N/A");
 
-      // Populate user and address info
-      $("#acceptedOrder-user-name").text(data.user_name || "N/A");
-      $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
+        // Populate user and address info
+        $("#acceptedOrder-user-name").text(data.user_name || "N/A");
+        $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
 
-      // Add address info
-      $("#acceptedOrder-address").html(
-        `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-        `${data.address.street ? data.address.street + ", " : ""}` +
-        `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-        `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
-      );
-      $("#acceptedOrder-address-desc").html(data.address.description || "N/A");
+        // Add address info
+        $("#acceptedOrder-address").html(
+          `${data.address.house_no ? data.address.house_no + ", " : ""}` +
+          `${data.address.street ? data.address.street + ", " : ""}` +
+          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
+          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
+        );
+        $("#acceptedOrder-address-desc").html(data.address.description || "N/A");
 
-      // Display the order items modal
-      $("#acceptedOrder-items-modal").modal("show");
-    },
-    error: function (xhr, status, error) {
-      console.error("Error fetching accepted order details:", error);
-    }
-  });
-}
+        // Display the order items modal
+        $("#acceptedOrder-items-modal").modal("show");
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching accepted order details:", error);
+      }
+    });
+  }
 
 
   // Fetch accepted orders on page load
   fetchAcceptedOrders();
 
   // Handle View button click in accepted orders table
-  $("#acceptedOrder-table").on("click", ".view-order-btn", function () {
+  $("#accepted-orders-container").on("click", ".view-order-btn", function () {
     const orderRef = $(this).data("order-ref");
     fetchAcceptedOrderDetails(orderRef);
   });
