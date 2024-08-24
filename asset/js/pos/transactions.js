@@ -15,12 +15,12 @@ $(document).ready(function () {
         // Initialize DataTable
         $('#transaction-table').DataTable({
           data: response.filter(transaction => transaction.status !== 'void').map(transaction => [
-            transaction.pos_ref,
+            transaction.pos_ref || transaction.order_ref,
             formatDateTime(transaction.date),
-            '₱' + parseFloat(transaction.total).toFixed(2),
+            '₱' + Number(transaction.total || transaction.gross).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
             transaction.name || '',
             '<span class="' + getStatusBadgeClass(transaction.status) + '">' + transaction.status + '</span>',
-            '<button class="btn btn-primary view-transaction-btn" data-bs-posref="' + transaction.pos_ref + '">View</button>'
+            '<button class="btn btn-primary view-transaction-btn" data-bs-posref="' + (transaction.pos_ref || transaction.order_ref) + '">View</button>'
           ]),
           columns: [
             { title: 'POS Ref' },
