@@ -97,54 +97,93 @@ $(document).ready(function () {
   //     }
   //   });
   // }
-  function fetchHistoryOrders() {
-    $.ajax({
+  let historyOrders = []; 
+  // Function to fetch history orders
+function fetchHistoryOrders() {
+  $.ajax({
       url: "/model-history",
       type: "GET",
       dataType: "json",
       success: function (data) {
-        const filteredOrders = data.filter(order =>
-          (order.status.toLowerCase() === "delivered" || order.status.toLowerCase() === "cancelled") &&
-          order.rider_id == riderId
-        );
+          historyOrders = data.filter(order =>
+              (order.status.toLowerCase() === "delivered" || order.status.toLowerCase() === "cancelled") &&
+              order.rider_id == riderId
+          );
 
-        // Clear the container where history order cards will be appended
-        $("#history-orders-container").empty();
-
-        // Loop through the filtered orders and create Bootstrap cards
-        filteredOrders.forEach(order => {
-          const orderRef = order.order_ref || "N/A";
-          const orderDate = formatDateTime(order.date) || "N/A";
-          const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
-          const orderStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
-
-          const cardBorderClass = order.status.toLowerCase() === "delivered" ? "border-success" : "border-danger";
-
-          const orderCard = `
-          <div class="card mb-3 ${cardBorderClass}">
-            <div class="card-body">
-              <div><strong>Order Ref:</strong> ${orderRef}</div>
-              <div><strong>Date:</strong> ${orderDate}</div>
-              <div class="d-flex mb-3">
-                ${paidStatus} 
-               ${orderStatus}
-              </div>
-              <div>
-                <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View</button>
-              </div>
-            </div>
-          </div>
-        `;
-
-          // Append the card to the container
-          $("#history-orders-container").append(orderCard);
-        });
+          displayHistoryOrders(historyOrders); // Initial display
       },
       error: function (xhr, status, error) {
-        console.error("Error fetching history orders:", error);
+          console.error("Error fetching history orders:", error);
       }
-    });
-  }
+  });
+}
+
+// Function to display history orders
+function displayHistoryOrders(orderList) {
+  const container = $("#history-orders-container");
+  container.empty();  // Clear the container
+
+  orderList.forEach(order => {
+      const orderRef = order.order_ref || "N/A";
+      const orderDate = formatDateTime(order.date) || "N/A";
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
+      const orderStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
+
+      const cardBorderClass = order.status.toLowerCase() === "delivered" ? "border-success" : "border-danger";
+
+      const orderCard = `
+          <div class="card mb-3 ${cardBorderClass}">
+              <div class="card-body">
+                  <div><strong>Order Ref:</strong> ${orderRef}</div>
+                  <div><strong>Date:</strong> ${orderDate}</div>
+                  <div class="d-flex mb-3">
+                      ${paidStatus} 
+                      ${orderStatus}
+                  </div>
+                  <div>
+                      <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View</button>
+                  </div>
+              </div>
+          </div>
+      `;
+
+      // Append the card to the container
+      container.append(orderCard);
+  });
+}
+
+// Search functionality: Filter orders by order_ref
+$("#search-input").on("input", function () {
+  const searchTerm = $(this).val().toLowerCase();
+  const filteredOrders = historyOrders.filter(order => order.order_ref.toLowerCase().includes(searchTerm));
+  displayHistoryOrders(filteredOrders);
+});
+
+// Sort orders based on selected criteria
+function sortHistoryOrders(orders, criteria) {
+  return orders.sort((a, b) => {
+      if (criteria === 'Order Ref') {
+          return a.order_ref.localeCompare(b.order_ref);
+      } else if (criteria === 'Date') {
+          return new Date(b.date) - new Date(a.date);  // Sort by newest date first
+      } else if (criteria === 'Paid') {
+          return a.paid.localeCompare(b.paid);
+      } else if (criteria === 'Status') {
+          return a.status.localeCompare(b.status);
+      }
+  });
+}
+
+// Sorting functionality: Trigger when a sort option is selected
+$(".dropdown-menu a").on("click", function (e) {
+  e.preventDefault();
+  const sortBy = $(this).text().trim();  // Get selected sort criteria
+  const sortedOrders = sortHistoryOrders(historyOrders, sortBy);  // Sort orders
+  displayHistoryOrders(sortedOrders);  // Display sorted orders
+});
+
+// Fetch history orders on page load or when needed
+fetchHistoryOrders();
 
   // Function to fetch and display history order details without using DataTables
   function fetchHistoryOrderDetails(orderRef) {
