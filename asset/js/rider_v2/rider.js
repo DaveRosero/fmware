@@ -103,8 +103,9 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         const filteredOrders = data.filter(order =>
-          order.status.toLowerCase() === "pending" &&
-          (!order.rider_id || order.rider_id === null)
+          order.status.toLowerCase() === "pending" &&  // Status is pending
+          (!order.rider_id || order.rider_id === null) &&  // No assigned rider
+          (order.paid.toLowerCase() === "paid" || order.paid.toLowerCase() === "unpaid")  // Paid or Unpaid orders
         );
 
         // Clear the container where cards will be appended
