@@ -21,7 +21,9 @@ function searchProducts($searchTerm)
               INNER JOIN product ON price_list.product_id = product.id
               INNER JOIN variant ON product.variant_id = variant.id
               INNER JOIN unit ON product.unit_id = unit.id
-              WHERE product.name LIKE CONCAT("%", ?, "%") OR product.barcode LIKE CONCAT("%", ?, "%")
+              WHERE product.name LIKE CONCAT("%", ?, "%") 
+                    OR product.barcode LIKE CONCAT("%", ?, "%")
+                    OR variant.name LIKE CONCAT("%", ?, "%")
               ORDER BY product.name ASC';
 
     // Prepare statement
@@ -33,7 +35,7 @@ function searchProducts($searchTerm)
 
     // Bind parameters
     $search = "%{$searchTerm}%";
-    $stmt->bind_param('ss', $search, $search);
+    $stmt->bind_param('sss', $search, $search, $search);
 
     // Execute statement
     $stmt->execute();
@@ -43,7 +45,7 @@ function searchProducts($searchTerm)
     // Fetch results into HTML format
     $output = '';
     while ($stmt->fetch()) {
-        $disabled = ($qty == 0) ? 'disabled' : '';
+        $disabled = ($qty <= 0) ? 'disabled' : '';
         $output .= '
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
               <div class="card border-secondary shadow-sm rounded">
@@ -52,7 +54,7 @@ function searchProducts($searchTerm)
                   <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . $name . ' (' . $variant_name . ')">
                    ' . $name . ' <small class="text-muted">(' . $variant_name . ')</small></h5>
                   <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit_name) . '</strong></p>
-                  <p class="card-text">Stock: <span class="badge ' . ($qty == 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
+                  <p class="card-text">Stock: <span class="badge ' . ($qty <= 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
                   <input type="hidden" value="' . $barcode . '" class="product-barcode">
                   <div class="d-grid">
                     <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 

@@ -116,6 +116,7 @@ any('/disable-product', 'controller/admin/product/disable-product.php');
 any('/get-product', 'controller/admin/product/get-product.php');
 any('/view-product', 'controller/admin/product/view-product.php');
 any('/get-base-prices', 'controller/admin/product/base-prices.php');
+any('/delete-product', 'controller/admin/product/delete-product.php');
 
 // Stocks Controller
 // any('/add-stock', 'controller/admin/stocks/add-stock.php');
@@ -248,6 +249,7 @@ any('/pos-puprod', 'views/pos/model/pickup_product.php');
 any('/pos-puclaim', 'views/pos/model/pickupclaim.php');
 any('/pos-puprepare', 'views/pos/model/pickup_prepared.php');
 any('/pos-notify', 'views/pos/notification.php');
+any('/pos-checkstock', 'views/pos/check-stock.php');
 
 // RIDER 
 //*****************************************************************//
