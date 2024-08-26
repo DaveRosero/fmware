@@ -23,8 +23,8 @@ $(document).ready(function () {
             '<button class="btn btn-primary view-transaction-btn" data-bs-posref="' + (transaction.pos_ref || transaction.order_ref) + '">View</button>'
           ]),
           columns: [
-            { title: 'POS Ref' },
-            { title: 'Date' },
+            { title: 'Transaction Ref' },
+            { title: 'Transaction Date' },
             { title: 'Total' },
             { title: 'Name' },
             { title: 'Status' },
@@ -50,7 +50,7 @@ $(document).ready(function () {
                 style: "currency",
                 currency: "PHP",
               });
-              $("#transactionViewLabel").text("Transaction #" + data.pos_ref);
+              $("#transactionViewLabel").text(data.transaction_type_source === 'order' ? "Order #" + data.pos_ref : "Transaction #" + data.pos_ref);
               $("#transaction-date").text(data.date);
               $("#transaction-subtotal").text(formatter.format(Number(data.subtotal)));
               $("#rtransaction-total").text(formatter.format(Number(data.total)));
@@ -99,6 +99,17 @@ $(document).ready(function () {
                 $("#viewmunicipality-input, #municipality-label").val(municipality).show();
                 $("#viewcontact-input, #contact-label").val(data.contact_no).show();
                 $("#viewdeliverer-input, #deliverer-label").val(data.deliverer_name).show();
+              } else if (data.transaction_type === "Online Order") {
+                $("#customer-details").show();
+                $("#rfName-input").val(data.firstname);
+                $("#rlName-input").val(data.lastname);
+                //merge house_no and street on online order
+                let fullAddress = `${data.house_no} ${data.street}`; 
+                $("#viewstreet-input, #street-label").val(fullAddress).show();
+                $("#viewbrgy-input, #brgy-label").val(data.brgy).show();
+                $("#viewmunicipality-input, #municipality-label").val(data.municipality).show();
+                $("#viewcontact-input, #contact-label").val(data.phone).show();
+                $("#viewdeliverer-input, #deliverer-label").val(data.deliverer_name).hide();
               }
               //Geting Transaction Items
               $("#refund-TotalValue").text("₱0.00");
@@ -198,22 +209,24 @@ $(document).ready(function () {
                   toggleRefundReplaceReason();
 
                 },
-                error: function (xhr, status, error) {
-                  console.error("Error fetching transaction items: ", status, error);
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error:", textStatus, errorThrown);
+                    console.log("Response:", jqXHR.responseText);
                 }
               });
 
               $("#transaction-viewModal").modal("show");
             },
-            error: function (xhr, status, error) {
-              console.error("Error fetching transaction: ", status, error);
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
             }
           });
         });
       },
-      error: function (xhr, status, error) {
-        console.error('Error fetching transactions:', error);
-        // Handle error scenario
+      error: function(jqXHR, textStatus, errorThrown) {
+          console.log("Error:", textStatus, errorThrown);
+          console.log("Response:", jqXHR.responseText);
       }
     });
   }
@@ -245,6 +258,9 @@ $(document).ready(function () {
         badgeClass = 'badge bg-warning text-white';
         break;
       case 'partially replaced':
+        badgeClass = 'badge bg-warning text-white';
+        break;
+      case 'pending':
         badgeClass = 'badge bg-warning text-white';
         break;
     }
