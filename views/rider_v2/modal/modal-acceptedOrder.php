@@ -1,38 +1,50 @@
-<!-- Order Items Modal -->
+<!-- Accepted Order Items Modal (Receipt Style) -->
 <div class="modal fade" id="acceptedOrder-items-modal" tabindex="-1" aria-labelledby="acceptedOrder-items-modal-label" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="acceptedOrder-items-modal-label"></h5>
+        <h5 class="modal-title" id="acceptedOrder-items-modal-label">Order</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body d-flex">
-        <div class="table-responsive flex-fill">
-          <table id="acceptedOrder-items-table" class="table text-center align-middle table-borderless w-100">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Variant</th>
-                <th>Unit</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Data will be populated by DataTable -->
-            </tbody>
-          </table>
-        </div>
-        <div class="ms-3 flex-shrink-1">
-          <h3>Order Info</h3>
+      <div class="modal-body">
+        <!-- Order Info Section -->
+        <div class="mb-3">
+          <h6><strong>Order Information</strong></h6>
           <p><strong>Date:</strong> <span id="acceptedOrder-date"></span></p>
-          <p><strong>Total Price:</strong> <span id="acceptedOrder-gross"></span></p>
-          <p><strong>Delivery Fee:</strong> <span id="acceptedOrder-delivery-fee"></span></p>
           <p><strong>Customer Name:</strong> <span id="acceptedOrder-user-name"></span></p>
           <p><strong>Phone#:</strong> <span id="acceptedOrder-user-phone"></span></p>
           <p><strong>Address:</strong> <span id="acceptedOrder-address"></span></p>
           <p><strong>Description:</strong> <span id="acceptedOrder-address-desc"></span></p>
+        </div>
+
+        <!-- Items Section -->
+        <div class="mb-3">
+          <h6><strong>Order Items</strong></h6>
+          <div id="acceptedOrder-items-container">
+            <!-- Individual Items will be populated here -->
+          </div>
+        </div>
+
+        <!-- Price Section -->
+        <div class="d-flex justify-content-between border-top pt-2">
+          <p><strong>Total Price:</strong></p>
+          <p id="acceptedOrder-gross"></p>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p><strong>VAT:</strong></p>
+          <p id="acceptedOrder-vat"></p>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p><strong>Discount:</strong></p>
+          <p id="acceptedOrder-discount"></p>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p><strong>Delivery Fee:</strong></p>
+          <p id="acceptedOrder-delivery-fee"></p>
+        </div>
+        <div class="d-flex justify-content-between border-top pt-2">
+          <p><strong>Grand Total:</strong></p>
+          <p id="acceptedOrder-grand-total"></p>
         </div>
       </div>
       <div class="modal-footer">

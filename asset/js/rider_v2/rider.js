@@ -178,7 +178,6 @@ $(document).ready(function () {
   });
 
 
-  // Function to fetch and display order details without using DataTables
   function fetchOrderDetails(orderRef) {
     $.ajax({
       url: "/model-order-details",
@@ -190,52 +189,66 @@ $(document).ready(function () {
           console.error("No data found for order details.");
           return;
         }
-
+  
         const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
-
-        // Clear existing table rows
-        const itemsTableBody = $("#order-items-table tbody");
-        itemsTableBody.empty();
-
-        // Generate rows for order items
+  
+        // Clear existing order items
+        const itemsContainer = $("#order-items-container");
+        itemsContainer.empty();
+  
+        let subtotal = 0;
+  
+        // Generate and append items to the container, calculate subtotal
         data.items.forEach(item => {
-          const row = `
-          <tr>
-            <td>${item.product_name || "N/A"}</td>
-            <td>${item.variant_name || "N/A"}</td>
-            <td>${item.unit_name || "N/A"}</td>
-            <td>${item.qty || 0}</td>
-            <td>${formatPrice(item.unit_price)}</td>
-            <td>${formatPrice(item.total_price)}</td>
-          </tr>
-        `;
-          itemsTableBody.append(row);
+          const itemTotal = parseFloat(item.total_price) || 0;
+          subtotal += itemTotal;
+  
+          const itemHtml = `
+            <div class="d-flex justify-content-between pt-2">
+              <div>
+                <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
+                <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"}, ${item.unit_name || "N/A"}) x ${item.qty || 0} </p>
+              </div>
+              <p class="mb-0">${formatPrice(itemTotal)}</p>
+            </div>
+          `;
+          itemsContainer.append(itemHtml);
         });
-
+  
         // Populate other order details
         $("#order-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
         $("#order-date").text(formatDateTime(data.date) || "N/A");
-        $("#order-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
-        $("#order-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
-        $("#order-gross").text(formatPrice(data.gross));
-        $("#order-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
-        $("#order-vat").text(formatPrice(data.vat) || "N/A");
-        $("#order-discount").text(formatPrice(data.discount) || "N/A");
-
-        // Populate additional order info
         $("#order-user-name").text(data.user_name || "N/A");
         $("#order-user-phone").text(data.user_phone || "N/A");
-
-        // Add address info
-        $("#order-address").html(
-          `${data.address.house_no ? data.address.house_no + ", " : ""}` +
+  
+        // Format and display address
+        const address = `${data.address.house_no ? data.address.house_no + ", " : ""}` +
           `${data.address.street ? data.address.street + ", " : ""}` +
           `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
-        );
+          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`;
+        $("#order-address").html(address || "N/A");
         $("#order-address-desc").html(data.address.description || "N/A");
-
-        // Display the order items modal
+  
+        // Display subtotal (total of all items)
+        $("#order-gross").text(formatPrice(subtotal));
+  
+        // Display delivery fee
+        const deliveryFee = parseFloat(data.delivery_fee) || 0;
+        $("#order-delivery-fee").text(formatPrice(deliveryFee));
+  
+        // Display discount
+        const discount = parseFloat(data.discount) || 0;
+        $("#order-discount").text(formatPrice(discount));
+  
+        // Display VAT
+        const vat = parseFloat(data.vat) || 0;
+        $("#order-vat").text(formatPrice(vat));
+  
+        // Calculate and display the grand total (subtotal + delivery fee - discount + VAT)
+        const grandTotal = subtotal + deliveryFee - discount + vat;
+        $("#order-grand-total").text(formatPrice(grandTotal));
+  
+        // Show the modal
         $("#order-items-modal").modal("show");
       },
       error: function (xhr, status, error) {
@@ -243,6 +256,10 @@ $(document).ready(function () {
       }
     });
   }
+  
+
+
+
 
 
   // Fetch orders on page load
@@ -428,71 +445,81 @@ $(document).ready(function () {
   });
 
 
-  // Function to fetch and display accepted order details without using DataTables
-  function fetchAcceptedOrderDetails(orderRef) {
-    $.ajax({
-      url: "/model-acceptedOrder-details",
-      type: "GET",
-      data: { order_ref: orderRef },
-      dataType: "json",
-      success: function (data) {
-        if (!data) {
-          console.error("No data found for order details.");
-          return;
-        }
-
-        const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
-
-        // Clear existing table rows
-        const itemsTableBody = $("#acceptedOrder-items-table tbody");
-        itemsTableBody.empty();
-
-        // Generate rows for order items
-        data.items.forEach(item => {
-          const row = `
-          <tr>
-            <td>${item.product_name || "N/A"}</td>
-            <td>${item.variant_name || "N/A"}</td>
-            <td>${item.unit_name || "N/A"}</td>
-            <td>${item.qty || 0}</td>
-            <td>${formatPrice(item.unit_price)}</td>
-            <td>${formatPrice(item.total_price)}</td>
-          </tr>
-        `;
-          itemsTableBody.append(row);
-        });
-
-        // Populate additional order information
-        $("#acceptedOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
-        $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
-        $("#acceptedOrder-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
-        $("#acceptedOrder-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
-        $("#acceptedOrder-gross").text(formatPrice(data.gross));
-        $("#acceptedOrder-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
-        $("#acceptedOrder-vat").text(formatPrice(data.vat) || "N/A");
-        $("#acceptedOrder-discount").text(formatPrice(data.discount) || "N/A");
-
-        // Populate user and address info
-        $("#acceptedOrder-user-name").text(data.user_name || "N/A");
-        $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
-
-        // Add address info
-        $("#acceptedOrder-address").html(
-          `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-          `${data.address.street ? data.address.street + ", " : ""}` +
-          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
-        );
-        $("#acceptedOrder-address-desc").html(data.address.description || "N/A");
-
-        // Display the order items modal
-        $("#acceptedOrder-items-modal").modal("show");
-      },
-      error: function (xhr, status, error) {
-        console.error("Error fetching accepted order details:", error);
+ // Function to fetch and display accepted order details (Receipt Style)
+function fetchAcceptedOrderDetails(orderRef) {
+  $.ajax({
+    url: "/model-acceptedOrder-details",
+    type: "GET",
+    data: { order_ref: orderRef },
+    dataType: "json",
+    success: function (data) {
+      if (!data) {
+        console.error("No data found for order details.");
+        return;
       }
-    });
-  }
+
+      const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
+
+      // Clear existing order items
+      const itemsContainer = $("#acceptedOrder-items-container");
+      itemsContainer.empty();
+
+      let subtotal = 0;
+
+      // Generate and append items to the container, calculate subtotal
+      data.items.forEach(item => {
+        const itemTotal = parseFloat(item.total_price) || 0;
+        subtotal += itemTotal;
+
+        const itemHtml = `
+          <div class="d-flex justify-content-between pt-2">
+            <div>
+              <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
+              <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"}, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
+            </div>
+            <p class="mb-0">${formatPrice(itemTotal)}</p>
+          </div>
+        `;
+        itemsContainer.append(itemHtml);
+      });
+
+      // Populate other order details
+      $("#acceptedOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
+      $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
+      $("#acceptedOrder-user-name").text(data.user_name || "N/A");
+      $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
+
+      // Format and display address
+      const address = `${data.address.house_no ? data.address.house_no + ", " : ""}` +
+        `${data.address.street ? data.address.street + ", " : ""}` +
+        `${data.address.brgy ? data.address.brgy + ", " : ""}` +
+        `${data.address.municipality ? data.address.municipality + "<br>" : ""}`;
+      $("#acceptedOrder-address").html(address || "N/A");
+      $("#acceptedOrder-address-desc").html(data.address.description || "N/A");
+
+      // Display subtotal (total of all items)
+      $("#acceptedOrder-gross").text(formatPrice(subtotal));
+
+      // Display delivery fee, VAT, discount, and grand total
+      const deliveryFee = parseFloat(data.delivery_fee) || 0;
+      const vat = parseFloat(data.vat) || 0;
+      const discount = parseFloat(data.discount) || 0;
+      const grandTotal = subtotal + deliveryFee + vat - discount;
+
+      $("#acceptedOrder-delivery-fee").text(formatPrice(deliveryFee));
+      $("#acceptedOrder-vat").text(formatPrice(vat));
+      $("#acceptedOrder-discount").text(formatPrice(discount));
+      $("#acceptedOrder-grand-total").text(formatPrice(grandTotal));
+
+      // Show the modal
+      $("#acceptedOrder-items-modal").modal("show");
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching accepted order details:", error);
+    }
+  });
+}
+
 
 
   // Fetch accepted orders on page load

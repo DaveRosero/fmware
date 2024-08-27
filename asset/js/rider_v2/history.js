@@ -185,71 +185,83 @@ $(".dropdown-menu a").on("click", function (e) {
 // Fetch history orders on page load or when needed
 fetchHistoryOrders();
 
-  // Function to fetch and display history order details without using DataTables
-  function fetchHistoryOrderDetails(orderRef) {
-    $.ajax({
-      url: "/model-history-details",
-      type: "GET",
-      data: { order_ref: orderRef },
-      dataType: "json",
-      success: function (data) {
-        if (!data) {
-          console.error("No data found for order details.");
-          return;
-        }
-
-        const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
-
-        // Clear existing table rows
-        const itemsTableBody = $("#historyOrder-items-table tbody");
-        itemsTableBody.empty();
-
-        // Generate rows for order items
-        data.items.forEach(item => {
-          const row = `
-          <tr>
-            <td>${item.product_name || "N/A"}</td>
-            <td>${item.variant_name || "N/A"}</td>
-            <td>${item.unit_name || "N/A"}</td>
-            <td>${item.qty || 0}</td>
-            <td>${formatPrice(item.unit_price)}</td>
-            <td>${formatPrice(item.total_price)}</td>
-          </tr>
-        `;
-          itemsTableBody.append(row);
-        });
-
-        // Populate other order details
-        $("#historyOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
-        $("#historyOrder-date").text(formatDateTime(data.date) || "N/A");
-        $("#historyOrder-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
-        $("#historyOrder-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
-        $("#historyOrder-gross").text(formatPrice(data.gross));
-        $("#historyOrder-delivery-fee").text(formatPrice(data.delivery_fee) || "N/A");
-        $("#historyOrder-vat").text(formatPrice(data.vat) || "N/A");
-        $("#historyOrder-discount").text(formatPrice(data.discount) || "N/A");
-
-        // Populate additional order info
-        $("#historyOrder-user-name").text(data.user_name || "N/A");
-        $("#historyOrder-user-phone").text(data.user_phone || "N/A");
-
-        // Add address info
-        $("#historyOrder-address").html(
-          `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-          `${data.address.street ? data.address.street + ", " : ""}` +
-          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
-        );
-        $("#historyOrder-address-desc").html(data.address.description || "N/A");
-
-        // Display the order items modal
-        $("#historyOrder-items-modal").modal("show");
-      },
-      error: function (xhr, status, error) {
-        console.error("Error fetching history order details:", error);
+function fetchHistoryOrderDetails(orderRef) {
+  $.ajax({
+    url: "/model-history-details",
+    type: "GET",
+    data: { order_ref: orderRef },
+    dataType: "json",
+    success: function (data) {
+      if (!data) {
+        console.error("No data found for order details.");
+        return;
       }
-    });
-  }
+
+      const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
+
+      // Clear existing order items
+      const itemsContainer = $("#historyOrder-items-container");
+      itemsContainer.empty();
+
+      let subtotal = 0;
+
+      // Generate and append items to the container, calculate subtotal
+      data.items.forEach(item => {
+        const itemTotal = parseFloat(item.total_price) || 0;
+        subtotal += itemTotal;
+
+        const itemHtml = `
+          <div class="d-flex justify-content-between py-2">
+            <div>
+              <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
+              <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"}, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
+            </div>
+            <p class="mb-0">${formatPrice(itemTotal)}</p>
+          </div>
+        `;
+        itemsContainer.append(itemHtml);
+      });
+
+      // Calculate grand total
+      const deliveryFee = parseFloat(data.delivery_fee) || 0;
+      const vat = parseFloat(data.vat) || 0;
+      const discount = parseFloat(data.discount) || 0;
+      const grandTotal = subtotal + deliveryFee + vat - discount;
+
+      // Populate other order details
+      $("#historyOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
+      $("#historyOrder-date").text(formatDateTime(data.date) || "N/A");
+      $("#historyOrder-paid").html(`<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"}</span>`);
+      $("#historyOrder-status").html(`<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"}</span>`);
+      $("#historyOrder-subtotal").text(formatPrice(subtotal));
+      $("#historyOrder-delivery-fee").text(formatPrice(deliveryFee) || "N/A");
+      $("#historyOrder-vat").text(formatPrice(vat) || "N/A");
+      $("#historyOrder-discount").text(formatPrice(discount) || "N/A");
+      $("#historyOrder-grand-total").text(formatPrice(grandTotal));
+
+      // Populate user and address info
+      $("#historyOrder-user-name").text(data.user_name || "N/A");
+      $("#historyOrder-user-phone").text(data.user_phone || "N/A");
+
+      // Add address info
+      $("#historyOrder-address").html(
+        `${data.address.house_no ? data.address.house_no + ", " : ""}` +
+        `${data.address.street ? data.address.street + ", " : ""}` +
+        `${data.address.brgy ? data.address.brgy + ", " : ""}` +
+        `${data.address.municipality ? data.address.municipality + "<br>" : ""}`
+      );
+      $("#historyOrder-address-desc").html(data.address.description || "N/A");
+
+      // Display the order items modal
+      $("#historyOrder-items-modal").modal("show");
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching history order details:", error);
+    }
+  });
+}
+
+
 
 
   // Fetch history orders on page load
