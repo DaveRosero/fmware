@@ -115,6 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update_pos_query = "UPDATE pos_items SET qty = qty - ? WHERE pos_ref = ? AND product_id = ?";
         prepareAndExecute($mysqli, $update_pos_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
 
+        // Update pos_items table to subtract refund_qty from qty
+        $update_order_query = "UPDATE order_items SET qty = qty - ? WHERE order_ref = ? AND product_id = ?";
+        prepareAndExecute($mysqli, $update_order_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
+
         // Update stock table
         $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
         prepareAndExecute($mysqli, $update_stock_query, [$refund_qty, $product_id], 'ii', "Error updating stock: ");
@@ -134,6 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update_pos_query = "UPDATE pos_items SET qty = qty - ? WHERE pos_ref = ? AND product_id = ?";
         prepareAndExecute($mysqli, $update_pos_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
 
+        $update_order_query = "UPDATE order_items SET qty = qty - ? WHERE order_ref = ? AND product_id = ?";
+        prepareAndExecute($mysqli, $update_order_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
+
         // Update stock table
         $update_stock_query = "UPDATE stock SET qty = qty + ? WHERE product_id = ?";
         prepareAndExecute($mysqli, $update_stock_query, [$refund_qty, $product_id], 'ii', "Error updating stock: ");
@@ -152,9 +159,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update pos_items table to subtract refund_qty from qty
         $update_pos_query = "UPDATE pos_items SET qty = qty - ? WHERE pos_ref = ? AND product_id = ?";
         prepareAndExecute($mysqli, $update_pos_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
+
+        $update_order_query = "UPDATE order_items SET qty = qty - ? WHERE order_ref = ? AND product_id = ?";
+        prepareAndExecute($mysqli, $update_order_query, [$refund_qty, $pos_ref, $product_id], 'isi', "Error updating pos_items: ");
     }
 
     $update_status_query = "UPDATE pos SET status = ? WHERE pos_ref = ?";
+    prepareAndExecute($mysqli, $update_status_query, [$newStatus, $pos_ref], 'ss', "Error updating transaction status: ");
+    $update_status_query = "UPDATE orders SET status = ? WHERE order_ref = ?";
     prepareAndExecute($mysqli, $update_status_query, [$newStatus, $pos_ref], 'ss', "Error updating transaction status: ");
     $logs->newLog($action_log, $user_id, date('F j, Y g:i A')); // Log the refund action
     echo "Refund processed successfully.";

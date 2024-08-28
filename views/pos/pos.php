@@ -1,5 +1,7 @@
 <?php
 include_once 'session.php';
+include_once 'model/history.php';
+include_once 'model/pickup.php';
 require_once 'model/user/addressClass.php';
 require_once 'model/user/user.php';
 
@@ -27,8 +29,7 @@ if ($_SESSION['group'] !== 'cashier') {
 
 
 ?>
-<?php include_once 'model/history.php' ?>
-<?php include_once 'model/pickup.php' ?>
+
 
 
 <!DOCTYPE html>

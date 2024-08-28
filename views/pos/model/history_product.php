@@ -37,7 +37,7 @@ if (!$result) {
 $content = '';
 
 while ($row = $result->fetch_assoc()) {
-    $price = $row['product_subtotal'] / $row['product_qty'];
+    $price = ($row['product_qty'] != 0) ? $row['product_subtotal'] / $row['product_qty'] : 0;
     $content .= '<tr>
     <td cclass="text-center">' . $row['product_name'] . '</td>
     <td class="text-center">' . $row['product_uvalue'] . ' ' . $row['unit_name'] . '</td>
