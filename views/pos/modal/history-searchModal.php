@@ -1,6 +1,6 @@
 <div class="modal fade" id="history-searchModal" aria-hidden="true"
     aria-labelledby="transactionhistorySearch-ModalLabel" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="transactionhistorySearch-ModalLabel"> History</h1>
@@ -31,12 +31,14 @@
                                 </td>
                                 <td>
                                     <?php
-                                    $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary'
-                                        : ($history['status'] == 'void' ? 'text-bg-secondary'
-                                            : ($history['status'] == 'fully refunded' ? 'bg-success text-white'
-                                                : ($history['status'] == 'fully replaced' ? 'bg-info text-white'
-                                                    : '')));
-                                    ?>
+                                        $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary'
+                                            : ($history['status'] == 'void' ? 'text-bg-secondary'
+                                                : ($history['status'] == 'fully refunded' ? 'bg-success text-white'
+                                                    : ($history['status'] == 'fully replaced' ? 'bg-info text-white'
+                                                        : ($history['status'] == 'partially refunded' ? 'bg-warning text-white'
+                                                            : ($history['status'] == 'partially replaced' ? 'bg-warning text-white'
+                                                                : '')))));
+                                     ?>
                                     <span
                                         class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($history['status']); ?></span>
                                     <!-- <span

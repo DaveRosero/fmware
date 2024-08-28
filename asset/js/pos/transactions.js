@@ -157,6 +157,10 @@ $(document).ready(function () {
                           $("#refund-button").prop("disabled", false);
                           $("#replace-button").prop("disabled", false);
                           break;
+                        case 'pending':
+                          $("#refund-button").prop("disabled", false);
+                          $("#replace-button").prop("disabled", false);
+                          break;
                         case 'refunded':
                         case 'fully refunded':
                         case 'partially refunded':
@@ -278,8 +282,6 @@ $(document).ready(function () {
     let itemsRemaining = false;
     let newStatus = 'fully refunded';
 
-
-
     // Validate reason and items
     let isValid = true;
     if (refundReason === "") {
@@ -318,15 +320,17 @@ $(document).ready(function () {
         badItemsCount += parseInt(refund_qty);
       }
 
-      const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text()) - parseInt(refund_qty);
+      // Check if any item has remaining quantity
+      const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(5)").data("initial-qty"));
+      const remainingQty = initialQty - parseInt(refund_qty);
       if (remainingQty > 0) {
         itemsRemaining = true;
       }
-
-      if (itemsRemaining) {
-        newStatus = 'partially refunded';
-      }
     });
+
+    if (itemsRemaining) {
+      newStatus = 'partially refunded';
+    }
 
     if (!isValid) {
       Swal.fire({
@@ -366,6 +370,7 @@ $(document).ready(function () {
       }
     });
   });
+
 
   $("#replace-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
@@ -463,5 +468,4 @@ $(document).ready(function () {
       }
     });
   });
-
 });
