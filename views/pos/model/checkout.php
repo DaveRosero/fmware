@@ -13,7 +13,6 @@ foreach ($post_keys as $key) {
     }
 }
 
-
 $user_id = $_POST['user_id'];
 $pos_ref = $_POST['pos_ref'];
 $delivery_fee = floatval($_POST['delivery-fee-value']);
@@ -27,16 +26,18 @@ $cash = floatval($_POST['cash']);
 $change = floatval($_POST['changes']);
 if ($_POST['transaction_type']) {
     $transaction_type_id = 3;
+    $status = 'pending';
+    $paid = 'paid';
 } else {
     $transaction_type_id = 2;
+    $status = 'paid';
+    $paid = 'paid';
 }
 
 if ($_POST['payment_type']) {
     $payment_type_id = 2;
-    $status = 'paid';
 } else {
     $payment_type_id = 3;
-    $status = 'paid';
 }
 $payment_type_id = intval($_POST['payment_type']);
 $address = $_POST['address'];
@@ -48,13 +49,13 @@ if (isset($_POST['delivery-fee-value'])) {
 
 $query = 'INSERT INTO pos
                     (pos_ref, firstname, lastname, subtotal, total, discount, cash, changes, delivery_fee,
-                    contact_no, address, transaction_type_id, payment_type_id, status, user_id)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    contact_no, address, transaction_type_id, payment_type_id, status, user_id, paid)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
     $stmt->bind_param(
-        'sssddddddssiisi',
+        'sssddddddssiisis',
         $pos_ref,
         $fname,
         $lname,
@@ -69,7 +70,8 @@ if ($stmt) {
         $transaction_type_id,
         $payment_type_id,
         $status,
-        $user_id
+        $user_id,
+        $paid,
     );
 
     if ($stmt->execute()) {

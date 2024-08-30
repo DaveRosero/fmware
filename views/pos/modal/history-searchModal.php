@@ -37,8 +37,9 @@
                                                     : ($history['status'] == 'fully replaced' ? 'bg-info text-white'
                                                         : ($history['status'] == 'partially refunded' ? 'bg-warning text-white'
                                                             : ($history['status'] == 'partially replaced' ? 'bg-warning text-white'
-                                                                : '')))));
-                                     ?>
+                                                                : ($history['status'] == 'pending' ? 'bg-warning text-white'
+                                                                    : ''))))));
+                                    ?>
                                     <span
                                         class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($history['status']); ?></span>
                                     <!-- <span

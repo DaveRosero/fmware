@@ -28,7 +28,6 @@ if ($_SESSION['group'] !== 'cashier') {
   header('Location: /404');
 }
 
-
 ?>
 
 
