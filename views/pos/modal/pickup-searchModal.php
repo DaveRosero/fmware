@@ -1,6 +1,6 @@
 <div class="modal fade" id="pickup-searchModal" aria-hidden="true" aria-labelledby="transactionSearch-ModalLabel"
     tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header  bg-dark text-white">
                 <h1 class="modal-title fs-5" id="pickupSearch-ModalLabel">Pick-Up Transaction</h1>

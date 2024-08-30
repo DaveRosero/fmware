@@ -74,11 +74,6 @@
                                     <input type="text" class="form-control" id="viewmunicipality-input" disabled />
                                     <label for="contact-input" class="form-label" id="contact-label">Contact:</label>
                                     <input type="text" class="form-control" id="viewcontact-input" disabled />
-                                    <label for="viewdeliverer-input" class="form-label"
-                                        id="deliverer-label">Deliverer:</label>
-                                    <input type="text" class="form-control" id="viewdeliverer-input" disabled />
-                                    <input type="hidden" id="deliverer-name-hidden" name="deliverer_name"
-                                        value="Deliverer Name">
                                 </form>
                             </form>
                         </div>

@@ -1,7 +1,10 @@
 $(document).ready(function () {
   var pickupTable = $("#pickup-search").DataTable({
-    order: [[1, "desc"]],
+    order: [[1, "desc"]], // Adjust the index to match the date column
     stateSave: true,
+    columnDefs: [
+      { type: 'date', targets: 1 }, // Ensure the date column index is correct
+    ],
   });
 
   function resetDataTable() {

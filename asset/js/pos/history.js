@@ -105,7 +105,6 @@ $(document).ready(function () {
           $("#viewbrgy-input, #brgy-label").val("").hide();
           $("#viewmunicipality-input, #municipality-label").val("").hide();
           $("#viewcontact-input, #contact-label").val("").hide();
-          $("#viewdeliverer-input, #deliverer-label").val("").hide();
         } else if (data.transaction_type === "Delivery") {
           $("#customer-details").show();
           $("#viewfName-input").val(data.firstname);
@@ -122,9 +121,6 @@ $(document).ready(function () {
             .val(municipality)
             .show();
           $("#viewcontact-input, #contact-label").val(data.contact_no).show();
-          $("#viewdeliverer-input, #deliverer-label")
-            .val(data.deliverer_name)
-            .show();
         }
 
         $.ajax({

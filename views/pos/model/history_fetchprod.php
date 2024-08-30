@@ -21,7 +21,6 @@ $query = "SELECT
     p.cash, 
     p.changes, 
     p.delivery_fee, 
-    p.deliverer_name, 
     p.contact_no , 
     p.address,
     tt.name AS transaction_type, 
