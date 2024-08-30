@@ -1,5 +1,5 @@
 <div class="modal fade" id="transaction-searchModal" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="transaction-searchModalLabel">TRANSACTIONS</h1>

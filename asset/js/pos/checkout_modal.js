@@ -14,7 +14,6 @@ $(document).ready(function () {
   var $contactInput = $("#contact-input");
   var $deliveryFeeContainer = $("#delivery-fee");
   var $deliveryFeeValue = $("#delivery-fee-value");
-  var $delivererSelect = $("#deliverer");
 
   // Function to show/hide fields based on dropdown selection
   function toggleFields() {
@@ -30,7 +29,6 @@ $(document).ready(function () {
       $contactInput.closest(".mb-3").hide();
       $deliveryFeeContainer.hide(); // Hide delivery fee
       $deliveryFeeValue.hide();
-      $delivererSelect.closest(".mb-3").hide();
     } else if ($transactionTypeSelect.val() === "1") {
       // delivery selected
       $firstNameInput.closest(".mb-3").show();
@@ -41,7 +39,6 @@ $(document).ready(function () {
       $contactInput.closest(".mb-3").show();
       $deliveryFeeContainer.show(); // Show delivery fee
       $deliveryFeeValue.show();
-      $delivererSelect.closest(".mb-3").show();
     }
     updateOriginalTotal(); // Recalculate total
     calculateDiscount(); // Recalculate discount
@@ -232,7 +229,6 @@ $(document).ready(function () {
       "#brgy option:selected"
     ).text()}, ${$("#municipality").val()}`;
     var contact = $("#contact-input").val();
-    var delivererName = $("#deliverer option:selected").text();
     var purchasedDate = new Date().toLocaleDateString();
 
     $("#cart-body-modal tr").each(function () {
@@ -333,7 +329,6 @@ $(document).ready(function () {
         <p>Customer Name: ${customerName}</p>
         ${transactionType === "1" ? `<p>Address: ${address}</p>` : ""}
         ${transactionType === "1" ? `<p>Contact: ${contact}</p>` : ""}
-        ${transactionType === "1" ? `<p>Deliverer: ${delivererName}</p>` : ""}
         <p>Date of Purchase: ${purchasedDate}</p>
         <table>
           <thead>
@@ -404,7 +399,6 @@ $(document).ready(function () {
     $brgyInput.val(null).trigger("change");
     $municipalInput.val("");
     $contactInput.val("");
-    $delivererSelect.val("0").trigger("change");
     $deliveryFeeValue.text("₱0.00").data("fee", 0);
     $("#cart-total-modal").text("₱0.00");
     $("#change-display").text("₱0.00");
@@ -456,7 +450,6 @@ $(document).ready(function () {
       var subtotal = parseFloat(total + discount) || 0;
       var cash = parseFloat($("#cashRec-input").val()) || 0;
       var changes = parseFloat(cash - total) || 0;
-      var deliverer = $("#deliverer-name-hidden").val() || ""; // Assuming deliverer is a select element
       var address =
         $("#street-input").val() +
         ", " +
@@ -470,7 +463,6 @@ $(document).ready(function () {
       formData.push({ name: "discount", value: discount });
       formData.push({ name: "cash", value: cash });
       formData.push({ name: "changes", value: changes });
-      formData.push({ name: "deliverer_name", value: deliverer });
       formData.push({ name: "address", value: address });
     }
 
@@ -484,7 +476,6 @@ $(document).ready(function () {
       var subtotal = parseFloat(total + discount) || 0;
       var cash = parseFloat($("#cashRec-input").val()) || 0;
       var changes = parseFloat(cash - total) || 0;
-      var deliverer = $("#deliverer option:selected").text() || ""; // Assuming deliverer is a select element
       var address =
         $("#street-input").val() +
         ", " +
@@ -499,7 +490,6 @@ $(document).ready(function () {
       formData.push({ name: "discount", value: discount });
       formData.push({ name: "cash", value: cash });
       formData.push({ name: "changes", value: changes });
-      formData.push({ name: "deliverer_name", value: deliverer });
       formData.push({ name: "address", value: address });
       formData.push({ name: "contact", value: contact });
     }

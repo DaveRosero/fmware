@@ -2,6 +2,7 @@
 include_once 'session.php';
 include_once 'model/history.php';
 include_once 'model/pickup.php';
+require_once 'model/database/database.php';
 require_once 'model/user/addressClass.php';
 require_once 'model/user/user.php';
 

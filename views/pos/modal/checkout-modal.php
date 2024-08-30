@@ -112,18 +112,7 @@
                                             maxlength="11" pattern="\d{11}" required />
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="mb-3">
-                                        <label for="deliverer-input" class="form-label">Deliverer</label>
-                                        <select class="form-select" type="text" name="deliverer_name" id="deliverer"
-                                            required>
-                                            <option value="0">Deliverer1</option>
-                                            <option value="1">Deliverer2</option>
-                                            <input type="hidden" id="deliverer-name-hidden" name="deliverer_name"
-                                                value="Deliverer Name">
-                                        </select>
-                                    </div>
-                                </div>
+                               
                                 <div class="col d-flex justify-content-end">
                                     <p class="text-secondary">Request fulfilled by:</p>
                                     <?php echo htmlspecialchars($user_name); ?>

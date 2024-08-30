@@ -1,5 +1,4 @@
 <?php
-require_once 'model/database/database.php';
 require_once 'model/admin/logsClass.php';
 
 $mysqli = database();
@@ -7,7 +6,7 @@ $mysqli = database();
 $logs = new Logs();
 
 // Check if POST variables are set
-$post_keys = ['user_id', 'pos_ref', 'delivery-fee-value', 'fname', 'lname', 'contact', 'subtotal', 'total', 'discount', 'cash', 'changes', 'deliverer_name', 'payment_type', 'address'];
+$post_keys = ['user_id', 'pos_ref', 'delivery-fee-value', 'fname', 'lname', 'contact', 'subtotal', 'total', 'discount', 'cash', 'changes', 'payment_type', 'address'];
 foreach ($post_keys as $key) {
     if (!isset($_POST[$key])) {
         die("Error: Missing POST variable $key");
@@ -26,7 +25,6 @@ $total = floatval($_POST['total']);
 $discount = floatval($_POST['discount']);
 $cash = floatval($_POST['cash']);
 $change = floatval($_POST['changes']);
-$deliverer_name = $_POST['deliverer_name'];
 if ($_POST['transaction_type']) {
     $transaction_type_id = 3;
 } else {
@@ -50,13 +48,13 @@ if (isset($_POST['delivery-fee-value'])) {
 
 $query = 'INSERT INTO pos
                     (pos_ref, firstname, lastname, subtotal, total, discount, cash, changes, delivery_fee,
-                    contact_no, address, deliverer_name, transaction_type_id, payment_type_id, status, user_id)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    contact_no, address, transaction_type_id, payment_type_id, status, user_id)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
     $stmt->bind_param(
-        'sssddddddsssiisi',
+        'sssddddddssiisi',
         $pos_ref,
         $fname,
         $lname,
@@ -68,7 +66,6 @@ if ($stmt) {
         $delivery_fee,
         $contact,
         $address,
-        $deliverer_name,
         $transaction_type_id,
         $payment_type_id,
         $status,

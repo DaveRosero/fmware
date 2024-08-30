@@ -14,7 +14,7 @@ $(document).ready(function () {
         }
         // Initialize DataTable
         $('#transaction-table').DataTable({
-          data: response.filter(transaction => transaction.status !== 'void').map(transaction => [
+          data: response.filter(transaction => !['void', 'prepared', 'to pay'].includes(transaction.status)).map(transaction => [
             transaction.pos_ref || transaction.order_ref,
             formatDateTime(transaction.date),
             '₱' + Number(transaction.total || transaction.gross).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
@@ -85,7 +85,6 @@ $(document).ready(function () {
                 $("#viewbrgy-input, #brgy-label").val("").hide();
                 $("#viewmunicipality-input, #municipality-label").val("").hide();
                 $("#viewcontact-input, #contact-label").val("").hide();
-                $("#viewdeliverer-input, #deliverer-label").val("").hide();
               } else if (data.transaction_type === "Delivery") {
                 $("#customer-details").show();
                 $("#rfName-input").val(data.firstname);
@@ -98,7 +97,6 @@ $(document).ready(function () {
                 $("#viewbrgy-input, #brgy-label").val(baranggay).show();
                 $("#viewmunicipality-input, #municipality-label").val(municipality).show();
                 $("#viewcontact-input, #contact-label").val(data.contact_no).show();
-                $("#viewdeliverer-input, #deliverer-label").val(data.deliverer_name).show();
               } else if (data.transaction_type === "Online Order") {
                 $("#customer-details").show();
                 $("#rfName-input").val(data.firstname);
@@ -109,7 +107,6 @@ $(document).ready(function () {
                 $("#viewbrgy-input, #brgy-label").val(data.brgy).show();
                 $("#viewmunicipality-input, #municipality-label").val(data.municipality).show();
                 $("#viewcontact-input, #contact-label").val(data.phone).show();
-                $("#viewdeliverer-input, #deliverer-label").val(data.deliverer_name).hide();
               }
               //Geting Transaction Items
               $("#refund-TotalValue").text("₱0.00");
