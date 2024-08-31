@@ -16,10 +16,9 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         console.error("Error retrieving rider ID:", error);
-      }
+      },
     });
   }
-
 
   // Fetch rider ID on page load
   getRiderId();
@@ -29,7 +28,9 @@ $(document).ready(function () {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
-
+  function formatPrice(price) {
+    return `₱${(parseFloat(price) || 0).toFixed(2)}`;
+  }
   // Function to get status badge class
   function getStatusBadgeClass(status) {
     if (!status) return "badge text-bg-secondary"; // Default class for undefined or null status
@@ -60,124 +61,133 @@ $(document).ready(function () {
     }
   }
 
-  // Function to fetch and display orders
-  // function fetchOrders() {
-  //   $.ajax({
-  //     url: "/model-order",
-  //     type: "GET",
-  //     dataType: "json",
-  //     success: function (data) {
-  //       const filteredOrders = data.filter(order =>
-  //         order.status.toLowerCase() === "pending" &&
-  //         (!order.rider_id || order.rider_id === null)
-  //       );
+  let orders = []; // Global variable to store fetched orders
+  let pos = []; // Global variable to store fetched POS
 
-  //       $("#orders-table").DataTable({
-  //         data: filteredOrders.map(order => [
-  //           order.order_ref || "N/A",
-  //           formatDateTime(order.date) || "N/A",
-  //           `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
-  //           `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
-  //           `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
-  //         ]),
-  //         columns: [
-  //           { title: "Order Ref" },
-  //           { title: "Date" },
-  //           { title: "Paid" },
-  //           { title: "Status" },
-  //           { title: "Actions" }
-  //         ],
-  //         order: [[1, "desc"]],
-  //         destroy: true
-  //       });
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error fetching orders:", error);
-  //     }
-  //   });
-  // }
-  let orders = [];  // Global variable to store the fetched orders
-
-  function fetchOrders() {
-    $.ajax({
-      url: "/model-order",
-      type: "GET",
-      dataType: "json",
-      success: function (data) {
-        orders = data.filter(order =>
-          order.status.toLowerCase() === "pending" &&  // Status is pending
-          (!order.rider_id || order.rider_id === null) &&  // No assigned rider
-          (order.paid.toLowerCase() === "paid" || order.paid.toLowerCase() === "unpaid")  // Paid or Unpaid orders
+  function fetchOrdersAndPOS() {
+    $.when(
+      $.ajax({
+        url: "/model-order",
+        type: "GET",
+        dataType: "json",
+      }),
+      $.ajax({
+        url: "/model-pos", // Separate route to fetch POS data
+        type: "GET",
+        dataType: "json",
+      })
+    )
+      .done(function (ordersResponse, posResponse) {
+        orders = ordersResponse[0].filter(
+          (order) =>
+            order.status.toLowerCase() === "pending" && // Status is pending
+            (!order.rider_id || order.rider_id === null) && // No assigned rider
+            (order.paid.toLowerCase() === "paid" ||
+              order.paid.toLowerCase() === "unpaid") // Paid or Unpaid orders
         );
 
-        displayOrders(orders);  // Display all orders initially
-      },
-      error: function (xhr, status, error) {
-        console.error("Error fetching orders:", error);
-      }
-    });
-  }
-  function displayOrders(orderList) {
-    const container = $("#orders-container");
-    container.empty();  // Clear the container before appending new orders
+        pos = posResponse[0].filter(
+          (posItem) =>
+            posItem.status.toLowerCase() === "pending" && // Status is pending
+            (!posItem.rider_id || posItem.rider_id === null) && // No assigned rider
+            (posItem.paid.toLowerCase() === "paid" ||
+              posItem.paid.toLowerCase() === "unpaid") // Paid or Unpaid POS
+        );
 
-    orderList.forEach(order => {
+        displayOrdersAndPOS(); // Display both Orders and POS
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error("Error fetching orders or POS:", textStatus, errorThrown);
+      });
+  }
+
+  // Display both Orders and POS cards
+  function displayOrdersAndPOS() {
+    const container = $("#orders-container");
+    container.empty(); // Clear the container before appending new orders and POS
+
+    // Display Orders
+    orders.forEach((order) => {
       const orderRef = order.order_ref || "N/A";
       const orderDate = formatDateTime(order.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
-      const deliveryStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(
+        order.paid
+      )} me-2">${order.paid || "N/A"}</span>`;
+      const deliveryStatus = `<span class="${getStatusBadgeClass(
+        order.status
+      )}">${order.status || "N/A"}</span>`;
 
       const orderCard = `
-      <div class="card mb-3">
-        <div class="card-body">
-          <div><strong>Order Ref:</strong> ${orderRef}</div>
-          <div><strong>Date:</strong> ${orderDate}</div>
-          <div class="d-flex mb-2">
-            ${paidStatus} 
-            ${deliveryStatus}
-          </div>
-          <div>
-            <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View</button>
+        <div class="card mb-3">
+          <div class="card-body">
+            <div><strong>Order Ref:</strong> ${orderRef}</div>
+            <div><strong>Date:</strong> ${orderDate}</div>
+            <div class="d-flex mb-2">
+              ${paidStatus} 
+              ${deliveryStatus}
+            </div>
+            <div>
+              <button class="btn btn-primary view-order-btn" data-type="order" data-ref="${orderRef}">View Order</button>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
 
-      container.append(orderCard);  // Append each order card to the container
+      container.append(orderCard); // Append each order card to the container
+    });
+
+    // Display POS
+    pos.forEach((posItem) => {
+      const posRef = posItem.pos_ref || "N/A";
+      const posDate = formatDateTime(posItem.date) || "N/A";
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(
+        posItem.paid
+      )} me-2">${posItem.paid || "N/A"}</span>`;
+      const deliveryStatus = `<span class="${getStatusBadgeClass(
+        posItem.status
+      )}">${posItem.status || "N/A"}</span>`;
+
+      const posCard = `
+        <div class="card mb-3">
+          <div class="card-body">
+            <div><strong>POS Ref:</strong> ${posRef}</div>
+            <div><strong>Date:</strong> ${posDate}</div>
+            <div class="d-flex mb-2">
+              ${paidStatus} 
+              ${deliveryStatus}
+            </div>
+            <div>
+              <button class="btn btn-primary view-pos-btn" data-type="pos" data-ref="${posRef}">View POS</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.append(posCard); // Append each POS card to the container
+    });
+
+    // Attach event listeners for both buttons
+    attachEventListeners();
+  }
+
+  // Attach event listeners to the view buttons
+  function attachEventListeners() {
+    // Order view button
+    $("#orders-container").on("click", ".view-order-btn", function () {
+      const orderRef = $(this).data("ref");
+      $("#accept-order-btn").data("order-ref", orderRef);
+      fetchOrderDetails(orderRef);
+    });
+
+    // POS view button
+    $("#orders-container").on("click", ".view-pos-btn", function () {
+      const posRef = $(this).data("ref");
+      $("#accept-pos-btn").data("pos-ref", posRef);
+      fetchPOSDetails(posRef); // Show POS modal when "View POS" is clicked
     });
   }
 
-  // Search Functionality: Filter orders by order_ref dynamically
-  document.querySelector("input[type='text']").addEventListener("input", function () {
-    const searchTerm = this.value.toLowerCase();
-    const filteredOrders = orders.filter(order => order.order_ref.toLowerCase().includes(searchTerm));
-    displayOrders(filteredOrders);  // Display filtered orders
-  });
-
-  // Sort Orders based on selected criteria
-  function sortOrders(orders, criteria) {
-    return orders.sort((a, b) => {
-      if (criteria === 'Order') {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === 'Date') {
-        return new Date(b.date) - new Date(a.date);  // Sort by newest first
-      } else if (criteria === 'Paid') {
-        return a.paid.localeCompare(b.paid);
-      };
-    });
-  }
-
-  // Sorting functionality: Trigger when a sort option is selected
-  document.querySelectorAll(".dropdown-menu a").forEach(item => {
-    item.addEventListener("click", function (e) {
-      e.preventDefault();
-      const sortBy = this.textContent.trim();  // Get selected sort criteria
-      const sortedOrders = sortOrders(orders, sortBy);  // Sort orders
-      displayOrders(sortedOrders);  // Display sorted orders
-    });
-  });
-
-
+  // Fetch Order details and display in modal
   function fetchOrderDetails(orderRef) {
     $.ajax({
       url: "/model-order-details",
@@ -185,92 +195,111 @@ $(document).ready(function () {
       data: { order_ref: orderRef },
       dataType: "json",
       success: function (data) {
-        if (!data) {
-          console.error("No data found for order details.");
-          return;
-        }
-  
-        const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
-  
-        // Clear existing order items
-        const itemsContainer = $("#order-items-container");
-        itemsContainer.empty();
-  
-        let subtotal = 0;
-  
-        // Generate and append items to the container, calculate subtotal
-        data.items.forEach(item => {
-          const itemTotal = parseFloat(item.total_price) || 0;
-          subtotal += itemTotal;
-  
-          const itemHtml = `
-            <div class="d-flex justify-content-between pt-2">
-              <div>
-                <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
-                <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"}, ${item.unit_name || "N/A"}) x ${item.qty || 0} </p>
-              </div>
-              <p class="mb-0">${formatPrice(itemTotal)}</p>
-            </div>
-          `;
-          itemsContainer.append(itemHtml);
-        });
-  
-        // Populate other order details
-        $("#order-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
-        $("#order-date").text(formatDateTime(data.date) || "N/A");
-        $("#order-user-name").text(data.user_name || "N/A");
-        $("#order-user-phone").text(data.user_phone || "N/A");
-  
-        // Format and display address
-        const address = `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-          `${data.address.street ? data.address.street + ", " : ""}` +
-          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-          `${data.address.municipality ? data.address.municipality + "<br>" : ""}`;
-        $("#order-address").html(address || "N/A");
-        $("#order-address-desc").html(data.address.description || "N/A");
-  
-        // Display subtotal (total of all items)
-        $("#order-gross").text(formatPrice(subtotal));
-  
-        // Display delivery fee
-        const deliveryFee = parseFloat(data.delivery_fee) || 0;
-        $("#order-delivery-fee").text(formatPrice(deliveryFee));
-  
-        // Display discount
-        const discount = parseFloat(data.discount) || 0;
-        $("#order-discount").text(formatPrice(discount));
-  
-        // Display VAT
-        const vat = parseFloat(data.vat) || 0;
-        $("#order-vat").text(formatPrice(vat));
-  
-        // Calculate and display the grand total (subtotal + delivery fee - discount + VAT)
-        const grandTotal = subtotal + deliveryFee - discount + vat;
-        $("#order-grand-total").text(formatPrice(grandTotal));
-  
-        // Show the modal
+        populateOrderModal(data);
         $("#order-items-modal").modal("show");
       },
       error: function (xhr, status, error) {
         console.error("Error fetching order details:", error);
-      }
+        console.log("Response text:", xhr.responseText); // Log the respons
+      },
     });
   }
-  
 
+  // Fetch POS details and display in modal
+  function fetchPOSDetails(posRef) {
+    $.ajax({
+      url: "/model-pos-details",
+      type: "GET",
+      data: { pos_ref: posRef },
+      dataType: "json",
+      success: function (data) {
+        populatePOSModal(data);
+        $("#pos-items-modal").modal("show");
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching POS details:", error);
+      },
+    });
+  }
 
+  // Populate the order modal with details
+  function populateOrderModal(order) {
+    // Populate modal with order details
+    $("#order-date").text(`Date: ${formatDateTime(order.date)}`);
+    $("#order-user-name").text(order.user_name || "N/A");
+    $("#order-user-phone").text(order.user_phone || "N/A");
+    $("#order-address").text(
+      `${order.address.house_no || "N/A"} ${order.address.street || "N/A"}, ${
+        order.address.brgy || "N/A"
+      }, ${order.address.municipality || "N/A"}`
+    );
+    $("#order-address-desc").text(order.address.description || "N/A");
 
+    // Clear previous items
+    $("#order-items-container").empty();
 
+    // Populate order items
+    order.items.forEach((item) => {
+      $("#order-items-container").append(`
+      <tr>
+        <td>${item.product_name || "N/A"}</td>
+        <td>${item.qty || 0}</td>
+        <td>${formatPrice(item.total_price || 0)}</td>
+      </tr>
+    `);
+    });
 
-  // Fetch orders on page load
-  fetchOrders();
+    // Calculate subtotal and grand total
+    const subtotal = order.gross - (order.delivery_fee || 0);
+    const grandTotal =
+      subtotal - (order.discount || 0) + (order.delivery_fee || 0);
 
-  // Handle View button click
-  $("#orders-container").on("click", ".view-order-btn", function () {
-    const orderRef = $(this).data("order-ref");
-    $("#accept-order-btn").data("order-ref", orderRef);
-    fetchOrderDetails(orderRef);
-  });
+    // Populate price section
+    $("#order-gross").text(formatPrice(subtotal || 0));
+    $("#order-vat").text(formatPrice(order.vat || 0));
+    $("#order-discount").text(formatPrice(order.discount || 0));
+    $("#order-delivery-fee").text(formatPrice(order.delivery_fee || 0));
+    $("#order-grand-total").text(formatPrice(grandTotal || 0));
+  }
+
+  // Populate the POS modal with details
+  function populatePOSModal(pos) {
+    // Populate modal with POS details
+    $("#pos-date").text(`Date: ${formatDateTime(pos.date)}`);
+    $("#pos-user-name").text(pos.user_name || "N/A");
+    $("#pos-user-phone").text(pos.user_phone || "N/A");
+    $("#pos-address").text(`${pos.address || "N/A"}`);
+
+    // Clear previous items
+    $("#pos-items-container").empty();
+
+    // Populate POS items
+    pos.items.forEach((item) => {
+      $("#pos-items-container").append(`
+      <tr>
+        <td>${item.product_name || "N/A"}</td>
+        <td>${item.qty || 0}</td>
+        <td>${formatPrice(item.total || 0)}</td>
+      </tr>
+    `);
+    });
+
+    // Calculate subtotal and grand total
+    const subtotal = pos.items.reduce(
+      (total, item) => total + (item.total || 0),
+      0
+    );
+    const grandTotal = subtotal - (pos.discount || 0) + (pos.delivery_fee || 0);
+
+    // Populate price section
+    $("#pos-subtotal").text(formatPrice(subtotal || 0));
+    $("#pos-discount").text(formatPrice(pos.discount || 0));
+    $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0));
+    $("#pos-total").text(formatPrice(grandTotal || 0));
+  }
+
+  // Initial fetch of orders and POS
+  fetchOrdersAndPOS();
 
   // Handle Accept Order button click
   $("#accept-order-btn").on("click", function () {
@@ -279,7 +308,11 @@ $(document).ready(function () {
     // Check if order reference or rider ID is missing
     if (!orderRef || !riderId) {
       console.error("Order reference or rider ID is missing.");
-      Swal.fire("Error", "Unable to accept the order. Missing order reference or rider ID.", "error");
+      Swal.fire(
+        "Error",
+        "Unable to accept the order. Missing order reference or rider ID.",
+        "error"
+      );
       return;
     }
 
@@ -291,7 +324,7 @@ $(document).ready(function () {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, accept it!"
+      confirmButtonText: "Yes, accept it!",
     }).then((result) => {
       if (result.isConfirmed) {
         // AJAX request to update the order status to 'delivering'
@@ -301,98 +334,157 @@ $(document).ready(function () {
           data: {
             order_ref: orderRef,
             rider_id: riderId,
-            status: "delivering"
+            status: "delivering",
           },
           success: function (response) {
             try {
-              const jsonResponse = typeof response === "string" ? JSON.parse(response) : response;
+              const jsonResponse =
+                typeof response === "string" ? JSON.parse(response) : response;
               if (jsonResponse.success) {
                 Swal.fire("Success", "Order accepted successfully!", "success");
-                fetchOrders(); // Refresh the orders table
+                fetchOrdersAndPOS(); // Refresh the orders table
                 $("#order-items-modal").modal("hide"); // Hide the modal
                 fetchAcceptedOrders(); // Refresh the accepted orders
               } else {
-                Swal.fire("Error", "Failed to accept the order: " + jsonResponse.message, "error");
+                Swal.fire(
+                  "Error",
+                  "Failed to accept the order: " + jsonResponse.message,
+                  "error"
+                );
                 console.error("Order update failed:", jsonResponse.message);
               }
             } catch (e) {
               console.error("Error parsing server response:", e);
-              Swal.fire("Error", "An error occurred while accepting the order.", "error");
+              Swal.fire(
+                "Error",
+                "An error occurred while accepting the order.",
+                "error"
+              );
             }
           },
           error: function (xhr, status, error) {
             console.error("Error accepting the order:", error);
-            Swal.fire("Error", "Failed to accept the order. Please try again.", "error");
-          }
+            Swal.fire(
+              "Error",
+              "Failed to accept the order. Please try again.",
+              "error"
+            );
+          },
         });
       }
     });
   });
+  $("#accept-pos-btn").on("click", function () {
+    const posRef = $(this).data("pos-ref");
+  
+    // Check if POS reference or rider ID is missing
+    console.log("POS Ref:", posRef);
+    console.log("Rider ID:", riderId);
+  
+    if (!posRef || !riderId) {
+      console.error("POS reference or rider ID is missing.");
+      Swal.fire(
+        "Error",
+        "Unable to accept the POS. Missing POS reference or rider ID.",
+        "error"
+      );
+      return;
+    }
+  
+    // Use SweetAlert to confirm the action
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to accept this POS?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, accept it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // AJAX request to update the POS status to 'delivering'
+        $.ajax({
+          url: "/model-update-pos", // Update with your backend URL
+          type: "POST",
+          data: {
+            pos_ref: posRef,
+            rider_id: riderId,
+            status: "delivering",
+          },
+          success: function (response) {
+            try {
+              const jsonResponse =
+                typeof response === "string" ? JSON.parse(response) : response;
+              if (jsonResponse.success) {
+                Swal.fire("Success", "POS accepted successfully!", "success");
+                fetchOrdersAndPOS(); // Refresh the POS table
+                $("#pos-items-modal").modal("hide"); // Hide the modal
+                fetchAcceptedPOS(); // Refresh the accepted POS
+              } else {
+                Swal.fire(
+                  "Error",
+                  "Failed to accept the POS: " + jsonResponse.message,
+                  "error"
+                );
+                console.error("POS update failed:", jsonResponse.message);
+              }
+            } catch (e) {
+              console.error("Error parsing server response:", e);
+              Swal.fire(
+                "Error",
+                "An error occurred while accepting the POS.",
+                "error"
+              );
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error accepting the POS:", error);
+            Swal.fire(
+              "Error",
+              "Failed to accept the POS. Please try again.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+  });
+  
 
-
-  // Function to fetch and display accepted orders
-  // function fetchAcceptedOrders() {
-  //   $.ajax({
-  //     url: "/model-acceptedOrder",
-  //     type: "GET",
-  //     dataType: "json",
-  //     success: function (data) {
-  //       const filteredOrders = data.filter(order =>
-  //         order.status.toLowerCase() === "delivering" && order.rider_id == riderId
-  //       );
-
-  //       $("#acceptedOrder-table").DataTable({
-  //         data: filteredOrders.map(order => [
-  //           order.order_ref || "N/A",
-  //           formatDateTime(order.date) || "N/A",
-  //           `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
-  //           `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
-  //           `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
-  //         ]),
-  //         columns: [
-  //           { title: "Order Ref" },
-  //           { title: "Date" },
-  //           { title: "Paid" },
-  //           { title: "Status" },
-  //           { title: "Actions" }
-  //         ],
-  //         order: [[1, "desc"]],
-  //         destroy: true
-  //       });
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error fetching accepted orders:", error);
-  //     }
-  //   });
-  // }
-  let acceptedOrders = [];  // Global variable to store fetched accepted orders
+  let acceptedOrders = []; // Global variable to store fetched accepted orders
   function fetchAcceptedOrders() {
     $.ajax({
       url: "/model-acceptedOrder",
       type: "GET",
       dataType: "json",
       success: function (data) {
-        acceptedOrders = data.filter(order =>
-          order.status.toLowerCase() === "delivering" && order.rider_id == riderId
+        acceptedOrders = data.filter(
+          (order) =>
+            order.status.toLowerCase() === "delivering" &&
+            order.rider_id == riderId
         );
 
         displayAcceptedOrders(acceptedOrders); // Initial display
       },
       error: function (xhr, status, error) {
         console.error("Error fetching accepted orders:", error);
-      }
+      },
     });
   }
   // Function to display accepted orders
   function displayAcceptedOrders(orderList) {
     const container = $("#accepted-orders-container");
-    container.empty();  // Clear the container
+    container.empty(); // Clear the container
 
-    orderList.forEach(order => {
+    orderList.forEach((order) => {
       const orderRef = order.order_ref || "N/A";
       const orderDate = formatDateTime(order.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
-      const deliveryStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(
+        order.paid
+      )} me-2">${order.paid || "N/A"}</span>`;
+      const deliveryStatus = `<span class="${getStatusBadgeClass(
+        order.status
+      )}">${order.status || "N/A"}</span>`;
 
       const orderCard = `
           <div class="card mb-3">
@@ -417,20 +509,22 @@ $(document).ready(function () {
   // Search functionality: Filter orders by order_ref
   $("#search-input").on("input", function () {
     const searchTerm = $(this).val().toLowerCase();
-    const filteredOrders = acceptedOrders.filter(order => order.order_ref.toLowerCase().includes(searchTerm));
+    const filteredOrders = acceptedOrders.filter((order) =>
+      order.order_ref.toLowerCase().includes(searchTerm)
+    );
     displayAcceptedOrders(filteredOrders);
   });
 
   // Sort orders based on selected criteria
   function sortAcceptedOrders(orders, criteria) {
     return orders.sort((a, b) => {
-      if (criteria === 'Order Ref') {
+      if (criteria === "Order Ref") {
         return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === 'Date') {
-        return new Date(b.date) - new Date(a.date);  // Sort by newest date first
-      } else if (criteria === 'Paid') {
+      } else if (criteria === "Date") {
+        return new Date(b.date) - new Date(a.date); // Sort by newest date first
+      } else if (criteria === "Paid") {
         return a.paid.localeCompare(b.paid);
-      } else if (criteria === 'Delivery Status') {
+      } else if (criteria === "Delivery Status") {
         return a.status.localeCompare(b.status);
       }
     });
@@ -439,88 +533,95 @@ $(document).ready(function () {
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu a").on("click", function (e) {
     e.preventDefault();
-    const sortBy = $(this).text().trim();  // Get selected sort criteria
-    const sortedOrders = sortAcceptedOrders(acceptedOrders, sortBy);  // Sort orders
-    displayAcceptedOrders(sortedOrders);  // Display sorted orders
+    const sortBy = $(this).text().trim(); // Get selected sort criteria
+    const sortedOrders = sortAcceptedOrders(acceptedOrders, sortBy); // Sort orders
+    displayAcceptedOrders(sortedOrders); // Display sorted orders
   });
 
+  // Function to fetch and display accepted order details (Receipt Style)
+  function fetchAcceptedOrderDetails(orderRef) {
+    $.ajax({
+      url: "/model-acceptedOrder-details",
+      type: "GET",
+      data: { order_ref: orderRef },
+      dataType: "json",
+      success: function (data) {
+        if (!data) {
+          console.error("No data found for order details.");
+          return;
+        }
 
- // Function to fetch and display accepted order details (Receipt Style)
-function fetchAcceptedOrderDetails(orderRef) {
-  $.ajax({
-    url: "/model-acceptedOrder-details",
-    type: "GET",
-    data: { order_ref: orderRef },
-    dataType: "json",
-    success: function (data) {
-      if (!data) {
-        console.error("No data found for order details.");
-        return;
-      }
+        const formatPrice = (price) =>
+          `₱${(parseFloat(price) || 0).toFixed(2)}`;
 
-      const formatPrice = (price) => `₱${(parseFloat(price) || 0).toFixed(2)}`;
+        // Clear existing order items
+        const itemsContainer = $("#acceptedOrder-items-container");
+        itemsContainer.empty();
 
-      // Clear existing order items
-      const itemsContainer = $("#acceptedOrder-items-container");
-      itemsContainer.empty();
+        let subtotal = 0;
 
-      let subtotal = 0;
+        // Generate and append items to the container, calculate subtotal
+        data.items.forEach((item) => {
+          const itemTotal = parseFloat(item.total_price) || 0;
+          subtotal += itemTotal;
 
-      // Generate and append items to the container, calculate subtotal
-      data.items.forEach(item => {
-        const itemTotal = parseFloat(item.total_price) || 0;
-        subtotal += itemTotal;
-
-        const itemHtml = `
+          const itemHtml = `
           <div class="d-flex justify-content-between pt-2">
             <div>
               <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
-              <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"}, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
+              <p class="mb-0">${formatPrice(item.unit_price)} (${
+            item.variant_name || "N/A"
+          }, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
             </div>
             <p class="mb-0">${formatPrice(itemTotal)}</p>
           </div>
         `;
-        itemsContainer.append(itemHtml);
-      });
+          itemsContainer.append(itemHtml);
+        });
 
-      // Populate other order details
-      $("#acceptedOrder-items-modal-label").text(`Order: ${data.order_ref || "N/A"}`);
-      $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
-      $("#acceptedOrder-user-name").text(data.user_name || "N/A");
-      $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
+        // Populate other order details
+        $("#acceptedOrder-items-modal-label").text(
+          `Order: ${data.order_ref || "N/A"}`
+        );
+        $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
+        $("#acceptedOrder-user-name").text(data.user_name || "N/A");
+        $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
 
-      // Format and display address
-      const address = `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-        `${data.address.street ? data.address.street + ", " : ""}` +
-        `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-        `${data.address.municipality ? data.address.municipality + "<br>" : ""}`;
-      $("#acceptedOrder-address").html(address || "N/A");
-      $("#acceptedOrder-address-desc").html(data.address.description || "N/A");
+        // Format and display address
+        const address =
+          `${data.address.house_no ? data.address.house_no + ", " : ""}` +
+          `${data.address.street ? data.address.street + ", " : ""}` +
+          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
+          `${
+            data.address.municipality ? data.address.municipality + "<br>" : ""
+          }`;
+        $("#acceptedOrder-address").html(address || "N/A");
+        $("#acceptedOrder-address-desc").html(
+          data.address.description || "N/A"
+        );
 
-      // Display subtotal (total of all items)
-      $("#acceptedOrder-gross").text(formatPrice(subtotal));
+        // Display subtotal (total of all items)
+        $("#acceptedOrder-gross").text(formatPrice(subtotal));
 
-      // Display delivery fee, VAT, discount, and grand total
-      const deliveryFee = parseFloat(data.delivery_fee) || 0;
-      const vat = parseFloat(data.vat) || 0;
-      const discount = parseFloat(data.discount) || 0;
-      const grandTotal = subtotal + deliveryFee + vat - discount;
+        // Display delivery fee, VAT, discount, and grand total
+        const deliveryFee = parseFloat(data.delivery_fee) || 0;
+        const vat = parseFloat(data.vat) || 0;
+        const discount = parseFloat(data.discount) || 0;
+        const grandTotal = subtotal + deliveryFee + vat - discount;
 
-      $("#acceptedOrder-delivery-fee").text(formatPrice(deliveryFee));
-      $("#acceptedOrder-vat").text(formatPrice(vat));
-      $("#acceptedOrder-discount").text(formatPrice(discount));
-      $("#acceptedOrder-grand-total").text(formatPrice(grandTotal));
+        $("#acceptedOrder-delivery-fee").text(formatPrice(deliveryFee));
+        $("#acceptedOrder-vat").text(formatPrice(vat));
+        $("#acceptedOrder-discount").text(formatPrice(discount));
+        $("#acceptedOrder-grand-total").text(formatPrice(grandTotal));
 
-      // Show the modal
-      $("#acceptedOrder-items-modal").modal("show");
-    },
-    error: function (xhr, status, error) {
-      console.error("Error fetching accepted order details:", error);
-    }
-  });
-}
-
-
+        // Show the modal
+        $("#acceptedOrder-items-modal").modal("show");
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching accepted order details:", error);
+      },
+    });
+  }
 
   // Fetch accepted orders on page load
   fetchAcceptedOrders();
@@ -531,77 +632,79 @@ function fetchAcceptedOrderDetails(orderRef) {
     fetchAcceptedOrderDetails(orderRef);
   });
 
-  $('#cancelOrderButton').on('click', function () {
-    const orderRef = $('#acceptedOrder-items-modal-label').text().replace('Order: ', ''); // Get the order reference from the modal
+  $("#cancelOrderButton").on("click", function () {
+    const orderRef = $("#acceptedOrder-items-modal-label")
+      .text()
+      .replace("Order: ", ""); // Get the order reference from the modal
 
     // Check if order reference is missing
     if (!orderRef) {
       console.error("Order reference is missing.");
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Unable to cancel the order. Order reference is missing.'
+        icon: "error",
+        title: "Error",
+        text: "Unable to cancel the order. Order reference is missing.",
       });
       return;
     }
 
     // Show confirmation before proceeding to cancel the order
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you really want to cancel this order?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cancel it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
         // Proceed with AJAX request to cancel the order
         $.ajax({
-          url: '/model-cancelOrder', // Update with the correct backend URL
-          type: 'POST',
+          url: "/model-cancelOrder", // Update with the correct backend URL
+          type: "POST",
           data: {
-            order_ref: orderRef  // Send only the order reference to be canceled
+            order_ref: orderRef, // Send only the order reference to be canceled
           },
           success: function (response) {
             try {
-              const res = typeof response === "string" ? JSON.parse(response) : response;
+              const res =
+                typeof response === "string" ? JSON.parse(response) : response;
               if (res.success) {
                 Swal.fire({
-                  icon: 'success',
-                  title: 'Order Canceled',
-                  text: 'Order has been successfully canceled!'
+                  icon: "success",
+                  title: "Order Canceled",
+                  text: "Order has been successfully canceled!",
                 });
-                $('#acceptedOrder-items-modal').modal('hide'); // Close the modal
+                $("#acceptedOrder-items-modal").modal("hide"); // Close the modal
                 fetchAcceptedOrders(); // Refresh the accepted orders list
               } else {
                 Swal.fire({
-                  icon: 'error',
-                  title: 'Cancellation Failed',
-                  text: 'Failed to cancel the order: ' + res.message
+                  icon: "error",
+                  title: "Cancellation Failed",
+                  text: "Failed to cancel the order: " + res.message,
                 });
                 console.error("Order cancellation failed:", res.message);
               }
             } catch (e) {
               console.error("Error parsing server response:", e);
               Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while canceling the order.'
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while canceling the order.",
               });
             }
           },
           error: function (xhr, status, error) {
             console.error("Error canceling the order:", error);
             Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to cancel the order. Please try again.'
+              icon: "error",
+              title: "Error",
+              text: "Failed to cancel the order. Please try again.",
             });
-          }
+          },
         });
       }
     });
   });
-
 });

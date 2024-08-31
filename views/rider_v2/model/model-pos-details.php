@@ -1,0 +1,103 @@
+<?php
+require_once 'model/database/database.php';
+
+// Get pos_ref from query string
+$pos_ref = $_GET['pos_ref'];
+
+// Connect to the database
+$mysqli = database();
+
+// SQL query to fetch POS details
+$query = '
+  SELECT pos.pos_ref,
+         pos.date,
+         pos.subtotal,
+         pos.total,
+         pos.discount,
+         pos.cash,
+         pos.changes,
+         pos.delivery_fee,
+         pos.rider_id,
+         pos.contact_no,
+         pos.transaction_type_id,
+         pos.payment_type_id,
+         pos.user_id,
+         pos.address,
+         pos.status,
+         pos.paid,
+         user.firstname AS user_firstname,
+         user.lastname AS user_lastname,
+         user.phone AS user_phone,
+         transaction_type.name AS transaction_type_name,
+         payment_type.name AS payment_type_name
+  FROM pos
+  LEFT JOIN user ON pos.user_id = user.id
+  LEFT JOIN transaction_type ON pos.transaction_type_id = transaction_type.id
+  LEFT JOIN payment_type ON pos.payment_type_id = payment_type.id
+  WHERE pos.pos_ref = ?';
+
+// Prepare and execute the statement
+$stmt = $mysqli->prepare($query);
+$stmt->bind_param('s', $pos_ref);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Fetch the POS details
+$posData = null;
+if ($row = $result->fetch_assoc()) {
+    $posData = [
+        'pos_ref' => $row['pos_ref'],
+        'date' => $row['date'],
+        'subtotal' => $row['subtotal'],
+        'total' => $row['total'],
+        'discount' => $row['discount'],
+        'cash' => $row['cash'],
+        'changes' => $row['changes'],
+        'delivery_fee' => $row['delivery_fee'],
+        'rider_id' => $row['rider_id'],
+        'contact_no' => $row['contact_no'],
+        'transaction_type_name' => $row['transaction_type_name'],
+        'payment_type_name' => $row['payment_type_name'],
+        'user_name' => $row['user_firstname'] . ' ' . $row['user_lastname'],
+        'user_phone' => $row['user_phone'],
+        'address' => $row['address'],
+        'status' => $row['status'],
+        'paid' => $row['paid'],
+        'items' => []  // Initialize items array
+    ];
+}
+
+// Fetch POS items
+$itemQuery = '
+  SELECT pos_items.product_id,
+         product.name AS product_name,
+         pos_items.qty,
+         pos_items.total
+  FROM pos_items
+  LEFT JOIN product ON pos_items.product_id = product.id
+  WHERE pos_items.pos_ref = ?';
+
+// Prepare and execute the statement for items
+$itemStmt = $mysqli->prepare($itemQuery);
+$itemStmt->bind_param('s', $pos_ref);
+$itemStmt->execute();
+$itemResult = $itemStmt->get_result();
+
+// Fetch items
+while ($itemRow = $itemResult->fetch_assoc()) {
+    $posData['items'][] = [
+        'product_name' => $itemRow['product_name'],
+        'qty' => $itemRow['qty'],
+        'total' => $itemRow['total']
+    ];
+}
+
+// Close MySQL connections
+$stmt->close();
+$itemStmt->close();
+$mysqli->close();
+
+// Send JSON response
+header('Content-Type: application/json');
+echo json_encode($posData);
+?>
