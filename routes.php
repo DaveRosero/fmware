@@ -268,6 +268,8 @@ any('/rider-acceptedOrder', 'views/rider_v2/screen-riderAcceptedOrder.php');
 any('/rider-history', 'views/rider_v2/screen-riderHistory.php');
 //modal
 //model
+any('/model-pos', 'views/rider_v2/model/model-pos.php');
+any('/model-pos-details', 'views/rider_v2/model/model-pos-details.php');
 any('/model-order', 'views/rider_v2/model/model-order.php');
 any('/model-acceptedOrder', 'views/rider_v2/model/model-acceptedOrder.php');
 any('/model-acceptedOrder-details', 'views/rider_v2/model/model-acceptedOrder-details.php');
