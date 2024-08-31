@@ -344,7 +344,7 @@ $(document).ready(function () {
                 Swal.fire("Success", "Order accepted successfully!", "success");
                 fetchOrdersAndPOS(); // Refresh the orders table
                 $("#order-items-modal").modal("hide"); // Hide the modal
-                fetchAcceptedOrders(); // Refresh the accepted orders
+                fetchOrdersAndPOS(); // Refresh the accepted orders
               } else {
                 Swal.fire(
                   "Error",
@@ -419,7 +419,7 @@ $(document).ready(function () {
                 Swal.fire("Success", "POS accepted successfully!", "success");
                 fetchOrdersAndPOS(); // Refresh the POS table
                 $("#pos-items-modal").modal("hide"); // Hide the modal
-                fetchAcceptedPOS(); // Refresh the accepted POS
+                fetchOrdersAndPOS(); // Refresh the accepted POS
               } else {
                 Swal.fire(
                   "Error",
