@@ -280,6 +280,7 @@ any('/model-processPayment', 'views/rider_v2/model/model-processPayment.php');
 any('/model-order-details', 'views/rider_v2/model/model-order-details.php');
 any('/model-order-items', 'views/rider_v2/model/model-order-items.php');
 any('/model-update-order', 'views/rider_v2/model/model-update-order.php');
+any('/model-update-pos', 'views/rider_v2/model/model-update-pos.php');
 any('/model-get-riderId', 'views/rider_v2/model/model-get-riderId.php');
 any('/model-history', 'views/rider_v2/model/model-history.php');
 any('/model-history-details', 'views/rider_v2/model/model-history-details.php');
