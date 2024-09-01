@@ -574,7 +574,7 @@ $(document).ready(function () {
     // Handle View button click for accepted POS
     $("#accepted-orders-container").on("click", ".view-pos-btn", function () {
         const posRef = $(this).data("ref");
-        // Fetch and display accepted POS details
+        $("#posPaymentButton").data("pos-ref", posRef);
         fetchAcceptedPOSDetails(posRef);
     });
   }
