@@ -180,7 +180,7 @@ $(document).ready(function () {
 
   // Add event listener to view-order buttons
   $(document).on('click', '.view-order-btn', function () {
-    const orderRef = $(this).data('order-ref');
+    const orderRef = $(this).data('ref');
     setSelectedOrderRef(orderRef);
   });
 });

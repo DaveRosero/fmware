@@ -60,43 +60,6 @@ $(document).ready(function () {
     }
   }
 
-  // Function to fetch and display history orders
-  // function fetchHistoryOrders() {
-  //   $.ajax({
-  //     url: "/model-history",
-  //     type: "GET",
-  //     dataType: "json",
-  //     success: function (data) {
-  //       const filteredOrders = data.filter(order =>
-  //         (order.status.toLowerCase() === "delivered" || order.status.toLowerCase() === "cancelled") &&
-  //         order.rider_id == riderId
-  //       );
-
-
-  //       $("#historyOrder-table").DataTable({
-  //         data: filteredOrders.map(order => [
-  //           order.order_ref || "N/A",
-  //           formatDateTime(order.date) || "N/A",
-  //           `<span class="${getPaidStatusBadgeClass(order.paid)}">${order.paid || "N/A"}</span>`,
-  //           `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`,
-  //           `<button class="btn btn-primary view-order-btn" data-order-ref="${order.order_ref || ""}">View</button>`
-  //         ]),
-  //         columns: [
-  //           { title: "Order Ref" },
-  //           { title: "Date" },
-  //           { title: "Paid" },
-  //           { title: "Status" },
-  //           { title: "Actions" }
-  //         ],
-  //         order: [[1, "desc"]],
-  //         destroy: true
-  //       });
-  //     },
-  //     error: function (xhr, status, error) {
-  //       console.error("Error fetching history orders:", error);
-  //     }
-  //   });
-  // }
   let historyOrders = []; 
   // Function to fetch history orders
 function fetchHistoryOrders() {
