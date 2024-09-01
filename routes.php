@@ -273,7 +273,7 @@ any('/model-pos-details', 'views/rider_v2/model/model-pos-details.php');
 any('/model-acceptedPos', 'views/rider_v2/model/model-acceptedPos.php');
 any('/model-acceptedPos-details', 'views/rider_v2/model/model-acceptedPos-details.php');
 any('/model-cancelPos', 'views/rider_v2/model/model-cancel-pos.php');
-
+any('/model-processPosPayment', 'views/rider_v2/model/model-processPosPayment.php');
 
 any('/model-order', 'views/rider_v2/model/model-order.php');
 any('/model-acceptedOrder', 'views/rider_v2/model/model-acceptedOrder.php');

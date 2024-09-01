@@ -33,6 +33,7 @@
         <?php require_once 'views/rider_v2/content/content-acceptedOrder.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-acceptedOrder.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-acceptedPos.php'; ?>
+        <?php require_once 'views/rider_v2/modal/modal-posPayment.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-qrCode.php'; ?>
         <?php require_once 'views/rider_v2/template/footer.php'; ?>
     </div>
@@ -70,6 +71,7 @@
     <script src="/asset/js/template/theme.js"></script>
     <script src="/asset/js/rider_v2/rider.js"></script>
     <script src="/asset/js/rider_v2/qr_scanner.js"></script>
+    <script src="/asset/js/rider_v2/confirm_pos.js"></script>
     <!--end::Script-->
 </body>
 <!--end::Body-->
