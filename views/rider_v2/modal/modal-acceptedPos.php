@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id="printPOSButton">Print POS</button>
-        <button type="button" class="btn btn-danger" id="cancelPOSButton">Cancel POS</button>
+        <button type="button" class="btn btn-danger" id="cancelPOSOrderButton">Cancel POS</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>

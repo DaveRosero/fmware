@@ -32,6 +32,7 @@
         <?php require_once 'views/rider_v2/template/sidebar.php'; ?>
         <?php require_once 'views/rider_v2/content/content-acceptedOrder.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-acceptedOrder.php'; ?>
+        <?php require_once 'views/rider_v2/modal/modal-acceptedPos.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-qrCode.php'; ?>
         <?php require_once 'views/rider_v2/template/footer.php'; ?>
     </div>
