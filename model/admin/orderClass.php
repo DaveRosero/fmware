@@ -91,6 +91,7 @@ class Order extends Admin
 
     public function statusFormat($status)
     {
+        $status = strtolower($status);
         if ($status === 'to pay') {
             $format = '<span class="badge bg-info text-wrap">' . strtoupper($status) . '</span>';
         }
@@ -107,7 +108,15 @@ class Order extends Admin
             $format = '<span class="badge bg-success text-wrap">' . strtoupper($status) . '</span>';
         }
 
-        return $format;
+        if ($status === 'prepared') {
+            $format = '<span class="badge bg-light border text-dark text-wrap">' . strtoupper($status) . '</span>';
+        }
+
+        if ($status === 'partially refunded' || $status === 'fully refunded' || $status === 'partially replaced' || $status === 'fully replaced') {
+            $format = '<span class="badge bg-secondary text-wrap">' . strtoupper($status) . '</span>';
+        }
+
+        return $format ?? null;
     }
 
     public function statusButton($status, $paid, $payment)
