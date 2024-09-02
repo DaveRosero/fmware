@@ -31,6 +31,7 @@
         <?php require_once 'views/rider_v2/template/sidebar.php'; ?>
         <?php require_once 'views/rider_v2/content/content-history.php'; ?>
         <?php require_once 'views/rider_v2/modal/modal-history.php'; ?>
+        <?php require_once 'views/rider_v2/modal/modal-historyPos.php'; ?>
         <?php require_once 'views/rider_v2/template/footer.php'; ?>
     </div>
     <!--end::App Wrapper-->
