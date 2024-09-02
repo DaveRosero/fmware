@@ -8,6 +8,7 @@
             <form id="new-unit" method="POST">
                 <div class="modal-body">
                     <div class="table-responsive">
+                        <p class="text-start" id="customer"></p>
                         <table class="table table-borderless">
                             <thead>
                                 <th class="text-center">Image</th>
@@ -19,6 +20,7 @@
 
                             </tbody>
                         </table>
+                        <p class="text-end" id="staff"></p>
                     </div>
                 </div>
                 <div class="modal-footer">
