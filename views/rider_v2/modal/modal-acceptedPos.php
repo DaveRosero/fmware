@@ -43,9 +43,8 @@
         </div>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-primary" id="posPaymentButton">To Payment</button>
-        <button type="button" class="btn btn-danger" id="cancelPOSOrderButton">Cancel POS</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="posPaymentButton">To Payment</button>
+        <button type="button" class="btn btn-danger" id="cancelPOSOrderButton">Cancel Order</button>
       </div>
     </div>
   </div>
