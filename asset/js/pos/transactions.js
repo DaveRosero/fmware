@@ -318,16 +318,17 @@ $(document).ready(function () {
       }
 
       // Check if any item has remaining quantity
-      const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(5)").data("initial-qty"));
-      const remainingQty = initialQty - parseInt(refund_qty);
+      const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
+      const remainingQty = initialQty - refund_qty;
+      console.log(`Product ID: ${product_id}, Initial Qty: ${initialQty}, Refund Qty: ${refund_qty}, Remaining Qty: ${remainingQty}`);
       if (remainingQty > 0) {
         itemsRemaining = true;
       }
     });
 
-    if (itemsRemaining) {
-      newStatus = 'partially refunded';
-    }
+    console.log(`Items Remaining: ${itemsRemaining}`);
+
+    newStatus = itemsRemaining ? 'partially refunded' : 'fully refunded';
 
     if (!isValid) {
       Swal.fire({
