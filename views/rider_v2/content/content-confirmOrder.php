@@ -38,7 +38,7 @@
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Gcash" value="2" >
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Gcash" value="2">
                                         <label class="form-check-label" for="flexRadioDefault2">
                                             Gcash
                                         </label>
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
 
-                    
+
                             <div>
                                 <button type="button" class="btn btn-primary" id="delivered-btn" disabled>Delivered</button>
                             </div>
