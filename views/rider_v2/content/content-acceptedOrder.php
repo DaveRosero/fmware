@@ -15,20 +15,20 @@
                 <div class="col-12">
                     <!-- Search and Sort Section -->
                     <div class="d-flex justify-content-between">
-                        <input type="text" id="search-input" class="form-control me-2" placeholder="Search by Order Ref">
-                        
+                        <input type="text" id="search-input" class="form-control me-2" placeholder="Search by Order Ref or POS Ref">
+
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                               Sort By
+                                Sort By
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Order Ref</a></li>
-                                <li><a class="dropdown-item" href="#">Date</a></li>
-                                <li><a class="dropdown-item" href="#">Paid</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Order Ref">Order Ref</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="POS Ref">POS Ref</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Date">Date</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Paid">Paid</a></li>
                             </ul>
                         </div>
                     </div>
-
                     <!-- Accepted Orders Container -->
                     <div id="accepted-orders-container" class="mt-3">
                         <!-- Accepted orders will be dynamically appended here -->

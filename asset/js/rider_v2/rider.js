@@ -63,7 +63,8 @@ $(document).ready(function () {
 
   let orders = []; // Global variable to store fetched orders
   let pos = []; // Global variable to store fetched POS
-
+  
+  // Fetch Orders and POS from the server
   function fetchOrdersAndPOS() {
     $.when(
       $.ajax({
@@ -85,7 +86,7 @@ $(document).ready(function () {
             (order.paid.toLowerCase() === "paid" ||
               order.paid.toLowerCase() === "unpaid") // Paid or Unpaid orders
         );
-
+  
         pos = posResponse[0].filter(
           (posItem) =>
             posItem.status.toLowerCase() === "pending" && // Status is pending
@@ -93,30 +94,76 @@ $(document).ready(function () {
             (posItem.paid.toLowerCase() === "paid" ||
               posItem.paid.toLowerCase() === "unpaid") // Paid or Unpaid POS
         );
-
-        displayOrdersAndPOS(); // Display both Orders and POS
+  
+        displayOrdersAndPOS(orders, pos); // Display both Orders and POS
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
         console.error("Error fetching orders or POS:", textStatus, errorThrown);
       });
   }
-
+  
+  // Search functionality: Filter Orders and POS by reference (order_ref or pos_ref)
+  $("#search-input").on("input", function () {
+    const searchTerm = $(this).val().toLowerCase();
+  
+    // Filter orders by order_ref
+    const filteredOrders = orders.filter((order) =>
+      order.order_ref.toLowerCase().includes(searchTerm)
+    );
+  
+    // Filter POS by pos_ref
+    const filteredPOS = pos.filter((posItem) =>
+      posItem.pos_ref.toLowerCase().includes(searchTerm)
+    );
+  
+    displayOrdersAndPOS(filteredOrders, filteredPOS); // Display filtered results
+    attachEventListeners()
+  });
+  
+  // Sort Orders and POS based on selected criteria
+  function sortOrdersAndPOS(criteria) {
+    const sortedOrders = [...orders].sort((a, b) => {
+      if (criteria === "Order Ref") {
+        return a.order_ref.localeCompare(b.order_ref);
+      } else if (criteria === "Date") {
+        return new Date(b.date) - new Date(a.date); // Newest date first
+      } else if (criteria === "Paid") {
+        return a.paid.localeCompare(b.paid);
+      }
+    });
+  
+    const sortedPOS = [...pos].sort((a, b) => {
+      if (criteria === "POS Ref") {
+        return a.pos_ref.localeCompare(b.pos_ref);
+      } else if (criteria === "Date") {
+        return new Date(b.date) - new Date(a.date); // Newest date first
+      } else if (criteria === "Paid") {
+        return a.paid.localeCompare(b.paid);
+      }
+    });
+  
+    displayOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted results
+  }
+  
+  // Sorting functionality: Trigger when a sort option is selected
+  $(".dropdown-menu .dropdown-item").on("click", function (e) {
+    e.preventDefault();
+    const sortBy = $(this).data("sort"); // Get the data-sort attribute value
+    sortOrdersAndPOS(sortBy); // Sort Orders and POS based on criteria
+  });
+  
   // Display both Orders and POS cards
-  function displayOrdersAndPOS() {
+  function displayOrdersAndPOS(filteredOrders, filteredPOS) {
     const container = $("#orders-container");
-    container.empty(); // Clear the container before appending new orders and POS
-
+    container.empty(); // Clear the container
+  
     // Display Orders
-    orders.forEach((order) => {
+    filteredOrders.forEach((order) => {
       const orderRef = order.order_ref || "N/A";
       const orderDate = formatDateTime(order.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(
-        order.paid
-      )} me-2">${order.paid || "N/A"}</span>`;
-      const deliveryStatus = `<span class="${getStatusBadgeClass(
-        order.status
-      )}">${order.status || "N/A"}</span>`;
-
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(order.paid)} me-2">${order.paid || "N/A"}</span>`;
+      const deliveryStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"}</span>`;
+  
       const orderCard = `
         <div class="card mb-3">
           <div class="card-body">
@@ -132,21 +179,16 @@ $(document).ready(function () {
           </div>
         </div>
       `;
-
-      container.append(orderCard); // Append each order card to the container
+      container.append(orderCard);
     });
-
+  
     // Display POS
-    pos.forEach((posItem) => {
+    filteredPOS.forEach((posItem) => {
       const posRef = posItem.pos_ref || "N/A";
       const posDate = formatDateTime(posItem.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(
-        posItem.paid
-      )} me-2">${posItem.paid || "N/A"}</span>`;
-      const deliveryStatus = `<span class="${getStatusBadgeClass(
-        posItem.status
-      )}">${posItem.status || "N/A"}</span>`;
-
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(posItem.paid)} me-2">${posItem.paid || "N/A"}</span>`;
+      const deliveryStatus = `<span class="${getStatusBadgeClass(posItem.status)}">${posItem.status || "N/A"}</span>`;
+  
       const posCard = `
         <div class="card mb-3">
           <div class="card-body">
@@ -162,13 +204,11 @@ $(document).ready(function () {
           </div>
         </div>
       `;
-
-      container.append(posCard); // Append each POS card to the container
+      container.append(posCard);
     });
-
-    // Attach event listeners for both buttons
-    attachEventListeners();
+    attachEventListeners()
   }
+  
 
   // Attach event listeners to the view buttons
   function attachEventListeners() {
@@ -452,114 +492,236 @@ $(document).ready(function () {
 
   let acceptedOrders = []; // Global variable to store fetched accepted orders
   let acceptedPOS = []; // Global variable to store fetched accepted POS
-
+  
   function fetchAcceptedOrdersAndPOS() {
-    $.when(
-      $.ajax({
-        url: "/model-acceptedOrder", // URL for fetching accepted orders
-        type: "GET",
-        dataType: "json",
-      }),
-      $.ajax({
-        url: "/model-acceptedPos", // URL for fetching accepted POS
-        type: "GET",
-        dataType: "json",
-      })
-    )
+      $.when(
+          $.ajax({
+              url: "/model-acceptedOrder", // URL for fetching accepted orders
+              type: "GET",
+              dataType: "json",
+          }),
+          $.ajax({
+              url: "/model-acceptedPos", // URL for fetching accepted POS
+              type: "GET",
+              dataType: "json",
+          })
+      )
       .done(function (ordersResponse, posResponse) {
-        console.log(ordersResponse, posResponse);
-        // Filter and assign the response data to global variables
-        acceptedOrders = ordersResponse[0].filter(
-          (order) =>
-            order.status === "delivering" && // Status is delivering
-            order.rider_id == riderId // Matching rider ID
-        );
-
-        acceptedPOS = posResponse[0].filter(
-          (posItem) =>
-            posItem.status === "delivering" && // Status is delivering
-            posItem.rider_id == riderId // Matching rider ID
-        );
-
-        displayAcceptedOrdersAndPOS(); // Display both accepted orders and POS
+          console.log(ordersResponse, posResponse);
+          // Filter and assign the response data to global variables
+          acceptedOrders = ordersResponse[0].filter(
+              (order) =>
+                  order.status === "delivering" && // Status is delivering
+                  order.rider_id == riderId // Matching rider ID
+          );
+  
+          acceptedPOS = posResponse[0].filter(
+              (posItem) =>
+                  posItem.status === "delivering" && // Status is delivering
+                  posItem.rider_id == riderId // Matching rider ID
+          );
+  
+          displayAcceptedOrdersAndPOS(); // Display both accepted orders and POS
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
-        console.error(
-          "Error fetching accepted orders or POS:",
-          textStatus,
-          errorThrown
-        );
+          console.error(
+              "Error fetching accepted orders or POS:",
+              textStatus,
+              errorThrown
+          );
       });
   }
-  fetchAcceptedOrdersAndPOS();
-  // Function to display both accepted Orders and POS cards
-  function displayAcceptedOrdersAndPOS() {
-    const container = $("#accepted-orders-container");
-    container.empty(); // Clear the container before appending new orders and POS
-
-    // Display Accepted Orders
-    acceptedOrders.forEach((order) => {
-      const orderRef = order.order_ref || "N/A";
-      const orderDate = formatDateTime(order.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(
-        order.paid
-      )} me-2">${order.paid || "N/A"}</span>`;
-      const deliveryStatus = `<span class="${getStatusBadgeClass(
-        order.status
-      )}">${order.status || "N/A"}</span>`;
-
-      const orderCard = `
-      <div class="card mb-3">
-        <div class="card-body">
-          <div><strong>Order Ref:</strong> ${orderRef}</div>
-          <div><strong>Date:</strong> ${orderDate}</div>
-          <div class="d-flex mb-2">
-            ${paidStatus} 
-            ${deliveryStatus}
+  
+  function displayAcceptedOrdersAndPOS(orders = acceptedOrders, pos = acceptedPOS) {
+      const container = $("#accepted-orders-container");
+      container.empty(); // Clear the container before appending new orders and POS
+  
+      // Display Accepted Orders
+      orders.forEach((order) => {
+          const orderRef = order.order_ref || "N/A";
+          const orderDate = formatDateTime(order.date) || "N/A";
+          const paidStatus = `<span class="${getPaidStatusBadgeClass(
+              order.paid
+          )} me-2">${order.paid || "N/A"}</span>`;
+          const deliveryStatus = `<span class="${getStatusBadgeClass(
+              order.status
+          )}">${order.status || "N/A"}</span>`;
+  
+          const orderCard = `
+          <div class="card mb-3">
+              <div class="card-body">
+                  <div><strong>Order Ref:</strong> ${orderRef}</div>
+                  <div><strong>Date:</strong> ${orderDate}</div>
+                  <div class="d-flex mb-2">
+                      ${paidStatus} 
+                      ${deliveryStatus}
+                  </div>
+                  <div>
+                      <button class="btn btn-primary view-order-btn" data-type="order" data-ref="${orderRef}">View Order</button>
+                  </div>
+              </div>
           </div>
-          <div>
-            <button class="btn btn-primary view-order-btn" data-type="order" data-ref="${orderRef}">View Order</button>
+          `;
+  
+          container.append(orderCard); // Append each accepted order card to the container
+      });
+  
+      // Display Accepted POS
+      pos.forEach((posItem) => {
+          const posRef = posItem.pos_ref || "N/A";
+          const posDate = formatDateTime(posItem.date) || "N/A";
+          const paidStatus = `<span class="${getPaidStatusBadgeClass(
+              posItem.paid
+          )} me-2">${posItem.paid || "N/A"}</span>`;
+          const deliveryStatus = `<span class="${getStatusBadgeClass(
+              posItem.status
+          )}">${posItem.status || "N/A"}</span>`;
+  
+          const posCard = `
+          <div class="card mb-3">
+              <div class="card-body">
+                  <div><strong>POS Ref:</strong> ${posRef}</div>
+                  <div><strong>Date:</strong> ${posDate}</div>
+                  <div class="d-flex mb-2">
+                      ${paidStatus} 
+                      ${deliveryStatus}
+                  </div>
+                  <div>
+                      <button class="btn btn-primary view-pos-btn" data-type="pos" data-ref="${posRef}">View POS</button>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
-    `;
-
-      container.append(orderCard); // Append each accepted order card to the container
-    });
-
-    // Display Accepted POS
-    acceptedPOS.forEach((posItem) => {
-      const posRef = posItem.pos_ref || "N/A";
-      const posDate = formatDateTime(posItem.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(
-        posItem.paid
-      )} me-2">${posItem.paid || "N/A"}</span>`;
-      const deliveryStatus = `<span class="${getStatusBadgeClass(
-        posItem.status
-      )}">${posItem.status || "N/A"}</span>`;
-
-      const posCard = `
-      <div class="card mb-3">
-        <div class="card-body">
-          <div><strong>POS Ref:</strong> ${posRef}</div>
-          <div><strong>Date:</strong> ${posDate}</div>
-          <div class="d-flex mb-2">
-            ${paidStatus} 
-            ${deliveryStatus}
-          </div>
-          <div>
-            <button class="btn btn-primary view-pos-btn" data-type="pos" data-ref="${posRef}">View POS</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-      container.append(posCard); // Append each accepted POS card to the container
-    });
-
-    // Attach event listeners for both buttons
-    attachAcceptedEventListeners();
+          `;
+  
+          container.append(posCard); // Append each accepted POS card to the container
+      });
+  
+      // Attach event listeners for both buttons
+      attachAcceptedEventListeners();
   }
+  
+  // Search functionality: Filter orders and POS by their reference (order_ref or pos_ref)
+  $("#search-input").on("input", function () {
+      const searchTerm = $(this).val().toLowerCase();
+  
+      // Filter accepted orders by order_ref
+      const searchedOrders = acceptedOrders.filter((order) =>
+          order.order_ref.toLowerCase().includes(searchTerm)
+      );
+  
+      // Filter accepted POS by pos_ref
+      const searchedPOS = acceptedPOS.filter((posItem) =>
+          posItem.pos_ref.toLowerCase().includes(searchTerm)
+      );
+  
+      displayAcceptedOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
+  });
+  
+  // Sort functionality: Sort orders and POS based on selected criteria
+  function sortAcceptedOrdersAndPOS(criteria) {
+      const sortedOrders = [...acceptedOrders].sort((a, b) => {
+          if (criteria === "Order Ref") {
+              return a.order_ref.localeCompare(b.order_ref);
+          } else if (criteria === "Date") {
+              return new Date(b.date) - new Date(a.date); // Sort by newest date first
+          } else if (criteria === "Paid") {
+              return a.paid.localeCompare(b.paid);
+          }
+      });
+  
+      const sortedPOS = [...acceptedPOS].sort((a, b) => {
+          if (criteria === "POS Ref") {
+              return a.pos_ref.localeCompare(b.pos_ref);
+          } else if (criteria === "Date") {
+              return new Date(b.date) - new Date(a.date); // Sort by newest date first
+          } else if (criteria === "Paid") {
+              return a.paid.localeCompare(b.paid);
+          }
+      });
+  
+      displayAcceptedOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
+      attachAcceptedEventListeners();
+  }
+  
+  // Sorting functionality: Trigger when a sort option is selected
+  $(".dropdown-menu .dropdown-item").on("click", function (e) {
+      e.preventDefault();
+      const sortBy = $(this).data("sort"); // Get the data-sort attribute value
+      sortAcceptedOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
+  });
+  
+  // Initial fetch
+  fetchAcceptedOrdersAndPOS();
+  
+  
+  function attachAcceptedEventListeners() {
+      // Add event listeners for view buttons
+      $("#accepted-orders-container").on("click", ".view-order-btn", function () {
+          const orderRef = $(this).data("ref");
+          // Handle view order action
+          console.log(`Viewing order ${orderRef}`);
+      });
+  
+      $("#accepted-orders-container").on("click", ".view-pos-btn", function () {
+          const posRef = $(this).data("ref");
+          // Handle view POS action
+          console.log(`Viewing POS ${posRef}`);
+      });
+  }
+  
+  // Search functionality: Filter orders and POS by their reference (order_ref or pos_ref)
+  $("#search-input").on("input", function () {
+      const searchTerm = $(this).val().toLowerCase();
+  
+      // Filter accepted orders by order_ref
+      const searchedOrders = acceptedOrders.filter((order) =>
+          order.order_ref.toLowerCase().includes(searchTerm)
+      );
+  
+      // Filter accepted POS by pos_ref
+      const searchedPOS = acceptedPOS.filter((posItem) =>
+          posItem.pos_ref.toLowerCase().includes(searchTerm)
+      );
+  
+      displayAcceptedOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
+  });
+  
+  // Sort functionality: Sort orders and POS based on selected criteria
+  function sortAcceptedOrdersAndPOS(criteria) {
+      const sortedOrders = [...acceptedOrders].sort((a, b) => {
+          if (criteria === "Order Ref") {
+              return a.order_ref.localeCompare(b.order_ref);
+          } else if (criteria === "Date") {
+              return new Date(b.date) - new Date(a.date); // Sort by newest date first
+          } else if (criteria === "Paid") {
+              return a.paid.localeCompare(b.paid);
+          }
+      });
+  
+      const sortedPOS = [...acceptedPOS].sort((a, b) => {
+          if (criteria === "POS Ref") {
+              return a.pos_ref.localeCompare(b.pos_ref);
+          } else if (criteria === "Date") {
+              return new Date(b.date) - new Date(a.date); // Sort by newest date first
+          } else if (criteria === "Paid") {
+              return a.paid.localeCompare(b.paid);
+          }
+      });
+  
+      displayAcceptedOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
+      
+  }
+  
+  // Sorting functionality: Trigger when a sort option is selected
+  $(".dropdown-menu .dropdown-item").on("click", function (e) {
+      e.preventDefault();
+      const sortBy = $(this).data("sort"); // Get the data-sort attribute value
+      sortAcceptedOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
+  });
+  
+  // Initial fetch
+  fetchAcceptedOrdersAndPOS();
+  
 
   // Function to attach event listeners
   function attachAcceptedEventListeners() {

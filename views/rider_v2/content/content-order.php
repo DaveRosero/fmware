@@ -12,21 +12,23 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="d-flex">
-                        <input type="text" class="form-control" placeholder="Search">
+                    <!-- Search and Sort Section -->
+                    <div class="d-flex justify-content-between">
+                        <input type="text" id="search-input" class="form-control me-2" placeholder="Search by Order Ref or POS Ref">
+                        
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                               Sort By
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sort By
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Order</a></li>
-                                <li><a class="dropdown-item" href="#">Date</a></li>
-                                <li><a class="dropdown-item" href="#">Paid</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Order Ref">Order Ref</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="POS Ref">POS Ref</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Date">Date</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Paid">Paid</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div id="orders-container" class="mt-3">
-                    </div>
+                    <div id="orders-container" class="mt-3"></div>
                 </div>
             </div>
         </div>

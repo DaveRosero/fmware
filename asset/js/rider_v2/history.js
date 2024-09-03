@@ -60,127 +60,178 @@ $(document).ready(function () {
   }
   let historyOrders = []; // Store fetched history orders
   let historyPOS = []; // Store fetched history POS
-
-  // Fetch both history orders and POS
+  
   function fetchHistoryOrdersAndPOS() {
-    $.when(
-      $.ajax({
-        url: "/model-history",
-        type: "GET",
-        dataType: "json",
-      }),
-      $.ajax({
-        url: "/model-pos", // Endpoint to fetch POS history
-        type: "GET",
-        dataType: "json",
-      })
-    )
+      $.when(
+          $.ajax({
+              url: "/model-history",
+              type: "GET",
+              dataType: "json",
+          }),
+          $.ajax({
+              url: "/model-pos", // Endpoint to fetch POS history
+              type: "GET",
+              dataType: "json",
+          })
+      )
       .done(function (historyOrdersResponse, historyPOSResponse) {
-        // Filter orders: delivered or canceled, with the correct rider ID
-        historyOrders = historyOrdersResponse[0].filter(
-          (order) =>
-            (order.status.toLowerCase() === "delivered" ||
-              order.status.toLowerCase() === "cancelled") &&
-            order.rider_id == riderId
-        );
-
-        // Filter POS: delivered or canceled, with the correct rider ID
-        historyPOS = historyPOSResponse[0].filter(
-          (pos) =>
-            (pos.status.toLowerCase() === "delivered" ||
-              pos.status.toLowerCase() === "cancelled") &&
-            pos.rider_id == riderId
-        );
-
-        displayHistoryOrdersAndPOS(); // Display both Orders and POS
+          // Filter orders: delivered or canceled, with the correct rider ID
+          historyOrders = historyOrdersResponse[0].filter(
+              (order) =>
+                  (order.status.toLowerCase() === "delivered" ||
+                  order.status.toLowerCase() === "cancelled") &&
+                  order.rider_id == riderId
+          );
+  
+          // Filter POS: delivered or canceled, with the correct rider ID
+          historyPOS = historyPOSResponse[0].filter(
+              (pos) =>
+                  (pos.status.toLowerCase() === "delivered" ||
+                  pos.status.toLowerCase() === "cancelled") &&
+                  pos.rider_id == riderId
+          );
+  
+          displayHistoryOrdersAndPOS(); // Display both Orders and POS
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
-        console.error(
-          "Error fetching history orders or POS:",
-          textStatus,
-          errorThrown
-        );
+          console.error(
+              "Error fetching history orders or POS:",
+              textStatus,
+              errorThrown
+          );
       });
   }
-
-  // Display history orders and POS
-  function displayHistoryOrdersAndPOS() {
-    const container = $("#history-orders-container");
-    container.empty(); // Clear the container before appending new history
-
-    // Display History Orders
-    historyOrders.forEach((order) => {
-      const orderRef = order.order_ref || "N/A";
-      const orderDate = formatDateTime(order.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(
-        order.paid
-      )} me-2">${order.paid || "N/A"}</span>`;
-      const orderStatus = `<span class="${getStatusBadgeClass(order.status)}">${
-        order.status || "N/A"
-      }</span>`;
-
-      const cardBorderClass =
-        order.status.toLowerCase() === "delivered"
-          ? "border-success"
-          : "border-danger";
-
-      const orderCard = `
-        <div class="card mb-3 ${cardBorderClass}">
-          <div class="card-body">
-            <div><strong>Order Ref:</strong> ${orderRef}</div>
-            <div><strong>Date:</strong> ${orderDate}</div>
-            <div class="d-flex mb-2">
-              ${paidStatus} 
-              ${orderStatus}
-            </div>
-            <div>
-              <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View Order</button>
-            </div>
-          </div>
-        </div>
-      `;
-
-      container.append(orderCard); // Append each order card to the container
-    });
-
-    // Display History POS
-    historyPOS.forEach((pos) => {
-      const posRef = pos.pos_ref || "N/A";
-      const posDate = formatDateTime(pos.date) || "N/A";
-      const paidStatus = `<span class="${getPaidStatusBadgeClass(
-        pos.paid
-      )} me-2">${pos.paid || "N/A"}</span>`;
-      const posStatus = `<span class="${getStatusBadgeClass(pos.status)}">${
-        pos.status || "N/A"
-      }</span>`;
-
-      const cardBorderClass =
-        pos.status.toLowerCase() === "delivered"
-          ? "border-success"
-          : "border-danger";
-
-      const posCard = `
-        <div class="card mb-3 ${cardBorderClass}">
-          <div class="card-body">
-            <div><strong>POS Ref:</strong> ${posRef}</div>
-            <div><strong>Date:</strong> ${posDate}</div>
-            <div class="d-flex mb-2">
-              ${paidStatus} 
-              ${posStatus}
-            </div>
-            <div>
-              <button class="btn btn-primary view-pos-btn" data-pos-ref="${posRef}">View POS</button>
-            </div>
-          </div>
-        </div>
-      `;
-
-      container.append(posCard); // Append each POS card to the container
-    });
-
-    // Attach event listeners for view buttons
-    attachEventListeners();
+  
+  function displayHistoryOrdersAndPOS(orders = historyOrders, pos = historyPOS) {
+      const container = $("#history-orders-container");
+      container.empty(); // Clear the container before appending new history
+  
+      // Display History Orders
+      orders.forEach((order) => {
+          const orderRef = order.order_ref || "N/A";
+          const orderDate = formatDateTime(order.date) || "N/A";
+          const paidStatus = `<span class="${getPaidStatusBadgeClass(
+              order.paid
+          )} me-2">${order.paid || "N/A"}</span>`;
+          const orderStatus = `<span class="${getStatusBadgeClass(order.status)}">${
+              order.status || "N/A"
+          }</span>`;
+  
+          const cardBorderClass =
+              order.status.toLowerCase() === "delivered"
+                  ? "border-success"
+                  : "border-danger";
+  
+          const orderCard = `
+              <div class="card mb-3 ${cardBorderClass}">
+                  <div class="card-body">
+                      <div><strong>Order Ref:</strong> ${orderRef}</div>
+                      <div><strong>Date:</strong> ${orderDate}</div>
+                      <div class="d-flex mb-2">
+                          ${paidStatus} 
+                          ${orderStatus}
+                      </div>
+                      <div>
+                          <button class="btn btn-primary view-order-btn" data-order-ref="${orderRef}">View Order</button>
+                      </div>
+                  </div>
+              </div>
+          `;
+  
+          container.append(orderCard); // Append each order card to the container
+      });
+  
+      // Display History POS
+      pos.forEach((pos) => {
+          const posRef = pos.pos_ref || "N/A";
+          const posDate = formatDateTime(pos.date) || "N/A";
+          const paidStatus = `<span class="${getPaidStatusBadgeClass(
+              pos.paid
+          )} me-2">${pos.paid || "N/A"}</span>`;
+          const posStatus = `<span class="${getStatusBadgeClass(pos.status)}">${
+              pos.status || "N/A"
+          }</span>`;
+  
+          const cardBorderClass =
+              pos.status.toLowerCase() === "delivered"
+                  ? "border-success"
+                  : "border-danger";
+  
+          const posCard = `
+              <div class="card mb-3 ${cardBorderClass}">
+                  <div class="card-body">
+                      <div><strong>POS Ref:</strong> ${posRef}</div>
+                      <div><strong>Date:</strong> ${posDate}</div>
+                      <div class="d-flex mb-2">
+                          ${paidStatus} 
+                          ${posStatus}
+                      </div>
+                      <div>
+                          <button class="btn btn-primary view-pos-btn" data-pos-ref="${posRef}">View POS</button>
+                      </div>
+                  </div>
+              </div>
+          `;
+  
+          container.append(posCard); // Append each POS card to the container
+      });
+  
+      // Attach event listeners for view buttons
+      attachEventListeners();
   }
+  
+  // Search functionality: Filter orders and POS by their reference (order_ref or pos_ref)
+  $("#search-input").on("input", function () {
+      const searchTerm = $(this).val().toLowerCase();
+  
+      // Filter history orders by order_ref
+      const searchedOrders = historyOrders.filter((order) =>
+          order.order_ref.toLowerCase().includes(searchTerm)
+      );
+  
+      // Filter history POS by pos_ref
+      const searchedPOS = historyPOS.filter((pos) =>
+          pos.pos_ref.toLowerCase().includes(searchTerm)
+      );
+  
+      displayHistoryOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
+  });
+  
+  // Sort functionality: Sort orders and POS based on selected criteria
+  function sortHistoryOrdersAndPOS(criteria) {
+      const sortedOrders = [...historyOrders].sort((a, b) => {
+          if (criteria === "Order Ref") {
+              return a.order_ref.localeCompare(b.order_ref);
+          } else if (criteria === "Date") {
+              return new Date(b.date) - new Date(a.date); // Sort by newest date first
+          } else if (criteria === "Paid") {
+              return a.paid.localeCompare(b.paid);
+          }
+      });
+  
+      const sortedPOS = [...historyPOS].sort((a, b) => {
+          if (criteria === "POS Ref") {
+              return a.pos_ref.localeCompare(b.pos_ref);
+          } else if (criteria === "Date") {
+              return new Date(b.date) - new Date(a.date); // Sort by newest date first
+          } else if (criteria === "Paid") {
+              return a.paid.localeCompare(b.paid);
+          }
+      });
+  
+      displayHistoryOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
+  }
+  
+  // Sorting functionality: Trigger when a sort option is selected
+  $(".dropdown-menu .dropdown-item").on("click", function (e) {
+      e.preventDefault();
+      const sortBy = $(this).data("sort"); // Get the data-sort attribute value
+      sortHistoryOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
+  });
+  attachEventListeners();
+  // Initial fetch
+  fetchHistoryOrdersAndPOS();
+  
 
   // Attach event listeners for viewing order or POS details
   function attachEventListeners() {
@@ -408,35 +459,5 @@ $(document).ready(function () {
     });
   }
 
-  // Search functionality: Filter orders by order_ref
-  $("#search-input").on("input", function () {
-    const searchTerm = $(this).val().toLowerCase();
-    const filteredOrders = historyOrders.filter((order) =>
-      order.order_ref.toLowerCase().includes(searchTerm)
-    );
-    displayHistoryOrders(filteredOrders);
-  });
-
-  // Sort orders based on selected criteria
-  function sortHistoryOrders(orders, criteria) {
-    return orders.sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      } else if (criteria === "Status") {
-        return a.status.localeCompare(b.status);
-      }
-    });
-  }
-
-  // Sorting functionality: Trigger when a sort option is selected
-  $(".dropdown-menu a").on("click", function (e) {
-    e.preventDefault();
-    const sortBy = $(this).text().trim(); // Get selected sort criteria
-    const sortedOrders = sortHistoryOrders(historyOrders, sortBy); // Sort orders
-    displayHistoryOrders(sortedOrders); // Display sorted orders
-  });
+  
 });
