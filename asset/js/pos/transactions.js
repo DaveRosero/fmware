@@ -276,99 +276,105 @@ $(document).ready(function () {
     const refundItems = [];
     let goodItemsCount = 0;
     let badItemsCount = 0;
-    let itemsRemaining = false;
-    let newStatus = 'fully refunded';
-
-    // Validate reason and items
     let isValid = true;
+
+    // Validate reason
     if (refundReason === "") {
-      isValid = false;
-      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+        isValid = false;
+        $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
     } else {
-      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+        $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
     }
 
-    $(".selectedItem:checked").each(function () {
-      const product_id = $(this).data("product-id");
-      const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
-      const condition = $(this).closest("tr").find(".item-condition").val();
+    // Initialize counters
+    let totalInitialItems = 0;
+    let totalRefundedItems = 0;
+    let totalRemainingItems = 0;
 
-      // Check if condition is selected
-      if (condition === "") {
-        isValid = false;
-        $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
-      } else {
-        $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
-      }
+    // Loop through all items in the transaction, including non-selected ones
+    $(".selectedItem").each(function () {
+        const product_id = $(this).data("product-id");
+        const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
+        const condition = $(this).closest("tr").find(".item-condition").val();
+        const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
+        
+        // Only process if the item is selected
+        if ($(this).is(":checked")) {
+            // Validate condition and quantity
+            if (condition === "") {
+                isValid = false;
+                $(this).closest("tr").find(".item-condition").addClass('is-invalid');
+            } else {
+                $(this).closest("tr").find(".item-condition").removeClass('is-invalid');
+            }
 
-      // Validate quantity
-      if (refund_qty <= 0 || isNaN(refund_qty)) {
-        isValid = false;
-        $(this).closest("tr").find(".refund-quantity").addClass('is-invalid'); // Highlight invalid field
-      } else {
-        $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid'); // Remove highlight if valid
-      }
+            if (refund_qty <= 0 || isNaN(refund_qty)) {
+                isValid = false;
+                $(this).closest("tr").find(".refund-quantity").addClass('is-invalid');
+            } else {
+                $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid');
+            }
 
-      refundItems.push({ product_id, refund_qty, condition });
+            refundItems.push({ product_id, refund_qty, condition });
 
-      if (condition === "Good") {
-        goodItemsCount += parseInt(refund_qty);
-      } else if (condition === "Broken") {
-        badItemsCount += parseInt(refund_qty);
-      }
+            if (condition === "Good") {
+                goodItemsCount += parseInt(refund_qty);
+            } else if (condition === "Broken") {
+                badItemsCount += parseInt(refund_qty);
+            }
 
-      // Check if any item has remaining quantity
-      const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
-      const remainingQty = initialQty - refund_qty;
-      console.log(`Product ID: ${product_id}, Initial Qty: ${initialQty}, Refund Qty: ${refund_qty}, Remaining Qty: ${remainingQty}`);
-      if (remainingQty > 0) {
-        itemsRemaining = true;
-      }
+            totalRefundedItems += parseInt(refund_qty);
+        }
+
+        totalInitialItems += initialQty;
+        totalRemainingItems += Math.max(0, initialQty - (refund_qty ? parseInt(refund_qty) : 0));
     });
 
-    console.log(`Items Remaining: ${itemsRemaining}`);
-
-    newStatus = itemsRemaining ? 'partially refunded' : 'fully refunded';
+    // Determine newStatus based on remaining items
+    let newStatus = 'fully refunded';
+    if (totalRemainingItems > 0) {
+        newStatus = 'partially refunded';
+    }
 
     if (!isValid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: 'Please ensure all selected items have a valid condition and quantity. Also, provide a reason for the refund.',
-      });
-      return; // Stop further processing
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: 'Please ensure all selected items have a valid condition and quantity. Also, provide a reason for the refund.',
+        });
+        return; // Stop further processing
     }
 
     $.ajax({
-      url: "/pos-processRefund",
-      method: "POST",
-      data: {
-        pos_ref: posRef,
-        total_refund_value: totalRefundValue,
-        refund_items: refundItems,
-        refund_reason: refundReason,
-        status: newStatus
-      },
-      success: function (response) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Refund Processed',
-          html: `Refund processed successfully.<br>Good items refunded: ${goodItemsCount}<br>Bad items refunded: ${badItemsCount}`,
-        });
-        $("#transaction-status").text(newStatus);
-        $("#transaction-viewModal").modal("hide");
-        fetchTransactions();
-      },
-      error: function (xhr, status, error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Refund Failed',
-          text: 'Failed to process refund. Please try again.',
-        });
-      }
+        url: "/pos-processRefund",
+        method: "POST",
+        data: {
+            pos_ref: posRef,
+            total_refund_value: totalRefundValue,
+            refund_items: refundItems,
+            refund_reason: refundReason,
+            status: newStatus
+        },
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Refund Processed',
+                html: `Refund processed successfully.<br>Good items refunded: ${goodItemsCount}<br>Bad items refunded: ${badItemsCount}`,
+            });
+            $("#transaction-status").text(newStatus);
+            $("#transaction-viewModal").modal("hide");
+            fetchTransactions();
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Refund Failed',
+                text: 'Failed to process refund. Please try again.',
+            });
+        }
     });
   });
-
+  
 
   $("#replace-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
@@ -377,93 +383,102 @@ $(document).ready(function () {
     const replacedItems = [];
     let goodItemsCount = 0;
     let badItemsCount = 0;
-    let itemsRemaining = false;
-    let newStatus = 'fully replaced';
-
-    // Validate reason and items
     let isValid = true;
+
+    // Validate reason
     if (replacementReason === "") {
-      isValid = false;
-      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+        isValid = false;
+        $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
     } else {
-      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+        $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
     }
 
-    $(".selectedItem:checked").each(function () {
-      const product_id = $(this).data("product-id");
-      const refund_qty = parseInt($(this).closest("tr").find(".refund-quantity").val(), 10);
-      const condition = $(this).closest("tr").find(".item-condition").val();
+    // Initialize counters
+    let totalInitialItems = 0;
+    let totalReplacedItems = 0;
+    let totalRemainingItems = 0;
 
-      // Check if condition is selected
-      if (condition === "") {
-        isValid = false;
-        $(this).closest("tr").find(".item-condition").addClass('is-invalid'); // Highlight invalid field
-      } else {
-        $(this).closest("tr").find(".item-condition").removeClass('is-invalid'); // Remove highlight if valid
-      }
+    // Loop through all items in the transaction, including non-selected ones
+    $(".selectedItem").each(function () {
+        const product_id = $(this).data("product-id");
+        const refund_qty = parseInt($(this).closest("tr").find(".refund-quantity").val(), 10);
+        const condition = $(this).closest("tr").find(".item-condition").val();
+        const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
 
-      // Validate quantity
-      if (refund_qty <= 0 || isNaN(refund_qty)) {
-        isValid = false;
-        $(this).closest("tr").find(".refund-quantity").addClass('is-invalid'); // Highlight invalid field
-      } else {
-        $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid'); // Remove highlight if valid
-      }
+        // Only process if the item is selected
+        if ($(this).is(":checked")) {
+            // Validate condition and quantity
+            if (condition === "") {
+                isValid = false;
+                $(this).closest("tr").find(".item-condition").addClass('is-invalid');
+            } else {
+                $(this).closest("tr").find(".item-condition").removeClass('is-invalid');
+            }
 
-      replacedItems.push({ product_id, refund_qty, condition });
+            if (refund_qty <= 0 || isNaN(refund_qty)) {
+                isValid = false;
+                $(this).closest("tr").find(".refund-quantity").addClass('is-invalid');
+            } else {
+                $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid');
+            }
 
-      if (condition === "Good") {
-        goodItemsCount += refund_qty;
-      } else if (condition === "Broken") {
-        badItemsCount += refund_qty;
-      }
+            replacedItems.push({ product_id, refund_qty, condition });
 
-      const remainingQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10) - refund_qty;
-      if (remainingQty > 0) {
-        itemsRemaining = true;
-      }
+            if (condition === "Good") {
+                goodItemsCount += refund_qty;
+            } else if (condition === "Broken") {
+                badItemsCount += refund_qty;
+            }
 
-      if (itemsRemaining) {
-        newStatus = 'partially replaced';
-      }
+            totalReplacedItems += refund_qty;
+        }
+
+        totalInitialItems += initialQty;
+        totalRemainingItems += Math.max(0, initialQty - (refund_qty ? refund_qty : 0));
     });
 
+    // Determine newStatus based on remaining items
+    let newStatus = 'fully replaced';
+    if (totalRemainingItems > 0) {
+        newStatus = 'partially replaced';
+    }
+
     if (!isValid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Error',
-        text: 'Please select a condition for all selected items and provide a reason for the replacement.',
-      });
-      return; // Stop further processing
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: 'Please select a condition for all selected items and provide a reason for the replacement.',
+        });
+        return; // Stop further processing
     }
 
     $.ajax({
-      url: "/pos-processReplace",
-      method: "POST",
-      data: {
-        pos_ref: posRef,
-        total_refund_value: totalReplaceValue,
-        replaced_items: replacedItems,
-        replacement_reason: replacementReason,
-        status: newStatus
-      },
-      success: function (response) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Replacement Processed',
-          html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
-        });
-        $("#transaction-status").text(newStatus);
-        $("#transaction-viewModal").modal("hide");
-        fetchTransactions();
-      },
-      error: function (xhr, status, error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Replacement Failed',
-          text: 'Failed to process replacement. Please try again.',
-        });
-      }
+        url: "/pos-processReplace",
+        method: "POST",
+        data: {
+            pos_ref: posRef,
+            total_refund_value: totalReplaceValue,
+            replaced_items: replacedItems,
+            replacement_reason: replacementReason,
+            status: newStatus
+        },
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Replacement Processed',
+                html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
+            });
+            $("#transaction-status").text(newStatus);
+            $("#transaction-viewModal").modal("hide");
+            fetchTransactions();
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Replacement Failed',
+                text: 'Failed to process replacement. Please try again.',
+            });
+        }
     });
   });
 });
