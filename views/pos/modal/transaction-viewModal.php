@@ -67,7 +67,6 @@
                                     <h5 class="text-secondary me-auto">Returned/Refunded Reason:</h5>
                                     <select class="form-select select-reason" aria-label="Default select example" id="replace-refund-reason" disabled>
                                         <option value="">Select Reason</option>
-                                        <option value="wrong items">Wrong Items</option>
                                         <option value="duplicated items">Duplicated Items</option>
                                         <option value="expired items">Expired items</option>
                                     </select>
