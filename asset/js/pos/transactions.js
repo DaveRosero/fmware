@@ -14,7 +14,7 @@ $(document).ready(function () {
         }
         // Initialize DataTable
         $('#transaction-table').DataTable({
-          data: response.filter(transaction => !['void', 'prepared', 'to pay'].includes(transaction.status)).map(transaction => [
+          data: response.filter(transaction => !['void', 'prepared', 'to pay', 'cancelled', 'delivered'].includes(transaction.status)).map(transaction => [
             transaction.pos_ref || transaction.order_ref,
             formatDateTime(transaction.date),
             '₱' + Number(transaction.total || transaction.gross).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
@@ -359,7 +359,7 @@ $(document).ready(function () {
             Swal.fire({
                 icon: 'success',
                 title: 'Refund Processed',
-                html: `Refund processed successfully.<br>Good items refunded: ${goodItemsCount}<br>Bad items refunded: ${badItemsCount}`,
+                html: `Refund processed successfully.<br>Wrong items refunded: ${goodItemsCount}<br>Defective items refunded: ${badItemsCount}`,
             });
             $("#transaction-status").text(newStatus);
             $("#transaction-viewModal").modal("hide");
@@ -466,7 +466,7 @@ $(document).ready(function () {
             Swal.fire({
                 icon: 'success',
                 title: 'Replacement Processed',
-                html: `Replacement processed successfully.<br>Good items replaced: ${goodItemsCount}<br>Bad items replaced: ${badItemsCount}`,
+                html: `Replacement processed successfully.<br>Wrong items replaced: ${goodItemsCount}<br>Defective items replaced: ${badItemsCount}`,
             });
             $("#transaction-status").text(newStatus);
             $("#transaction-viewModal").modal("hide");

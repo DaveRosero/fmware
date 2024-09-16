@@ -71,8 +71,8 @@ while ($row = $result_pos_items->fetch_assoc()) {
     <td>
       <select class="form-select item-condition" aria-label="Default select example" disabled>
         <option value="">Select item condition</option>
-        <option value="Good">Good</option>
-        <option value="Broken">Broken</option>
+        <option value="Good">Wrong Item</option>
+        <option value="Broken">Defective</option>
       </select>
     </td>
     </tr>';
@@ -98,8 +98,8 @@ while ($row = $result_order_items->fetch_assoc()) {
     <td>
       <select class="form-select item-condition" aria-label="Default select example" disabled>
         <option value="">Select item condition</option>
-        <option value="Good">Good</option>
-        <option value="Broken">Broken</option>
+        <option value="Good">Wrong Item</option>
+        <option value="Broken">Defective</option>
       </select>
     </td>
     </tr>';
