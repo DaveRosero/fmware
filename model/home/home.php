@@ -16,7 +16,7 @@
                     header('Location: /dashboard');
                     break;
                 case 'delivery':
-                    header('Location: /scan-qr');
+                    header('Location: /rider-order');
                     break;
                 default:
                     header('Location: /pos');
