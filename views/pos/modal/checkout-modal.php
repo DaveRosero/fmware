@@ -55,7 +55,7 @@
                             <div class="mb-2">
                                 <form id="discount-form" class="mb-2">
                                     <label for="cashRec-input" class="form-label">Cash Received</label>
-                                    <input type="number" class="form-control" name="cash" id="cashRec-input" />
+                                    <input type="number" class="form-control" name="cash" id="cashRec-input" value="0.00" />
                                 </form>
                                 <div class="d-flex justify-content-end">
                                     <h5 class="text-secondary my-auto">Change:</h5>

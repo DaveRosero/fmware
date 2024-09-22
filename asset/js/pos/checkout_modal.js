@@ -211,6 +211,20 @@ $(document).ready(function () {
   calculateDiscount(); // Ensure discount calculation on load
   calculateChange(); // Ensure change calculation on load
 
+  $("#cashRec-input").on("focus", function() {
+    if ($(this).val() === "0.00") {
+        $(this).val("");
+    }
+  });
+
+  $("#cashRec-input").on("blur", function() {
+      if ($(this).val() === "") {
+          $(this).val("0.00");
+      }
+  });
+
+  $("#cashRec-input").on("input", calculateChange);
+
   // Define a function to generate printable receipt content
   function generatePrintableContent() {
     var content = "";
