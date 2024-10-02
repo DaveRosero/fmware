@@ -12,6 +12,7 @@ get('/view-product/product/$product_id', 'views/home/view-product.php');
 get('/cart', 'views/home/cart.php');
 get('/account/settings', 'views/home/account.php');
 get('/my-purchases/$status', 'views/home/my-purchases.php');
+get('/contact', 'views/home/contact.php');
 
 // Cart Controller
 any('/add-cart', 'controller/home/cart/add-cart.php');
