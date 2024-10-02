@@ -25,6 +25,19 @@
                         <form id="create-report-form" method="POST">
                             <div class="card-body">
                                 <div class="row">
+                                    <div class="col col-sm-2 ms-auto">
+                                        <div class="mb-3">
+                                            <select id="dateRange" class="form-select">
+                                                <option selected disabled>Select Date Range</option>
+                                                <option value="daily">Daily</option>
+                                                <option value="weekly">Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                                <option value="annually">Annually</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="moduleSelect" class="form-label">Select Module</label>
@@ -82,4 +95,4 @@
             </div> <!--end::Row-->
         </div>
     </div> <!--end::App Content-->
-</main> <!--end::App Main--> 
+</main> <!--end::App Main-->
