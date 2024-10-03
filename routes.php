@@ -13,6 +13,7 @@ get('/cart', 'views/home/cart.php');
 get('/account/settings', 'views/home/account.php');
 get('/my-purchases/$status', 'views/home/my-purchases.php');
 get('/contact', 'views/home/contact.php');
+get('/terms-&-conditions', 'views/home/terms.php');
 
 // Cart Controller
 any('/add-cart', 'controller/home/cart/add-cart.php');
