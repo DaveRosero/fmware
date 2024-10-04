@@ -276,107 +276,108 @@ $(document).ready(function () {
 
     var printableContent = `
       <style>
-         @page {
-          size: 80mm 70mm; /* Paper size */
-          margin: 0; /* No margins */
-        }
-        body {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-        }
-        .receipt {
-          width: 80mm; /* Matches the paper size */
-          font-size: 8px; /* Adjust font size for better fit */
-          line-height: 1.2;
-          padding: 2mm;
-        }
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 0;
-          padding: 0;
-        }
-        th, td {
-          padding: 2px; /* Reduce padding to fit more content */
-          text-align: center;
-          border-bottom: 1px solid #ddd;
-          font-size: 8px; /* Adjust font size for better fit */
-        }
-        th {
-          background-color: #f2f2f2;
-        }
-        .total {
-          font-weight: bold;
-          text-align: right;
-          margin-top: 2mm;
-          font-size: 8px; /* Adjust font size for better fit */
-        }
-        .center {
-          text-align: center;
-        }
-        .header {
-          text-align: center; /* Center align header */
-          margin-bottom: 2mm;
-        }
-        .logo {
-          width: 30px; /* Adjust logo size to fit */
-          height: 30px;
-          margin-bottom: 2mm;
-        }
-        .signature {
-          margin-top: 10mm;
-        }
-        .signature p {
-          text-align: center;
-          margin-top: 15mm;
-          font-size: 8px; /* Adjust font size for better fit */
-        }
-      </style>
-      <div class="receipt">
-        <div class="header">
-          <img src="${logosrc}" alt="Company Logo" class="logo">
-          <h2>F.M. ODULIOS ENTERPRISES AND GEN. MERCHANDISE</h2>
-          <p>Mc Arthur HI-way, Poblacion II, Marilao, Bulacan</p>
-        </div>
-        <p>Sales Receipt Number: ${salesReceiptNumber}</p>
-        <p>Customer Name: ${customerName}</p>
-        ${transactionType === "1" ? `<p>Address: ${address}</p>` : ""}
-        ${transactionType === "1" ? `<p>Contact: ${contact}</p>` : ""}
-        <p>Date of Purchase: ${purchasedDate}</p>
-        <table>
-          <thead>
-            <tr><th>Item</th><th>Variant</th><th>Unit</th><th>Price</th><th>Quantity</th><th>Total</th></tr>
-          </thead>
-          <tbody>
-            ${content}
-          </tbody>
-        </table>
-        <div class="total">
-          <p>Subtotal: ₱${originalTotal
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-          ${
-            transactionType === "1"
-              ? `<p>Delivery Fee: ₱${deliveryFee
-                  .toFixed(2)
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>`
-              : ""
-          }
-          <p>Discount: ₱${discount
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-          <p>Total: ₱${finalTotal
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-          <p>Cash: ₱${cashReceived
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-          <p>Change: ${change}</p>
-        </div>
-      </div>`;
+    @page {
+      size: 80mm 210mm; /* Paper size */
+      margin: 0; /* No margins */
+      orientation: portrait;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .receipt {
+      width: 80mm; /* Matches the paper width */
+      font-size: 12px; /* Adjust font size for better fit */
+      line-height: 1.2;
+      padding: 2mm;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+      padding: 0;
+    }
+    th, td {
+      padding: 2px; /* Reduce padding to fit more content */
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      font-size: 12px; /* Adjust font size for better fit */
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .total {
+      font-weight: bold;
+      text-align: right;
+      margin-top: 2mm;
+      font-size: 12px; /* Adjust font size for better fit */
+    }
+    .center {
+      text-align: center;
+    }
+    .header {
+      text-align: center; /* Center align header */
+      margin-bottom: 2mm;
+    }
+    .logo {
+      width: 80px; /* Adjust logo size to fit */
+      height: 80px;
+      margin-bottom: 2mm;
+    }
+    .signature {
+      margin-top: 10mm;
+    }
+    .signature p {
+      text-align: center;
+      margin-top: 15mm;
+      font-size: 8px; /* Adjust font size for better fit */
+    }
+  </style>
+  <div class="receipt">
+    <div class="header">
+      <img src="${logosrc}" alt="Company Logo" class="logo">
+      <h2>F.M. ODULIOS ENTERPRISES AND GEN. MERCHANDISE</h2>
+      <p>Mc Arthur HI-way, Poblacion II, Marilao, Bulacan</p>
+    </div>
+    <p>Sales Receipt Number: ${salesReceiptNumber}</p>
+    <p>Customer Name: ${customerName}</p>
+    ${transactionType === "1" ? `<p>Address: ${address}</p>` : ""}
+    ${transactionType === "1" ? `<p>Contact: ${contact}</p>` : ""}
+    <p>Date of Purchase: ${purchasedDate}</p>
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Variant</th><th>Unit</th><th>Price</th><th>Quantity</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        ${content}
+      </tbody>
+    </table>
+    <div class="total">
+      <p>Subtotal: ₱${originalTotal
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+      ${
+        transactionType === "1"
+          ? `<p>Delivery Fee: ₱${deliveryFee
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>`
+          : ""
+      }
+      <p>Discount: ₱${discount
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+      <p>Total: ₱${finalTotal
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+      <p>Cash: ₱${cashReceived
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+      <p>Change: ${change}</p>
+    </div>
+  </div>`;
 
-    return printableContent;
+return printableContent;
   }
 
   function resetCart() {
