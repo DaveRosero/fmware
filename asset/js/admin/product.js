@@ -274,7 +274,6 @@ $(document).ready(function () {
 
     $('#supplier').select2({
         dropdownParent: $('#newProduct'),
-        tags: true,
         width: '100%',
         placeholder: 'Select a supplier <span class="text-danger">*</span>',
         theme: 'bootstrap-5',
