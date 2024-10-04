@@ -65,7 +65,7 @@ class Product extends Home
                     INNER JOIN stock ON stock.product_id = product.id
                     WHERE EXISTS 
                         (SELECT 1 FROM price_list WHERE price_list.product_id = product.id)
-                    AND product.active != 2 
+                    AND product.active = 1 
                     GROUP BY product.name';
         $stmt = $this->conn->prepare($query);
         if ($stmt) {
