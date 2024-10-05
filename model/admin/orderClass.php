@@ -406,7 +406,7 @@ class Order extends Admin
     public function generateQrCode($order_ref)
     {
         $code = $this->getCode($order_ref);
-        $url = 'https://localhost/confirm-order/' . $code . '/' . $order_ref;
+        $url = 'https://fmware.shop/confirm-order/' . $code . '/' . $order_ref;
         return $url;
     }
 
