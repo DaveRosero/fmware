@@ -18,20 +18,18 @@ $query = '
          pos.changes,
          pos.delivery_fee,
          pos.rider_id,
-         pos.contact_no,
          pos.transaction_type_id,
          pos.payment_type_id,
          pos.user_id,
          pos.address,
          pos.status,
          pos.paid,
-         user.firstname AS user_firstname,
-         user.lastname AS user_lastname,
-         user.phone AS user_phone,
+         pos.contact_no,  -- Fetch from pos table
+         pos.firstname,    -- Fetch from pos table
+         pos.lastname,     -- Fetch from pos table
          transaction_type.name AS transaction_type_name,
          payment_type.name AS payment_type_name
   FROM pos
-  LEFT JOIN user ON pos.user_id = user.id
   LEFT JOIN transaction_type ON pos.transaction_type_id = transaction_type.id
   LEFT JOIN payment_type ON pos.payment_type_id = payment_type.id
   WHERE pos.pos_ref = ?';
@@ -55,11 +53,11 @@ if ($row = $result->fetch_assoc()) {
         'changes' => $row['changes'],
         'delivery_fee' => $row['delivery_fee'],
         'rider_id' => $row['rider_id'],
-        'contact_no' => $row['contact_no'],
+        'contact_no' => $row['contact_no'],  // From pos table
+        'firstname' => $row['firstname'],    // From pos table
+        'lastname' => $row['lastname'],      // From pos table
         'transaction_type_name' => $row['transaction_type_name'],
         'payment_type_name' => $row['payment_type_name'],
-        'user_name' => $row['user_firstname'] . ' ' . $row['user_lastname'],
-        'user_phone' => $row['user_phone'],
         'address' => $row['address'],
         'status' => $row['status'],
         'paid' => $row['paid'],

@@ -26,7 +26,7 @@ $(document).ready(function () {
   function formatDateTime(dateTime) {
     const date = new Date(dateTime);
     const options = { year: "numeric", month: "long", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
+    return date.toLocaleDateString("en-PH", options);
   }
   function formatPrice(price) {
     return `₱${(parseFloat(price) || 0).toFixed(2)}`;
@@ -302,41 +302,48 @@ $(document).ready(function () {
     $("#order-grand-total").text(formatPrice(grandTotal || 0));
   }
 
-  // Populate the POS modal with details
-  function populatePOSModal(pos) {
-    // Populate modal with POS details
-    $("#pos-date").text(`Date: ${formatDateTime(pos.date)}`);
-    $("#pos-user-name").text(pos.user_name || "N/A");
-    $("#pos-user-phone").text(pos.user_phone || "N/A");
-    $("#pos-address").text(`${pos.address || "N/A"}`);
+ // Populate the POS modal with details
+function populatePOSModal(pos) {
+  // Populate modal with POS details
+  $("#pos-date").text(`${formatDateTime(pos.date)}`);
+  
+  // Combine firstname and lastname for user name display
+  $("#pos-user-name").text(`${pos.firstname || "N/A"} ${pos.lastname || "N/A"}`);
+  
+  // Show contact number from pos table
+  $("#pos-user-phone").text(pos.contact_no || "N/A");
+  
+  // Show address from pos table
+  $("#pos-address").text(`${pos.address || "N/A"}`);
 
-    // Clear previous items
-    $("#pos-items-container").empty();
+  // Clear previous items
+  $("#pos-items-container").empty();
 
-    // Populate POS items
-    pos.items.forEach((item) => {
-      $("#pos-items-container").append(`
+  // Populate POS items
+  pos.items.forEach((item) => {
+    $("#pos-items-container").append(`
       <tr>
         <td>${item.product_name || "N/A"}</td>
         <td>X${item.qty || 0}</td>
         <td>${formatPrice(item.total || 0)}</td>
       </tr>
     `);
-    });
+  });
 
-    // Calculate subtotal and grand total
-    const subtotal = pos.items.reduce(
-      (total, item) => total + (item.total || 0),
-      0
-    );
-    const grandTotal = subtotal - (pos.discount || 0) + (pos.delivery_fee || 0);
+  // Calculate subtotal and grand total
+  const subtotal = pos.items.reduce(
+    (total, item) => total + (item.total || 0),
+    0
+  );
+  const grandTotal = subtotal - (pos.discount || 0) + (pos.delivery_fee || 0);
 
-    // Populate price section
-    $("#pos-subtotal").text(formatPrice(subtotal || 0));
-    $("#pos-discount").text(formatPrice(pos.discount || 0));
-    $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0));
-    $("#pos-total").text(formatPrice(grandTotal || 0));
-  }
+  // Populate price section
+  $("#pos-subtotal").text(formatPrice(subtotal || 0));
+  $("#pos-discount").text(formatPrice(pos.discount || 0));
+  $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0));
+  $("#pos-total").text(formatPrice(grandTotal || 0));
+}
+
 
   // Initial fetch of orders and POS
   fetchOrdersAndPOS();
