@@ -342,7 +342,7 @@ $(document).ready(function () {
         getProductInfo(id);
     });
 
-    $('.view').click(function () {
+    $(document).on('click', '.view', function () {
         var id = $(this).data('product-id');
         viewProductInfo(id);
     });
