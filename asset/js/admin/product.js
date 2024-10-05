@@ -337,12 +337,12 @@ $(document).ready(function () {
         }
     });
 
-    $('.edit').click(function () {
+    $('#product-table').on('click', '.edit', function () {
         var id = $(this).data('product-id');
         getProductInfo(id);
     });
 
-    $(document).on('click', '.view', function () {
+    $('#product-table').on('click', '.view', function () {
         var id = $(this).data('product-id');
         viewProductInfo(id);
     });
@@ -373,7 +373,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.status').change(function () {
+    $('#product-table').on('change', '.status', function () {
         var id = $(this).data('product-id');
         var checkbox = $(this);
 
