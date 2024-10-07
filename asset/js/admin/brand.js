@@ -1,14 +1,14 @@
-$(document).ready(function(){
-    function updateBrand (id, status) {
+$(document).ready(function () {
+    function updateBrand(id, status) {
         $.ajax({
             url: '/disable-brand',
             method: 'POST',
             data: {
-                id : id,
-                status : status
+                id: id,
+                status: status
             },
-            dataType: 'json', 
-            success: function(feedback){
+            dataType: 'json',
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
@@ -21,7 +21,7 @@ $(document).ready(function(){
         ]
     });
 
-    $('#new-brand').on('submit', function(event){
+    $('#new-brand').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -29,7 +29,7 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 } else {
@@ -39,7 +39,7 @@ $(document).ready(function(){
         });
     });
 
-    $('.status').on('click', function(){
+    $('#brand-table').on('click', '.status', function () {
         var id = $(this).data('brand-id');
         var status = $(this).data('brand-status');
         var checkbox = $(this);
@@ -79,14 +79,14 @@ $(document).ready(function(){
         }
     });
 
-    $('.edit').on('click', function(){
+    $('#brand-table').on('click', '.edit', function () {
         $('#edit-label').html('Editing <strong>"' + $(this).data('brand-name') + '</strong>"');
         $('#brand_name').val($(this).data('brand-name'));
         $('#brand_id').val($(this).data('brand-id'));
         $('#editBrand').modal('show');
     });
 
-    $('#edit-brand').on('submit', function(event){
+    $('#edit-brand').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -94,7 +94,7 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 $('#edit_feedback').text(feedback.edit_feedback);
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;

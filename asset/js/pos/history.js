@@ -28,9 +28,20 @@ $(document).ready(function () {
           currency: "PHP",
         });
 
+        var formattedDate = new Intl.DateTimeFormat('en-PH', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          hour12: true
+        }).format(new Date(data.date));
+
+
         // Update general transaction details
         $("#historyViewLabel").text("Transaction #" + data.pos_ref);
-        $("#transaction-date").text(data.date);
+        $("#transaction-date").text(formattedDate);
         $("#transaction-subtotal").text(
           formatter.format(Number(data.subtotal))
         );

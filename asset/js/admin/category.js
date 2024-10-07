@@ -1,14 +1,14 @@
-$(document).ready(function(){
-    function updateCategory (id, status) {
+$(document).ready(function () {
+    function updateCategory(id, status) {
         $.ajax({
             url: '/disable-category',
             method: 'POST',
             data: {
-                id : id,
-                status : status
+                id: id,
+                status: status
             },
-            dataType: 'json', 
-            success: function(feedback){
+            dataType: 'json',
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
@@ -21,7 +21,7 @@ $(document).ready(function(){
         ]
     });
 
-    $('#new-category').on('submit', function(event){
+    $('#new-category').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -29,7 +29,7 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 } else {
@@ -39,7 +39,7 @@ $(document).ready(function(){
         });
     });
 
-    $('.status').on('click', function(){
+    $('#category-table').on('click', '.status', function () {
         var id = $(this).data('category-id');
         var status = $(this).data('category-status');
         var checkbox = $(this);
@@ -79,14 +79,14 @@ $(document).ready(function(){
         }
     });
 
-    $('.edit').on('click', function(){
+    $('#category-table').on('click', '.edit', function () {
         $('#edit-label').html('Editing <strong>"' + $(this).data('category-name') + '</strong>"');
         $('#category_name').val($(this).data('category-name'));
         $('#category_id').val($(this).data('category-id'));
         $('#editCategory').modal('show');
     });
 
-    $('#edit-category').on('submit', function(event){
+    $('#edit-category').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -94,7 +94,7 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }

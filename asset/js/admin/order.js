@@ -1,6 +1,6 @@
 $.fn.dataTable.moment('MMMM D, YYYY');
 
-$(document).ready(function(){
+$(document).ready(function () {
     // function paidOpt (paid) {
     //     var select = $('#paid');
     //     select.empty();
@@ -39,63 +39,63 @@ $(document).ready(function(){
     //     }
     // }
 
-    function getOrders () {
+    function getOrders() {
         $.ajax({
             url: '/get-orders',
             method: 'POST',
             dataType: 'html',
-            success: function(html){
+            success: function (html) {
                 $('#order-table-content').html(html);
             }
         });
     }
 
-    function paidStatus () {
+    function paidStatus() {
         var order_ref = $('#order_ref').val();
         $.ajax({
             url: '/paid-status',
             method: 'POST',
             data: {
-                order_ref : order_ref
+                order_ref: order_ref
             },
             dataType: 'text',
-            success: function(html){
+            success: function (html) {
                 $('#paid-status').html(html);
             }
         })
     }
 
-    function orderStatus () {
+    function orderStatus() {
         var order_ref = $('#order_ref').val();
         $.ajax({
             url: '/order-status',
             method: 'POST',
             data: {
-                order_ref : order_ref
+                order_ref: order_ref
             },
             dataType: 'json',
-            success: function(json){
+            success: function (json) {
                 $('#order-status').html(json.html);
                 if (json.status === 'delivered' || json.status === 'delivering') {
                     $('#cancel-order').prop('disabled', true);
-                }else {
+                } else {
                     $('#cancel-order').prop('disabled', false);
                 }
             }
         })
     }
 
-    function getProof () {
+    function getProof() {
         var order_ref = $('#order_ref').val();
-        
+
         $.ajax({
             url: '/get-proof',
             method: 'POST',
             data: {
-                order_ref : order_ref
+                order_ref: order_ref
             },
             dataType: 'html',
-            success: function(html){
+            success: function (html) {
                 $('#proof-content').html(html);
             }
         });
@@ -107,7 +107,7 @@ $(document).ready(function(){
         ]
     });
 
-    $(document).on('click', '.viewOrder', function(){
+    $(document).on('click', '.viewOrder', function () {
         $('#orderLabel').html('<strong>' + $(this).data('order-ref') + '</strong>');
         $('#order_ref').val($(this).data('order-ref'));
         paidStatus();
@@ -115,52 +115,52 @@ $(document).ready(function(){
         $('#order-modal').modal('show');
     });
 
-    $(document).on('click', '#paid-btn', function(event){
+    $(document).on('click', '#paid-btn', function (event) {
         event.preventDefault();
         $('#paid-modal-warning').html('Do you want to approve the payment of this order <span class="text-primary">' + $('#order_ref').val() + '</span>?');
         $('#order-modal').modal('hide');
         $('#paid-modal').modal('show');
     });
 
-    $(document).on('click', '#paid-modal-close', function(event){
+    $(document).on('click', '#paid-modal-close', function (event) {
         event.preventDefault();
-        $('#paid-modal').modal('hide'); 
+        $('#paid-modal').modal('hide');
         $('#order-modal').modal('show');
     });
 
-    $(document).on('click', '#delivering-btn', function(event){
+    $(document).on('click', '#delivering-btn', function (event) {
         event.preventDefault();
         $('#delivering-modal-warning').html('Are you sure you want to set the order status of this order <span class="text-primary">' + $('#order_ref').val() + '</span> to <span class="text-primary">DELIVERING</span>?');
         $('#order-modal').modal('hide');
         $('#delivering-modal').modal('show');
     });
 
-    $(document).on('click', '#delivering-modal-close', function(event){
+    $(document).on('click', '#delivering-modal-close', function (event) {
         event.preventDefault();
-        $('#delivering-modal').modal('hide'); 
+        $('#delivering-modal').modal('hide');
         $('#order-modal').modal('show');
     });
 
-    $(document).on('click', '#delivered-btn', function(event){
+    $(document).on('click', '#delivered-btn', function (event) {
         event.preventDefault();
         $('#delivered-modal-warning').html('Are you sure you want to set the order status of this order <span class="text-primary">' + $('#order_ref').val() + '</span> to <span class="text-success">DELIVERED</span>?');
         $('#order-modal').modal('hide');
         $('#delivered-modal').modal('show');
     });
 
-    $(document).on('click', '#delivered-modal-close', function(event){
+    $(document).on('click', '#delivered-modal-close', function (event) {
         event.preventDefault();
-        $('#delivered-modal').modal('hide'); 
+        $('#delivered-modal').modal('hide');
         $('#order-modal').modal('show');
     });
 
-    $('.print-receipt').on('click', function(){
+    $('.print-receipt').on('click', function () {
         var order_ref = $(this).data('order-ref');
         var printUrl = '/print-receipt/' + order_ref;
         window.open(printUrl, '_blank');
     });
 
-    $('#confirm-paid').on('click', function(event){
+    $('#confirm-paid').on('click', function (event) {
         event.preventDefault();
         var order_ref = $('#order_ref').val();
         var paid = $('#paid').val();
@@ -169,10 +169,10 @@ $(document).ready(function(){
             url: '/update-paid',
             method: 'POST',
             data: {
-                order_ref : order_ref,
-                paid : paid
+                order_ref: order_ref,
+                paid: paid
             },
-            success: function(){
+            success: function () {
                 paidStatus();
                 orderStatus();
                 getOrders();
@@ -182,7 +182,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#confirm-delivering').on('click', function(event){
+    $('#confirm-delivering').on('click', function (event) {
         event.preventDefault();
         var order_ref = $('#order_ref').val();
         var status = $('#delivering').val();
@@ -191,10 +191,10 @@ $(document).ready(function(){
             url: '/update-status',
             method: 'POST',
             data: {
-                order_ref : order_ref,
-                status : status
+                order_ref: order_ref,
+                status: status
             },
-            success: function(){
+            success: function () {
                 orderStatus();
                 getOrders();
                 $('#delivering-modal').modal('hide');
@@ -203,7 +203,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#confirm-delivered').on('click', function(event){
+    $('#confirm-delivered').on('click', function (event) {
         event.preventDefault();
         var order_ref = $('#order_ref').val();
         var status = $('#delivered').val();
@@ -212,10 +212,10 @@ $(document).ready(function(){
             url: '/update-status',
             method: 'POST',
             data: {
-                order_ref : order_ref,
-                status : status
+                order_ref: order_ref,
+                status: status
             },
-            success: function(){
+            success: function () {
                 orderStatus();
                 getOrders();
                 $('#delivered-modal').modal('hide');
@@ -224,13 +224,13 @@ $(document).ready(function(){
         });
     });
 
-    $('#view-proof').on('click', function(){
+    $('#view-proof').on('click', function () {
         getProof();
         $('#proof-modal').modal('show');
         $('#order-modal').modal('hide');
     });
 
-    $('#proof-modal-close').on('click', function(){
+    $('#proof-modal-close').on('click', function () {
         $('#proof-modal').modal('hide');
         $('#order-modal').modal('show');
     });
@@ -258,24 +258,24 @@ $(document).ready(function(){
     let startX;
     let scrollLeft;
 
-    $tableContainer.on('mousedown', function(e) {
+    $tableContainer.on('mousedown', function (e) {
         isDown = true;
         $tableContainer.addClass('active');
         startX = e.pageX - $tableContainer.offset().left;
         scrollLeft = $tableContainer.scrollLeft();
     });
 
-    $tableContainer.on('mouseleave', function() {
+    $tableContainer.on('mouseleave', function () {
         isDown = false;
         $tableContainer.removeClass('active');
     });
 
-    $tableContainer.on('mouseup', function() {
+    $tableContainer.on('mouseup', function () {
         isDown = false;
         $tableContainer.removeClass('active');
     });
 
-    $tableContainer.on('mousemove', function(e) {
+    $tableContainer.on('mousemove', function (e) {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - $tableContainer.offset().left;
@@ -283,7 +283,7 @@ $(document).ready(function(){
         $tableContainer.scrollLeft(scrollLeft - walk);
     });
 
-    $('#printButton').click(function() {
+    $('#printButton').click(function () {
         var content = $('#printContent').html();
         var header = `<div id="printHeader">
                         <div class="text-center" style="font-size: 12px;">
@@ -295,13 +295,13 @@ $(document).ready(function(){
                         </div>
                         <hr style="margin: 5px 0;">
                     </div>`;
-    
+
         // Append the header to the content
         $('body').html(header + content);
-    
+
         // Print the page
         window.print();
-    
+
         // Restore the original content
         location.reload();
     });

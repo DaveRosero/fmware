@@ -1,14 +1,14 @@
-$(document).ready(function(){
-    function updateUnit (id, status) {
+$(document).ready(function () {
+    function updateUnit(id, status) {
         $.ajax({
             url: '/disable-unit',
             method: 'POST',
             data: {
-                id : id,
-                status : status
+                id: id,
+                status: status
             },
-            dataType: 'json', 
-            success: function(feedback){
+            dataType: 'json',
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 }
@@ -22,7 +22,7 @@ $(document).ready(function(){
         ]
     });
 
-    $('#new-unit').on('submit', function(event){
+    $('#new-unit').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -30,7 +30,7 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;
                 } else {
@@ -40,7 +40,7 @@ $(document).ready(function(){
         });
     });
 
-    $('.status').on('click', function(){
+    $('#unit-table').on('click', '.status', function () {
         var id = $(this).data('unit-id');
         var status = $(this).data('unit-status');
         var checkbox = $(this);
@@ -80,14 +80,14 @@ $(document).ready(function(){
         }
     });
 
-    $('.edit').on('click', function(){
+    $('#unit-table').on('click', '.edit', function () {
         $('#edit-label').html('Editing <strong>"' + $(this).data('unit-name') + '</strong>"');
         $('#unit_name').val($(this).data('unit-name'));
         $('#unit_id').val($(this).data('unit-id'));
         $('#editUnit').modal('show');
     });
 
-    $('#edit-unit').on('submit', function(event){
+    $('#edit-unit').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -95,7 +95,7 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(feedback){
+            success: function (feedback) {
                 $('#edit_feedback').text(feedback.edit_feedback);
                 if (feedback.redirect) {
                     window.location.href = feedback.redirect;

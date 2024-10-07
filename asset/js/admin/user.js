@@ -1,18 +1,18 @@
-$(document).ready(function(){
-    function updateUserStatus (user_id, status) {
+$(document).ready(function () {
+    function updateUserStatus(user_id, status) {
         $.ajax({
             url: '/update-user-status',
             method: 'POST',
             data: {
-                user_id : user_id,
-                status : status
+                user_id: user_id,
+                status: status
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.status == 1) {
-                    var titleText = 'User Account is now enabled.'; 
+                    var titleText = 'User Account is now enabled.';
                 } else {
-                    var titleText = 'User Account is now disabled.'; 
+                    var titleText = 'User Account is now disabled.';
                 }
 
                 if (json.redirect) {
@@ -29,7 +29,7 @@ $(document).ready(function(){
 
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
@@ -38,7 +38,7 @@ $(document).ready(function(){
 
     $('#user-table').DataTable();
 
-    $('.status').on('click', function(){
+    $('#user-table').on('click', '.status', function () {
         var user_id = $(this).data('user-id');
         var checkbox = $(this);
 

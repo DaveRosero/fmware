@@ -1,16 +1,16 @@
-$(document).ready(function(){
-    function updateStaff (active, id) {
+$(document).ready(function () {
+    function updateStaff(active, id) {
         console.log('staff update ajax');
 
         $.ajax({
             url: '/update-staff',
             method: 'POST',
             data: {
-                active : active,
-                id : id
+                active: active,
+                id: id
             },
             dataType: 'text',
-            success: function(feedback) {
+            success: function (feedback) {
                 console.log(feedback);
                 if (feedback === '/staff') {
                     window.location.href = feedback;
@@ -21,17 +21,17 @@ $(document).ready(function(){
 
     $('#staff-table').DataTable();
 
-    $('#show_password').change(function(){
+    $('#show_password').change(function () {
         if ($(this).is(':checked')) {
             $('#password').prop('type', 'text');
-            $('#confirm').prop('type', 'text');  
+            $('#confirm').prop('type', 'text');
         } else {
             $('#password').prop('type', 'password');
-            $('#confirm').prop('type', 'password');  
+            $('#confirm').prop('type', 'password');
         }
     });
 
-    $('#add-staff').submit(function(event){
+    $('#add-staff').submit(function (event) {
         event.preventDefault();
         console.log('form submitted');
 
@@ -40,22 +40,22 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'text',
-            success: function(feedback) {
+            success: function (feedback) {
                 console.log(feedback);
                 if (feedback === '/staff') {
                     window.location.href = feedback;
                 } else {
                     $.notify(feedback, 'error');
                 }
-                
+
             }
         });
     });
 
-    $('.status').change(function(){
+    $('#staff-table').on('change', '.status', function () {
         var id = $(this).data('user-id');
         var checkbox = $(this);
-        
+
         if ($(this).is(':checked')) {
             Swal.fire({
                 title: 'Enabling Staff Account',

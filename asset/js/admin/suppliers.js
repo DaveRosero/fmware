@@ -1,19 +1,19 @@
-$(document).ready(function(){
-    function updateSupplierStatus (active, id) {
+$(document).ready(function () {
+    function updateSupplierStatus(active, id) {
         $.ajax({
             url: '/update-supplier',
             method: 'POST',
             data: {
-                id : id,
-                active : active
+                id: id,
+                active: active
             },
             dataType: 'json',
-            success: function(json){
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
@@ -23,7 +23,7 @@ $(document).ready(function(){
         order: [1, 'asc']
     });
 
-    $('#add-supplier-form').on('submit', function(event){
+    $('#add-supplier-form').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -31,29 +31,29 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
 
-    $('.edit').on('click', function(){
+    $('#suppliers-table').on('click', '.edit', function () {
         var id = $(this).data('supplier-id');
 
         $.ajax({
             url: '/get-supplier',
             method: 'POST',
             data: {
-                id : id
+                id: id
             },
             dataType: 'json',
-            success: function(json){
+            success: function (json) {
                 $('#edit-id').val(json.id);
                 $('#edit-supplier').val(json.supplier);
                 $('#edit-email').val(json.email);
@@ -61,14 +61,14 @@ $(document).ready(function(){
                 $('#edit-address').val(json.address);
                 $('#edit-contact').val(json.contact);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
     });
 
-    $('#edit-supplier-form').on('submit', function(event){
+    $('#edit-supplier-form').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -76,19 +76,19 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
     });
 
-    $('.status').change(function(){
+    $('#suppliers-table').on('change', '.status', function () {
         var id = $(this).data('supplier-id');
         var checkbox = $(this);
 
