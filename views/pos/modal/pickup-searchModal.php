@@ -28,8 +28,7 @@
                                 <td><?php echo htmlspecialchars($pickup['order_ref']); ?></td>
                                 <td><?php echo date('F j, Y h:i A', strtotime($pickup['date'])); ?></td>
                                 <td>₱<?php echo number_format($pickup['gross'], 2); ?></td>
-                                <td><?php echo isset($pickup['name']) ? htmlspecialchars($pickup['name']) : ''; ?>
-                                </td>
+                                <td><?php echo htmlspecialchars($pickup['transaction_type_name']); ?></td>
                                 <td>
                                     <?php
                                     $badgeClass = $pickup['status'] == 'pending' ? 'text-bg-warning text-white'
