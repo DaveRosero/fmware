@@ -15,7 +15,7 @@
                             <th class="text-center">Transaction #</th>
                             <th class="text-center">Order Date</th>
                             <th class="text-center">Total Price</th>
-                            <th class="text-center">Claimed Date</th>
+                            <th class="text-center">Transaction Type</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Action</th>
                         </tr>
