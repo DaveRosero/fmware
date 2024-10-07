@@ -162,6 +162,7 @@ any('/paid-status', 'controller/admin/order/paid-status.php');
 any('/update-paid', 'controller/admin/order/update-paid.php');
 any('/order-status', 'controller/admin/order/order-status.php');
 any('/update-status', 'controller/admin/order/update-status.php');
+any('/deny-order', 'controller/admin/order/deny-order.php');
 
 // Confirm Order Controller
 any('/confirm-order-status', 'controller/admin/order/confirm-order.php');

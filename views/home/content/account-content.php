@@ -3,7 +3,7 @@
         <div class="col-lg-3">
             <h1 class="h2 pb-4">My Account</h1>
             <ul class="list-unstyled templatemo-accordion">
-                <li class="pb-3">
+                <!-- <li class="pb-3">
                     <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-user-circle profile-icon"></i>
@@ -15,7 +15,7 @@
                         <li><a class="text-decoration-none" href="/account/settings">Settings</a></li>
                         <li><a class="text-decoration-none" href="#">Addresses</a></li>
                     </ul>
-                </li>
+                </li> -->
                 <li class="pb-3">
                     <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                         <div class="d-flex align-items-center">
