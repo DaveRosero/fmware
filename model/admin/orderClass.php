@@ -22,13 +22,21 @@ class Order extends Admin
             return '<img src="/asset/images/payments/cod.png" alt="COD" style="width: 250px;">';
         }
 
+        if ($payment == 4 && $status === 'claimed') {
+            return '<p>The order has been claimed by the customer.</p>';
+        }
+
+        if ($payment == 4) {
+            return '<p>To be picked up by the customer.</p>';
+        }
+
         if ($status === 'to pay') {
             return '<p>Awaiting for buyer to upload proof of payment...</p>';
         }
 
-        if ($paid === 'unpaid') {
+        if ($paid === 'unpaid' && $status === 'pending') {
             $button = '<div class="col col-auto">  
-                            <button class="btn btn-lg btn-danger">
+                            <button class="btn btn-lg btn-danger" id="deny-btn">
                                 <span><i class="bi bi-x-circle-fill"></i></span> 
                                 Deny
                             </button>
@@ -39,6 +47,10 @@ class Order extends Admin
                         <div class="col col-auto">
                             <button class="btn btn-lg btn-success" id="paid-btn"><i class="bi bi-check-circle-fill"></i> Approve</button>
                         </div>';
+        }
+
+        if ($paid === 'unpaid' && $status === 'cancelled') {
+            return '<p>Proof of Payment denied.</p>';
         }
 
         if ($paid === 'paid') {
@@ -116,13 +128,33 @@ class Order extends Admin
             $format = '<span class="badge bg-secondary text-wrap">' . strtoupper($status) . '</span>';
         }
 
+        if ($status === 'cancelled') {
+            $format = '<span class="badge bg-danger text-wrap">' . strtoupper($status) . '</span>';
+        }
+
+        if ($status === 'claimed') {
+            $format = '<span class="badge bg-success text-wrap">' . strtoupper($status) . '</span>';
+        }
+
         return $format ?? null;
     }
 
     public function statusButton($status, $paid, $payment)
     {
+        if ($payment == 4 && $status === 'claimed') {
+            return '<p>The order has been claimed by the customer.</p>';
+        }
+
+        if ($payment == 4) {
+            return '<p>To be picked up by the customer.</p>';
+        }
+
         if ($status === 'to pay') {
             return '<p>Awaiting approval of the payment...</p>';
+        }
+
+        if ($status === 'cancelled') {
+            return '<p>Order is cancelled.</p>';
         }
 
         if ($payment == 2 && $paid === 'unpaid') {
@@ -146,7 +178,7 @@ class Order extends Admin
                             <button class="btn btn-lg btn-primary" disabled><i class="bi bi-truck"></i> Delivering</button>
                         </div>
                         <div class="col col-auto">
-                            <i class="fas fa-arrow-right fa-2x"></i>
+                            <i class="bi bi-arrow-right fs-4"></i>
                         </div>
                         <div class="col col-auto">
                             <button class="btn btn-lg btn-success" id="delivered-btn" disabled><i class="bi bi-check-circle-fill"></i> Delivered</button>
@@ -177,7 +209,9 @@ class Order extends Admin
                 $button = $this->statusButton($status, $paid, $payment);
                 return [
                     'html' => $button,
-                    'status' => $status
+                    'status' => $status,
+                    'paid' => $paid,
+                    'payment' => $payment
                 ];
             } else {
                 die("Error in executing statement: " . $stmt->error);
@@ -251,12 +285,12 @@ class Order extends Admin
                                         >
                                             <i class="bi bi-eye-fill"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-info print-receipt ms-1"
+                                        <!-- <button class="btn btn-sm btn-info print-receipt ms-1"
                                             data-order-ref="' . $ref . '"
                                             data-customer-name="' . $customer . '"
                                         >
                                             <i class="bi bi-printer-fill"></i>
-                                        </button>
+                                        </button> -->
                                     </div>
                                 </td>
                             </tr>';
@@ -618,5 +652,29 @@ class Order extends Admin
         } else {
             die("Error in preparing statement: " . $this->conn->error);
         }
+    }
+
+    public function denyOrder($order_ref)
+    {
+        $status = 'cancelled';
+        $query = 'UPDATE orders SET status = ? WHERE order_ref = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $status, $order_ref);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->close();
+
+        $json = array(
+            'redirect' => '/manage-orders'
+        );
+        echo json_encode($json);
     }
 }

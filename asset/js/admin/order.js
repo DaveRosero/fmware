@@ -76,9 +76,24 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (json) {
                 $('#order-status').html(json.html);
+
+                if (json.status === 'cancelled') {
+                    $('#cancel-order').prop('disabled', true);
+                }
+
+                if (json.status === 'prepared') {
+                    $('#cancel-order').prop('disabled', true);
+                }
+
                 if (json.status === 'delivered' || json.status === 'delivering') {
                     $('#cancel-order').prop('disabled', true);
-                } else {
+                }
+
+                if (json.status === 'pending' && json.paid === 'paid') {
+                    $('#cancel-order').prop('disabled', true);
+                }
+
+                if (json.status === 'pending' && json.paid === 'unpaid') {
                     $('#cancel-order').prop('disabled', false);
                 }
             }
@@ -97,6 +112,35 @@ $(document).ready(function () {
             dataType: 'html',
             success: function (html) {
                 $('#proof-content').html(html);
+            }
+        });
+    }
+
+    function denyOrder(order_ref) {
+        $.ajax({
+            url: '/deny-order',
+            method: 'POST',
+            data: {
+                order_ref: order_ref
+            },
+            dataType: 'json',
+            success: function (json) {
+                if (json.redirect) {
+                    Swal.fire({
+                        title: 'Order Cancelled',
+                        icon: 'success',
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = json.redirect;
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                console.log("Response:", jqXHR.responseText);
             }
         });
     }
@@ -305,4 +349,41 @@ $(document).ready(function () {
         // Restore the original content
         location.reload();
     });
+
+    $(document).on('click', '#deny-btn', function () {
+        var order_ref = $('#order_ref').val();
+
+        Swal.fire({
+            title: 'Denying Proof of Payment',
+            text: "This will cancel the order automatically, do you want to continue?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, deny it!',
+            cancelButtonText: 'No, do not deny!',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                denyOrder(order_ref);
+            }
+        });
+    });
+
+    $(document).on('click', '#cancel-order', function () {
+
+        var order_ref = $('#order_ref').val();
+
+        Swal.fire({
+            title: 'Cancelling Order',
+            text: "Do you want to cancel this order?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No, do not cancel!',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                denyOrder(order_ref);
+            }
+        });
+    })
 })

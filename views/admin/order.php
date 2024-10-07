@@ -1,12 +1,12 @@
 <?php
-  include_once 'session.php';
-  require_once 'model/admin/admin.php';
-  require_once 'model/admin/orderClass.php';
+include_once 'session.php';
+require_once 'model/admin/admin.php';
+require_once 'model/admin/orderClass.php';
 
-  $admin = new Admin();
-  $order = new Order();
+$admin = new Admin();
+$order = new Order();
 
-  $admin->isAdmin();
+$admin->isAdmin();
 ?>
 <!DOCTYPE html>
 <html lang="en"> <!--begin::Head-->
@@ -27,8 +27,8 @@
         <?php require_once 'views/admin/content/order-content.php'; ?>
         <?php require_once 'views/admin/modals/order-modal.php'; ?>
         <?php require_once 'views/admin/template/footer.php'; ?>
-    </div> <!--end::App Wrapper--> <!--begin::Script--> 
-    <?php include_once 'views/admin/include/script.php'; ?><!--begin::Required Plugin(AdminLTE)-->
+    </div> <!--end::App Wrapper--> <!--begin::Script-->
+    <?php require_once 'views/admin/include/script.php'; ?><!--begin::Required Plugin(AdminLTE)-->
     <script src="/asset/js/admin/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
