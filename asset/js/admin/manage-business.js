@@ -1,39 +1,39 @@
-$(document).ready(function(){
-    function updateDeliveryFeeStatus (active, id) {
+$(document).ready(function () {
+    function updateDeliveryFeeStatus(active, id) {
         $.ajax({
             url: '/update-df-status',
             method: 'POST',
             data: {
-                active : active,
-                id : id
+                active: active,
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
     }
 
-    function delExpense (id) {
+    function delExpense(id) {
         $.ajax({
             url: '/delete-expenses',
             method: 'POST',
             data: {
-                id : id
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
@@ -66,7 +66,7 @@ $(document).ready(function(){
             preConfirm: () => {
                 const oldPin = Swal.getPopup().querySelector('#old-pin-input').value;
                 const newPin = Swal.getPopup().querySelector('#new-pin-input').value;
-                
+
                 if (!oldPin || !newPin) {
                     Swal.showValidationMessage('Please enter both the current and new PIN');
                 } else if (oldPin.length !== 4 || isNaN(oldPin)) {
@@ -84,11 +84,11 @@ $(document).ready(function(){
                     url: '/change-pin',
                     method: 'POST',
                     data: {
-                        oldPin : oldPin,
-                        newPin : newPin
+                        oldPin: oldPin,
+                        newPin: newPin
                     },
                     dataType: 'json',
-                    success: function(json) {
+                    success: function (json) {
                         if (json.invalid) {
                             Swal.fire({
                                 title: 'Your Current PIN is incorrect.',
@@ -105,7 +105,7 @@ $(document).ready(function(){
                             });
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Error:", textStatus, errorThrown);
                         console.log("Response:", jqXHR.responseText);
                     }
@@ -114,7 +114,7 @@ $(document).ready(function(){
         });
 
         // Add event listener for the "Forgot PIN" button
-        $('#forgot-pin').click(function(){
+        $('#forgot-pin').click(function () {
             Swal.close();
             $('#loadingOverlay').show();
 
@@ -122,16 +122,16 @@ $(document).ready(function(){
                 url: '/reset-pin',
                 method: 'POST',
                 dataType: 'json',
-                success: function(json) {
+                success: function (json) {
                     if (json.success) {
                         Swal.fire('PIN Reset', 'An email has been sent. Check your inbox for your new PIN...', 'info');
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log("Error:", textStatus, errorThrown);
                     console.log("Response:", jqXHR.responseText);
                 },
-                complete: function(){
+                complete: function () {
                     $('#loadingOverlay').hide();
                 }
             })
@@ -148,11 +148,11 @@ $(document).ready(function(){
         ]
     });
 
-    $('#add-expenses').click(function(){
+    $('#add-expenses').click(function () {
         $('#expenses-modal').modal('show');
     });
 
-    $('#add-expenses-form').on('submit', function(event){
+    $('#add-expenses-form').on('submit', function (event) {
         event.preventDefault();
         console.log('form submiteed');
 
@@ -161,41 +161,41 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 console.log(json);
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         });
     });
 
-    $('.edit').click(function(){
+    $('.edit').click(function () {
         var id = $(this).data('df-id');
 
         $.ajax({
             url: '/get-df',
             method: 'POST',
             data: {
-                id : id
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 $('#municipal').val(json.municipal);
                 $('#df').val(json.df);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
     });
 
-    $('#edit-df-form').on('submit', function(event){
+    $('#edit-df-form').on('submit', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -203,19 +203,19 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
-            success: function(json) {
+            success: function (json) {
                 if (json.redirect) {
                     window.location.href = json.redirect;
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
         })
     });
 
-    $('.status').change(function(){
+    $('.status').change(function () {
         if ($(this).is(':checked')) {
             var id = $(this).data('df-id');
             var active = 1;
@@ -227,7 +227,7 @@ $(document).ready(function(){
         }
     });
 
-    $('.delete').click(function(){
+    $('#expenses-table').on('click', '.delete', function () {
         var id = $(this).data('expense-id');
 
         Swal.fire({
@@ -246,7 +246,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#change_pin').click(function(){
+    $('#change_pin').click(function () {
         Swal.fire({
             title: 'Are you sure?',
             text: "Do you really want to change your PIN?",

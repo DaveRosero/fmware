@@ -27,7 +27,7 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on('click', '.viewPOS', function () {
+    $('#sales-table').on('click', '.viewPOS', function () {
         viewPOS($(this).data('pos-ref'));
     });
 })

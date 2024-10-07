@@ -52,12 +52,12 @@ $(document).ready(function () {
         ]
     })
 
-    $(document).on('click', '.view-refund', function () {
+    $('#returns-table').on('click', '.view-refund', function () {
         console.log($(this).data('refund-id') + $(this).data('type'));
         viewRefund($(this).data('refund-id'), $(this).data('type'));
     });
 
-    $(document).on('click', '.view-replacement', function () {
+    $('#returns-table').on('click', '.view-replacement', function () {
         console.log($(this).data('replacement-id') + $(this).data('type'));
         viewReplacement($(this).data('replacement-id'), $(this).data('type'));
     });
