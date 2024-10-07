@@ -32,7 +32,7 @@
                                 <h1>Payment Method</h1>
                                 <div class="d-flex">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Cash" value="3" checked>
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Cash" value="1" checked>
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             Cash
                                         </label>
