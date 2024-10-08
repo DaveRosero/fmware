@@ -32,11 +32,22 @@ $(document).ready(function () {
                     // Enable or disable 'Delivered' button and cash input field based on payment status
                     if (response.paid === 'paid') {
                         $('#delivered-btn').prop('disabled', false); // Enable button
-                        $('input[type="number"]').prop('disabled', true); // Enable input field
+                        $('input[type="number"]').prop('disabled', true); // Disable input field
+
+                        // Set the Gcash radio button (value = 2) as checked and disable both radio buttons
+                        $('#Gcash').prop('checked', true); // Select Gcash
+                        $('#Gcash').prop('disabled', true); // Disable Gcash
+                        $('#Cash').prop('disabled', true);  // Disable Cash to prevent switching
                     } else {
                         $('#delivered-btn').prop('disabled', true); // Disable button
-                        $('input[type="number"]').prop('disabled', false); // Disable input field
+                        $('input[type="number"]').prop('disabled', false); // Enable input field
+
+                        // Re-enable radio buttons if payment is not paid
+                        $('#Cash').prop('checked', true); // Select Gcash
+                        $('#Gcash').prop('disabled', true); // Disable Gcash
+                        $('#Cash').prop('disabled', true);  // Disable Cash to prevent switching
                     }
+
                 } else {
                     $('#order-ref').text('Order Ref: N/A');
                     $('#order-price').text('Order Price: ₱0.00');

@@ -83,9 +83,17 @@ $(document).ready(function () {
           (order) =>
             order.status.toLowerCase() === "pending" && // Status is pending
             (!order.rider_id || order.rider_id === null) && // No assigned rider
-            (order.paid.toLowerCase() === "paid" ||
-              order.paid.toLowerCase() === "unpaid") // Paid or Unpaid orders
+            (
+              // Payment type 2 and paid
+              (order.payment_type_name.toLowerCase() === "gcash" && order.paid.toLowerCase() === "paid") ||
+              // Payment type 1 and paid or unpaid
+              (order.payment_type_name.toLowerCase() === "cod" && 
+               (order.paid.toLowerCase() === "paid" || order.paid.toLowerCase() === "unpaid"))
+            )
         );
+        
+        
+        
   
         pos = posResponse[0].filter(
           (posItem) =>
