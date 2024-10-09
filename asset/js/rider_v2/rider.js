@@ -904,175 +904,197 @@ function populatePOSModal(pos) {
 
   $("#cancelOrderButton").on("click", function () {
     const orderRef = $("#acceptedOrder-items-modal-label")
-      .text()
-      .replace("Order: ", ""); // Get the order reference from the modal
+        .text()
+        .replace("Order: ", ""); // Get the order reference from the modal
 
     if (!orderRef) {
-      console.error("Order reference is missing.");
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Unable to cancel the order. Order reference is missing.",
-      });
-      return;
+        console.error("Order reference is missing.");
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Unable to cancel the order. Order reference is missing.",
+        });
+        return;
     }
 
     // Show SweetAlert with a dropdown for cancellation reason
     Swal.fire({
-      title: "Cancel Order",
-      text: "Please select a reason for canceling this order.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, cancel it!",
-      html: `
-        <select id="cancel-reason-dropdown" class="swal2-input">
-          <option value="">-- Select Reason --</option>
-          <option value="Customer Request">Customer Request</option>
-          <option value="Out of Stock">Out of Stock</option>
-          <option value="Incorrect Order">Incorrect Order</option>
-          <option value="Payment Issue">Payment Issue</option>
-        </select>
-      `,
-      preConfirm: () => {
-        const cancelReason = Swal.getPopup().querySelector("#cancel-reason-dropdown").value;
-        if (!cancelReason) {
-          Swal.showValidationMessage("Please select a reason for cancellation.");
-        }
-        return cancelReason;
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const cancelReason = result.value;
-
-        // Proceed with AJAX request to cancel the order
-        $.ajax({
-          url: "/model-cancelOrder", // Update with the correct backend URL
-          type: "POST",
-          data: {
-            order_ref: orderRef, // Send the order reference
-            cancel_reason: cancelReason, // Send the selected reason
-          },
-          success: function (response) {
-            try {
-              const res =
-                typeof response === "string" ? JSON.parse(response) : response;
-              if (res.success) {
-                Swal.fire({
-                  icon: "success",
-                  title: "Order Canceled",
-                  text: "Order has been successfully canceled!",
-                });
-                $("#acceptedOrder-items-modal").modal("hide"); // Close the modal
-                window.location.href = "/rider-history";
-                fetchAcceptedOrdersAndPOS(); // Refresh the accepted orders list
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: "Cancellation Failed",
-                  text: "Failed to cancel the order: " + res.message,
-                });
-                console.error("Order cancellation failed:", res.message);
-              }
-            } catch (e) {
-              console.error("Error parsing server response:", e);
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "An error occurred while canceling the order.",
-              });
+        title: "Cancel Delivery",
+        text: "Please select a reason for canceling this delivery.",
+        icon: "warning",
+        input: 'select',
+        inputOptions: {
+            'customer_request': 'Customer Request',
+            'out_of_stock': 'Out of Stock',
+            'incorrect_order': 'Incorrect Order',
+            'payment_issue': 'Payment Issue',
+            // Add more reasons as needed
+        },
+        inputPlaceholder: 'Select a cancellation reason',
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it!",
+        preConfirm: (cancelReason) => {
+            if (!cancelReason) {
+                Swal.showValidationMessage("Please select a reason for cancellation.");
             }
-          },
-          error: function (xhr, status, error) {
-            console.error("Error canceling the order:", error);
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "Failed to cancel the order. Please try again.",
+            return cancelReason;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const cancelReason = result.value;
+
+            // Proceed with AJAX request to cancel the order
+            $.ajax({
+                url: "/model-cancelOrder", // Update with the correct backend URL
+                type: "POST",
+                data: {
+                    order_ref: orderRef, // Send the order reference
+                    cancel_reason: cancelReason, // Send the selected reason
+                },
+                success: function (response) {
+                    try {
+                        const res =
+                            typeof response === "string" ? JSON.parse(response) : response;
+                        if (res.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Delivery Canceled",
+                                text: "Delivery has been successfully canceled!",
+                            }).then(() => {
+                                $("#acceptedOrder-items-modal").modal("hide"); // Close the modal
+                                fetchAcceptedOrdersAndPOS(); // Refresh the accepted orders list
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Cancellation Failed",
+                                text: "Failed to cancel the order: " + res.message,
+                            });
+                            console.error("Order cancellation failed:", res.message);
+                        }
+                    } catch (e) {
+                        console.error("Error parsing server response:", e);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "An error occurred while canceling the order.",
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error canceling the order:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Failed to cancel the order. Please try again.",
+                    });
+                },
             });
-          },
-        });
-      }
+        }
     });
 });
 
 
-  // Add event listener to cancel POS order button
-  $("#cancelPOSOrderButton").on("click", function () {
-    const posRef = $("#acceptedPOS-items-modal-label")
+
+
+$("#cancelPOSOrderButton").on("click", function () {
+  const posRef = $("#acceptedPOS-items-modal-label")
       .text()
       .replace("POS: ", ""); // Get the POS reference from the modal
 
-    // Check if POS reference is missing
-    if (!posRef) {
+  // Check if POS reference is missing
+  if (!posRef) {
       console.error("POS reference is missing.");
       Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Unable to cancel the POS order. POS reference is missing.",
+          icon: "error",
+          title: "Error",
+          text: "Unable to cancel the Delivery. POS reference is missing.",
       });
       return;
-    }
+  }
 
-    // Show confirmation before proceeding to cancel the POS order
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Do you really want to cancel this POS order?",
+  // Show SweetAlert with a dropdown for cancellation reason
+  Swal.fire({
+      title: "Cancel Delivery",
+      text: "Please select a reason for canceling this Delivery.",
       icon: "warning",
+      input: 'select',
+      inputOptions: {
+          'out_of_stock': 'Out of Stock',
+          'customer_request': 'Customer Request',
+          'incorrect_order': 'Incorrect Order',
+          'payment_issue': 'Payment Issue',
+          // Add more reasons as needed
+      },
+      inputPlaceholder: 'Select a cancellation reason',
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, cancel it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Proceed with AJAX request to cancel the POS order
-        $.ajax({
-          url: "/model-cancelPos", // Update with the correct backend URL
-          type: "POST",
-          data: {
-            pos_ref: posRef, // Send only the POS reference to be canceled
-          },
-          success: function (response) {
-            try {
-              const res =
-                typeof response === "string" ? JSON.parse(response) : response;
-              if (res.success) {
-                Swal.fire({
-                  icon: "success",
-                  title: "POS Order Canceled",
-                  text: "POS order has been successfully canceled!",
-                });
-                $("#acceptedPOS-items-modal").modal("hide"); // Close the modal
-                window.location.href = "/rider-history";
-                fetchAcceptedOrdersAndPOS(); // Refresh the accepted POS orders list
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: "Cancellation Failed",
-                  text: "Failed to cancel the POS order: " + res.message,
-                });
-                console.error("POS order cancellation failed:", res.message);
-              }
-            } catch (e) {
-              console.error("Error parsing server response:", e);
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "An error occurred while canceling the POS order.",
-              });
-            }
-          },
-          error: function (xhr, status, error) {
-            console.error("Error canceling the POS order:", error);
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "Failed to cancel the POS order. Please try again.",
-            });
-          },
-        });
+      preConfirm: () => {
+          const cancelReason = Swal.getInput().value; // Get selected value
+          if (!cancelReason) {
+              Swal.showValidationMessage("Please select a reason for cancellation.");
+          }
+          return cancelReason;
       }
-    });
+  }).then((result) => {
+      if (result.isConfirmed) {
+          const cancelReason = result.value;
+
+          // Proceed with AJAX request to cancel the POS order
+          $.ajax({
+              url: "/model-cancelPos", // Update with the correct backend URL
+              type: "POST",
+              data: {
+                  pos_ref: posRef, // Send the POS reference
+                  cancel_reason: cancelReason, // Send the selected reason
+              },
+              success: function (response) {
+                  try {
+                      const res = typeof response === "string" ? JSON.parse(response) : response;
+                      if (res.success) {
+                          Swal.fire({
+                              icon: "success",
+                              title: "Delivery Canceled",
+                              text: "Delivery has been successfully canceled!",
+                          }).then(() => {
+                              $("#acceptedPOS-items-modal").modal("hide"); // Close the modal
+                              fetchAcceptedOrdersAndPOS(); // Refresh the accepted POS orders list
+                          });
+                      } else {
+                          Swal.fire({
+                              icon: "error",
+                              title: "Cancellation Failed",
+                              text: "Failed to cancel the POS order: " + res.message,
+                          });
+                          console.error("POS order cancellation failed:", res.message);
+                      }
+                  } catch (e) {
+                      console.error("Error parsing server response:", e);
+                      Swal.fire({
+                          icon: "error",
+                          title: "Error",
+                          text: "An error occurred while canceling the POS order.",
+                      });
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.error("Error canceling the POS order:", error);
+                  Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: "Failed to cancel the POS order. Please try again.",
+                  });
+              },
+          });
+      }
   });
+});
+
+
+
+
 });
