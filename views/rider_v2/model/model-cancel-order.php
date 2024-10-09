@@ -6,6 +6,7 @@ $mysqli = database();
 
 // Get the POST data from the AJAX request
 $order_ref = isset($_POST['order_ref']) ? $_POST['order_ref'] : '';
+$cancel_reason = isset($_POST['cancel_reason']) ? $_POST['cancel_reason'] : ''; // Get the cancellation reason
 $status = 'cancelled'; // Set status to 'canceled'
 
 // Validate input
@@ -14,16 +15,21 @@ if (empty($order_ref)) {
     exit();
 }
 
-// Prepare the SQL query to update the order's status
-$query = 'UPDATE orders SET status = ? WHERE order_ref = ?';
+if (empty($cancel_reason)) {
+    echo json_encode(['success' => false, 'message' => 'Cancellation reason is missing']);
+    exit();
+}
+
+// Prepare the SQL query to update the order's status and cancellation reason
+$query = 'UPDATE orders SET status = ?, cncl_reason = ? WHERE order_ref = ?';
 
 // Initialize prepared statement
 $stmt = $mysqli->prepare($query);
 
 // Check if statement preparation was successful
 if ($stmt) {
-    // Bind parameters (s - string, s - string for status and order_ref)
-    $stmt->bind_param('ss', $status, $order_ref);
+    // Bind parameters (s - string, s - string, s - string for status, reason, and order_ref)
+    $stmt->bind_param('sss', $status, $cancel_reason, $order_ref);
 
     // Execute the query
     if ($stmt->execute()) {

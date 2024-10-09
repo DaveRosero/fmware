@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id="posPaymentButton">To Payment</button>
-        <button type="button" class="btn btn-danger" id="cancelPOSOrderButton">Cancel Order</button>
+        <button type="button" class="btn btn-danger" id="cancelPOSOrderButton">Cancel Delivery</button>
       </div>
     </div>
   </div>
