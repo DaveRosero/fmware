@@ -907,7 +907,6 @@ function populatePOSModal(pos) {
       .text()
       .replace("Order: ", ""); // Get the order reference from the modal
 
-    // Check if order reference is missing
     if (!orderRef) {
       console.error("Order reference is missing.");
       Swal.fire({
@@ -918,23 +917,42 @@ function populatePOSModal(pos) {
       return;
     }
 
-    // Show confirmation before proceeding to cancel the order
+    // Show SweetAlert with a dropdown for cancellation reason
     Swal.fire({
-      title: "Are you sure?",
-      text: "Do you really want to cancel this order?",
+      title: "Cancel Order",
+      text: "Please select a reason for canceling this order.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, cancel it!",
+      html: `
+        <select id="cancel-reason-dropdown" class="swal2-input">
+          <option value="">-- Select Reason --</option>
+          <option value="Customer Request">Customer Request</option>
+          <option value="Out of Stock">Out of Stock</option>
+          <option value="Incorrect Order">Incorrect Order</option>
+          <option value="Payment Issue">Payment Issue</option>
+        </select>
+      `,
+      preConfirm: () => {
+        const cancelReason = Swal.getPopup().querySelector("#cancel-reason-dropdown").value;
+        if (!cancelReason) {
+          Swal.showValidationMessage("Please select a reason for cancellation.");
+        }
+        return cancelReason;
+      }
     }).then((result) => {
       if (result.isConfirmed) {
+        const cancelReason = result.value;
+
         // Proceed with AJAX request to cancel the order
         $.ajax({
           url: "/model-cancelOrder", // Update with the correct backend URL
           type: "POST",
           data: {
-            order_ref: orderRef, // Send only the order reference to be canceled
+            order_ref: orderRef, // Send the order reference
+            cancel_reason: cancelReason, // Send the selected reason
           },
           success: function (response) {
             try {
@@ -977,7 +995,8 @@ function populatePOSModal(pos) {
         });
       }
     });
-  });
+});
+
 
   // Add event listener to cancel POS order button
   $("#cancelPOSOrderButton").on("click", function () {
