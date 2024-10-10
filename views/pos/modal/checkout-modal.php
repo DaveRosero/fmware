@@ -107,9 +107,9 @@
                                             readonly />
                                     </div>
                                     <div class="mb-3">
-                                        <label for="contact-input" class="form-label">Contact:</label>
+                                        <label for="contact-input" class="form-label">Contact Number:</label>
                                         <input type="text" class="form-control" name="contact" id="contact-input"
-                                            maxlength="11" pattern="\d{11}" required />
+                                            maxlength="11" pattern="\d{11}"  placeholder="+63" required />
                                     </div>
                                 </div>
                                

@@ -51,7 +51,7 @@ function fetchAllProducts()
                              </div>
                         </div>
                         <div class="card-footer text-center">
-                            <h5 class="m-0 text-success">₱ ' . number_format($row['unit_price']) . '</h5>
+                            <h5 class="m-0 text-success">₱ ' . number_format($row['unit_price'], 2) . '</h5>
                         </div>
                     </div>
                 </div>';

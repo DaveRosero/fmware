@@ -50,7 +50,7 @@ while ($stmt->fetch()) {
           </div>
         </div>
         <div class="card-footer text-center">
-          <h5 class="m-0 text-success">₱ ' . number_format($unit_price) . '</h5>
+          <h5 class="m-0 text-success">₱ ' . number_format($unit_price, 2) . '</h5>
         </div>
       </div>
     </div>';
