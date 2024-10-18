@@ -10,7 +10,7 @@ $(document).ready(function () {
         function formatDateTime(dateTime) {
           const date = new Date(dateTime);
           const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-          return date.toLocaleString('en-US', options);
+          return date.toLocaleString('en-PH', options);
         }
         // Initialize DataTable
         $('#transaction-table').DataTable({

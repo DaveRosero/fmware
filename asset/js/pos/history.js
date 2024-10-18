@@ -28,7 +28,8 @@ $(document).ready(function () {
           currency: "PHP",
         });
 
-        var formattedDate = new Intl.DateTimeFormat('en-PH', {
+        var formattedDate = new Date(data.date).toLocaleString('en-PH', {
+          timeZone: 'Asia/Manila',  // Set timezone to Manila
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -36,7 +37,7 @@ $(document).ready(function () {
           minute: 'numeric',
           second: 'numeric',
           hour12: true
-        }).format(new Date(data.date));
+        });
 
 
         // Update general transaction details
