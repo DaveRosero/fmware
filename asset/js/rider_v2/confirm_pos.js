@@ -43,10 +43,12 @@ $(document).ready(function () {
 
           // Check if the POS is already paid
           if (response.paid === "paid") {
+            $('input[name="paymentMethod"]').prop("disabled", true);
             $("#cash-received").prop("disabled", true);
             $("#delivered-btn").prop("disabled", false);
           } else {
             // Enable input field for cash received
+            $('input[name="paymentMethod"]').prop("disabled", false);
             $("#cash-received").prop("disabled", false);
             $("#delivered-btn").prop("disabled", true);
           }

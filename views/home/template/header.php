@@ -13,15 +13,15 @@
         <div class="collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between align-items-center" id="templatemo_main_nav">
             <ul class="navbar-nav mx-lg-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link mx-3" href="/">Home</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-3">
                     <a class="nav-link" href="/about">About</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-3">
                     <a class="nav-link" href="/shop/all">Shop</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-3">
                     <a class="nav-link" href="/contact">Contact</a>
                 </li>
             </ul>

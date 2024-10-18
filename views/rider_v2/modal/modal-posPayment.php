@@ -26,7 +26,7 @@
               <div class="d-flex">
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="paymentMethod" id="Cash" value="3" checked>
-                  <label class="form-check-label" for="Cash">Cash</label>
+                  <label class="form-check-label" for="Cash">Cash on Delivery</label>
                 </div>
                 <div class="form-check ms-3">
                   <input class="form-check-input" type="radio" name="paymentMethod" id="Gcash" value="2">
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-primary" id="delivered-btn" disabled>Delivered</button>
+        <button type="button" class="btn btn-primary" id="delivered-btn" disabled>Delivered</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
