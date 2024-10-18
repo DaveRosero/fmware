@@ -4,6 +4,8 @@ session_start();
 require_once 'model/database/database.php';
 require_once 'model/admin/logsClass.php';
 
+date_default_timezone_set('Asia/Manila'); 
+
 $user_id = $_SESSION['user_id'];
 $mysqli = database();
 $logs = new Logs();

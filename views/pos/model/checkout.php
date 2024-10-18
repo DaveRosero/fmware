@@ -1,7 +1,11 @@
 <?php
 require_once 'model/admin/logsClass.php';
 
+date_default_timezone_set('Asia/Manila');
+
 $mysqli = database();
+
+$mysqli->query("SET time_zone = '+08:00'");
 
 $logs = new Logs();
 
