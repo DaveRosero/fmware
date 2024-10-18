@@ -90,7 +90,7 @@
                                             required />
                                     </div>
                                     <div class="mb-3">
-                                        <label for="address-input" class="form-label">Street:</label>
+                                        <label for="address-input" class="form-label">Street Address</label>
                                         <input type="text" class="form-control" name="address" id="street-input"
                                             required />
                                     </div>
@@ -109,10 +109,10 @@
                                     <div class="mb-3">
                                         <label for="contact-input" class="form-label">Contact Number:</label>
                                         <input type="text" class="form-control" name="contact" id="contact-input"
-                                            maxlength="11" pattern="\d{11}"  placeholder="+63" required />
+                                            maxlength="11" pattern="\d{11}" placeholder="+63" required />
                                     </div>
                                 </div>
-                               
+
                                 <div class="col d-flex justify-content-end">
                                     <p class="text-secondary">Request fulfilled by:</p>
                                     <?php echo htmlspecialchars($user_name); ?>
