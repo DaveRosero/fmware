@@ -290,11 +290,11 @@ $(document).ready(function () {
       subtotal - (order.discount || 0) + (order.delivery_fee || 0);
 
     // Populate price section
-    $("#order-gross").text(formatPrice(subtotal || 0));
-    $("#order-vat").text(formatPrice(order.vat || 0));
-    $("#order-discount").text(formatPrice(order.discount || 0));
-    $("#order-delivery-fee").text(formatPrice(order.delivery_fee || 0));
-    $("#order-grand-total").text(formatPrice(grandTotal || 0));
+    $("#order-gross").text(formatPrice(subtotal || 0.00));
+    $("#order-vat").text(formatPrice(order.vat || 0.00));
+    $("#order-discount").text(formatPrice(order.discount || 0.00));
+    $("#order-delivery-fee").text(formatPrice(order.delivery_fee || 0.00));
+    $("#order-grand-total").text(formatPrice(grandTotal || 0.00));
   }
   // Populate the POS modal with details
   function populatePOSModal(pos) {
@@ -332,10 +332,10 @@ $(document).ready(function () {
     const grandTotal = subtotal - (pos.discount || 0) + (pos.delivery_fee || 0);
 
     // Populate price section
-    $("#pos-subtotal").text(formatPrice(subtotal || 0));
-    $("#pos-discount").text(formatPrice(pos.discount || 0));
-    $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0));
-    $("#pos-total").text(formatPrice(grandTotal || 0));
+    $("#pos-subtotal").text(formatPrice(subtotal || 0.00));
+    $("#pos-discount").text(formatPrice(pos.discount || 0.00));
+    $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0.00));
+    $("#pos-total").text(formatPrice(grandTotal || 0.00));
   }
   // Initial fetch of orders and POS
   fetchOrdersAndPOS();
