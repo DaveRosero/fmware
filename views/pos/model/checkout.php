@@ -4,7 +4,6 @@ require_once 'model/admin/logsClass.php';
 date_default_timezone_set('Asia/Manila');
 
 $mysqli = database();
-
 $mysqli->query("SET time_zone = '+08:00'");
 
 $logs = new Logs();
@@ -28,6 +27,8 @@ $total = floatval($_POST['total']);
 $discount = floatval($_POST['discount']);
 $cash = floatval($_POST['cash']);
 $change = floatval($_POST['changes']);
+$date = date('F j, Y g:i A');
+
 if ($_POST['transaction_type']) {
     $transaction_type_id = 3;
     $status = 'pending';
@@ -52,17 +53,18 @@ if (isset($_POST['delivery-fee-value'])) {
 }
 
 $query = 'INSERT INTO pos
-                    (pos_ref, firstname, lastname, subtotal, total, discount, cash, changes, delivery_fee,
+                    (pos_ref, firstname, lastname, date, subtotal, total, discount, cash, changes, delivery_fee,
                     contact_no, address, transaction_type_id, payment_type_id, status, user_id, paid)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
 $stmt = $mysqli->prepare($query);
 if ($stmt) {
     $stmt->bind_param(
-        'sssddddddssiisis',
+        'ssssddddddssiisis',
         $pos_ref,
         $fname,
         $lname,
+        $date,
         $subtotal,
         $total,
         $discount,
