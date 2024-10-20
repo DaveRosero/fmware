@@ -36,6 +36,7 @@ $(document).ready(function () {
         $('#transaction-table').on('click', '.view-transaction-btn', function () {
           var posRef = $(this).data('bs-posref');
           // Implement view transaction details functionality here
+
           $.ajax({
             url: "/pos-transactionDetails",
             method: "GET",
@@ -77,6 +78,7 @@ $(document).ready(function () {
                 }));
               }
               $("#rtransaction-type").val(data.transaction_type);
+              // Handle address display based on transaction type
               if (data.transaction_type === "Walk-in") {
                 $("#customer-details").show();
                 $("#rfName-input").val(data.firstname);
@@ -89,24 +91,28 @@ $(document).ready(function () {
                 $("#customer-details").show();
                 $("#rfName-input").val(data.firstname);
                 $("#rlName-input").val(data.lastname);
-                let addressParts = data.address.split(", ");
-                let street = addressParts[0];
-                let baranggay = addressParts[1];
-                let municipality = addressParts[2]
+
+                // Directly check for null or empty values
+                let addressParts = data.address ? data.address.split(", ") : [];
+                let street = addressParts[0] ? addressParts[0] : "N/A";
+                let baranggay = addressParts[1] ? addressParts[1] : "N/A";
+                let municipality = addressParts[2] ? addressParts[2] : "N/A";
+
                 $("#viewstreet-input, #street-label").val(street).show();
                 $("#viewbrgy-input, #brgy-label").val(baranggay).show();
                 $("#viewmunicipality-input, #municipality-label").val(municipality).show();
-                $("#viewcontact-input, #contact-label").val(data.contact_no).show();
+                $("#viewcontact-input, #contact-label").val(data.contact_no ? data.contact_no : "N/A").show();
               } else if (data.transaction_type === "Online Order") {
                 $("#customer-details").show();
                 $("#rfName-input").val(data.firstname);
                 $("#rlName-input").val(data.lastname);
-                //merge house_no and street on online order
-                let fullAddress = `${data.house_no} ${data.street}`; 
-                $("#viewstreet-input, #street-label").val(fullAddress).show();
-                $("#viewbrgy-input, #brgy-label").val(data.brgy).show();
-                $("#viewmunicipality-input, #municipality-label").val(data.municipality).show();
-                $("#viewcontact-input, #contact-label").val(data.phone).show();
+
+                // Combine house_no and street, check for null or empty values
+                let fullAddress = (data.house_no ? data.house_no : "") + " " + (data.street ? data.street : "N/A");
+                $("#viewstreet-input, #street-label").val(fullAddress.trim()).show();
+                $("#viewbrgy-input, #brgy-label").val(data.brgy ? data.brgy : "N/A").show();
+                $("#viewmunicipality-input, #municipality-label").val(data.municipality ? data.municipality : "N/A").show();
+                $("#viewcontact-input, #contact-label").val(data.phone ? data.phone : "N/A").show();
               }
               //Geting Transaction Items
               $("#refund-TotalValue").text("₱0.00");
@@ -155,6 +161,10 @@ $(document).ready(function () {
                           $("#replace-button").prop("disabled", false);
                           break;
                         case 'pending':
+                          $("#refund-button").prop("disabled", false);
+                          $("#replace-button").prop("disabled", false);
+                          break;
+                        case 'claimed':
                           $("#refund-button").prop("disabled", false);
                           $("#replace-button").prop("disabled", false);
                           break;
@@ -210,24 +220,24 @@ $(document).ready(function () {
                   toggleRefundReplaceReason();
 
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log("Error:", textStatus, errorThrown);
-                    console.log("Response:", jqXHR.responseText);
+                error: function (jqXHR, textStatus, errorThrown) {
+                  console.log("Error:", textStatus, errorThrown);
+                  console.log("Response:", jqXHR.responseText);
                 }
               });
 
               $("#transaction-viewModal").modal("show");
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log("Error:", textStatus, errorThrown);
-                console.log("Response:", jqXHR.responseText);
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log("Error:", textStatus, errorThrown);
+              console.log("Response:", jqXHR.responseText);
             }
           });
         });
       },
-      error: function(jqXHR, textStatus, errorThrown) {
-          console.log("Error:", textStatus, errorThrown);
-          console.log("Response:", jqXHR.responseText);
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log("Error:", textStatus, errorThrown);
+        console.log("Response:", jqXHR.responseText);
       }
     });
   }
@@ -280,10 +290,10 @@ $(document).ready(function () {
 
     // Validate reason
     if (refundReason === "") {
-        isValid = false;
-        $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+      isValid = false;
+      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
     } else {
-        $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
     }
 
     // Initialize counters
@@ -293,88 +303,88 @@ $(document).ready(function () {
 
     // Loop through all items in the transaction, including non-selected ones
     $(".selectedItem").each(function () {
-        const product_id = $(this).data("product-id");
-        const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
-        const condition = $(this).closest("tr").find(".item-condition").val();
-        const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
-        
-        // Only process if the item is selected
-        if ($(this).is(":checked")) {
-            // Validate condition and quantity
-            if (condition === "") {
-                isValid = false;
-                $(this).closest("tr").find(".item-condition").addClass('is-invalid');
-            } else {
-                $(this).closest("tr").find(".item-condition").removeClass('is-invalid');
-            }
+      const product_id = $(this).data("product-id");
+      const refund_qty = $(this).closest("tr").find(".refund-quantity").val();
+      const condition = $(this).closest("tr").find(".item-condition").val();
+      const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
 
-            if (refund_qty <= 0 || isNaN(refund_qty)) {
-                isValid = false;
-                $(this).closest("tr").find(".refund-quantity").addClass('is-invalid');
-            } else {
-                $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid');
-            }
-
-            refundItems.push({ product_id, refund_qty, condition });
-
-            if (condition === "Good") {
-                goodItemsCount += parseInt(refund_qty);
-            } else if (condition === "Broken") {
-                badItemsCount += parseInt(refund_qty);
-            }
-
-            totalRefundedItems += parseInt(refund_qty);
+      // Only process if the item is selected
+      if ($(this).is(":checked")) {
+        // Validate condition and quantity
+        if (condition === "") {
+          isValid = false;
+          $(this).closest("tr").find(".item-condition").addClass('is-invalid');
+        } else {
+          $(this).closest("tr").find(".item-condition").removeClass('is-invalid');
         }
 
-        totalInitialItems += initialQty;
-        totalRemainingItems += Math.max(0, initialQty - (refund_qty ? parseInt(refund_qty) : 0));
+        if (refund_qty <= 0 || isNaN(refund_qty)) {
+          isValid = false;
+          $(this).closest("tr").find(".refund-quantity").addClass('is-invalid');
+        } else {
+          $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid');
+        }
+
+        refundItems.push({ product_id, refund_qty, condition });
+
+        if (condition === "Good") {
+          goodItemsCount += parseInt(refund_qty);
+        } else if (condition === "Broken") {
+          badItemsCount += parseInt(refund_qty);
+        }
+
+        totalRefundedItems += parseInt(refund_qty);
+      }
+
+      totalInitialItems += initialQty;
+      totalRemainingItems += Math.max(0, initialQty - (refund_qty ? parseInt(refund_qty) : 0));
     });
 
     // Determine newStatus based on remaining items
     let newStatus = 'fully refunded';
     if (totalRemainingItems > 0) {
-        newStatus = 'partially refunded';
+      newStatus = 'partially refunded';
     }
 
     if (!isValid) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Validation Error',
-            text: 'Please ensure all selected items have a valid condition and quantity. Also, provide a reason for the refund.',
-        });
-        return; // Stop further processing
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please ensure all selected items have a valid condition and quantity. Also, provide a reason for the refund.',
+      });
+      return; // Stop further processing
     }
 
     $.ajax({
-        url: "/pos-processRefund",
-        method: "POST",
-        data: {
-            pos_ref: posRef,
-            total_refund_value: totalRefundValue,
-            refund_items: refundItems,
-            refund_reason: refundReason,
-            status: newStatus
-        },
-        success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Refund Processed',
-                html: `Refund processed successfully.<br>Wrong items refunded: ${goodItemsCount}<br>Defective items refunded: ${badItemsCount}`,
-            });
-            $("#transaction-status").text(newStatus);
-            $("#transaction-viewModal").modal("hide");
-            fetchTransactions();
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Refund Failed',
-                text: 'Failed to process refund. Please try again.',
-            });
-        }
+      url: "/pos-processRefund",
+      method: "POST",
+      data: {
+        pos_ref: posRef,
+        total_refund_value: totalRefundValue,
+        refund_items: refundItems,
+        refund_reason: refundReason,
+        status: newStatus
+      },
+      success: function (response) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Refund Processed',
+          html: `Refund processed successfully.<br>Wrong items refunded: ${goodItemsCount}<br>Defective items refunded: ${badItemsCount}`,
+        });
+        $("#transaction-status").text(newStatus);
+        $("#transaction-viewModal").modal("hide");
+        fetchTransactions();
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Refund Failed',
+          text: 'Failed to process refund. Please try again.',
+        });
+      }
     });
   });
-  
+
 
   $("#replace-button").click(function () {
     const posRef = $("#transactionViewLabel").text().split("#")[1];
@@ -387,10 +397,10 @@ $(document).ready(function () {
 
     // Validate reason
     if (replacementReason === "") {
-        isValid = false;
-        $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
+      isValid = false;
+      $("#replace-refund-reason").addClass('is-invalid'); // Highlight invalid field
     } else {
-        $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
+      $("#replace-refund-reason").removeClass('is-invalid'); // Remove highlight if valid
     }
 
     // Initialize counters
@@ -400,85 +410,85 @@ $(document).ready(function () {
 
     // Loop through all items in the transaction, including non-selected ones
     $(".selectedItem").each(function () {
-        const product_id = $(this).data("product-id");
-        const refund_qty = parseInt($(this).closest("tr").find(".refund-quantity").val(), 10);
-        const condition = $(this).closest("tr").find(".item-condition").val();
-        const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
+      const product_id = $(this).data("product-id");
+      const refund_qty = parseInt($(this).closest("tr").find(".refund-quantity").val(), 10);
+      const condition = $(this).closest("tr").find(".item-condition").val();
+      const initialQty = parseInt($(this).closest("tr").find(".text-center:nth-child(6)").text(), 10);
 
-        // Only process if the item is selected
-        if ($(this).is(":checked")) {
-            // Validate condition and quantity
-            if (condition === "") {
-                isValid = false;
-                $(this).closest("tr").find(".item-condition").addClass('is-invalid');
-            } else {
-                $(this).closest("tr").find(".item-condition").removeClass('is-invalid');
-            }
-
-            if (refund_qty <= 0 || isNaN(refund_qty)) {
-                isValid = false;
-                $(this).closest("tr").find(".refund-quantity").addClass('is-invalid');
-            } else {
-                $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid');
-            }
-
-            replacedItems.push({ product_id, refund_qty, condition });
-
-            if (condition === "Good") {
-                goodItemsCount += refund_qty;
-            } else if (condition === "Broken") {
-                badItemsCount += refund_qty;
-            }
-
-            totalReplacedItems += refund_qty;
+      // Only process if the item is selected
+      if ($(this).is(":checked")) {
+        // Validate condition and quantity
+        if (condition === "") {
+          isValid = false;
+          $(this).closest("tr").find(".item-condition").addClass('is-invalid');
+        } else {
+          $(this).closest("tr").find(".item-condition").removeClass('is-invalid');
         }
 
-        totalInitialItems += initialQty;
-        totalRemainingItems += Math.max(0, initialQty - (refund_qty ? refund_qty : 0));
+        if (refund_qty <= 0 || isNaN(refund_qty)) {
+          isValid = false;
+          $(this).closest("tr").find(".refund-quantity").addClass('is-invalid');
+        } else {
+          $(this).closest("tr").find(".refund-quantity").removeClass('is-invalid');
+        }
+
+        replacedItems.push({ product_id, refund_qty, condition });
+
+        if (condition === "Good") {
+          goodItemsCount += refund_qty;
+        } else if (condition === "Broken") {
+          badItemsCount += refund_qty;
+        }
+
+        totalReplacedItems += refund_qty;
+      }
+
+      totalInitialItems += initialQty;
+      totalRemainingItems += Math.max(0, initialQty - (refund_qty ? refund_qty : 0));
     });
 
     // Determine newStatus based on remaining items
     let newStatus = 'fully replaced';
     if (totalRemainingItems > 0) {
-        newStatus = 'partially replaced';
+      newStatus = 'partially replaced';
     }
 
     if (!isValid) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Validation Error',
-            text: 'Please select a condition for all selected items and provide a reason for the replacement.',
-        });
-        return; // Stop further processing
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please select a condition for all selected items and provide a reason for the replacement.',
+      });
+      return; // Stop further processing
     }
 
     $.ajax({
-        url: "/pos-processReplace",
-        method: "POST",
-        data: {
-            pos_ref: posRef,
-            total_refund_value: totalReplaceValue,
-            replaced_items: replacedItems,
-            replacement_reason: replacementReason,
-            status: newStatus
-        },
-        success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Replacement Processed',
-                html: `Replacement processed successfully.<br>Wrong items replaced: ${goodItemsCount}<br>Defective items replaced: ${badItemsCount}`,
-            });
-            $("#transaction-status").text(newStatus);
-            $("#transaction-viewModal").modal("hide");
-            fetchTransactions();
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Replacement Failed',
-                text: 'Failed to process replacement. Please try again.',
-            });
-        }
+      url: "/pos-processReplace",
+      method: "POST",
+      data: {
+        pos_ref: posRef,
+        total_refund_value: totalReplaceValue,
+        replaced_items: replacedItems,
+        replacement_reason: replacementReason,
+        status: newStatus
+      },
+      success: function (response) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Replacement Processed',
+          html: `Replacement processed successfully.<br>Wrong items replaced: ${goodItemsCount}<br>Defective items replaced: ${badItemsCount}`,
+        });
+        $("#transaction-status").text(newStatus);
+        $("#transaction-viewModal").modal("hide");
+        fetchTransactions();
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Replacement Failed',
+          text: 'Failed to process replacement. Please try again.',
+        });
+      }
     });
   });
 });

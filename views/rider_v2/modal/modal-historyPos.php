@@ -33,10 +33,6 @@
           <p id="historyPOS-subtotal"></p>
         </div>
         <div class="d-flex justify-content-between">
-          <p><strong>VAT:</strong></p>
-          <p id="historyPOS-vat"></p>
-        </div>
-        <div class="d-flex justify-content-between">
           <p><strong>Discount:</strong></p>
           <p id="historyPOS-discount"></p>
         </div>
