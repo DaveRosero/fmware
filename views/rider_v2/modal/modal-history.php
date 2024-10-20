@@ -33,10 +33,6 @@
           <p id="historyOrder-subtotal"></p>
         </div>
         <div class="d-flex justify-content-between">
-          <p><strong>VAT:</strong></p>
-          <p id="historyOrder-vat"></p>
-        </div>
-        <div class="d-flex justify-content-between">
           <p><strong>Discount:</strong></p>
           <p id="historyOrder-discount"></p>
         </div>

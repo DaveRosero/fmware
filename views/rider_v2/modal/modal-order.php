@@ -31,10 +31,6 @@
           <p id="order-gross"></p>
         </div>
         <div class="d-flex justify-content-between">
-          <p><strong>VAT:</strong></p>
-          <p id="order-vat"></p>
-        </div>
-        <div class="d-flex justify-content-between">
           <p><strong>Discount:</strong></p>
           <p id="order-discount"></p>
         </div>
