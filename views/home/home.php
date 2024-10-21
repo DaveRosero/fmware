@@ -21,7 +21,7 @@ $user_info = $user->getUser($_SESSION['email'] ?? null);
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Auto Deploy Test</title>
+    <title>FMWARE</title>
     <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
     <?php
     require_once 'config/load_vendors.php';
