@@ -39,6 +39,7 @@ if ($_SESSION['group'] !== 'cashier') {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FMWARE | POS</title>
+  <link rel="icon" href="/asset/images/store/logo.png" type="image/png">
   <?php
   require_once 'config/load_vendors.php';
   ?>
