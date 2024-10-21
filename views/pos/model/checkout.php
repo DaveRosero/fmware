@@ -1,10 +1,10 @@
 <?php
+include_once 'session.php';
 require_once 'model/admin/logsClass.php';
 
-date_default_timezone_set('Asia/Manila');
 
 $mysqli = database();
-$mysqli->query("SET time_zone = '+08:00'");
+
 
 $logs = new Logs();
 
@@ -61,23 +61,23 @@ $stmt = $mysqli->prepare($query);
 if ($stmt) {
     $stmt->bind_param(
         'ssssddddddssiisis',
-        $pos_ref,
-        $fname,
-        $lname,
-        $date,
-        $subtotal,
-        $total,
-        $discount,
-        $cash,
-        $change,
-        $delivery_fee,
-        $contact,
-        $address,
-        $transaction_type_id,
-        $payment_type_id,
-        $status,
-        $user_id,
-        $paid,
+        $pos_ref, //string
+        $fname,   //string
+        $lname,   //string
+        $date,    //string
+        $subtotal, //double
+        $total,    //double
+        $discount, //double
+        $cash,     //double
+        $change,   //double
+        $delivery_fee, //double
+        $contact,  //string
+        $address,  //string
+        $transaction_type_id, //int
+        $payment_type_id,  //int
+        $status,  //string
+        $user_id, //int
+        $paid,    //string
     );
 
     if ($stmt->execute()) {

@@ -465,12 +465,6 @@ return printableContent;
       var subtotal = parseFloat(total + discount) || 0;
       var cash = parseFloat($("#cashRec-input").val()) || 0;
       var changes = parseFloat(cash - total) || 0;
-      var address =
-        $("#street-input").val() +
-        ", " +
-        $("#brgy option:selected").text() +
-        ", " +
-        $("#municipality").val();
 
       formData.push({ name: "delivery-fee-value", value: deliveryFee });
       formData.push({ name: "subtotal", value: subtotal });
@@ -478,7 +472,6 @@ return printableContent;
       formData.push({ name: "discount", value: discount });
       formData.push({ name: "cash", value: cash });
       formData.push({ name: "changes", value: changes });
-      formData.push({ name: "address", value: address });
     }
 
     function transaction2() {
