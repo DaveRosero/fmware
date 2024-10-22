@@ -26,10 +26,12 @@
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
                         <li><a class="text-decoration-none" href="/my-purchases/to-pay">To Pay <?php echo $transaction->getToPayCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/prepared">Prepared <?php echo $transaction->getPreparedCount($user_info['id']); ?></a></li>
                         <li><a class="text-decoration-none" href="/my-purchases/pending">Pending <?php echo $transaction->getPendingCount($user_info['id']); ?></a></li>
                         <li><a class="text-decoration-none" href="/my-purchases/to-receive">To Receive <?php echo $transaction->getToReceiveCount($user_info['id']); ?></a></li>
                         <li><a class="text-decoration-none" href="/my-purchases/delivered">Delivered <?php echo $transaction->getDeliveredCount($user_info['id']); ?></a></li>
                         <li><a class="text-decoration-none" href="/my-purchases/completed">Completed <?php echo $transaction->getCompletedCount($user_info['id']); ?></a></li>
+                        <li><a class="text-decoration-none" href="/my-purchases/claimed">Claimed <?php echo $transaction->getClaimedCount($user_info['id']); ?></a></li>
                         <li><a class="text-decoration-none" href="/my-purchases/cancelled">Cancelled<?php echo $transaction->getCancelledCount($user_info['id']); ?></a></li>
                     </ul>
                 </li>
