@@ -12,6 +12,7 @@ function searchProducts($searchTerm)
                      product.name,
                      product.unit_value,
                      stock.qty,
+                     stock.critical_level,
                      product.id,
                      product.barcode,
                      unit.name AS unit_name,
@@ -21,9 +22,10 @@ function searchProducts($searchTerm)
               INNER JOIN product ON price_list.product_id = product.id
               INNER JOIN variant ON product.variant_id = variant.id
               INNER JOIN unit ON product.unit_id = unit.id
-              WHERE product.name LIKE CONCAT("%", ?, "%") 
+              WHERE (product.name LIKE CONCAT("%", ?, "%") 
                     OR product.barcode LIKE CONCAT("%", ?, "%")
-                    OR variant.name LIKE CONCAT("%", ?, "%")
+                    OR variant.name LIKE CONCAT("%", ?, "%"))
+                    AND stock.qty > stock.critical_level
               ORDER BY product.name ASC';
 
     // Prepare statement
@@ -40,7 +42,7 @@ function searchProducts($searchTerm)
     // Execute statement
     $stmt->execute();
     // Bind result variables
-    $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $barcode, $unit_name, $variant_name);
+    $stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $critical_level, $id, $barcode, $unit_name, $variant_name);
 
     // Fetch results into HTML format
     $output = '';
