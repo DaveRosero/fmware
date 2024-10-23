@@ -162,15 +162,14 @@ class Cart extends Home
                             <div class="col-lg-4 col-md-5 mb-4 mb-lg-0">
                                 <!-- Data -->
                                 <p><strong>' . $name . ' (' . $variant . ') ' . $unit_value . ' ' . strtoupper($unit) . '</strong></p>
-                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2 del-cart" data-mdb-toggle="tooltip"
+                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2 del-cart fs-6" data-mdb-toggle="tooltip"
                                     data-product-id=' . $product_id . '
                                     data-cart-id="' . $cart_id . '"
                                     title="Remove item">
-                                    <i class="fas fa-trash"></i>
+                                    Remove
                                 </button>
-                                <a href="/view-product/product/' . $product_id . '" class="mb-2" data-mdb-toggle="tooltip"
-                                    title="View Product">
-                                    <i class="fas fa-eye"></i>
+                                <a href="/view-product/product/' . $product_id . '" class="btn btn-primary btn-sm me-1 mb-2 mb-2 fs-6">
+                                    View Product
                                 </a>
                                 <!-- Data -->
                             </div>
