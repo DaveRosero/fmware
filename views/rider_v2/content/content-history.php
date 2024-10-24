@@ -22,10 +22,12 @@
                                 Sort By
                             </button>
                             <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-sort="All">All</a></li>
                                 <li><a class="dropdown-item" href="#" data-sort="Order Ref">Order Ref</a></li>
                                 <li><a class="dropdown-item" href="#" data-sort="POS Ref">POS Ref</a></li>
                                 <li><a class="dropdown-item" href="#" data-sort="Date">Date</a></li>
-                                <li><a class="dropdown-item" href="#" data-sort="Paid">Paid</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Delivered">Delivered</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="Cancelled">Cancelled</a></li>
                             </ul>
                         </div>
                     </div>

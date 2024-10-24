@@ -60,69 +60,68 @@ $(document).ready(function () {
   }
   let historyOrders = []; // Store fetched history orders
   let historyPOS = []; // Store fetched history POS
-  
+
   function fetchHistoryOrdersAndPOS() {
-      $.when(
-          $.ajax({
-              url: "/model-history",
-              type: "GET",
-              dataType: "json",
-          }),
-          $.ajax({
-              url: "/model-pos", // Endpoint to fetch POS history
-              type: "GET",
-              dataType: "json",
-          })
-      )
+    $.when(
+      $.ajax({
+        url: "/model-history",
+        type: "GET",
+        dataType: "json",
+      }),
+      $.ajax({
+        url: "/model-pos", // Endpoint to fetch POS history
+        type: "GET",
+        dataType: "json",
+      })
+    )
       .done(function (historyOrdersResponse, historyPOSResponse) {
-          // Filter orders: delivered or canceled, with the correct rider ID
-          historyOrders = historyOrdersResponse[0].filter(
-              (order) =>
-                  (order.status.toLowerCase() === "delivered" ||
-                  order.status.toLowerCase() === "cancelled") &&
-                  order.rider_id == riderId
-          );
-  
-          // Filter POS: delivered or canceled, with the correct rider ID
-          historyPOS = historyPOSResponse[0].filter(
-              (pos) =>
-                  (pos.status.toLowerCase() === "delivered" ||
-                  pos.status.toLowerCase() === "cancelled") &&
-                  pos.rider_id == riderId
-          );
-  
-          displayHistoryOrdersAndPOS(); // Display both Orders and POS
+        // Filter orders: delivered or canceled, with the correct rider ID
+        historyOrders = historyOrdersResponse[0].filter(
+          (order) =>
+            (order.status.toLowerCase() === "delivered" ||
+              order.status.toLowerCase() === "cancelled") &&
+            order.rider_id == riderId
+        );
+
+        // Filter POS: delivered or canceled, with the correct rider ID
+        historyPOS = historyPOSResponse[0].filter(
+          (pos) =>
+            (pos.status.toLowerCase() === "delivered" ||
+              pos.status.toLowerCase() === "cancelled") &&
+            pos.rider_id == riderId
+        );
+
+        displayHistoryOrdersAndPOS(); // Display both Orders and POS
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
-          console.error(
-              "Error fetching history orders or POS:",
-              textStatus,
-              errorThrown
-          );
+        console.error(
+          "Error fetching history orders or POS:",
+          textStatus,
+          errorThrown
+        );
       });
   }
-  
+
   function displayHistoryOrdersAndPOS(orders = historyOrders, pos = historyPOS) {
-      const container = $("#history-orders-container");
-      container.empty(); // Clear the container before appending new history
-  
-      // Display History Orders
-      orders.forEach((order) => {
-          const orderRef = order.order_ref || "N/A";
-          const orderDate = formatDateTime(order.date) || "N/A";
-          const paidStatus = `<span class="${getPaidStatusBadgeClass(
-              order.paid
-          )} me-2">${order.paid || "N/A"}</span>`;
-          const orderStatus = `<span class="${getStatusBadgeClass(order.status)}">${
-              order.status || "N/A"
-          }</span>`;
-  
-          const cardBorderClass =
-              order.status.toLowerCase() === "delivered"
-                  ? "border-success"
-                  : "border-danger";
-  
-          const orderCard = `
+    const container = $("#history-orders-container");
+    container.empty(); // Clear the container before appending new history
+
+    // Display History Orders
+    orders.forEach((order) => {
+      const orderRef = order.order_ref || "N/A";
+      const orderDate = formatDateTime(order.date) || "N/A";
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(
+        order.paid
+      )} me-2">${order.paid || "N/A"}</span>`;
+      const orderStatus = `<span class="${getStatusBadgeClass(order.status)}">${order.status || "N/A"
+        }</span>`;
+
+      const cardBorderClass =
+        order.status.toLowerCase() === "delivered"
+          ? "border-success"
+          : "border-danger";
+
+      const orderCard = `
               <div class="card mb-3 ${cardBorderClass}">
                   <div class="card-body">
                       <div><strong>Order Ref:</strong> ${orderRef}</div>
@@ -137,27 +136,26 @@ $(document).ready(function () {
                   </div>
               </div>
           `;
-  
-          container.append(orderCard); // Append each order card to the container
-      });
-  
-      // Display History POS
-      pos.forEach((pos) => {
-          const posRef = pos.pos_ref || "N/A";
-          const posDate = formatDateTime(pos.date) || "N/A";
-          const paidStatus = `<span class="${getPaidStatusBadgeClass(
-              pos.paid
-          )} me-2">${pos.paid || "N/A"}</span>`;
-          const posStatus = `<span class="${getStatusBadgeClass(pos.status)}">${
-              pos.status || "N/A"
-          }</span>`;
-  
-          const cardBorderClass =
-              pos.status.toLowerCase() === "delivered"
-                  ? "border-success"
-                  : "border-danger";
-  
-          const posCard = `
+
+      container.append(orderCard); // Append each order card to the container
+    });
+
+    // Display History POS
+    pos.forEach((pos) => {
+      const posRef = pos.pos_ref || "N/A";
+      const posDate = formatDateTime(pos.date) || "N/A";
+      const paidStatus = `<span class="${getPaidStatusBadgeClass(
+        pos.paid
+      )} me-2">${pos.paid || "N/A"}</span>`;
+      const posStatus = `<span class="${getStatusBadgeClass(pos.status)}">${pos.status || "N/A"
+        }</span>`;
+
+      const cardBorderClass =
+        pos.status.toLowerCase() === "delivered"
+          ? "border-success"
+          : "border-danger";
+
+      const posCard = `
               <div class="card mb-3 ${cardBorderClass}">
                   <div class="card-body">
                       <div><strong>POS Ref:</strong> ${posRef}</div>
@@ -172,66 +170,91 @@ $(document).ready(function () {
                   </div>
               </div>
           `;
-  
-          container.append(posCard); // Append each POS card to the container
-      });
-  
-      // Attach event listeners for view buttons
-      attachEventListeners();
+
+      container.append(posCard); // Append each POS card to the container
+    });
+
+    // Attach event listeners for view buttons
+    attachEventListeners();
   }
-  
+
   // Search functionality: Filter orders and POS by their reference (order_ref or pos_ref)
   $("#search-input").on("input", function () {
-      const searchTerm = $(this).val().toLowerCase();
-  
-      // Filter history orders by order_ref
-      const searchedOrders = historyOrders.filter((order) =>
-          order.order_ref.toLowerCase().includes(searchTerm)
-      );
-  
-      // Filter history POS by pos_ref
-      const searchedPOS = historyPOS.filter((pos) =>
-          pos.pos_ref.toLowerCase().includes(searchTerm)
-      );
-  
-      displayHistoryOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
+    const searchTerm = $(this).val().toLowerCase();
+
+    // Filter history orders by order_ref
+    const searchedOrders = historyOrders.filter((order) =>
+      order.order_ref.toLowerCase().includes(searchTerm)
+    );
+
+    // Filter history POS by pos_ref
+    const searchedPOS = historyPOS.filter((pos) =>
+      pos.pos_ref.toLowerCase().includes(searchTerm)
+    );
+
+    displayHistoryOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
   });
-  
+
   // Sort functionality: Sort orders and POS based on selected criteria
   function sortHistoryOrdersAndPOS(criteria) {
-      const sortedOrders = [...historyOrders].sort((a, b) => {
-          if (criteria === "Order Ref") {
-              return a.order_ref.localeCompare(b.order_ref);
-          } else if (criteria === "Date") {
-              return new Date(b.date) - new Date(a.date); // Sort by newest date first
-          } else if (criteria === "Paid") {
-              return a.paid.localeCompare(b.paid);
-          }
+    let displayOrders = [];
+    let displayPOS = [];
+
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...historyOrders].sort((a, b) => {
+        return a.order_ref.localeCompare(b.order_ref); // Sort by Order Ref
       });
-  
-      const sortedPOS = [...historyPOS].sort((a, b) => {
-          if (criteria === "POS Ref") {
-              return a.pos_ref.localeCompare(b.pos_ref);
-          } else if (criteria === "Date") {
-              return new Date(b.date) - new Date(a.date); // Sort by newest date first
-          } else if (criteria === "Paid") {
-              return a.paid.localeCompare(b.paid);
-          }
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...historyPOS].sort((a, b) => {
+        return a.pos_ref.localeCompare(b.pos_ref); // Sort by POS Ref
       });
-  
-      displayHistoryOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
+    } else if (criteria === "Date") {
+      displayOrders = [...historyOrders].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Sort by newest date first
+      });
+      displayPOS = [...historyPOS].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Sort by newest date first
+      });
+    } else if (criteria === "Cancelled") {
+      displayOrders = [...historyOrders].filter(order => order.status === "cancelled")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...historyPOS].filter(posItem => posItem.status === "cancelled")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    }
+    else if (criteria === "Delivered") {
+      displayOrders = [...historyOrders].filter(order => order.status === "delivered")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...historyPOS].filter(posItem => posItem.status === "delivered")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...historyOrders]; // Show all orders
+      displayPOS = [...historyPOS]; // Show all POS
+    }
+
+    displayHistoryOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
-  
+
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
-      e.preventDefault();
-      const sortBy = $(this).data("sort"); // Get the data-sort attribute value
-      sortHistoryOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
+    e.preventDefault();
+    const sortBy = $(this).data("sort"); // Get the data-sort attribute value
+    sortHistoryOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
+  });
+
+
+  // Sorting functionality: Trigger when a sort option is selected
+  $(".dropdown-menu .dropdown-item").on("click", function (e) {
+    e.preventDefault();
+    const sortBy = $(this).data("sort"); // Get the data-sort attribute value
+    sortHistoryOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
   });
   attachEventListeners();
   // Initial fetch
   fetchHistoryOrdersAndPOS();
-  
+
 
   // Attach event listeners for viewing order or POS details
   function attachEventListeners() {
@@ -317,9 +340,8 @@ $(document).ready(function () {
           <div class="d-flex justify-content-between py-2">
             <div>
               <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
-              <p class="mb-0">${formatPrice(item.unit_price)} (${
-            item.variant_name || "N/A"
-          }, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
+              <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"
+            }, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
             </div>
             <p class="mb-0">${formatPrice(itemTotal)}</p>
           </div>
@@ -339,13 +361,11 @@ $(document).ready(function () {
         );
         $("#historyOrder-date").text(formatDateTime(data.date) || "N/A");
         $("#historyOrder-paid").html(
-          `<span class="${getPaidStatusBadgeClass(data.paid)}">${
-            data.paid || "N/A"
+          `<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"
           }</span>`
         );
         $("#historyOrder-status").html(
-          `<span class="badge ${getStatusBadgeClass(data.status)}">${
-            data.status || "N/A"
+          `<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"
           }</span>`
         );
         $("#historyOrder-subtotal").text(formatPrice(subtotal));
@@ -361,13 +381,12 @@ $(document).ready(function () {
         // Add address info
         $("#historyOrder-address").html(
           `${data.address.house_no ? data.address.house_no + ", " : ""}` +
-            `${data.address.street ? data.address.street + ", " : ""}` +
-            `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-            `${
-              data.address.municipality
-                ? data.address.municipality + "<br>"
-                : ""
-            }`
+          `${data.address.street ? data.address.street + ", " : ""}` +
+          `${data.address.brgy ? data.address.brgy + ", " : ""}` +
+          `${data.address.municipality
+            ? data.address.municipality + "<br>"
+            : ""
+          }`
         );
         $("#historyOrder-address-desc").html(data.address.description || "N/A");
 
@@ -410,12 +429,10 @@ $(document).ready(function () {
           const itemHtml = `
                 <div class="d-flex justify-content-between py-2">
                     <div>
-                        <p class="mb-0"><strong>${
-                          item.product_name || "N/A"
-                        }</strong></p>
-                        <p class="mb-0">${formatPrice(item.unit_price)} (${
-            item.variant_name || "N/A"
-          }, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
+                        <p class="mb-0"><strong>${item.product_name || "N/A"
+            }</strong></p>
+                        <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"
+            }, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
                     </div>
                     <p class="mb-0">${formatPrice(itemTotal)}</p>
                 </div>
@@ -435,13 +452,11 @@ $(document).ready(function () {
         );
         $("#historyPOS-date").text(formatDateTime(data.date) || "N/A");
         $("#historyPOS-paid").html(
-          `<span class="${getPaidStatusBadgeClass(data.paid)}">${
-            data.paid || "N/A"
+          `<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"
           }</span>`
         );
         $("#historyPOS-status").html(
-          `<span class="badge ${getStatusBadgeClass(data.status)}">${
-            data.status || "N/A"
+          `<span class="badge ${getStatusBadgeClass(data.status)}">${data.status || "N/A"
           }</span>`
         );
         $("#historyPOS-subtotal").text(formatPrice(subtotal));
@@ -459,5 +474,5 @@ $(document).ready(function () {
     });
   }
 
-  
+
 });

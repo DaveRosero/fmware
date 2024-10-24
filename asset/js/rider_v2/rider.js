@@ -125,28 +125,46 @@ $(document).ready(function () {
   });
   // Sort Orders and POS based on selected criteria
   function sortOrdersAndPOS(criteria) {
-    const sortedOrders = [...orders].sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+    let displayOrders = [];
+    let displayPOS = [];
 
-    const sortedPOS = [...pos].sort((a, b) => {
-      if (criteria === "POS Ref") {
-        return a.pos_ref.localeCompare(b.pos_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...orders].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...pos].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+    } else if (criteria === "Date") {
+      displayOrders = [...orders].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+      displayPOS = [...pos].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+    } else if (criteria === "Paid") {
+      displayOrders = [...orders].filter(order => order.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...pos].filter(posItem => posItem.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    }
+    else if (criteria === "Unpaid") {
+      displayOrders = [...orders].filter(order => order.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...pos].filter(posItem => posItem.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...orders]; // Show all orders
+      displayPOS = [...pos]; // Show all POS
+    }
 
-    displayOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted results
+    displayOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
+
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
     e.preventDefault();
@@ -615,31 +633,46 @@ $(document).ready(function () {
     displayAcceptedOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
   });
 
-  // Sort functionality: Sort orders and POS based on selected criteria
   function sortAcceptedOrdersAndPOS(criteria) {
-    const sortedOrders = [...acceptedOrders].sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+    let displayOrders = [];
+    let displayPOS = [];
 
-    const sortedPOS = [...acceptedPOS].sort((a, b) => {
-      if (criteria === "POS Ref") {
-        return a.pos_ref.localeCompare(b.pos_ref);
-      } else if (criteria === "Date") {
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
+        return a.order_ref.localeCompare(b.order_ref); // Sort by Order Ref
+      });
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...acceptedPOS].sort((a, b) => {
+        return a.pos_ref.localeCompare(b.pos_ref); // Sort by POS Ref
+      });
+    } else if (criteria === "Date") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
         return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+      });
+      displayPOS = [...acceptedPOS].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Sort by newest date first
+      });
+    } else if (criteria === "Paid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid === true)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid === true)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "Unpaid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid === false)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid === false)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...acceptedOrders]; // Show all orders
+      displayPOS = [...acceptedPOS]; // Show all POS
+    }
 
-    displayAcceptedOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
-    attachAcceptedEventListeners();
+    displayAcceptedOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
+
 
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
@@ -647,10 +680,6 @@ $(document).ready(function () {
     const sortBy = $(this).data("sort"); // Get the data-sort attribute value
     sortAcceptedOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
   });
-
-  // Initial fetch
-  fetchAcceptedOrdersAndPOS();
-
 
   function attachAcceptedEventListeners() {
     // Add event listeners for view buttons
@@ -684,31 +713,46 @@ $(document).ready(function () {
     displayAcceptedOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
   });
 
-  // Sort functionality: Sort orders and POS based on selected criteria
   function sortAcceptedOrdersAndPOS(criteria) {
-    const sortedOrders = [...acceptedOrders].sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
+    let displayOrders = [];
+    let displayPOS = [];
+
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
+        return a.order_ref.localeCompare(b.order_ref); // Sort by Order Ref
+      });
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...acceptedPOS].sort((a, b) => {
+        return a.pos_ref.localeCompare(b.pos_ref); // Sort by POS Ref
+      });
+    } else if (criteria === "Date") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
         return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
-
-    const sortedPOS = [...acceptedPOS].sort((a, b) => {
-      if (criteria === "POS Ref") {
-        return a.pos_ref.localeCompare(b.pos_ref);
-      } else if (criteria === "Date") {
+      });
+      displayPOS = [...acceptedPOS].sort((a, b) => {
         return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+      });
+    } else if (criteria === "Paid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "Unpaid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...acceptedOrders]; // Show all orders
+      displayPOS = [...acceptedPOS]; // Show all POS
+    }
 
-    displayAcceptedOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
-
+    displayAcceptedOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
+
 
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
