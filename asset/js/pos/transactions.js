@@ -274,6 +274,9 @@ $(document).ready(function () {
       case 'pending':
         badgeClass = 'badge bg-warning text-white';
         break;
+      case 'delivering':
+        badgeClass = 'badge bg-info text-white';
+        break;
     }
     return badgeClass;
   }
