@@ -75,6 +75,7 @@
                                         aria-label="Default select example">
                                         <option value="3" name="cash">Cash</option>
                                         <option value="2" name="gcash">Gcash</option>
+                                        <option value="1" name="cod">COD</option>
                                     </select>
                                 </div>
                                 <h3>Customer Details</h3>
