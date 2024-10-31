@@ -451,6 +451,14 @@ $(document).ready(function () {
           `POS: ${data.pos_ref || "N/A"}`
         );
         $("#historyPOS-date").text(formatDateTime(data.date) || "N/A");
+        $("#historyPOS-user-name").text(data.user_name || "N/A");
+        $("#historyPOS-user-phone").text(data.user_phone || "N/A");
+        // Set address as a Google Maps link
+        const address = data.address || "N/A";
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+        $("#historyPOS-address").html(`<a href="${googleMapsUrl}" target="_blank">${address}</a>`);
+        
+
         $("#historyPOS-paid").html(
           `<span class="${getPaidStatusBadgeClass(data.paid)}">${data.paid || "N/A"
           }</span>`

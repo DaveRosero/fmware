@@ -16,7 +16,6 @@
           <p><strong>Customer Name:</strong> <span id="historyPOS-user-name"></span></p>
           <p><strong>Phone#:</strong> <span id="historyPOS-user-phone"></span></p>
           <p><strong>Address:</strong> <span id="historyPOS-address"></span></p>
-          <p><strong>Description:</strong> <span id="historyPOS-address-desc"></span></p>
         </div>
 
         <!-- Items Section -->
