@@ -125,28 +125,46 @@ $(document).ready(function () {
   });
   // Sort Orders and POS based on selected criteria
   function sortOrdersAndPOS(criteria) {
-    const sortedOrders = [...orders].sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+    let displayOrders = [];
+    let displayPOS = [];
 
-    const sortedPOS = [...pos].sort((a, b) => {
-      if (criteria === "POS Ref") {
-        return a.pos_ref.localeCompare(b.pos_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...orders].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...pos].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+    } else if (criteria === "Date") {
+      displayOrders = [...orders].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+      displayPOS = [...pos].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Newest first
+      });
+    } else if (criteria === "Paid") {
+      displayOrders = [...orders].filter(order => order.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...pos].filter(posItem => posItem.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    }
+    else if (criteria === "Unpaid") {
+      displayOrders = [...orders].filter(order => order.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...pos].filter(posItem => posItem.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...orders]; // Show all orders
+      displayPOS = [...pos]; // Show all POS
+    }
 
-    displayOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted results
+    displayOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
+
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
     e.preventDefault();
@@ -259,84 +277,99 @@ $(document).ready(function () {
     });
   }
   // Populate the order modal with details
-  function populateOrderModal(order) {
-    // Populate modal with order details
-    $("#order-date").text(`Date: ${formatDateTime(order.date)}`);
-    $("#order-user-name").text(order.user_name || "N/A");
-    $("#order-user-phone").text(order.user_phone || "N/A");
-    $("#order-address").text(
-      `${order.address.house_no || "N/A"} ${order.address.street || "N/A"}, ${order.address.brgy || "N/A"
-      }, ${order.address.municipality || "N/A"}`
-    );
-    $("#order-address-desc").text(order.address.description || "N/A");
+function populateOrderModal(order) {
+  // Populate modal with order details
+  $("#order-date").text(`Date: ${formatDateTime(order.date)}`);
+  $("#order-user-name").text(order.user_name || "N/A");
+  $("#order-user-phone").text(order.user_phone || "N/A");
 
-    // Clear previous items
-    $("#order-items-container").empty();
+  // Build the address string
+  const addressText = `${order.address.house_no || "N/A"} ${order.address.street || "N/A"}, ${order.address.brgy || "N/A"}, ${order.address.municipality || "N/A"}`;
 
-    // Populate order items
-    order.items.forEach((item) => {
-      $("#order-items-container").append(`
+  // Create the Google Maps URL with the address
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`;
+
+  // Set the address as a clickable link
+  $("#order-address").html(
+    `<a href="${mapsUrl}" target="_blank">${addressText}</a>`
+  );
+
+  $("#order-address-desc").text(order.address.description || "N/A");
+
+  // Clear previous items
+  $("#order-items-container").empty();
+
+  // Populate order items
+  order.items.forEach((item) => {
+    $("#order-items-container").append(`
       <tr>
         <td>${item.product_name || "N/A"}</td>
         <td>${item.qty || 0}</td>
         <td>${formatPrice(item.total_price || 0)}</td>
       </tr>
     `);
-    });
+  });
 
-    // Calculate subtotal and grand total
-    const subtotal = order.gross - (order.delivery_fee || 0);
-    const grandTotal =
-      subtotal - (order.discount || 0) + (order.delivery_fee || 0);
+  // Calculate subtotal and grand total
+  const subtotal = order.gross - (order.delivery_fee || 0);
+  const grandTotal =
+    subtotal - (order.discount || 0) + (order.delivery_fee || 0);
 
-    // Populate price section
-    $("#order-gross").text(formatPrice(subtotal || 0.00));
-    $("#order-vat").text(formatPrice(order.vat || 0.00));
-    $("#order-discount").text(formatPrice(order.discount || 0.00));
-    $("#order-delivery-fee").text(formatPrice(order.delivery_fee || 0.00));
-    $("#order-grand-total").text(formatPrice(grandTotal || 0.00));
-  }
-  // Populate the POS modal with details
-  function populatePOSModal(pos) {
-    // Populate modal with POS details
-    $("#pos-date").text(`${formatDateTime(pos.date)}`);
+  // Populate price section
+  $("#order-gross").text(formatPrice(subtotal || 0.00));
+  $("#order-vat").text(formatPrice(order.vat || 0.00));
+  $("#order-discount").text(formatPrice(order.discount || 0.00));
+  $("#order-delivery-fee").text(formatPrice(order.delivery_fee || 0.00));
+  $("#order-grand-total").text(formatPrice(grandTotal || 0.00));
+}
 
-    // Combine firstname and lastname for user name display
-    $("#pos-user-name").text(`${pos.firstname || "N/A"} ${pos.lastname || "N/A"}`);
+// Populate the POS modal with details
+function populatePOSModal(pos) {
+  // Populate modal with POS details
+  $("#pos-date").text(`${formatDateTime(pos.date)}`);
 
-    // Show contact number from pos table
-    $("#pos-user-phone").text(pos.contact_no || "N/A");
+  // Combine firstname and lastname for user name display
+  $("#pos-user-name").text(`${pos.firstname || "N/A"} ${pos.lastname || "N/A"}`);
 
-    // Show address from pos table
-    $("#pos-address").text(`${pos.address || "N/A"}`);
+  // Show contact number from pos table
+  $("#pos-user-phone").text(pos.contact_no || "N/A");
 
-    // Clear previous items
-    $("#pos-items-container").empty();
+  // Create the Google Maps URL with the address
+  const posMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(pos.address || "N/A")}`;
 
-    // Populate POS items
-    pos.items.forEach((item) => {
-      $("#pos-items-container").append(`
+  // Set the address as a clickable link
+  $("#pos-address").html(
+    `<a href="${posMapsUrl}" target="_blank">${pos.address || "N/A"}</a>`
+  );
+
+  // Clear previous items
+  $("#pos-items-container").empty();
+
+  // Populate POS items
+  pos.items.forEach((item) => {
+    $("#pos-items-container").append(`
       <tr>
         <td>${item.product_name || "N/A"}</td>
         <td>X${item.qty || 0}</td>
         <td>${formatPrice(item.total || 0)}</td>
       </tr>
     `);
-    });
+  });
 
-    // Calculate subtotal and grand total
-    const subtotal = pos.items.reduce(
-      (total, item) => total + (item.total || 0),
-      0
-    );
-    const grandTotal = subtotal - (pos.discount || 0) + (pos.delivery_fee || 0);
+  // Calculate subtotal and grand total
+  const subtotal = pos.items.reduce(
+    (total, item) => total + (item.total || 0),
+    0
+  );
+  const grandTotal = subtotal - (pos.discount || 0) + (pos.delivery_fee || 0);
 
-    // Populate price section
-    $("#pos-subtotal").text(formatPrice(subtotal || 0.00));
-    $("#pos-discount").text(formatPrice(pos.discount || 0.00));
-    $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0.00));
-    $("#pos-total").text(formatPrice(grandTotal || 0.00));
-  }
+  // Populate price section
+  $("#pos-subtotal").text(formatPrice(subtotal || 0.00));
+  $("#pos-discount").text(formatPrice(pos.discount || 0.00));
+  $("#pos-delivery-fee").text(formatPrice(pos.delivery_fee || 0.00));
+  $("#pos-total").text(formatPrice(grandTotal || 0.00));
+}
+
   // Initial fetch of orders and POS
   fetchOrdersAndPOS();
   // Handle Accept Order button click
@@ -615,31 +648,46 @@ $(document).ready(function () {
     displayAcceptedOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
   });
 
-  // Sort functionality: Sort orders and POS based on selected criteria
   function sortAcceptedOrdersAndPOS(criteria) {
-    const sortedOrders = [...acceptedOrders].sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
-        return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+    let displayOrders = [];
+    let displayPOS = [];
 
-    const sortedPOS = [...acceptedPOS].sort((a, b) => {
-      if (criteria === "POS Ref") {
-        return a.pos_ref.localeCompare(b.pos_ref);
-      } else if (criteria === "Date") {
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
+        return a.order_ref.localeCompare(b.order_ref); // Sort by Order Ref
+      });
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...acceptedPOS].sort((a, b) => {
+        return a.pos_ref.localeCompare(b.pos_ref); // Sort by POS Ref
+      });
+    } else if (criteria === "Date") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
         return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+      });
+      displayPOS = [...acceptedPOS].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date); // Sort by newest date first
+      });
+    } else if (criteria === "Paid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid === true)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid === true)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "Unpaid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid === false)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid === false)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...acceptedOrders]; // Show all orders
+      displayPOS = [...acceptedPOS]; // Show all POS
+    }
 
-    displayAcceptedOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
-    attachAcceptedEventListeners();
+    displayAcceptedOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
+
 
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
@@ -647,10 +695,6 @@ $(document).ready(function () {
     const sortBy = $(this).data("sort"); // Get the data-sort attribute value
     sortAcceptedOrdersAndPOS(sortBy); // Sort orders and POS based on criteria
   });
-
-  // Initial fetch
-  fetchAcceptedOrdersAndPOS();
-
 
   function attachAcceptedEventListeners() {
     // Add event listeners for view buttons
@@ -684,31 +728,46 @@ $(document).ready(function () {
     displayAcceptedOrdersAndPOS(searchedOrders, searchedPOS); // Display filtered orders and POS
   });
 
-  // Sort functionality: Sort orders and POS based on selected criteria
   function sortAcceptedOrdersAndPOS(criteria) {
-    const sortedOrders = [...acceptedOrders].sort((a, b) => {
-      if (criteria === "Order Ref") {
-        return a.order_ref.localeCompare(b.order_ref);
-      } else if (criteria === "Date") {
+    let displayOrders = [];
+    let displayPOS = [];
+
+    // Determine what to display based on criteria
+    if (criteria === "Order Ref") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
+        return a.order_ref.localeCompare(b.order_ref); // Sort by Order Ref
+      });
+      displayPOS = []; // No POS to display
+    } else if (criteria === "POS Ref") {
+      displayOrders = []; // No orders to display
+      displayPOS = [...acceptedPOS].sort((a, b) => {
+        return a.pos_ref.localeCompare(b.pos_ref); // Sort by POS Ref
+      });
+    } else if (criteria === "Date") {
+      displayOrders = [...acceptedOrders].sort((a, b) => {
         return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
-
-    const sortedPOS = [...acceptedPOS].sort((a, b) => {
-      if (criteria === "POS Ref") {
-        return a.pos_ref.localeCompare(b.pos_ref);
-      } else if (criteria === "Date") {
+      });
+      displayPOS = [...acceptedPOS].sort((a, b) => {
         return new Date(b.date) - new Date(a.date); // Sort by newest date first
-      } else if (criteria === "Paid") {
-        return a.paid.localeCompare(b.paid);
-      }
-    });
+      });
+    } else if (criteria === "Paid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid.toLowerCase() === "paid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "Unpaid") {
+      displayOrders = [...acceptedOrders].filter(order => order.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+      displayPOS = [...acceptedPOS].filter(posItem => posItem.paid.toLowerCase() === "unpaid")
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+    } else if (criteria === "All") {
+      displayOrders = [...acceptedOrders]; // Show all orders
+      displayPOS = [...acceptedPOS]; // Show all POS
+    }
 
-    displayAcceptedOrdersAndPOS(sortedOrders, sortedPOS); // Display sorted orders and POS
-
+    displayAcceptedOrdersAndPOS(displayOrders, displayPOS); // Display results
   }
+
 
   // Sorting functionality: Trigger when a sort option is selected
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
@@ -746,18 +805,18 @@ $(document).ready(function () {
           console.error("No data found for order details.");
           return;
         }
-
+  
         // Clear existing order items
         const itemsContainer = $("#acceptedOrder-items-container");
         itemsContainer.empty();
-
+  
         let subtotal = 0;
-
+  
         // Generate and append items to the container, calculate subtotal
         data.items.forEach((item) => {
           const itemTotal = parseFloat(item.total_price) || 0;
           subtotal += itemTotal;
-
+  
           const itemHtml = `
           <div class="d-flex justify-content-between pt-2">
             <div>
@@ -769,7 +828,7 @@ $(document).ready(function () {
           </div>`;
           itemsContainer.append(itemHtml);
         });
-
+  
         // Populate other order details
         $("#acceptedOrder-items-modal-label").text(
           `Order: ${data.order_ref || "N/A"}`
@@ -777,33 +836,35 @@ $(document).ready(function () {
         $("#acceptedOrder-date").text(formatDateTime(data.date) || "N/A");
         $("#acceptedOrder-user-name").text(data.user_name || "N/A");
         $("#acceptedOrder-user-phone").text(data.user_phone || "N/A");
-
-        // Format and display address
-        const address =
+  
+        // Format and display address as a clickable link
+        const addressText =
           `${data.address.house_no ? data.address.house_no + ", " : ""}` +
           `${data.address.street ? data.address.street + ", " : ""}` +
           `${data.address.brgy ? data.address.brgy + ", " : ""}` +
-          `${data.address.municipality ? data.address.municipality + "<br>" : ""
-          }`;
-        $("#acceptedOrder-address").html(address || "N/A");
-        $("#acceptedOrder-address-desc").html(
-          data.address.description || "N/A"
+          `${data.address.municipality || ""}`;
+        const addressUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`;
+  
+        $("#acceptedOrder-address").html(
+          `<a href="${addressUrl}" target="_blank">${addressText || "N/A"}</a>`
         );
-
+  
+        $("#acceptedOrder-address-desc").html(data.address.description || "N/A");
+  
         // Display subtotal (total of all items)
         $("#acceptedOrder-gross").text(formatPrice(subtotal));
-
+  
         // Display delivery fee, VAT, discount, and grand total
         const deliveryFee = parseFloat(data.delivery_fee) || 0;
         const vat = parseFloat(data.vat) || 0;
         const discount = parseFloat(data.discount) || 0;
         const grandTotal = subtotal + deliveryFee + vat - discount;
-
+  
         $("#acceptedOrder-delivery-fee").text(formatPrice(deliveryFee));
         $("#acceptedOrder-vat").text(formatPrice(vat));
         $("#acceptedOrder-discount").text(formatPrice(discount));
         $("#acceptedOrder-grand-total").text(formatPrice(grandTotal));
-
+  
         // Show the modal
         $("#acceptedOrder-items-modal").modal("show");
       },
@@ -812,6 +873,7 @@ $(document).ready(function () {
       },
     });
   }
+  
   function fetchAcceptedPOSDetails(posRef) {
     $.ajax({
       url: "/model-acceptedPos-details",
@@ -826,29 +888,29 @@ $(document).ready(function () {
         }
         const items = data.items;
         console.log(items); // Log the items array to see what's inside
+  
         // Clear existing POS items
         const itemsContainer = $("#acceptedPOS-items-container");
         itemsContainer.empty();
-
+  
         let subtotal = 0;
-
+  
         // Generate and append items to the container, calculate subtotal
         items.forEach((item) => {
           const itemTotal = parseFloat(item.total_price) || 0;
           subtotal += itemTotal;
-
+  
           const itemHtml = `
           <div class="d-flex justify-content-between pt-2">
             <div>
               <p class="mb-0"><strong>${item.product_name || "N/A"}</strong></p>
-              <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"
-            }, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
+              <p class="mb-0">${formatPrice(item.unit_price)} (${item.variant_name || "N/A"}, ${item.unit_name || "N/A"}) x ${item.qty || 0}</p>
             </div>
             <p class="mb-0">${formatPrice(itemTotal)}</p>
           </div>`;
           itemsContainer.append(itemHtml);
         });
-
+  
         // Populate other POS details
         $("#acceptedPOS-items-modal-label").text(
           `POS: ${data.pos_ref || "N/A"}`
@@ -856,20 +918,27 @@ $(document).ready(function () {
         $("#acceptedPOS-date").text(formatDateTime(data.date) || "N/A");
         $("#acceptedPOS-user-name").text(data.user_name || "N/A");
         $("#acceptedPOS-user-phone").text(data.user_phone || "N/A");
-        $("#acceptedPOS-address").text(data.address || "N/A");
-
+  
+        // Create Google Maps URL for the address
+        const posAddressUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address || "N/A")}`;
+  
+        // Set the address as a clickable link
+        $("#acceptedPOS-address").html(
+          `<a href="${posAddressUrl}" target="_blank">${data.address || "N/A"}</a>`
+        );
+  
         // Display subtotal (total of all items)
         $("#acceptedPOS-subtotal").text(formatPrice(subtotal));
-
+  
         // Display delivery fee, discount, and grand total
         const deliveryFee = parseFloat(data.delivery_fee) || 0;
         const discount = parseFloat(data.discount) || 0;
         const grandTotal = subtotal + deliveryFee - discount;
-
+  
         $("#acceptedPOS-delivery-fee").text(formatPrice(deliveryFee));
         $("#acceptedPOS-discount").text(formatPrice(discount));
         $("#acceptedPOS-grand-total").text(formatPrice(grandTotal));
-
+  
         // Show the modal
         console.log("Opening the POS modal...");
         $("#acceptedPOS-items-modal").modal("show");
@@ -879,6 +948,7 @@ $(document).ready(function () {
       },
     });
   }
+  
 
   $("#cancelOrderButton").on("click", function () {
     const orderRef = $("#acceptedOrder-items-modal-label")

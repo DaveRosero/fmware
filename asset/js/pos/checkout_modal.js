@@ -166,9 +166,16 @@ $(document).ready(function () {
   // Function to validate all required fields
   function validateCheckoutButton() {
     let isValid = true;
-
+  
+    // Disable cashRec-input if payment type is "1"
+    if ($paymentTypeSelect.val() === "1") {
+      $("#cashRec-input").val("").prop("disabled", true);
+    } else {
+      $("#cashRec-input").prop("disabled", false);
+    }
+  
+    // Check required fields for Walk-in transaction type
     if ($transactionTypeSelect.val() === "1") {
-      // Check required fields for Walk-in
       isValid =
         $firstNameInput.val().trim() !== "" &&
         $lastNameInput.val().trim() !== "" &&
@@ -176,17 +183,23 @@ $(document).ready(function () {
         $brgyInput.val() !== "" &&
         $contactInput.val().trim() !== "";
     }
-
-    // Check if the cash received is greater than or equal to the total amount
-    isValid =
-      isValid &&
-      parseFloat($("#cashRec-input").val()) >=
-        parseFloat(
-          $("#cart-total-modal").text().replace("₱", "").replace(/,/g, "")
-        );
-
+  
+    // If cashRec-input is enabled, validate cash amount
+    if (!$("#cashRec-input").prop("disabled")) {
+      isValid =
+        isValid &&
+        parseFloat($("#cashRec-input").val()) >=
+          parseFloat(
+            $("#cart-total-modal").text().replace("₱", "").replace(/,/g, "")
+          );
+    }
+  
+    // Enable or disable checkout button based on validity
     $(".print").prop("disabled", !isValid);
   }
+  
+  // Listen for changes in payment type and validate on page load
+  $paymentTypeSelect.on("change", validateCheckoutButton);
 
   // Event listeners for input changes to validate checkout button
   $firstNameInput.on("input", validateCheckoutButton);

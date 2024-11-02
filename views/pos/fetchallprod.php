@@ -13,6 +13,7 @@ function fetchAllProducts()
                      product.name,
                      product.unit_value,
                      stock.qty,
+                     stock.critical_level,
                      product.id,
                      unit.name AS unit_name,
                      variant.name AS variant_name
@@ -21,6 +22,7 @@ function fetchAllProducts()
               INNER JOIN product ON price_list.product_id = product.id
               INNER JOIN variant ON product.variant_id = variant.id
               INNER JOIN unit ON product.unit_id = unit.id
+              WHERE stock.qty > stock.critical_level
               ORDER BY product.name ASC';
 
     // Execute query

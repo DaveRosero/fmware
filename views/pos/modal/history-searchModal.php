@@ -30,15 +30,17 @@
                                 <td><?php echo isset($history['name']) ? htmlspecialchars($history['name']) : ''; ?>
                                 </td>
                                 <td>
-                                    <?php
-                                        $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary'
+                                <?php
+                                    $badgeClass = $history['status'] == 'paid' ? 'text-bg-primary'
+                                        : ($history['status'] == 'delivering' ? 'text-bg-primary'
                                             : ($history['status'] == 'void' ? 'text-bg-secondary'
                                                 : ($history['status'] == 'fully refunded' ? 'bg-success text-white'
                                                     : ($history['status'] == 'fully replaced' ? 'bg-info text-white'
                                                         : ($history['status'] == 'partially refunded' ? 'bg-warning text-white'
                                                             : ($history['status'] == 'partially replaced' ? 'bg-warning text-white'
                                                                 : ($history['status'] == 'pending' ? 'bg-warning text-white'
-                                                                    : ''))))));
+                                                                    : ($history['status'] == 'delivered' ? 'bg-success'
+                                                                        : ''))))))));
                                     ?>
                                     <span
                                         class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($history['status']); ?></span>

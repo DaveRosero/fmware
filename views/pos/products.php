@@ -8,6 +8,7 @@ $query = 'SELECT price_list.unit_price,
                   product.name,
                   product.unit_value,
                   stock.qty,
+                  stock.critical_level,
                   product.id,
                   product.barcode,
                   unit.name,
@@ -17,15 +18,18 @@ $query = 'SELECT price_list.unit_price,
                   INNER JOIN product ON price_list.product_id = product.id
                   INNER JOIN variant ON variant.id = product.variant_id
                   INNER JOIN unit ON unit.id = product.unit_id
-                  WHERE product.name LIKE CONCAT("%", ?, "%") 
+                  INNER JOIN brand ON product.brand_id = brand.id
+                  WHERE (product.name LIKE CONCAT("%", ?, "%") 
                         OR product.barcode LIKE CONCAT("%", ?, "%")
                         OR variant.name LIKE CONCAT("%", ?, "%")
+                        OR brand.name LIKE CONCAT("%", ?, "%"))
+                        AND stock.qty > stock.critical_level
                   ORDER BY product.name ASC';
 
 $stmt = $mysqli->prepare($query);
-$stmt->bind_param('sss', $search, $search, $search); // Bind search parameter twice for both placeholders
+$stmt->bind_param('ssss', $search, $search, $search, $search); // Bind search parameter twice for both placeholders
 $stmt->execute();
-$stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $id, $barcode, $unit, $variant);
+$stmt->bind_result($unit_price, $image, $name, $unit_value, $qty, $critical_level, $id, $barcode, $unit, $variant);
 
 $output = '';
 

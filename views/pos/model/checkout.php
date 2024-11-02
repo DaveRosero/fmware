@@ -32,14 +32,21 @@ $date = date('F j, Y g:i A');
 if ($_POST['transaction_type']) {
     $transaction_type_id = 3;
     $status = 'pending';
-    $paid = 'paid';
+    // Determine the payment status based on payment_type_id
+    if ($_POST['payment_type'] == '1') {
+        $paid = 'unpaid'; // If payment_type_id is 1 and transaction is pending, mark as unpaid
+    } else {
+        $paid = 'paid';   // For other payment types, mark as paid
+    }
 } else {
     $transaction_type_id = 2;
     $status = 'paid';
     $paid = 'paid';
 }
 
-if ($_POST['payment_type']) {
+if ($_POST['payment_type'] === '1') {
+    $payment_type_id = 1;
+} elseif ($_POST['payment_type'] === '2') {
     $payment_type_id = 2;
 } else {
     $payment_type_id = 3;

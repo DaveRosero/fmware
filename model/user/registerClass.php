@@ -142,47 +142,40 @@ class Register extends User
     public function register()
     {
         $logs = new Logs();
+        $errors = array(); // Array to store all validation errors
 
+        // Check if account already exists
         if ($this->accountExist($_POST['email'])) {
-            $json =  array(
-                'exist' => 'This email is registered to an existing account'
-            );
-            echo json_encode($json);
-            return;
+            $errors['exist'] = 'This email is registered to an existing account';
         }
 
+        // Check password length
         if (!$this->checkPasswordLength($_POST['password'])) {
-            $json = array(
-                'password' => 'Password must be 8 characters'
-            );
-            echo json_encode($json);
-            return;
+            $errors['password_length'] = 'Password must be 8 characters';
         }
 
+        // Check if password is alphanumeric
         if (!$this->isAlphanumeric($_POST['password'])) {
-            $json = array(
-                'password' => 'Password must consist of letters and numbers'
-            );
-            echo json_encode($json);
-            return;
+            $errors['password_alphanumeric'] = 'Password must consist of letters and numbers';
         }
 
+        // Check if passwords match
         if ($_POST['password'] !== $_POST['confirm']) {
-            $json = array(
-                'confirm' => 'Passwords does not match'
-            );
-            echo json_encode($json);
-            return;
+            $errors['confirm'] = 'Passwords do not match';
         }
 
+        // Check mobile number format
         if (substr($_POST['phone'], 0, 2) !== '09' || strlen($_POST['phone']) !== 11) {
-            $json = array(
-                'phone' => 'Mobile number must be 09XXXXXXXXX'
-            );
-            echo json_encode($json);
+            $errors['phone'] = 'Mobile number must be 11 digits (09XXXXXXXXX)';
+        }
+
+        // If there are any errors, return them as JSON and stop the execution
+        if (!empty($errors)) {
+            echo json_encode($errors);
             return;
         }
 
+        // If no errors, proceed with registration
         $fname = ucfirst($_POST['fname']);
         $lname = ucfirst($_POST['lname']);
         $email = $_POST['email'];
@@ -200,10 +193,11 @@ class Register extends User
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $query = 'INSERT INTO user
-                        (firstname, lastname, email, password, phone, date, code, active)
-                    VALUES (?,?,?,?,?,?,?,?)';
+              (firstname, lastname, email, password, phone, date, code, active)
+              VALUES (?,?,?,?,?,?,?,?)';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('sssssssi', $fname, $lname, $email, $hashedPassword, $phone, $date, $verify['code'], $active);
+
         if ($stmt) {
             if ($stmt->execute()) {
                 $stmt->close();
@@ -231,6 +225,7 @@ class Register extends User
             die("Error in preparing statement: " . $this->conn->error);
         }
     }
+
 
     public function verifyAccount($email)
     {
