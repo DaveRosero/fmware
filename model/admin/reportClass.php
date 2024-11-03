@@ -76,16 +76,84 @@ class Reports extends Admin
         ];
     }
 
+    public function refunds($start_date, $end_date)
+    {
+        $query = "SELECT 
+                SUBSTRING(description, 
+                        LOCATE('Transaction ', description) + LENGTH('Transaction '), 
+                        LOCATE(',', description) - LOCATE('Transaction ', description) - LENGTH('Transaction ')) AS transaction_reference,
+                CASE 
+                    WHEN description LIKE 'Updated refund for Transaction%' 
+                        AND description LIKE '%New Total Amount: ₱%' 
+                        THEN 
+                        CAST(SUBSTRING_INDEX(SUBSTRING(description, 
+                                    LOCATE('New Total Amount: ₱', description) + LENGTH('New Total Amount: ₱')), 
+                                    ' ', 1) AS DECIMAL(10, 2))
+                    WHEN description LIKE 'Created new refund for Transaction%' 
+                        AND description LIKE '%Amount: ₱%' 
+                        THEN 
+                        CAST(
+                            SUBSTRING(
+                                description, 
+                                LOCATE('₱', description) + 1, 
+                                LOCATE('.', description, LOCATE('₱', description)) - LOCATE('₱', description)
+                            ) AS DECIMAL(10, 2)
+                        )
+                END AS refund_amount
+            FROM logs
+            WHERE (description LIKE 'Updated refund for Transaction%' 
+                OR description LIKE 'Created new refund for Transaction%')
+                AND description LIKE '%POS_%'
+                AND DATE(STR_TO_DATE(date, '%M %d, %Y %h:%i %p')) BETWEEN ? AND ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($pos_ref, $amount);
+        $tbody = '';
+        while ($stmt->fetch()) {
+            // Debug output to see the raw values being retrieved
+            error_log("Transaction Reference: " . strtoupper($pos_ref) . " | Amount: " . $amount);
+
+            // Default to 0 if no amount is retrieved
+            if ($amount === null) {
+                $amount = 0;
+            }
+
+            $tbody .= '<tr>
+                    <td class="text-center">' . strtoupper($pos_ref) . '</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center">-₱' . number_format($amount, 2) . '</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                </tr>';
+        }
+        $stmt->close();
+        return $tbody;
+    }
+
+
     public function sales($start_date, $end_date)
     {
+        $tbody = $this->refunds($start_date, $end_date);
         $query = 'SELECT pos.pos_ref, pos.firstname, pos.lastname, pos.date, pos.subtotal, pos.total, 
                         pos.discount, t.name, p.name
                     FROM pos
                     INNER JOIN transaction_type t ON t.id = pos.transaction_type_id
                     INNER JOIN payment_type p ON p.id = pos.payment_type_id
-                    WHERE STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p") BETWEEN 
-                      STR_TO_DATE(?, "%Y-%m-%d") AND 
-                      STR_TO_DATE(?, "%Y-%m-%d")';
+                    WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) BETWEEN ? AND ?';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ss', $start_date, $end_date);
 
@@ -99,7 +167,6 @@ class Reports extends Admin
         }
 
         $stmt->bind_result($pos_ref, $fname, $lname, $date, $subtotal, $total, $discount, $transaction, $payment);
-        $tbody = '';
         while ($stmt->fetch()) {
             $tbody .= '<tr>
                                 <td class="text-center">' . strtoupper($pos_ref) . '</td>

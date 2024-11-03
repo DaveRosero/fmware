@@ -123,7 +123,7 @@ class Dashboard extends Admin
 
     public function getDailySales($date)
     {
-        $query = 'SELECT SUM(total), SUM(discount), COUNT(*) FROM pos WHERE DATE(date) = ?';
+        $query = 'SELECT SUM(total), SUM(discount), COUNT(*) FROM pos WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) = ?';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('s', $date);
 
