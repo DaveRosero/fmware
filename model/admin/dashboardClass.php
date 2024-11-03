@@ -62,7 +62,7 @@ class Dashboard extends Admin
             'sales_data' => $sales_data,
             'start_date' => $start_date ?? 0,
             'end_date' => $end_date ?? 0,
-            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - $expenses), 2),
+            'profit' => '₱' . number_format((($orders['total'] + $sales['total']) - ($expenses + $sales['discounts'] + $refunds)), 2),
             'refunds' => '₱' . number_format($refunds, 2),
             'discount' => '₱' . number_format($discount, 2),
         );
@@ -72,7 +72,7 @@ class Dashboard extends Admin
 
     public function getDailyOrders($date)
     {
-        $query = 'SELECT SUM(gross), COUNT(*) FROM orders WHERE DATE(date) = ?';
+        $query = 'SELECT SUM(gross), COUNT(*) FROM orders WHERE DATE(date) = ? AND (status = "delivered" OR paid = "paid")';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('s', $date);
 
@@ -98,7 +98,7 @@ class Dashboard extends Admin
     public function getWeeklyOrders($date)
     {
         $query = 'SELECT SUM(gross), COUNT(*) FROM orders 
-              WHERE DATE(date) BETWEEN DATE_SUB(?, INTERVAL 1 WEEK) AND ?';
+              WHERE DATE(date) BETWEEN DATE_SUB(?, INTERVAL 1 WEEK) AND ? AND (status = "delivered" OR paid = "paid")';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ss', $date, $date);
 
@@ -295,7 +295,8 @@ class Dashboard extends Admin
             $orders_query = 'SELECT COALESCE(SUM(gross), 0) AS total_orders
                          FROM orders
                          WHERE DATE(date) = ?
-                         AND TIME(date) BETWEEN ? AND ?';
+                         AND TIME(date) BETWEEN ? AND ?
+                         AND (status = "delivered" OR paid = "paid")';
             $stmt = $this->conn->prepare($orders_query);
             $stmt->bind_param('sss', $date, $start_time, $end_time);
             if (!$stmt->execute()) {
@@ -340,6 +341,7 @@ class Dashboard extends Admin
                       SELECT COALESCE(SUM(orders.gross), 0) 
                       FROM orders 
                       WHERE DATE(orders.date) = ?
+                      AND (status = "delivered" OR paid = "paid")
                   ) AS total_orders';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ss', $date, $date);
@@ -385,6 +387,7 @@ class Dashboard extends Admin
                       SELECT COALESCE(SUM(orders.gross), 0) 
                       FROM orders 
                       WHERE DATE_FORMAT(orders.date, "%Y-%m") = ?
+                      AND (status = "delivered" OR paid = "paid")
                   ) AS total_orders';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('ss', $month, $month);
@@ -415,7 +418,8 @@ class Dashboard extends Admin
             $month = DateTime::createFromFormat('F Y', $title)->format('Y-m');
             $query = 'SELECT COALESCE(SUM(gross), 0), COUNT(*) 
                   FROM orders 
-                  WHERE DATE_FORMAT(date, "%Y-%m") = ?';
+                  WHERE DATE_FORMAT(date, "%Y-%m") = ?
+                  AND (status = "delivered" OR paid = "paid")';
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('s', $month);
 

@@ -83,7 +83,9 @@ class Reports extends Admin
                     FROM pos
                     INNER JOIN transaction_type t ON t.id = pos.transaction_type_id
                     INNER JOIN payment_type p ON p.id = pos.payment_type_id
-                    WHERE DATE(pos.date) BETWEEN ? AND ?';
+                    WHERE STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p") BETWEEN 
+                      STR_TO_DATE(?, "%Y-%m-%d") AND 
+                      STR_TO_DATE(?, "%Y-%m-%d")';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ss', $start_date, $end_date);
 

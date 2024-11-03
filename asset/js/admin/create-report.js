@@ -1,6 +1,9 @@
 $(document).ready(function () {
-    var today = new Date().toISOString().split('T')[0];
-    $('#startDate, #endDate').attr('max', today);
+    var today = new Date();
+    var localToday = today.getFullYear() + '-' +
+        ('0' + (today.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + today.getDate()).slice(-2);
+    $('#startDate, #endDate').attr('max', localToday);
 
     $('#create-report-form').submit(function (event) {
         event.preventDefault();
