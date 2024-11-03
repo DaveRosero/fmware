@@ -3,6 +3,8 @@ session_start();
 require_once 'model/database/database.php';
 require_once 'model/admin/logsClass.php';
 
+date_default_timezone_set('Asia/Manila');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
     $logs = new Logs(); // Create a new instance of Logs
@@ -65,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update the refund record with the new total
         $refund_query = "UPDATE refunds SET total_refund_value = ? WHERE id = ?";
         prepareAndExecute($mysqli, $refund_query, [$new_total_refund_value, $refund_id], 'di', "Error updating refund: ");
-        $action_log = 'Updated refund for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_refund_value;
+        $action_log = 'Updated refund for Transaction ' . $pos_ref . ', New Total Amount: ₱' . number_format($new_total_refund_value, 2);
     } else {
         // Fetch the discount from the pos table
         $discount_query = "SELECT discount FROM pos WHERE pos_ref = ?";
@@ -81,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason) VALUES (?, ?, ?)";
         $stmt = prepareAndExecute($mysqli, $refund_query, [$pos_ref, $total_refund_value, $refund_reason], 'sds', "Error inserting refund: ");
         $refund_id = $mysqli->insert_id; // Get the ID of the inserted refund record
-        $action_log = 'Created new refund for Transaction ' . $pos_ref . ', Amount: ₱' . $total_refund_value;
+        $action_log = 'Created new refund for Transaction ' . $pos_ref . ', Amount: ₱' . number_format($total_refund_value, 2);
     }
 
     // Separate items into 'Good' and 'Broken'

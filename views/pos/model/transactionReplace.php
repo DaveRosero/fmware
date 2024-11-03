@@ -3,6 +3,8 @@ session_start();
 require_once 'model/database/database.php';
 require_once 'model/admin/logsClass.php';
 
+date_default_timezone_set('Asia/Manila');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
     $logs = new Logs(); // Create a new instance of Logs
@@ -59,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update the replacement record with the new total
             $replace_query = "UPDATE replacements SET total_replace_value = ? WHERE id = ?";
             prepareAndExecute($mysqli, $replace_query, [$new_total_replace_value, $replace_id], 'di', "Error updating replacement: ");
-            $action_log = 'Updated replacement for Transaction ' . $pos_ref . ', New Total Amount: ₱' . $new_total_replace_value;
+            $action_log = 'Updated replacement for Transaction ' . $pos_ref . ', New Total Amount: ₱' . number_format($new_total_replace_value,2);
         } else {
             // Fetch the discount from the pos table
             $discount_query = "SELECT discount FROM pos WHERE pos_ref = ?";
@@ -75,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $replace_query = "INSERT INTO replacements (pos_ref, total_replace_value, reason) VALUES (?, ?, ?)";
             $stmt = prepareAndExecute($mysqli, $replace_query, [$pos_ref, $total_replace_value, $replacement_reason], 'sds', "Error inserting replacement: ");
             $replace_id = $mysqli->insert_id; // Get the ID of the inserted replacement record
-            $action_log = 'Created new replacement for Transaction ' . $pos_ref . ', Amount: ₱' . $total_replace_value;
+            $action_log = 'Created new replacement for Transaction ' . $pos_ref . ', Amount: ₱' . number_format($total_replace_value,2);
         }
 
     // Insert or update replacement items
