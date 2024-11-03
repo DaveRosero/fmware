@@ -29,6 +29,7 @@ $(document).ready(function () {
       $contactInput.closest(".mb-3").hide();
       $deliveryFeeContainer.hide(); // Hide delivery fee
       $deliveryFeeValue.hide();
+      $paymentTypeSelect.find("option[value='1']").remove();
     } else if ($transactionTypeSelect.val() === "1") {
       // delivery selected
       $firstNameInput.closest(".mb-3").show();
@@ -39,6 +40,9 @@ $(document).ready(function () {
       $contactInput.closest(".mb-3").show();
       $deliveryFeeContainer.show(); // Show delivery fee
       $deliveryFeeValue.show();
+      if ($paymentTypeSelect.find("option[value='1']").length === 0) {
+        $paymentTypeSelect.append('<option value="1">COD</option>');
+      }
     }
     updateOriginalTotal(); // Recalculate total
     calculateDiscount(); // Recalculate discount
@@ -55,6 +59,11 @@ $(document).ready(function () {
   $paymentTypeSelect.val("3"); // Set default selection to "Cash"
   $brgySelect.val("0"); // Set default selection to "Select your Baranggay"
   resetTransaction();
+  validateCheckoutButton();
+
+  // Initially disable the checkout button
+  $(".print").prop("disabled", true); // Disable the checkout button on initial load
+
 
   // Event listener for dropdown change
   $transactionTypeSelect.on("change", function () {
@@ -111,6 +120,9 @@ $(document).ready(function () {
     });
   });
 
+  //transaction is 0 yung payment is cash or gcash lang 
+  
+
   // Function to update the original total price before discount
   function updateOriginalTotal() {
     let total = 0;
@@ -163,6 +175,10 @@ $(document).ready(function () {
     validateCheckoutButton();
   }
 
+  $('#checkoutModal').on('show.bs.modal', function () {
+    $('#modal-checkout .btn-success').prop('disabled', true); // Disables the checkout button
+});
+
   // Function to validate all required fields
   function validateCheckoutButton() {
     let isValid = true;
@@ -176,12 +192,13 @@ $(document).ready(function () {
   
     // Check required fields for Walk-in transaction type
     if ($transactionTypeSelect.val() === "1") {
+      const isContactValid = $contactInput.val().trim().length === 11;
       isValid =
         $firstNameInput.val().trim() !== "" &&
         $lastNameInput.val().trim() !== "" &&
         $streetInput.val().trim() !== "" &&
         $brgyInput.val() !== "" &&
-        $contactInput.val().trim() !== "";
+        isContactValid;
     }
   
     // If cashRec-input is enabled, validate cash amount
@@ -383,10 +400,12 @@ $(document).ready(function () {
       <p>Total: ₱${finalTotal
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+      ${transactionType !== "1" ? `
       <p>Cash: ₱${cashReceived
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
       <p>Change: ${change}</p>
+      ` : ""}
     </div>
   </div>`;
 
