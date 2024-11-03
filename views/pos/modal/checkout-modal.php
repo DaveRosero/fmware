@@ -97,7 +97,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="address-input" class="form-label">Baranggay:</label>
-                                        <select class="form-select" type="text" name="address" id="brgy" required>
+                                        <select class="form-select" type="text" name="address" id="brgy" required >
                                             <option value="0">Select Your Baranggay</option>
                                             <?php $posaddress->getBrgys(); ?>
                                         </select>
