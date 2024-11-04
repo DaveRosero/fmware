@@ -37,7 +37,7 @@
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Municipal</th>
                                         <th class="text-center">Delivery Fee</th>
-                                        <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                        <th class="text-center">Action</th>
                                     </thead>
                                     <tbody>
                                         <?php $manage->showDeliveryFee(); ?>
@@ -64,7 +64,7 @@
                                         <th class="text-center">Description</th>
                                         <th class="text-center">Amount</th>
                                         <th class="text-center">Date</th>
-                                        <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                        <th class="text-center">Action</th>
                                     </thead>
                                     <tbody>
                                         <?php $manage->showExpenses(); ?>
@@ -77,4 +77,4 @@
             </div> <!--end::Row-->
         </div>
     </div> <!--end::App Content-->
-</main> <!--end::App Main--> 
+</main> <!--end::App Main-->

@@ -41,7 +41,7 @@
                                             <th class="text-center">Date Created</th>
                                             <th class="text-center">Date Received</th>
                                             <th class="text-center">Status</th>
-                                            <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -55,4 +55,4 @@
             </div> <!--end::Row-->
         </div>
     </div> <!--end::App Content-->
-</main> <!--end::App Main--> 
+</main> <!--end::App Main-->

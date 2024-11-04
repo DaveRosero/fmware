@@ -130,7 +130,7 @@ class Manage extends Admin
                                         data-bs-target="#df-modal"
                                         data-df-id=' . $id . '
                                     >
-                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
                                     </button>
                                 </td>
                             </tr>';

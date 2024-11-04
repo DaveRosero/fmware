@@ -42,7 +42,7 @@
                                         <th class="text-center">Phone</th>
                                         <th class="text-center">Address</th>
                                         <th class="text-center">Date</th>
-                                        <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                        <th class="text-center">Action</th>
                                     </thead>
                                     <tbody>
                                         <?php $supplier->showSupplier(); ?>
@@ -55,4 +55,4 @@
             </div> <!--end::Row-->
         </div>
     </div> <!--end::App Content-->
-</main> <!--end::App Main--> 
+</main> <!--end::App Main-->

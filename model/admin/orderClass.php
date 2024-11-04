@@ -283,7 +283,7 @@ class Order extends Admin
                                             data-paid="' . $paid . '"
                                             data-status="' . $status . '"
                                         >
-                                            <i class="bi bi-eye-fill"></i>
+                                            View
                                         </button>
                                         <!-- <button class="btn btn-sm btn-info print-receipt ms-1"
                                             data-order-ref="' . $ref . '"

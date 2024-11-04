@@ -44,7 +44,7 @@
                                             <th class="text-center">Base Price</th>
                                             <th class="text-center">Selling Price</th>
                                             <th class="text-center">Stock</th>
-                                            <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,5 +58,4 @@
             </div> <!--end::Row-->
         </div>
     </div> <!--end::App Content-->
-</main> <!--end::App Main--> 
-
+</main> <!--end::App Main-->

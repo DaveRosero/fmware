@@ -32,7 +32,7 @@
                                             <th class="text-center">Date</th>
                                             <th class="text-center">Type</th>
                                             <th class="text-center">Reason</th>
-                                            <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>

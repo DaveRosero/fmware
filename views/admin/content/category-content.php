@@ -37,7 +37,7 @@
                                         <th class="text-center">Category</th>
                                         <th class="text-center">Number of Products</th>
                                         <th class="text-center">Date Added</th>
-                                        <th class="text-center"><i class="bi bi-gear-fill"></i></th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -50,4 +50,4 @@
             </div> <!--end::Row-->
         </div>
     </div> <!--end::App Content-->
-</main> <!--end::App Main--> 
+</main> <!--end::App Main-->
