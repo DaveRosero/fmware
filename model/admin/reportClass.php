@@ -120,6 +120,7 @@ class Reports extends Admin
 
         $stmt->bind_result($pos_ref, $amount);
         $tbody = '';
+        $total = 0;
         while ($stmt->fetch()) {
             // Debug output to see the raw values being retrieved
             error_log("Transaction Reference: " . strtoupper($pos_ref) . " | Amount: " . $amount);
@@ -139,21 +140,28 @@ class Reports extends Admin
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                 </tr>';
+            $total += $amount;
         }
         $stmt->close();
-        return $tbody;
+        return [
+            'tbody' => $tbody,
+            'total' => $total
+        ];
     }
-
 
     public function sales($start_date, $end_date)
     {
-        $tbody = $this->refunds($start_date, $end_date);
+        $refunds = $this->refunds($start_date, $end_date);
+        $tbody = $refunds['tbody'];
+        $total_refunds = $refunds['total'];
+
         $query = 'SELECT pos.pos_ref, pos.firstname, pos.lastname, pos.date, pos.subtotal, pos.total, 
-                        pos.discount, t.name, p.name
-                    FROM pos
-                    INNER JOIN transaction_type t ON t.id = pos.transaction_type_id
-                    INNER JOIN payment_type p ON p.id = pos.payment_type_id
-                    WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) BETWEEN ? AND ?';
+                    pos.discount, t.name, p.name
+                FROM pos
+                INNER JOIN transaction_type t ON t.id = pos.transaction_type_id
+                INNER JOIN payment_type p ON p.id = pos.payment_type_id
+                WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) BETWEEN ? AND ?';
+
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ss', $start_date, $end_date);
 
@@ -167,34 +175,63 @@ class Reports extends Admin
         }
 
         $stmt->bind_result($pos_ref, $fname, $lname, $date, $subtotal, $total, $discount, $transaction, $payment);
+
+        $total_sales = 0;
+        $total_discounts = 0;
         while ($stmt->fetch()) {
             $tbody .= '<tr>
-                                <td class="text-center">' . strtoupper($pos_ref) . '</td>
-                                <td class="text-center">' . ucfirst($fname) . ' ' . ucfirst($lname) . '</td>
-                                <td class="text-center">' . date('F j, Y', strtotime($date)) . '</td>
-                                <td class="text-center">₱' . number_format($subtotal, 2) . '</td>
-                                <td class="text-center">₱' . number_format($total, 2) . '</td>
-                                <td class="text-center">₱' . number_format($discount, 2) . '</td>
-                                <td class="text-center">' . strtoupper($transaction) . '</td>
-                                <td class="text-center">' . strtoupper($payment) . '</td>
-                            </tr>';
+                        <td class="text-center">' . strtoupper($pos_ref) . '</td>
+                        <td class="text-center">' . ucfirst($fname) . ' ' . ucfirst($lname) . '</td>
+                        <td class="text-center">' . date('F j, Y', strtotime($date)) . '</td>
+                        <td class="text-center">₱' . number_format($subtotal, 2) . '</td>
+                        <td class="text-center">₱' . number_format($total, 2) . '</td>
+                        <td class="text-center">₱' . number_format($discount, 2) . '</td>
+                        <td class="text-center">' . strtoupper($transaction) . '</td>
+                        <td class="text-center">' . strtoupper($payment) . '</td>
+                    </tr>';
+            $total_sales += $total;
+            $total_discounts += $discount;
         }
         $stmt->close();
+
+        // Calculate net sales
+        $net_sales = $total_sales - $total_discounts - $total_refunds;
+
+        // Summary rows for total sales, discounts, refunds, and net sales
+        $tbody .= '<tr>
+                    <td colspan="4" class="text-end font-weight-bold">Total Sales:</td>
+                    <td class="text-center">₱' . number_format($total_sales, 2) . '</td>
+                </tr>';
+        $tbody .= '<tr>
+                    <td colspan="4" class="text-end font-weight-bold">Total Discounts:</td>
+                    <td class="text-center text-danger">-₱' . number_format($total_discounts, 2) . '</td>
+                </tr>';
+        $tbody .= '<tr>
+                    <td colspan="4" class="text-end font-weight-bold">Total Refunds:</td>
+                    <td class="text-center text-danger">-₱' . number_format($total_refunds, 2) . '</td>
+                </tr>';
+        $tbody .= '<tr>
+                    <td colspan="4" class="text-end font-weight-bold">Net Sales:</td>
+                    <td class="text-center font-weight-bold">₱' . number_format($net_sales, 2) . '</td>
+                </tr>';
+
         $thead = '<th class="text-center">POS Ref</th>
-                    <th class="text-center">Customer</th>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Subtotal</th>
-                    <th class="text-center">Total</th>
-                    <th class="text-center">Discount</th>
-                    <th class="text-center">Transaction</th>
-                    <th class="text-center">Payment</th>';
+              <th class="text-center">Customer</th>
+              <th class="text-center">Date</th>
+              <th class="text-center">Subtotal</th>
+              <th class="text-center">Total</th>
+              <th class="text-center">Discount</th>
+              <th class="text-center">Transaction</th>
+              <th class="text-center">Payment</th>';
+
         $signature = '<tr>
-                        <td colspan="8" class="text-center" style="padding-top: 50px;">
-                            <p class="mb-0">__________________________</p>
-                            <p class="mb-0 mt-0"><strong>Angelica Odulio</strong></p>
-                            <p class="mt-0"><strong>Manager</strong></p>
-                        </td>
-                    </tr>';
+                    <td colspan="8" class="text-center" style="padding-top: 50px;">
+                        <p class="mb-0">__________________________</p>
+                        <p class="mb-0 mt-0"><strong>Angelica Odulio</strong></p>
+                        <p class="mt-0"><strong>Manager</strong></p>
+                    </td>
+                  </tr>';
+
         return [
             'tbody' => $tbody . $signature,
             'thead' => $thead
