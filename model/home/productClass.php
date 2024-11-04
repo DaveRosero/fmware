@@ -61,30 +61,38 @@ class Product extends Home
 
     public function getProducts()
     {
-        $query = 'SELECT product.id, product.name, product.image, stock.qty FROM product
-                    INNER JOIN stock ON stock.product_id = product.id
-                    WHERE EXISTS 
-                        (SELECT 1 FROM price_list WHERE price_list.product_id = product.id)
-                    AND product.active = 1 
-                    GROUP BY product.name';
+        $query = '
+        SELECT product.id, product.name, product.image, stock.qty, 
+               (COALESCE(SUM(order_items.qty), 0) + COALESCE(SUM(pos_items.qty), 0)) AS total_sales
+        FROM product
+        INNER JOIN stock ON stock.product_id = product.id
+        LEFT JOIN order_items ON order_items.product_id = product.id
+        LEFT JOIN pos_items ON pos_items.product_id = product.id
+        WHERE EXISTS 
+            (SELECT 1 FROM price_list WHERE price_list.product_id = product.id)
+        AND product.active = 1 
+        GROUP BY product.id
+        ORDER BY total_sales DESC
+        LIMIT 15';
+
         $stmt = $this->conn->prepare($query);
         if ($stmt) {
             if ($stmt->execute()) {
-                $stmt->bind_result($id, $name, $image, $stock);
+                $stmt->bind_result($id, $name, $image, $stock, $total_sales);
                 while ($stmt->fetch()) {
                     if ($stock == 0) {
                         continue;
                     }
                     echo '<div class="col-md-4 mb-3">
-                                <div class="card h-100">
-                                    <a href="/view-product/product/' . $id . '">
-                                        <img src="/asset/images/products/' . $image . '" class="card-img-top product-image" alt="' . $name . '">
-                                    </a>
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center fw-bold">' . $name . '</h5>
-                                    </div>
+                            <div class="card h-100">
+                                <a href="/view-product/product/' . $id . '">
+                                    <img src="/asset/images/products/' . $image . '" class="card-img-top product-image" alt="' . $name . '">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title text-center fw-bold">' . $name . '</h5>
                                 </div>
-                            </div>';
+                            </div>
+                        </div>';
                 }
 
                 $stmt->close();
@@ -96,6 +104,7 @@ class Product extends Home
             die("Error in preparing statement: " . $this->conn->error);
         }
     }
+
 
     public function getProductInfo($product_id)
     {
