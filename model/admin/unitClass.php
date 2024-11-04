@@ -1,69 +1,73 @@
 <?php
-    include_once 'session.php';
-    require_once 'model/admin/admin.php';
-    require_once 'model/admin/logsClass.php';
+include_once 'session.php';
+require_once 'model/admin/admin.php';
+require_once 'model/admin/logsClass.php';
 
-    class Unit extends Admin {
-        public function isUnitExist ($unit) {
-            $query = 'SELECT COUNT(*) FROM unit WHERE name = ?';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('s', $unit);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->bind_result($count);
-                    $stmt->fetch();
-                    $stmt->close();
+class Unit extends Admin
+{
+    public function isUnitExist($unit)
+    {
+        $query = 'SELECT COUNT(*) FROM unit WHERE name = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $unit);
+        if ($stmt) {
+            if ($stmt->execute()) {
+                $stmt->bind_result($count);
+                $stmt->fetch();
+                $stmt->close();
 
-                    if ($count > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                if ($count > 0) {
+                    return true;
                 } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
+                    return false;
                 }
             } else {
-                die("Error in preparing statement: " . $this->conn->error);
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
             }
+        } else {
+            die("Error in preparing statement: " . $this->conn->error);
         }
+    }
 
-        public function newUnit() {
-            $logs = new Logs();
+    public function newUnit()
+    {
+        $logs = new Logs();
 
-            $unit = ucwords($_POST['unit_name']);
-            if ($this->isUnitExist($unit)) {
-                $json = array('unit_feedback' => 'Unit already exist.');
-                echo json_encode($json);
-                return;
-            }
-            $active = 1;
-            $query = 'INSERT INTO unit
+        $unit = ucwords($_POST['unit_name']);
+        if ($this->isUnitExist($unit)) {
+            $json = array('unit_feedback' => 'Unit already exist.');
+            echo json_encode($json);
+            return;
+        }
+        $active = 1;
+        $query = 'INSERT INTO unit
                         (name, user_id, active)
                     VALUES (?,?,?)';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('sii', $unit, $_SESSION['user_id'], $active);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->close();
-                    
-                    $action_log = 'Added new unit '.$unit;
-                    $date_log = date('F j, Y g:i A');
-                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('sii', $unit, $_SESSION['user_id'], $active);
+        if ($stmt) {
+            if ($stmt->execute()) {
+                $stmt->close();
 
-                    $json = array('redirect' => '/unit');
-                    echo json_encode($json);
-                } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
-                }
+                $action_log = 'Added new unit ' . $unit;
+                $date_log = date('F j, Y g:i A');
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
+                $json = array('redirect' => '/unit');
+                echo json_encode($json);
             } else {
-                die("Error in preparing statement: " . $this->conn->error);
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
             }
+        } else {
+            die("Error in preparing statement: " . $this->conn->error);
         }
+    }
 
-        public function getUnits () {
-            $query = 'SELECT unit.id, 
+    public function getUnits()
+    {
+        $query = 'SELECT unit.id, 
                         unit.name, 
                         unit.date,
                         unit.active,
@@ -75,137 +79,139 @@
                         WHERE active = 1
                         GROUP BY unit_id
                     ) AS product_counts ON unit.id = product_counts.unit_id';
-            $stmt = $this->conn->prepare($query);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->bind_result($id, $name, $date, $active, $product_count);
-                    while ($stmt->fetch()) {
-                        if ($active == 1) {
-                            $status = '<div class="form-check form-switch d-flex justify-content-center">
-                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-unit-id="'.$id.'" data-unit-status="'.$active.'" checked>
+        $stmt = $this->conn->prepare($query);
+        if ($stmt) {
+            if ($stmt->execute()) {
+                $stmt->bind_result($id, $name, $date, $active, $product_count);
+                while ($stmt->fetch()) {
+                    if ($active == 1) {
+                        $status = '<div class="form-check form-switch d-flex justify-content-center">
+                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-unit-id="' . $id . '" data-unit-status="' . $active . '" checked>
                                         </div>';
-                        } else {
-                            $status = '<div class="form-check form-switch d-flex justify-content-center">
-                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-unit-id="'.$id.'" data-unit-status="'.$active.'">
+                    } else {
+                        $status = '<div class="form-check form-switch d-flex justify-content-center">
+                                            <input class="form-check-input status" type="checkbox" id="toggleSwitch" data-unit-id="' . $id . '" data-unit-status="' . $active . '">
                                         </div>';
-                        }
+                    }
 
-                        echo '<tr>
-                                <td class="text-center">'.$status.'</td>
-                                <td class="text-center">'.$name.'</td>
-                                <td class="text-center">'.$product_count.'</td>
-                                <td class="text-center">'.date('F j, Y', strtotime($date)).'</td>
+                    echo '<tr>
+                                <td class="text-center">' . $status . '</td>
+                                <td class="text-center">' . $name . '</td>
+                                <td class="text-center">' . $product_count . '</td>
+                                <td class="text-center">' . date('F j, Y', strtotime($date)) . '</td>
                                 <td class="text-center">
                                     <button 
                                         class="btn btn-sm btn-success edit" 
                                         type="button" 
-                                        data-unit-id="'.$id.'" 
-                                        data-unit-name="'.$name.'"
+                                        data-unit-id="' . $id . '" 
+                                        data-unit-name="' . $name . '"
                                     >
-                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
                                     </button>                               
                                 </td>
                             </tr>';
-                    }
-                    $stmt->close();
-                } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
                 }
+                $stmt->close();
             } else {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-        }
-
-        public function editUnit () {
-            $logs = new Logs();
-
-            $id = $_POST['unit_id'];
-            $unit = ucwords($_POST['unit_name']);
-            $old_unit = $this->getUnitName($id);
-
-            if ($this->isUnitExist($unit)) {
-                $json = array('edit_feedback' => 'Unit already exist.');
-                echo json_encode($json);
-                return;
-            }
-            
-            $query = "UPDATE unit SET name = ? WHERE id = ?";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('si', $unit, $id);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->close();
-                    
-                    $action_log = 'Update '.$old_unit.' to '.$unit;
-                    $date_log = date('F j, Y g:i A');
-                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
-
-                    $json = array('redirect' => '/unit');
-                    echo json_encode($json);
-                } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
-                }
-            } else {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-        }
-
-        public function disableUnit () {
-            $logs = new Logs();
-
-            $id = $_POST['id'];
-            $status = $_POST['status'];
-            $unit = $this->getUnitName($id);
-
-            if ($status == 1) {
-                $active = 0;
-                $action_log = 'Disable unit '.$unit;
-            } else {
-                $active = 1;
-                $action_log = 'Enable unit '.$unit;
-            }
-            
-            $query = 'UPDATE unit SET active = ? WHERE id = ?';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ii', $active, $id);
-            if ($stmt) {
-                if ($stmt->execute()) {
-                    $stmt->close();
-
-                    $date_log = date('F j, Y g:i A');
-                    $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
-
-                    $json['redirect'] = '/unit';
-                    echo json_encode($json);
-                } else {
-                    die("Error in executing statement: " . $stmt->error);
-                    $stmt->close();
-                }
-            } else {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-        }
-
-        public function getUnitName ($id) {
-            $query = 'SELECT name FROM unit WHERE id = ?';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('i', $id);
-
-            if (!$stmt) {
-                die("Error in preparing statement: " . $this->conn->error);
-            }
-            
-            if (!$stmt->execute()) {
                 die("Error in executing statement: " . $stmt->error);
                 $stmt->close();
             }
-
-            $stmt->bind_result($unit);
-            $stmt->fetch();
-            $stmt->close();
-            return $unit;
+        } else {
+            die("Error in preparing statement: " . $this->conn->error);
         }
     }
-?>
+
+    public function editUnit()
+    {
+        $logs = new Logs();
+
+        $id = $_POST['unit_id'];
+        $unit = ucwords($_POST['unit_name']);
+        $old_unit = $this->getUnitName($id);
+
+        if ($this->isUnitExist($unit)) {
+            $json = array('edit_feedback' => 'Unit already exist.');
+            echo json_encode($json);
+            return;
+        }
+
+        $query = "UPDATE unit SET name = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('si', $unit, $id);
+        if ($stmt) {
+            if ($stmt->execute()) {
+                $stmt->close();
+
+                $action_log = 'Update ' . $old_unit . ' to ' . $unit;
+                $date_log = date('F j, Y g:i A');
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
+                $json = array('redirect' => '/unit');
+                echo json_encode($json);
+            } else {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+        } else {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+    }
+
+    public function disableUnit()
+    {
+        $logs = new Logs();
+
+        $id = $_POST['id'];
+        $status = $_POST['status'];
+        $unit = $this->getUnitName($id);
+
+        if ($status == 1) {
+            $active = 0;
+            $action_log = 'Disable unit ' . $unit;
+        } else {
+            $active = 1;
+            $action_log = 'Enable unit ' . $unit;
+        }
+
+        $query = 'UPDATE unit SET active = ? WHERE id = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ii', $active, $id);
+        if ($stmt) {
+            if ($stmt->execute()) {
+                $stmt->close();
+
+                $date_log = date('F j, Y g:i A');
+                $logs->newLog($action_log, $_SESSION['user_id'], $date_log);
+
+                $json['redirect'] = '/unit';
+                echo json_encode($json);
+            } else {
+                die("Error in executing statement: " . $stmt->error);
+                $stmt->close();
+            }
+        } else {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+    }
+
+    public function getUnitName($id)
+    {
+        $query = 'SELECT name FROM unit WHERE id = ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('i', $id);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($unit);
+        $stmt->fetch();
+        $stmt->close();
+        return $unit;
+    }
+}

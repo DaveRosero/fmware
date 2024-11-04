@@ -42,7 +42,7 @@ class Returns extends Admin
                             <td class="text-center">' . date('F j, Y H:i A', strtotime($date)) . '</td>
                             <td class="text-center">' . $type . '</td>
                             <td class="text-center">' . $reason . '</td>
-                            <td class="text-center"><button class="btn btn-sm btn-primary view-refund" data-refund-id="' . $id . '" data-type="' . $data_type . '" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="bi bi-eye-fill"></i></button></td>
+                            <td class="text-center"><button class="btn btn-sm btn-primary view-refund" data-refund-id="' . $id . '" data-type="' . $data_type . '" data-bs-toggle="modal" data-bs-target="#viewModal">View</button></td>
                         </tr>';
         }
         $stmt->close();
@@ -79,7 +79,7 @@ class Returns extends Admin
                             <td class="text-center">' . date('F j, Y H:i A', strtotime($date)) . '</td>
                             <td class="text-center">' . $type . '</td>
                             <td class="text-center">' . $reason . '</td>
-                            <td class="text-center"><button class="btn btn-sm btn-primary view-replacement" data-replacement-id="' . $id . '" data-type="' . $data_type . '" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="bi bi-eye-fill"></i></button></td>
+                            <td class="text-center"><button class="btn btn-sm btn-primary view-replacement" data-replacement-id="' . $id . '" data-type="' . $data_type . '" data-bs-toggle="modal" data-bs-target="#viewModal">View</button></td>
                         </tr>';
         }
         $stmt->close();

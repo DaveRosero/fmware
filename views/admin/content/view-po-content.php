@@ -26,8 +26,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col text-end">
-                                    <button class="btn btn-info text-white" id="imageButton" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-image"></i></button>
-                                    <button class="btn btn-primary" id="printButton"><i class="bi bi-printer-fill"></i></button>
+                                    <button class="btn btn-info text-white" id="imageButton" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-image"></i> Save as image</button>
+                                    <button class="btn btn-primary" id="printButton"><i class="bi bi-printer-fill"></i> Print</button>
                                 </div>
                             </div>
                             <div id="printContent">
@@ -114,8 +114,8 @@
                             </div>
                         </div>
                         <div class="card-footer bg-transparent text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
-                            <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-trash3-fill"></i></button>
-                            <a href="/purchase-orders" class="btn btn-secondary"><i class="bi bi-arrow-left"></i></a>
+                            <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>">Delete</button>
+                            <a href="/purchase-orders" class="btn btn-secondary">Back</a>
                         </div>
                     </div>
                 </div>

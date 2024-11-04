@@ -60,8 +60,8 @@
                                             <?php $po->getSupplierProducts($supplier_info['id']); ?>
                                         </select>
                                         <input type="hidden" name="po_ref" id="po_ref" value="<?php echo $po_info['po_ref']; ?>">
-                                        <button class="btn btn-success ms-2" type="submit"><i class="bi bi-plus-lg"></i></button>
-                                        <a class="btn btn-primary ms-2" href="/manage-products"><i class="bi bi-bag-plus-fill"></i></a>
+                                        <button class="btn btn-success ms-2" type="submit">Add</button>
+                                        <a class="btn btn-primary ms-2" href="/manage-products">New</a>
                                     </div>
                                 </div>
                             </form>
@@ -93,9 +93,9 @@
                             </div>
                         </div>
                         <div class="card-footer bg-transparent text-end mb-3" style="border-top: none; box-shadow: none; margin-top: 0;">
-                            <button class="btn btn-primary" id="save" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-floppy-fill"></i></button>
-                            <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>"><i class="bi bi-trash3"></i></button>
-                            <a href="/purchase-orders" class="btn btn-secondary"><i class="bi bi-arrow-left"></i></a>
+                            <button class="btn btn-primary" id="save" data-po-ref="<?php echo $po_info['po_ref']; ?>">Save</button>
+                            <button class="btn btn-danger" id="delete" data-po-ref="<?php echo $po_info['po_ref']; ?>">Delete</button>
+                            <a href="/purchase-orders" class="btn btn-secondary">Back</i></a>
                         </div>
                     </div>
                 </div>

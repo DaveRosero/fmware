@@ -529,7 +529,7 @@ class Products extends Admin
                                             data-bs-toggle="modal"
                                             data-bs-target="#viewProduct";
                                         >
-                                            <i class="bi bi-eye-fill"></i>
+                                            View
                                         </button>   
                                         <button 
                                             class="btn btn-sm btn-success edit" 
@@ -538,7 +538,7 @@ class Products extends Admin
                                             data-bs-toggle="modal"
                                             data-bs-target="#editProduct"
                                         >
-                                            <i class="bi bi-pencil-square"></i>
+                                            Edit
                                         </button>
                                     </div>                              
                                 </td>
