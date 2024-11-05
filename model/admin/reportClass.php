@@ -86,9 +86,13 @@ class Reports extends Admin
                     WHEN description LIKE 'Updated refund for Transaction%' 
                         AND description LIKE '%New Total Amount: ₱%' 
                         THEN 
-                        CAST(SUBSTRING_INDEX(SUBSTRING(description, 
-                                    LOCATE('New Total Amount: ₱', description) + LENGTH('New Total Amount: ₱')), 
-                                    ' ', 1) AS DECIMAL(10, 2))
+                        CAST(
+                            SUBSTRING(
+                                description, 
+                                LOCATE('₱', description) + 1, 
+                                LOCATE('.', description, LOCATE('₱', description)) - LOCATE('₱', description)
+                            ) AS DECIMAL(10, 2)
+                        )
                     WHEN description LIKE 'Created new refund for Transaction%' 
                         AND description LIKE '%Amount: ₱%' 
                         THEN 
@@ -105,7 +109,7 @@ class Reports extends Admin
                 OR description LIKE 'Created new refund for Transaction%')
                 AND description LIKE '%POS_%'
                 AND DATE(STR_TO_DATE(date, '%M %d, %Y %h:%i %p')) BETWEEN ? AND ?
-            ORDER BY date DESC";
+            ORDER BY STR_TO_DATE(date, '%M %d, %Y %h:%i %p') DESC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ss', $start_date, $end_date);
@@ -120,29 +124,38 @@ class Reports extends Admin
         }
 
         $stmt->bind_result($pos_ref, $amount);
-        $refunds = [];
+        $tbody = '';
+        $total = 0;
+        $refunds = []; // Array to store unique transaction references
+
         while ($stmt->fetch()) {
-            // Only store the first occurrence of each transaction_reference (latest due to ORDER BY date DESC)
+            // Debug output to see the raw values being retrieved
+            error_log("Transaction Reference: " . strtoupper($pos_ref) . " | Amount: " . $amount);
+
+            // Default to 0 if no amount is retrieved
+            if ($amount === null) {
+                $amount = 0;
+            }
+
+            // Store the latest refund amount for each transaction reference
             if (!isset($refunds[$pos_ref])) {
                 $refunds[$pos_ref] = $amount;
             }
         }
         $stmt->close();
 
-        // Prepare the table rows and calculate the total
-        $tbody = '';
-        $total = 0;
-        foreach ($refunds as $pos_ref => $amount) {
+        // Build the tbody output
+        foreach ($refunds as $ref => $amount) {
             $tbody .= '<tr>
-                        <td class="text-center">' . strtoupper($pos_ref) . '</td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center">-₱' . number_format($amount, 2) . '</td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                    </tr>';
+                <td class="text-center">' . strtoupper($ref) . '</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">-₱' . number_format($amount, 2) . '</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+            </tr>';
             $total += $amount;
         }
 
@@ -151,6 +164,7 @@ class Reports extends Admin
             'total' => $total
         ];
     }
+
 
     public function sales($start_date, $end_date)
     {
