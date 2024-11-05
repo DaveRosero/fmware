@@ -99,13 +99,13 @@ class Reports extends Admin
                                 LOCATE('.', description, LOCATE('₱', description)) - LOCATE('₱', description)
                             ) AS DECIMAL(10, 2)
                         )
-                END AS refund_amount,
-                description
+                END AS refund_amount
             FROM logs
             WHERE (description LIKE 'Updated refund for Transaction%' 
                 OR description LIKE 'Created new refund for Transaction%')
                 AND description LIKE '%POS_%'
-                AND DATE(STR_TO_DATE(date, '%M %d, %Y %h:%i %p')) BETWEEN ? AND ?";
+                AND DATE(STR_TO_DATE(date, '%M %d, %Y %h:%i %p')) BETWEEN ? AND ?
+            ORDER BY date DESC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ss', $start_date, $end_date);
@@ -119,19 +119,12 @@ class Reports extends Admin
             $stmt->close();
         }
 
-        $stmt->bind_result($pos_ref, $amount, $description);
+        $stmt->bind_result($pos_ref, $amount);
         $refunds = [];
         while ($stmt->fetch()) {
-            // Default to 0 if no amount is retrieved
-            if ($amount === null) {
-                $amount = 0;
-            }
-
-            // Check if it's an updated refund and override if exists, otherwise add new entry
-            if (strpos($description, 'Updated refund for Transaction') !== false) {
-                $refunds[$pos_ref] = $amount; // Set or update with the updated amount
-            } elseif (!isset($refunds[$pos_ref])) {
-                $refunds[$pos_ref] = $amount; // Set initial amount for created refund
+            // Only store the first occurrence of each transaction_reference (latest due to ORDER BY date DESC)
+            if (!isset($refunds[$pos_ref])) {
+                $refunds[$pos_ref] = $amount;
             }
         }
         $stmt->close();
