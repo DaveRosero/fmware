@@ -99,7 +99,8 @@ class Reports extends Admin
                                 LOCATE('.', description, LOCATE('₱', description)) - LOCATE('₱', description)
                             ) AS DECIMAL(10, 2)
                         )
-                END AS refund_amount
+                END AS refund_amount,
+                description
             FROM logs
             WHERE (description LIKE 'Updated refund for Transaction%' 
                 OR description LIKE 'Created new refund for Transaction%')
@@ -118,31 +119,40 @@ class Reports extends Admin
             $stmt->close();
         }
 
-        $stmt->bind_result($pos_ref, $amount);
-        $tbody = '';
-        $total = 0;
+        $stmt->bind_result($pos_ref, $amount, $description);
+        $refunds = [];
         while ($stmt->fetch()) {
-            // Debug output to see the raw values being retrieved
-            error_log("Transaction Reference: " . strtoupper($pos_ref) . " | Amount: " . $amount);
-
             // Default to 0 if no amount is retrieved
             if ($amount === null) {
                 $amount = 0;
             }
 
-            $tbody .= '<tr>
-                    <td class="text-center">' . strtoupper($pos_ref) . '</td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center">-₱' . number_format($amount, 2) . '</td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                </tr>';
-            $total += $amount;
+            // Check if it's an updated refund and override if exists, otherwise add new entry
+            if (strpos($description, 'Updated refund for Transaction') !== false) {
+                $refunds[$pos_ref] = $amount; // Set or update with the updated amount
+            } elseif (!isset($refunds[$pos_ref])) {
+                $refunds[$pos_ref] = $amount; // Set initial amount for created refund
+            }
         }
         $stmt->close();
+
+        // Prepare the table rows and calculate the total
+        $tbody = '';
+        $total = 0;
+        foreach ($refunds as $pos_ref => $amount) {
+            $tbody .= '<tr>
+                        <td class="text-center">' . strtoupper($pos_ref) . '</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center">-₱' . number_format($amount, 2) . '</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                    </tr>';
+            $total += $amount;
+        }
+
         return [
             'tbody' => $tbody,
             'total' => $total
