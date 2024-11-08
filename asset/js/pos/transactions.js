@@ -14,7 +14,7 @@ $(document).ready(function () {
         }
         // Initialize DataTable
         $('#transaction-table').DataTable({
-          data: response.filter(transaction => !['void', 'prepared', 'to pay', 'cancelled', 'delivered'].includes(transaction.status)).map(transaction => [
+          data: response.filter(transaction => !['void', 'prepared', 'to pay', 'cancelled', 'pending'].includes(transaction.status)).map(transaction => [
             transaction.pos_ref || transaction.order_ref,
             formatDateTime(transaction.date),
             '₱' + Number(transaction.total || transaction.gross).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
@@ -160,6 +160,10 @@ $(document).ready(function () {
                           $("#refund-button").prop("disabled", false);
                           $("#replace-button").prop("disabled", false);
                           break;
+                        case 'delivered':
+                          $("#refund-button").prop("disabled", false);
+                          $("#replace-button").prop("disabled", false);
+                          break;
                         case 'pending':
                           $("#refund-button").prop("disabled", false);
                           $("#replace-button").prop("disabled", false);
@@ -270,12 +274,6 @@ $(document).ready(function () {
         break;
       case 'partially replaced':
         badgeClass = 'badge bg-warning text-white';
-        break;
-      case 'pending':
-        badgeClass = 'badge bg-warning text-white';
-        break;
-      case 'delivering':
-        badgeClass = 'badge bg-info text-white';
         break;
     }
     return badgeClass;
