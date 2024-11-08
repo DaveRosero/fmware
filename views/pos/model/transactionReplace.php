@@ -9,12 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
     $logs = new Logs(); // Create a new instance of Logs
 
-    $replaced_items = [];
-
     // Validate and sanitize input
     $pos_ref = $mysqli->real_escape_string($_POST['pos_ref']);
     $total_replace_value = $mysqli->real_escape_string($_POST['total_refund_value']);
-    $replaced_items = $_POST['replaced_items']; // This should be an array of items 
+    $replaced_items = $_POST['replaced_items']; // This should be an array of items
     $replacement_reason = $mysqli->real_escape_string($_POST['replacement_reason']); // Capture replacement reason from POST data
     $newStatus = $mysqli->real_escape_string($_POST['status']); // Changed from 'newStatus' to 'status'
     $user_id = $_SESSION['user_id']; // Capture the user ID from the session
@@ -83,9 +81,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         prepareAndExecute($mysqli, $update_stock_query, [$replace_qty, $product_id], 'ii', "Error updating stock: ");
     }
 
-    // Update transaction status
+    // Check if all items are replaced or partially replaced and update transaction status
+    $check_all_replaced_query = "SELECT SUM(qty) as total_qty FROM pos_items WHERE pos_ref = ? AND qty > 0";
+    $stmt = prepareAndExecute($mysqli, $check_all_replaced_query, [$pos_ref], 's', "Error checking remaining items: ");
+    $remaining_qty_result = $stmt->get_result();
+    $remaining_qty_row = $remaining_qty_result->fetch_assoc();
+    $remaining_qty = $remaining_qty_row['total_qty'] ?? 0;
+
+    if ($remaining_qty > 0) {
+        $newStatus = 'partially replaced';
+    } else {
+        $newStatus = 'fully replaced';
+    }
+
+    // Update transaction status in both pos and orders table
     $update_status_query = "UPDATE pos SET status = ? WHERE pos_ref = ?";
     prepareAndExecute($mysqli, $update_status_query, [$newStatus, $pos_ref], 'ss', "Error updating transaction status: ");
+    $update_status_query = "UPDATE orders SET status = ? WHERE order_ref = ?";
+    prepareAndExecute($mysqli, $update_status_query, [$newStatus, $pos_ref], 'ss', "Error updating order status: ");
 
     // Log the replacement action
     $logs->newLog($action_log, $user_id, date('F j, Y g:i A'));
