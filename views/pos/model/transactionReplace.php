@@ -81,17 +81,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         prepareAndExecute($mysqli, $update_stock_query, [$replace_qty, $product_id], 'ii', "Error updating stock: ");
     }
 
-    // Check if all items are replaced or partially replaced and update transaction status
-    $check_all_replaced_query = "SELECT SUM(qty) as total_qty FROM pos_items WHERE pos_ref = ? AND qty > 0";
-    $stmt = prepareAndExecute($mysqli, $check_all_replaced_query, [$pos_ref], 's', "Error checking remaining items: ");
-    $remaining_qty_result = $stmt->get_result();
-    $remaining_qty_row = $remaining_qty_result->fetch_assoc();
-    $remaining_qty = $remaining_qty_row['total_qty'] ?? 0;
+    // Check if all items have qty = 0 in the pos_items table for the transaction
+    $check_qty_query = "SELECT qty FROM pos_items WHERE pos_ref = ?";
+    $stmt = prepareAndExecute($mysqli, $check_qty_query, [$pos_ref], 's', "Error checking remaining quantities: ");
+    $result = $stmt->get_result();
 
-    if ($remaining_qty > 0) {
-        $newStatus = 'partially replaced';
-    } else {
+    $fully_replaced = true;
+
+    while ($row = $result->fetch_assoc()) {
+        if ($row['qty'] > 0) {
+            $fully_replaced = false;
+            break;
+        }
+    }
+
+    // Set status based on whether all items have been replaced (qty = 0)
+    if ($fully_replaced) {
         $newStatus = 'fully replaced';
+    } else {
+        $newStatus = 'partially replaced';
     }
 
     // Update transaction status in both pos and orders table
