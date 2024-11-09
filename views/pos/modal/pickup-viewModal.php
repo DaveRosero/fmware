@@ -35,7 +35,7 @@
                         <div class="col border-bottom mb-2" id="payment-section">
                             <form id="discount-form" class="mb-2">
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" name="cash" id="pickupcashRec-input" />
+                                <input type="text" class="form-control" name="cash" id="pickupcashRec-input" placeholder="0.00" />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">

@@ -38,7 +38,7 @@
                                 <label for="discountRec-input" class="form-label">Discount</label>
                                 <input type="number" class="form-control" id="viewdiscountRec-input" disabled />
                                 <label for="cashRec-input" class="form-label">Cash Received</label>
-                                <input type="number" class="form-control" id="viewcashRec-input" disabled />
+                                <input type="text" class="form-control" id="viewcashRec-input" disabled />
                             </form>
                             <div class="mb-2">
                                 <div class="d-flex justify-content-end">
