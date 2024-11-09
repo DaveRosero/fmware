@@ -56,7 +56,7 @@ $(document).ready(function () {
               $("#transaction-subtotal").text(formatter.format(Number(data.subtotal)));
               $("#rtransaction-total").text(formatter.format(Number(data.total)));
               $("#rviewdiscountRec-input").val(data.discount);
-              $("#rviewcashRec-input").val(Number(data.cash).toFixed(2));
+              $("#rviewcashRec-input").val(Number(data.cash).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
               $("#rtransaction-change").text(formatter.format(Number(data.changes)));
               $("#transaction-status").text(data.status);
               $("#rtrans-username").text(data.username);

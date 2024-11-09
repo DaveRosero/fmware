@@ -13,7 +13,7 @@ $(document).ready(function () {
   }
 
   function updateChange() {
-    var cashReceived = parseFloat($("#pickupcashRec-input").val()) || 0;
+    var cashReceived = parseNumber($("#pickupcashRec-input").val()) || 0;
     var totalAmount = parseFloat($("#ptransaction-total").text().replace("₱", "").replace(/,/g, "")
     ) || 0;
   
@@ -28,8 +28,19 @@ $(document).ready(function () {
     validateupdateChange();
   }
 
+  function formatWithCommas(value) {
+    let [integer, decimal] = value.split(".");
+    integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return decimal ? `${integer}.${decimal}` : integer;
+  }
+
+  // Function to clean up commas and parse the number correctly
+  function parseNumber(value) {
+    return parseFloat(value.replace(/,/g, "")) || 0;
+  }
+
   function validateupdateChange() {
-    let cashReceived = parseFloat($("#pickupcashRec-input").val()) || 0;
+    let cashReceived = parseNumber($("#pickupcashRec-input").val()) || 0;
     let totalAmount = parseFloat($("#ptransaction-total").text().replace("₱", "").replace(/,/g, "")) || 0;
   
     // Enable the claim button only if the cash received is greater than or equal to the total amount
@@ -41,13 +52,34 @@ $(document).ready(function () {
 
   $("#pickupcashRec-input").on("input", validateupdateChange);
 
-  $("#pickupcashRec-input").on("input", updateChange);
+  $("#pickupcashRec-input").on("input", function () {
+    var rawValue = $(this).val().replace(/,/g, ""); // Remove commas
+    if (rawValue) {
+      // If there is a value, format it with commas
+      $(this).val(formatWithCommas(rawValue));
+    }
+    updateChange(); // Recalculate the change after the input
+    });
+
   $("#ptransaction-total").on("DOMSubtreeModified", updateChange);
   updateChange(); 
   
   
   $("#pickup-searchModal, #pickupView").on("hidden.bs.modal", function () {
     resetDataTable();
+  });
+
+  // Focus/blur behavior for cash received input
+  $("#pickupcashRec-input").on("focus", function () {
+    if ($(this).val() === "0.00") {
+      $(this).val("");
+    }
+  });
+
+  $("#pickupcashRec-input").on("blur", function () {
+    if ($(this).val() === "") {
+      $(this).val("0.00");
+    }
   });
 
   // View pickup button functionality
@@ -79,7 +111,7 @@ $(document).ready(function () {
 
         // Display cash and changes if status is claimed
         if (data.status === "claimed") {
-          $("#pickupcashRec-input").val(data.cash);
+          $("#pickupcashRec-input").val(Number(data.cash).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
           $("#pickup-change").text(formatter.format(data.changes));
         } else {
           $("#pickupcashRec-input").val('');

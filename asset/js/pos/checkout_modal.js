@@ -120,9 +120,18 @@ $(document).ready(function () {
     });
   });
 
-  //transaction is 0 yung payment is cash or gcash lang 
-  
+  function formatWithCommas(value) {
+    let [integer, decimal] = value.split(".");
+    integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return decimal ? `${integer}.${decimal}` : integer;
+  }
 
+  // Function to clean up commas and parse the number correctly
+  function parseNumber(value) {
+    return parseFloat(value.replace(/,/g, "")) || 0;
+  }
+
+  
   // Function to update the original total price before discount
   function updateOriginalTotal() {
     let total = 0;
@@ -135,7 +144,6 @@ $(document).ready(function () {
     });
 
     if ($transactionTypeSelect.val() === "1") {
-      // Only add delivery fee if Walk-in selected
       var deliveryFee = $deliveryFeeValue.data("fee") || 0;
       total += deliveryFee;
     }
@@ -164,7 +172,7 @@ $(document).ready(function () {
       parseFloat(
         $("#cart-total-modal").text().replace("₱", "").replace(/,/g, "")
       ) || 0;
-    var cashReceived = parseFloat($("#cashRec-input").val()) || 0;
+    var cashReceived = parseNumber($("#cashRec-input").val()) || 0;
     var change = cashReceived - finalTotal;
     if (change < 0) {
       change = 0;
@@ -175,22 +183,16 @@ $(document).ready(function () {
     validateCheckoutButton();
   }
 
-  $('#checkoutModal').on('show.bs.modal', function () {
-    $('#modal-checkout .btn-success').prop('disabled', true); // Disables the checkout button
-});
-
-  // Function to validate all required fields
+  // Validate the checkout button based on required fields and payment type
   function validateCheckoutButton() {
     let isValid = true;
-  
-    // Disable cashRec-input if payment type is "1"
+
     if ($paymentTypeSelect.val() === "1") {
       $("#cashRec-input").val("").prop("disabled", true);
     } else {
       $("#cashRec-input").prop("disabled", false);
     }
-  
-    // Check required fields for Walk-in transaction type
+
     if ($transactionTypeSelect.val() === "1") {
       const isContactValid = $contactInput.val().trim().length === 11;
       isValid =
@@ -200,25 +202,21 @@ $(document).ready(function () {
         $brgyInput.val() !== "" &&
         isContactValid;
     }
-  
-    // If cashRec-input is enabled, validate cash amount
+
     if (!$("#cashRec-input").prop("disabled")) {
       isValid =
         isValid &&
-        parseFloat($("#cashRec-input").val()) >=
-          parseFloat(
+        parseNumber($("#cashRec-input").val()) >=
+          parseNumber(
             $("#cart-total-modal").text().replace("₱", "").replace(/,/g, "")
           );
     }
-  
-    // Enable or disable checkout button based on validity
+
     $(".print").prop("disabled", !isValid);
   }
-  
-  // Listen for changes in payment type and validate on page load
-  $paymentTypeSelect.on("change", validateCheckoutButton);
 
-  // Event listeners for input changes to validate checkout button
+  // Event listeners for form changes that affect button validation
+  $paymentTypeSelect.on("change", validateCheckoutButton);
   $firstNameInput.on("input", validateCheckoutButton);
   $lastNameInput.on("input", validateCheckoutButton);
   $streetInput.on("input", validateCheckoutButton);
@@ -229,39 +227,51 @@ $(document).ready(function () {
   // Event listener for discount input
   $("#discount-input").on("input", function () {
     updateOriginalTotal();
-    calculateDiscount(); // Recalculate total after applying discount
+    calculateDiscount();
   });
 
-  // Event listener for cash received input
-  $("#cashRec-input").on("input", calculateChange);
-  $("#cart-total-modal").on("DOMSubtreeModified", calculateChange);
+ // Event listener for cash received input
+ $("#cashRec-input").on("input", function () {
+  var rawValue = $(this).val().replace(/,/g, ""); // Remove commas
+  if (rawValue) {
+    // If there is a value, format it with commas
+    $(this).val(formatWithCommas(rawValue));
+  }
+  calculateChange(); // Recalculate the change after the input
+  });
 
-  // Initial update for original total and change
+  // Initial update for totals
   updateOriginalTotal();
-  calculateDiscount(); // Ensure discount calculation on load
-  calculateChange(); // Ensure change calculation on load
+  calculateDiscount();
+  calculateChange();
 
-  $("#cashRec-input").on("focus", function() {
+  // Focus/blur behavior for cash received input
+  $("#cashRec-input").on("focus", function () {
     if ($(this).val() === "0.00") {
-        $(this).val("");
+      $(this).val("");
     }
   });
 
-  $("#cashRec-input").on("blur", function() {
-      if ($(this).val() === "") {
-          $(this).val("0.00");
-      }
+  $("#cashRec-input").on("blur", function () {
+    if ($(this).val() === "") {
+      $(this).val("0.00");
+    }
   });
 
-  $("#cashRec-input").on("input", calculateChange);
+  // Disable checkout button on modal open
+  $('#checkoutModal').on('show.bs.modal', function () {
+    $(".print").prop("disabled", true); // Disable initially
+    validateCheckoutButton(); // Run validation in case form is pre-filled
+  });
 
   // Define a function to generate printable receipt content
   function generatePrintableContent() {
     var content = "";
     var originalTotal = 0;
     var discount = parseFloat($("#discount-input").val()) || 0;
-    var cashReceived = parseFloat($("#cashRec-input").val()) || 0;
+    var cashReceived = parseNumber($("#cashRec-input").val()) || 0;
     var change = $("#change-display").text();
+    var paymenttype = $paymentTypeSelect.val();
     var transactionType = $transactionTypeSelect.val();
     var deliveryFee =
       transactionType === "1"
@@ -400,12 +410,12 @@ $(document).ready(function () {
       <p>Total: ₱${finalTotal
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-      ${transactionType !== "1" ? `
+      ${$paymentTypeSelect.val() !== "1" ? `
       <p>Cash: ₱${cashReceived
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
       <p>Change: ${change}</p>
-      ` : ""}
+      ` : ""} 
     </div>
   </div>`;
 
@@ -495,7 +505,7 @@ return printableContent;
         ) || 0;
       var discount = parseFloat($("#discount-input").val()) || 0;
       var subtotal = parseFloat(total + discount) || 0;
-      var cash = parseFloat($("#cashRec-input").val()) || 0;
+      var cash = parseNumber($("#cashRec-input").val()) || 0;
       var changes = parseFloat(cash - total) || 0;
 
       formData.push({ name: "delivery-fee-value", value: deliveryFee });
@@ -514,7 +524,7 @@ return printableContent;
         ) || 0;
       var discount = parseFloat($("#discount-input").val()) || 0;
       var subtotal = parseFloat(total + discount) || 0;
-      var cash = parseFloat($("#cashRec-input").val()) || 0;
+      var cash = parseNumber($("#cashRec-input").val()) || 0;
       var changes = parseFloat(cash - total) || 0;
       var address =
         $("#street-input").val() +

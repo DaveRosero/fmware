@@ -26,6 +26,8 @@ $(document).ready(function () {
         var formatter = new Intl.NumberFormat("en-PH", {
           style: "currency",
           currency: "PHP",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
         });
 
         var formattedDate = new Date(data.date).toLocaleString('en-PH', {
@@ -48,7 +50,7 @@ $(document).ready(function () {
         );
         $("#htransaction-total").text(formatter.format(Number(data.total)));
         $("#viewdiscountRec-input").val(data.discount);
-        $("#viewcashRec-input").val(Number(data.cash).toFixed(2));
+        $("#viewcashRec-input").val(Number(data.cash).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#history-change").text(formatter.format(Number(data.changes)));
         $("#transaction-status").text(data.status);
         $("#history-username").text(data.username);
