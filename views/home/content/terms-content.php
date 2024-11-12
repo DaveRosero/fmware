@@ -25,6 +25,9 @@
     <h3 class="ms-5">2.4 Refund Policy</h3>
     <p class="ms-5">Refunds will only be issued for items that are defective, damaged, or sent in error. Contact our customer support within 24 hours of receiving your order to initiate a refund request.</p>
 
+    <h3 class="ms-5">2.5 Minimum Order</h3>
+    <p class="ms-5">Order must be minimum of P500. Extra additional charge may imply if lower than P500. For more inquiries, please contact the email or contact no. provided the shop.</p>
+
     <h2>3. In-Store Transactions Using Barcode Scanner</h2>
     <h3 class="ms-5">3.1 Barcode Scanning</h3>
     <p class="ms-5">Our system allows seamless in-store purchases via barcode scanning. It is the customer’s responsibility to ensure all items scanned match the items they wish to purchase.</p>
@@ -34,6 +37,9 @@
 
     <h3 class="ms-5">3.3 Errors in Transactions</h3>
     <p class="ms-5">Should an error occur during the barcode scanning or payment process, please notify our staff immediately. FMWARE is not responsible for discrepancies once the customer has completed the transaction and exited the store.</p>
+
+    <h3 class="ms-5">3.4 Receipt Validity</h3>
+    <p class="ms-5">In-store receipts are valid for seven days after the transaction. Please save your receipt as an evidence of purchased during this time for any further inquiries or changes</p>
 
     <h2>4. User Accounts</h2>
     <h3 class="ms-5">4.1 Account Creation</h3>
