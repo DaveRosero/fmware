@@ -69,6 +69,8 @@
                                         <option value="">Select Reason</option>
                                         <option value="duplicated items">Duplicated Items</option>
                                         <option value="expired items">Expired items</option>
+                                        <option value="broken items">Broken items</option>
+                                        <option value="missing parts">Missing Parts</option>
                                     </select>
                                 </div>
                                 <h3>Customer Details</h3>
