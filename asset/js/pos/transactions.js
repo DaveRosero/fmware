@@ -258,6 +258,12 @@ $(document).ready(function () {
       case 'paid':
         badgeClass = 'badge bg-primary text-white';
         break;
+      case 'claimed':
+        badgeClass = 'badge bg-primary text-white';
+        break;
+      case 'delivered':
+        badgeClass = 'badge bg-primary text-white';
+        break;
       case 'void':
         badgeClass = 'badge bg-secondary text-white';
         break;
