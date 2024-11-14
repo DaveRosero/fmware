@@ -3,8 +3,6 @@ session_start();
 require_once 'model/database/database.php';
 require_once 'model/admin/logsClass.php';
 
-date_default_timezone_set('Asia/Manila');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
     $logs = new Logs(); // Create a new instance of Logs
@@ -18,6 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $refund_reason = $mysqli->real_escape_string($_POST['refund_reason']); // Capture refund reason from POST data
     $newStatus = $mysqli->real_escape_string($_POST['status']); // Changed from 'newStatus' to 'status'
     $user_id = $_SESSION['user_id']; // Capture the user ID from the session
+
+    // Get current timestamp and format it as Y-m-d H:i:s
+    $timestamp = time(); // Current timestamp
+    $refund_date = date("Y-m-d H:i:s", $timestamp); // Format as "2024-11-14 09:35:11"
 
     // Function to prepare and execute statement
     function prepareAndExecute($mysqli, $query, $params, $types, $errorMessage)
@@ -35,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $stmt;
     }
 
-    // Insert new refund record
-    $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason) VALUES (?, ?, ?)";
-    $stmt = prepareAndExecute($mysqli, $refund_query, [$pos_ref, $total_refund_value, $refund_reason], 'sds', "Error inserting refund: ");
+    // Insert new refund record with refund_date
+    $refund_query = "INSERT INTO refunds (pos_ref, total_refund_value, reason, refund_date) VALUES (?, ?, ?, ?)";
+    $stmt = prepareAndExecute($mysqli, $refund_query, [$pos_ref, $total_refund_value, $refund_reason, $refund_date], 'sdss', "Error inserting refund: ");
     $refund_id = $mysqli->insert_id; // Get the ID of the inserted refund record
     $action_log = 'Created new refund for Transaction ' . $pos_ref . ', Amount: ₱' . number_format($total_refund_value, 2);
 
@@ -71,7 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     prepareAndExecute($mysqli, $update_status_query, [$newStatus, $pos_ref], 'ss', "Error updating order status: ");
 
     // Log the action
-    $logs->newLog($action_log, $user_id, date('F j, Y g:i A')); // Log the refund action
+    $current_date = date("F j, Y g:i A", $timestamp); // Format the log date as "November 14, 2024 10:14 AM"
+    $logs->newLog($action_log, $user_id, $current_date); // Log the refund action
     echo "Refund processed successfully.";
     
     // Close the connection
