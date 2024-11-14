@@ -148,8 +148,6 @@ function getDashboard(sort) {
       $('#refunds').text(json.refunds);
       $('#discount').text(json.discount);
 
-      console.log(json.expenses_test);
-
       lineChart(json.line_title, json.sales_data);
       pieChart(json.orders_count, json.sales_count);
     },
