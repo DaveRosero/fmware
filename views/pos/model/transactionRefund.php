@@ -2,7 +2,7 @@
 session_start();
 require_once 'model/database/database.php';
 require_once 'model/admin/logsClass.php';
-
+require_once 'session.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysqli = database();
     $logs = new Logs(); // Create a new instance of Logs
@@ -76,10 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $current_date = date("F j, Y g:i A", $timestamp); // Format the log date as "November 14, 2024 10:14 AM"
     $logs->newLog($action_log, $user_id, $current_date); // Log the refund action
     echo "Refund processed successfully.";
-    
+
     // Close the connection
     $mysqli->close();
 } else {
     echo "Invalid request method.";
 }
-?>
