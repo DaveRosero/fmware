@@ -460,4 +460,19 @@ $(document).ready(function () {
             }
         });
     })
+
+    // Get the cart count from the data attribute
+    const cartCount = parseInt($('#checkout').data('cart-count'), 10);
+
+    // Function to disable the checkout button if cart is empty
+    function toggleCheckoutButton() {
+        if (cartCount === 0) {
+            $('#checkout').prop('disabled', true).addClass('disabled');
+        } else {
+            $('#checkout').prop('disabled', false).removeClass('disabled');
+        }
+    }
+
+    // Call the function on page load
+    toggleCheckoutButton();
 })

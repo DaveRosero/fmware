@@ -31,7 +31,9 @@
                 </div>
               </li> DISCOUNT/PROMO CODES/COUPON-->
             </ul>
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="checkout" data-user-id="<?php echo $user_info['id']; ?>">
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="checkout"
+              data-user-id="<?php echo $user_info['id']; ?>"
+              data-cart-count="<?php echo $cart->cartCount($user_info['id']); ?>">
               Go to checkout
             </button>
           </div>

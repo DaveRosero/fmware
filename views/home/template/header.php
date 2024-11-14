@@ -45,7 +45,7 @@
                             <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="/account/settings">My Account</a>
+                            <a class="dropdown-item" href="/my-purchases/pending">My Account</a>
                             <div class="dropdown-divider"></div>
                             <form action="/logout" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>

@@ -61,38 +61,52 @@ class Product extends Home
 
     public function getProducts()
     {
-        $query = '
-        SELECT product.id, product.name, product.image, stock.qty, 
-               (COALESCE(SUM(order_items.qty), 0) + COALESCE(SUM(pos_items.qty), 0)) AS total_sales
-        FROM product
-        INNER JOIN stock ON stock.product_id = product.id
-        LEFT JOIN order_items ON order_items.product_id = product.id
-        LEFT JOIN pos_items ON pos_items.product_id = product.id
-        WHERE EXISTS 
-            (SELECT 1 FROM price_list WHERE price_list.product_id = product.id)
-        AND product.active = 1 
-        GROUP BY product.id
-        ORDER BY total_sales DESC
-        LIMIT 15';
-
+        $query = 'SELECT product.id, product.name, product.image, stock.qty, stock.critical_level,
+                    (COALESCE(SUM(order_items.qty), 0) + COALESCE(SUM(pos_items.qty), 0)) AS total_sales,
+                    price_list.min_price, price_list.max_price
+                FROM product
+                INNER JOIN stock ON stock.product_id = product.id
+                LEFT JOIN order_items ON order_items.product_id = product.id
+                LEFT JOIN pos_items ON pos_items.product_id = product.id
+                LEFT JOIN (
+                    SELECT product_id, MIN(unit_price) AS min_price, MAX(unit_price) AS max_price
+                    FROM price_list
+                    GROUP BY product_id
+                ) AS price_list ON price_list.product_id = product.id
+                WHERE product.active = 1
+                GROUP BY product.id, product.name, product.image, stock.qty, price_list.min_price, price_list.max_price
+                ORDER BY total_sales DESC
+                LIMIT 15';
         $stmt = $this->conn->prepare($query);
         if ($stmt) {
             if ($stmt->execute()) {
-                $stmt->bind_result($id, $name, $image, $stock, $total_sales);
+                $stmt->bind_result($id, $name, $image, $stock, $critical_level, $total_sales, $min_price, $max_price);
                 while ($stmt->fetch()) {
-                    if ($stock == 0) {
+                    if ($stock <= $critical_level || $stock == 0) {
                         continue;
                     }
+
+                    // Check if we successfully retrieved min and max prices
+                    if ($min_price !== null && $max_price !== null) {
+                        $price_display = ($min_price == $max_price)
+                            ? '₱' . number_format($min_price, 2)
+                            : '₱' . number_format($min_price, 2) . ' - ₱' . number_format($max_price, 2);
+                    } else {
+                        // Fallback if min_price or max_price are null
+                        $price_display = 'Price not available';
+                    }
+
                     echo '<div class="col-md-4 mb-3">
-                            <div class="card h-100">
-                                <a href="/view-product/product/' . $id . '">
-                                    <img src="/asset/images/products/' . $image . '" class="card-img-top product-image" alt="' . $name . '">
-                                </a>
-                                <div class="card-body">
-                                    <h5 class="card-title text-center fw-bold">' . $name . '</h5>
-                                </div>
+                        <div class="card h-100">
+                            <a href="/view-product/product/' . $id . '">
+                                <img src="/asset/images/products/' . $image . '" class="card-img-top product-image" alt="' . $name . '">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-center fw-bold">' . $name . '</h5>
+                                <p class="text-center">' . $price_display . '</p>
                             </div>
-                        </div>';
+                        </div>
+                    </div>';
                 }
 
                 $stmt->close();
@@ -104,7 +118,6 @@ class Product extends Home
             die("Error in preparing statement: " . $this->conn->error);
         }
     }
-
 
     public function getProductInfo($product_id)
     {
