@@ -149,29 +149,37 @@ class Dashboard extends Admin
 
     public function getWeeklySales($start_date, $end_date)
     {
-        $query = 'SELECT SUM(total), SUM(discount), COUNT(*) FROM pos WHERE DATE(date) BETWEEN ? AND ?';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('ss', $start_date, $end_date);
+        $query = 'SELECT SUM(total), SUM(discount), COUNT(*) 
+              FROM pos 
+              WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) BETWEEN ? AND ?';
 
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             die("Error in preparing statement: " . $this->conn->error);
         }
 
+        // Bind parameters - expecting dates in "Y-m-d" format for both start_date and end_date
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        // Execute statement and check for errors
         if (!$stmt->execute()) {
             die("Error in executing statement: " . $stmt->error);
-            $stmt->close();
         }
 
+        // Bind result variables and fetch
         $stmt->bind_result($total, $discount, $count);
         $stmt->fetch();
         $stmt->close();
 
+        // Return results
         return [
             'total' => $total,
             'discounts' => $discount,
             'count' => $count
         ];
     }
+
 
     public function getDailyExpenses($date)
     {
@@ -453,37 +461,46 @@ class Dashboard extends Admin
         $total_count = 0;
 
         foreach ($titles as $title) {
+            // Convert the month title to 'Y-m' format
             $month = DateTime::createFromFormat('F Y', $title)->format('Y-m');
+
+            // Prepare query with STR_TO_DATE to parse the date from VARCHAR
             $query = 'SELECT COALESCE(SUM(total), 0), COALESCE(SUM(discount), 0), COUNT(*) 
                   FROM pos 
-                  WHERE DATE_FORMAT(date, "%Y-%m") = ?';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('s', $month);
+                  WHERE DATE_FORMAT(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p"), "%Y-%m") = ?';
 
+            $stmt = $this->conn->prepare($query);
             if (!$stmt) {
                 die("Error in preparing statement: " . $this->conn->error);
             }
 
+            // Bind the month parameter
+            $stmt->bind_param('s', $month);
+
+            // Execute statement and check for errors
             if (!$stmt->execute()) {
                 die("Error in executing statement: " . $stmt->error);
-                $stmt->close();
             }
 
+            // Bind result variables and fetch
             $stmt->bind_result($total, $discount, $count);
             $stmt->fetch();
             $stmt->close();
 
+            // Accumulate totals
             $total_sales += $total;
             $total_discounts += $discount;
             $total_count += $count;
         }
 
+        // Return the accumulated results
         return [
             'total' => $total_sales,
             'discounts' => $total_discounts,
             'count' => $total_count
         ];
     }
+
 
     public function getPastSixMonthsExpenses()
     {
