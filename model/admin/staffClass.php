@@ -1,6 +1,15 @@
 <?php
 require_once 'model/admin/admin.php';
 require_once 'model/admin/logsClass.php';
+require_once 'vendor/PHPMailer/src/PHPMailer.php';
+require_once 'vendor/PHPMailer/src/SMTP.php';
+require_once 'vendor/PHPMailer/src/Exception.php';
+require_once 'model/admin/logsClass.php';
+require_once 'config/load_env.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 class Staff extends Admin
 {
@@ -261,6 +270,9 @@ class Staff extends Admin
                 $staff = $this->getStaff($email);
                 $this->addStaffGroup($staff['id'], $group);
 
+                $name = $fname . ' ' . $lname;
+                $this->sendGeneratedPassword($email, $name, $password);
+
                 $description_log = 'Added staff ' . ucfirst($staff['fname']) . ' ' . ucfirst($staff['lname']);
                 $date_log = date('F j, Y g:i A');
                 $logs->newLog($description_log, $_SESSION['user_id'], $date_log);
@@ -303,6 +315,45 @@ class Staff extends Admin
             }
         } else {
             die("Error in preparing statement: " . $this->conn->error);
+        }
+    }
+
+    public function sendGeneratedPassword($email, $name, $password)
+    {
+        loadEnv('.env');
+        $smtp_password = getenv('SMTP_PASSWORD');
+
+        $mail = new PHPMailer(true);
+
+        // Server settings
+        $mail->isSMTP(); // Set mailer to use SMTP
+        $mail->Host = 'smtp.hostinger.com'; // Specify SMTP server
+        $mail->SMTPAuth = true; // Enable SMTP authentication
+        $mail->Username = 'no-reply@fmware.shop'; // SMTP username
+        $mail->Password = $smtp_password; // SMTP password
+        $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 587; // TCP port to connect to
+
+        // Recipients
+        $mail->setFrom('no-reply@fmware.shop', 'FMWare');
+        $mail->addAddress($email, $name);
+
+        // Email content
+        $mail->isHTML(true); // Set email format to HTML
+        $mail->Subject = 'FMWare Account Password';
+
+        // Email body with the confirmation link
+        $mail->Body = '<h1>Hello, ' . $name . '</h1>
+                           <p>Thank you for signing up with FMWare! This is your default password for your FMWare staff account:</p>
+                           <h2>' . $password . '</h2>
+                           <p>If you did not sign up for an account with FMWare, you can ignore this email.</p>';
+
+        // Send the email
+        try {
+            $mail->send();
+            return true; // Email sent successfully
+        } catch (Exception $e) {
+            return false; // Failed to send email
         }
     }
 }

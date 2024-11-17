@@ -33,7 +33,7 @@ $(document).ready(function () {
 
     $('#add-staff').submit(function (event) {
         event.preventDefault();
-        console.log('form submitted');
+        $('#loadingOverlay').show();
 
         $.ajax({
             url: '/add-staff',
@@ -48,6 +48,9 @@ $(document).ready(function () {
                     $.notify(feedback, 'error');
                 }
 
+            },
+            complete: function () {
+                $('#loadingOverlay').hide(); // Hide the loading overlay after the request completes
             }
         });
     });
@@ -90,6 +93,26 @@ $(document).ready(function () {
                     checkbox.prop('checked', true);
                 }
             });
+        }
+    });
+
+    // Function to generate an alphanumeric random password
+    function generatePassword(length = 8) {
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let password = "";
+        for (let i = 0; i < length; i++) {
+            password += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return password;
+    }
+
+    // Handle checkbox state change
+    $("#generate_password_checkbox").on("change", function () {
+        if ($(this).is(":checked")) {
+            const password = generatePassword();
+            $("#password, #confirm").val(password).prop("readonly", true); // Fill inputs and make them readonly
+        } else {
+            $("#password, #confirm").val("").prop("readonly", false); // Clear inputs and make them editable
         }
     });
 });
