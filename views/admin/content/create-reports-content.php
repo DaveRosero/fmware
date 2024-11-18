@@ -33,6 +33,7 @@
                                                 <option value="weekly">Weekly</option>
                                                 <option value="monthly">Monthly</option>
                                                 <option value="annually">Annually</option>
+                                                <option value="custom">Custom Date Range</option> <!-- New option for custom date range -->
                                             </select>
                                         </div>
                                     </div>
@@ -96,3 +97,5 @@
         </div>
     </div> <!--end::App Content-->
 </main> <!--end::App Main-->
+
+<input type="hidden" name="user" id="user" value="<?php echo ucfirst($_SESSION['name']); ?>">

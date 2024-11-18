@@ -155,14 +155,14 @@ class Login extends User
         $json = array();
         $logs = new Logs();
 
-        $query = 'SELECT id, email, password, active, code, attempts
+        $query = 'SELECT id, firstname, lastname, email, password, active, code, attempts
                     FROM user
                     WHERE email = ?';
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('s', $_POST['email']);
         if ($stmt) {
             if ($stmt->execute()) {
-                $stmt->bind_result($id, $email, $hash, $active, $code, $attempts);
+                $stmt->bind_result($id, $fname, $lname, $email, $hash, $active, $code, $attempts);
                 $stmt->fetch();
                 $stmt->close();
 
@@ -195,6 +195,7 @@ class Login extends User
                     $_SESSION['email'] = $email;
                     $_SESSION['user_id'] = $id;
                     $_SESSION['group'] = $group_name;
+                    $_SESSION['name'] = $fname . ' ' . $lname;
                     $this->setNullAttempt($email);
 
                     switch ($group_name) {
