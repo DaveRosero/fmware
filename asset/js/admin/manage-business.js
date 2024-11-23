@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    JsBarcode(".barcode").init();
+
     function updateDeliveryFeeStatus(active, id) {
         $.ajax({
             url: '/update-df-status',
@@ -261,5 +263,19 @@ $(document).ready(function () {
 
             }
         });
+    })
+
+    $('#print_barcodes').click(function () {
+
+        var content = $('#barcodes').html();
+
+        // Append the header to the content
+        $('body').html(content);
+
+        // Print the page
+        window.print();
+
+        // Restore the original content
+        location.reload();
     })
 })
