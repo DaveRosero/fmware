@@ -410,7 +410,11 @@ class Manage extends Admin
 
     public function getBarcodes()
     {
-        $query = 'SELECT name, barcode FROM product';
+        $query = 'SELECT p.name, p.barcode, v.name, b.name, u.name, p.unit_value 
+                FROM product p
+                INNER JOIN variant v ON v.id = p.variant_id
+                INNER JOIN brand b ON b.id = p.brand_id
+                INNER JOIN unit u ON u.id = p.unit_id';
         $stmt = $this->conn->prepare($query);
 
         if (!$stmt) {
@@ -422,12 +426,12 @@ class Manage extends Admin
             $stmt->close();
         }
 
-        $stmt->bind_result($name, $barcode);
+        $stmt->bind_result($name, $barcode, $variant, $brand, $unit, $unit_value);
         $content = '<div class="container-fluid">';
         $content .= '<div class="row">';
         while ($stmt->fetch()) {
             $content .= '<div class="col-md-4 text-center barcode-container mb-4">
-                        <div class="barcode-name">' . htmlspecialchars($name) . '</div>
+                        <div class="barcode-name">' . htmlspecialchars($name . ' (' . $variant . ') ' . $unit_value . ' ' . strtoupper($unit)) . '</div>
                         <svg
                             class="barcode"
                             jsbarcode-format="code39"
