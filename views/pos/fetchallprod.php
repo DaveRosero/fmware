@@ -22,7 +22,7 @@ function fetchAllProducts()
               INNER JOIN product ON price_list.product_id = product.id
               INNER JOIN variant ON product.variant_id = variant.id
               INNER JOIN unit ON product.unit_id = unit.id
-              WHERE stock.qty > stock.critical_level
+              WHERE stock.qty > 0
               ORDER BY product.name ASC';
 
     // Execute query
@@ -43,7 +43,7 @@ function fetchAllProducts()
                              <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . htmlspecialchars($row['name']) . ' (' . htmlspecialchars($row['variant_name']) . ')">
                              ' . htmlspecialchars($row['name']) . ' <small class="text-muted">(' . htmlspecialchars($row['variant_name']) . ')</small></h5>
                              <p class="card-text">Unit: <strong>' . htmlspecialchars($row['unit_value']) . ' ' . strtoupper($row['unit_name']) . '</strong></p>
-                             <p class="card-text">Stock: <span class="badge ' . ($row['qty'] <= 0 ? 'bg-danger' : 'bg-success') . '">' . $row['qty'] . '</span></p>
+                             <p class="card-text">Stock: <span class="badge ' . ($row['qty'] > $row['critical_level'] ? 'bg-success' : 'bg-danger') . '">' . $row['qty'] . '</span></p>
                             <div class="d-grid">
                                  <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
                                     data-product-id="' . $row['id'] . '"
