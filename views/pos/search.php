@@ -27,7 +27,7 @@ function searchProducts($searchTerm)
                     OR product.barcode LIKE CONCAT("%", ?, "%")
                     OR variant.name LIKE CONCAT("%", ?, "%")
                     OR brand.name LIKE CONCAT("%", ?, "%"))
-                    AND stock.qty > stock.critical_level
+                    AND stock.qty > 0
               ORDER BY product.name ASC';
 
     // Prepare statement
@@ -58,7 +58,7 @@ function searchProducts($searchTerm)
                   <h5 class="card-title text-dark product-name" data-bs-toggle="tooltip" data-bs-placement="top" title="' . $name . ' (' . $variant_name . ')">
                    ' . $name . ' <small class="text-muted">(' . $variant_name . ')</small></h5>
                   <p class="card-text">Unit: <strong>' . $unit_value . ' ' . strtoupper($unit_name) . '</strong></p>
-                  <p class="card-text">Stock: <span class="badge ' . ($qty <= 0 ? 'bg-danger' : 'bg-success') . '">' . $qty . '</span></p>
+                  <p class="card-text">Stock: <span class="badge ' . ($qty > $critical_level ? 'bg-success' : 'bg-danger') . '">' . $qty . '</span></p>
                   <input type="hidden" value="' . $barcode . '" class="product-barcode">
                   <div class="d-grid">
                     <button class="btn btn-primary btn-lg' . ($disabled ? ' disabled' : '') . ' cart-button" 
