@@ -1,13 +1,13 @@
 <?php
-    include_once 'session.php';
-    require_once 'model/admin/admin.php';
-    require_once 'model/user/logoutClass.php';
-    require_once 'model/admin/manageClass.php';
+include_once 'session.php';
+require_once 'model/admin/admin.php';
+require_once 'model/user/logoutClass.php';
+require_once 'model/admin/manageClass.php';
 
-    $admin = new Admin();
-    $logout = new Logout();
-    $manage = new Manage();
-    $admin->isAdmin();
+$admin = new Admin();
+$logout = new Logout();
+$manage = new Manage();
+$admin->isAdmin();
 ?>
 <!DOCTYPE html>
 <html lang="en"> <!--begin::Head-->
@@ -18,6 +18,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="title" content="Manage Business | FMWare">
     <?php include_once 'views/admin/include/style.php'; ?><!-- begin::Required Plugin(AdminLTE)-->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .barcode-container {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .barcode-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .barcode {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media print {
+            .container-fluid {
+                padding: 0;
+            }
+
+            .barcode-container {
+                border: none;
+                margin-bottom: 0;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="/asset/css/admin/adminlte.css"><!--end::Required Plugin(AdminLTE)-->
 </head> <!--end::Head--> <!--begin::Body-->
 
@@ -28,7 +63,7 @@
         <?php require_once 'views/admin/content/manage-business-content.php'; ?>
         <?php require_once 'views/admin/modals/manage-business-modal.php'; ?>
         <?php require_once 'views/admin/template/footer.php'; ?>
-    </div> <!--end::App Wrapper--> <!--begin::Script--> 
+    </div> <!--end::App Wrapper--> <!--begin::Script-->
     <?php include_once 'views/admin/include/script.php'; ?><!--begin::Required Plugin(AdminLTE)-->
     <script src="/asset/js/admin/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>

@@ -21,7 +21,8 @@
         <div class="container-fluid"> <!--begin::Row-->
             <div class="row">
                 <div class="col col-6 mb-2">
-                    <button class="btn btn-success" id="change_pin">Change PIN</button>
+                    <button class="btn btn-success me-2" id="change_pin">Change PIN</button>
+                    <button class="btn btn-success" id="print_barcodes">Print Barcodes</button>
                 </div>
             </div>
             <div class="row">
@@ -75,6 +76,10 @@
                     </div>
                 </div>
             </div> <!--end::Row-->
+            <div class="d-none" id="barcodes">
+                <?php $manage->getBarcodes();
+                ?>
+            </div>
         </div>
     </div> <!--end::App Content-->
 </main> <!--end::App Main-->

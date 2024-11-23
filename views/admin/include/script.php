@@ -3,6 +3,7 @@
 <script src="/vendor/jQuery/jquery-3.7.1.min.js"></script>
 <script src="/vendor/jQuery-easing/jquery.easing.min.js"></script>
 <script src="/vendor/Bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/barcodes/JsBarcode.code39.min.js"></script>
 <script src="/vendor/ApexCharts/dist/apexcharts.min.js"></script>
 <script src="/vendor/DataTables/datatables.min.js"></script>
 <script src="/vendor/NotifyJS/notify.js"></script>
