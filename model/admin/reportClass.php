@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\map;
+
 include_once 'session.php';
 require_once 'model/admin/admin.php';
 
@@ -10,6 +13,8 @@ class Reports extends Admin
             $content = $this->orders($start_date, $end_date);
         } else if ($module === 'pos') {
             $content = $this->sales($start_date, $end_date);
+        } else if ($module === 'products') {
+            $content = $this->products($start_date, $end_date);
         }
 
         $json = array(
@@ -303,5 +308,88 @@ class Reports extends Admin
             'tbody' => $tbody . $signature,
             'thead' => $thead
         ];
+    }
+
+    public function products ($start_date, $end_date) {
+        $order_ref_arr = $this->getOrderRef($start_date, $end_date);
+        $pos_ref_arr = $this->getPosRef($start_date, $end_date);
+
+        $products = array();
+        foreach($order_ref_arr as $order_ref){
+            $product[] = $this->getOrderProducts($order_ref);
+        }
+        
+        return [
+            'thead' => 'Product Report',
+            'tbody' => $product
+        ];
+    }
+
+    public function getOrderRef ($start_date, $end_date){
+        $query = 'SELECT order_ref FROM orders WHERE DATE(date) BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+        
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($order_ref);
+        $order_ref_arr = array();
+        while ($stmt->fetch()) {
+            $order_ref_arr[] = $order_ref;
+        }
+        $stmt->close();
+        return $order_ref_arr;
+    }
+
+    public function getOrderProducts ($order_ref){
+        $query = 'SELECT product_id FROM order_items WHERE order_ref= ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $order_ref);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+        
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($product_id);
+        $product_id_arr = array();
+        while ($stmt->fetch()){
+            $product_id_arr[] = $product_id;
+        }
+        return $product_id_arr;
+    }
+
+    public function getPosRef ($start_date, $end_date){
+        $query = 'SELECT pos_ref FROM pos WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) BETWEEN ? AND ?';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+        
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($pos_ref);
+        $pos_ref_arr = array();
+        while ($stmt->fetch()) {
+            $pos_ref_arr[] = $pos_ref;
+        }
+        $stmt->close();
+        return $pos_ref_arr;
     }
 }

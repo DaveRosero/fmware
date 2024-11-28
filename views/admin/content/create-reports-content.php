@@ -46,6 +46,7 @@
                                                 <option value="">Choose a module</option>
                                                 <option value="pos">Sales</option>
                                                 <option value="orders">Online Orders</option>
+                                                <option value="products">Products</option>
                                                 <!-- Add more modules as needed -->
                                             </select>
                                         </div>
