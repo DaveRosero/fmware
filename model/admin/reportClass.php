@@ -355,6 +355,9 @@ class Reports extends Admin
         $stmt->bind_result($order_ref, $product_id, $qty, $product_name, $unit, $variant, $unit_value);
         $tbody = '';
         while ($stmt->fetch()) {
+            if ($qty == 0) {
+                continue;
+            }
             $tbody .= '<tr>
                     <td class="text-center">' . $product_name . ' (' . $variant . ') ' . $unit_value . ' ' . strtoupper($unit) . '</td>
                     <td class="text-center">Online Order</td>
@@ -399,6 +402,9 @@ class Reports extends Admin
         $stmt->bind_result($pos_ref, $product_id, $qty, $product_name, $unit, $variant, $unit_value);
         $tbody = '';
         while ($stmt->fetch()) {
+            if ($qty == 0) {
+                continue;
+            }
             $tbody .= '<tr>
                     <td class="text-center">' . $product_name . ' (' . $variant . ') ' . $unit_value . ' ' . strtoupper($unit) . '</td>
                     <td class="text-center">Point of Sale</td>
