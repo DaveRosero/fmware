@@ -21,6 +21,10 @@ $(document).ready(function () {
                 $('#content-thead').html(json.thead);
                 $('#content-tbody').html(json.tbody);
 
+                // Sort the table rows by quantity (assuming the quantity is in the 3rd column)
+                sortTableByQuantity();
+
+                // Show content if hidden
                 if ($('#content').hasClass('d-none')) {
                     $('#content').removeClass('d-none');
                 }
@@ -29,8 +33,25 @@ $(document).ready(function () {
                 console.log("Error:", textStatus, errorThrown);
                 console.log("Response:", jqXHR.responseText);
             }
-        })
+        });
     });
+
+    // Function to sort table rows by the quantity in descending order
+    function sortTableByQuantity() {
+        var rows = $('#content-tbody tr').get();
+
+        rows.sort(function (a, b) {
+            var qtyA = parseInt($(a).find('td').eq(2).text()); // Get the quantity value from the 3rd column
+            var qtyB = parseInt($(b).find('td').eq(2).text());
+
+            return qtyB - qtyA; // Sort in descending order
+        });
+
+        $.each(rows, function (index, row) {
+            $('#content-tbody').append(row); // Re-append rows in sorted order
+        });
+    }
+
 
     $('#print').click(function () {
         var module = $('#moduleSelect').val();
@@ -71,6 +92,30 @@ $(document).ready(function () {
                 title = 'Monthly Online Order Report';
             } else if (dateRange === 'annually') {
                 title = 'Annual Online Order Report';
+            } else if (dateRange === 'custom') {
+                // Custom Date Range Title
+                var startDate = $('#startDate').val();
+                var endDate = $('#endDate').val();
+
+                var formattedStartDate = new Date(startDate);
+                var formattedEndDate = new Date(endDate);
+
+                // Format the dates to a readable format (e.g., "November 12 to 14")
+                var options = { month: 'long', day: 'numeric' };
+                var formattedStart = formattedStartDate.toLocaleDateString('en-US', options);
+                var formattedEnd = formattedEndDate.toLocaleDateString('en-US', options);
+
+                title = `Online Order Report from ${formattedStart} to ${formattedEnd}`;
+            }
+        } else if (module === 'products') {
+            if (dateRange === 'daily') {
+                title = 'Daily Product Report';
+            } else if (dateRange === 'weekly') {
+                title = 'Weekly Product Report';
+            } else if (dateRange === 'monthly') {
+                title = 'Monthly Product Report';
+            } else if (dateRange === 'annually') {
+                title = 'Annual Product Report';
             } else if (dateRange === 'custom') {
                 // Custom Date Range Title
                 var startDate = $('#startDate').val();

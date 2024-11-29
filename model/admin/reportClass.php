@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\map;
+
 include_once 'session.php';
 require_once 'model/admin/admin.php';
 
@@ -10,6 +13,8 @@ class Reports extends Admin
             $content = $this->orders($start_date, $end_date);
         } else if ($module === 'pos') {
             $content = $this->sales($start_date, $end_date);
+        } else if ($module === 'products') {
+            $content = $this->products($start_date, $end_date);
         }
 
         $json = array(
@@ -302,6 +307,113 @@ class Reports extends Admin
         return [
             'tbody' => $tbody . $signature,
             'thead' => $thead
+        ];
+    }
+
+    public function products($start_date, $end_date)
+    {
+        $order = $this->getOrderProducts($start_date, $end_date);
+        $pos = $this->getPosProducts($start_date, $end_date);
+
+        $signature = '<tr>
+                <td colspan="8" class="text-center" style="padding-top: 50px;">
+                    <p class="mb-0">__________________________</p>
+                    <p class="mb-0 mt-0"><strong>Angelica Odulio</strong></p>
+                    <p class="mt-0"><strong>Manager</strong></p>
+                </td>
+              </tr>';
+
+        return [
+            'thead' => $order['thead'],
+            'tbody' => $order['tbody'] . $pos['tbody'] . $signature
+        ];
+    }
+
+    public function getOrderProducts($start_date, $end_date)
+    {
+        $query = 'SELECT o.order_ref, oi.product_id, SUM(oi.qty) AS total_qty, p.name, u.name, v.name, p.unit_value
+                FROM orders o
+                INNER JOIN order_items oi ON oi.order_ref = o.order_ref
+                INNER JOIN product p ON p.id = oi.product_id
+                INNER JOIN unit u ON u.id = p.unit_id
+                INNER JOIN variant v ON v.id = p.variant_id
+                WHERE DATE(o.date) BETWEEN ? AND ?
+                GROUP BY oi.product_id
+                ORDER BY total_qty DESC';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($order_ref, $product_id, $qty, $product_name, $unit, $variant, $unit_value);
+        $tbody = '';
+        while ($stmt->fetch()) {
+            $tbody .= '<tr>
+                    <td class="text-center">' . $product_name . ' (' . $variant . ') ' . $unit_value . ' ' . strtoupper($unit) . '</td>
+                    <td class="text-center">Online Order</td>
+                    <td class="text-center">' . $qty . '</td>
+                </tr>';
+        }
+        $stmt->close();
+
+        $thead = '<th class="text-center">Product</th>
+              <th class="text-center">Module</th>
+              <th class="text-center">Quantity Sold</th>';
+
+        return [
+            'thead' => $thead,
+            'tbody' => $tbody
+        ];
+    }
+
+    public function getPosProducts($start_date, $end_date)
+    {
+        $query = 'SELECT pos.pos_ref, pi.product_id, SUM(pi.qty) AS total_qty, p.name, u.name, v.name, p.unit_value
+                FROM pos
+                INNER JOIN pos_items pi ON pi.pos_ref = pos.pos_ref
+                INNER JOIN product p ON p.id = pi.product_id
+                INNER JOIN unit u ON u.id = p.unit_id
+                INNER JOIN variant v ON v.id = p.variant_id
+                WHERE DATE(STR_TO_DATE(pos.date, "%M %d, %Y %h:%i %p")) BETWEEN ? AND ?
+                GROUP BY pi.product_id
+                ORDER BY total_qty DESC';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ss', $start_date, $end_date);
+
+        if (!$stmt) {
+            die("Error in preparing statement: " . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die("Error in executing statement: " . $stmt->error);
+            $stmt->close();
+        }
+
+        $stmt->bind_result($pos_ref, $product_id, $qty, $product_name, $unit, $variant, $unit_value);
+        $tbody = '';
+        while ($stmt->fetch()) {
+            $tbody .= '<tr>
+                    <td class="text-center">' . $product_name . ' (' . $variant . ') ' . $unit_value . ' ' . strtoupper($unit) . '</td>
+                    <td class="text-center">Point of Sale</td>
+                    <td class="text-center">' . $qty . '</td>
+                </tr>';
+        }
+        $stmt->close();
+
+        $thead = '<th class="text-center">Product</th>
+              <th class="text-center">Module</th>
+              <th class="text-center">Quantity Sold</th>';
+
+        return [
+            'thead' => $thead,
+            'tbody' => $tbody
         ];
     }
 }
